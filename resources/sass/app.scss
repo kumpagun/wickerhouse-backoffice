@@ -1,0 +1,23 @@
+// Variables
+@import 'variables';
+@import 'button';
+@import 'card';
+@import 'select2';
+
+.img-fluid {
+  width: 100%;
+}
+.input-group {
+  .input-group-append {
+    .input-group-btn {
+      .btn {
+        border-radius: 0 0.4em 0.4em 0 !important;
+      }
+    }
+  }
+}
+
+
+// Bootstrap
+// @import '~bootstrap/scss/bootstrap';
+
