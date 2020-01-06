@@ -64,7 +64,7 @@ deploy_staging:
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage $DEPLOY_BASE/releases/$CI_COMMIT_SHA/storage"
     - sed -r s/^\([A-Z0-9_]\)+=\S*\$//g .env.staging > .env
     - echo "" >> .env
-    - echo "DB_PASSWORD=$STAGING_DB_PASSWORD" >> .env
+    - echo "DB_PASSWORD=$DB_PASSWORD" >> .env
     - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA" >> .env
     - scp -P $USER_SSH_PORT -r .env $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -d $DEPLOY_BASE/current ]; then cp \`ls -t $DEPLOY_BASE/current/public/css/app.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/css/admin.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/app.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/admin.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/vendor.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/manifest.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; fi"
