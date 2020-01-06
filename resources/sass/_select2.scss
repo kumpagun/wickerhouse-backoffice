@@ -1,0 +1,9 @@
+.select2 {
+  width: 100% !important;
+  .select2-selection--single {
+    border: 1px solid #ccd6e6 !important;
+  }
+  .select2-container--default .select2-selection--single {
+    border: 1px solid #ccd6e6 !important;
+  }
+}

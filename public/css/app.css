@@ -1,0 +1,65 @@
+.btn {
+  border-radius: 0.4em !important;
+}
+
+.card {
+  border-radius: 1em !important;
+  overflow: hidden;
+}
+
+.card .card-header:first-child {
+  border-radius: inherit;
+}
+
+@media (min-width: 576px) {
+  .card-columns {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
+
+@media (min-width: 768px) {
+  .card-columns {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-columns {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1200px) {
+  .card-columns {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
+
+.select2 {
+  width: 100% !important;
+}
+
+.select2 .select2-selection--single {
+  border: 1px solid #ccd6e6 !important;
+}
+
+.select2 .select2-container--default .select2-selection--single {
+  border: 1px solid #ccd6e6 !important;
+}
+
+.img-fluid {
+  width: 100%;
+}
+
+.input-group .input-group-append .input-group-btn .btn {
+  border-radius: 0 0.4em 0.4em 0 !important;
+}
+
