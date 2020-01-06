@@ -7,7 +7,7 @@
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('homework_index') }}">Homework</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('course_create', ['id' => $course_id, '#homework']) }}">Course</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -40,9 +40,9 @@
                 </optgroup>
               </select>
               @if($errors->course->has('course_id'))
-                  <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->course->first('course_id') }}</p>
-                  </span>
+                <span class="small" role="alert">
+                <p class="mb-0">{{ $errors->course->first('course_id') }}</p>
+                </span>
               @endif
             </fieldset>
             <div class="row">

@@ -10,6 +10,8 @@ use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use Carbon\Carbon;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\Examination_group;
+use App\Models\Examination;
 
 class CourseClass
 {   
@@ -28,5 +30,11 @@ class CourseClass
       $name = $data->title;
     }
     return $name;
+  }
+  public function get_exam_total($id) {
+    // $exam_group = Examination_group::find($id);
+    $data = Examination::where('exam_group_id',new ObjectId($id))->where('status',1)->count();
+    
+    return $data;
   }
 }

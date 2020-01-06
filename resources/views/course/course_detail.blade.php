@@ -1,6 +1,9 @@
 @extends('layouts.app')
-
-@php $title = strtoupper('add course'); @endphp
+@if(!empty($data->_id))
+  @php $title = strtoupper('edit course'); @endphp
+@else 
+  @php $title = strtoupper('add course'); @endphp
+@endif
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -16,7 +19,7 @@
 
 @section('content')
 <div class="row align-items-center justify-content-center">
-  <div class="col-12 col-md-8 mb-4">
+  <div class="col-12 col-md-10 col-xl-8 mb-4">
     <div class="card px-1 py-1 m-0">
       <div class="card-header border-0 pb-0">
         <h4 class="card-title">COURSE</h4>

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 // Controller
 use  App\Http\Controllers\Course\HomeworkController;
 use  App\Http\Controllers\Course\EpisodeController;
+use  App\Http\Controllers\Course\ExaminationController;
 // Model
 use App\Models\Course;
 use App\Models\Category;
@@ -93,8 +94,26 @@ class CourseController extends Controller
     $category = $this->get_category();
     $episode_group_controller = new EpisodeController;
     $episode_group = $episode_group_controller->get_episode_group($id);
+    $episode = $episode_group_controller->get_episode($id);
     $homework_controller = new HomeworkController;
     $homework = $homework_controller->get_homework($id);
+    $examination_controller = new ExaminationController;
+    $examination = $examination_controller->get_examination_group($id);
+
+    $examination_type = ['pretest & posttest','pretest','posttest'];
+    if(!empty($examination)) {
+      // ลบ Type ที่มีแล้วออกจาก select list
+      foreach($examination as $row) {
+        foreach($row->type as $type) {
+          if (($key = array_search($type, $examination_type)) !== false) {
+            unset($examination_type[$key]);
+          }
+        }
+      } 
+      if(count($examination_type)<3) {
+        unset($examination_type[0]);
+      }
+    }
     $withData = [
       'data' => $data,
       'teacher' => $teacher,
@@ -102,7 +121,10 @@ class CourseController extends Controller
       'course' => $course,
       'category' => $category,
       'episode_group' => $episode_group,
-      'homework' => $homework
+      'episode' => $episode,
+      'homework' => $homework,
+      'examination' => $examination,
+      'examination_type' => $examination_type
     ]; 
     return view('course.course_detail',$withData);
   }

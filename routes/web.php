@@ -56,9 +56,16 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
 
 // Episode
 Route::group(['prefix' => 'episode', 'middleware' => ['auth', 'role:admin|course']], function () {
-  Route::post('/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
-  Route::post('/updatelist', 'Course\EpisodeController@episode_group_updatelist')->name('episode_group_updatelist');
+  // GROUP
+  Route::post('/group/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
+  Route::get('/group/create/{course_id}/{id?}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
+  // EP
+  Route::post('/group/updatelist', 'Course\EpisodeController@episode_group_updatelist')->name('episode_group_updatelist');
   Route::get('/create/{course_id}/{id?}', 'Course\EpisodeController@episode_create')->name('episode_create');
+  Route::post('/store', 'Course\EpisodeController@episode_store')->name('episode_store');
+  // Upload Video
+  Route::match(['get','post'],'/upload_file', 'Course\EpisodeController@episode_upload_file')->name('episode_upload_file');
+  Route::match(['get','post'],'/video_delete_file', 'Course\EpisodeController@episode_video_delete_file')->name('episode_video_delete_file');
 });
 
 // Homework
@@ -67,6 +74,17 @@ Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|cours
   Route::get('/course/create/{id?}', 'Course\HomeworkController@homework_by_course_create')->name('homework_by_course_create');
   Route::get('/create/{id?}', 'Course\HomeworkController@homework_create')->name('homework_create');
   Route::post('/store/{id?}', 'Course\HomeworkController@homework_store')->name('homework_store');
+});
+
+// Examination
+Route::group(['prefix' => 'examination', 'middleware' => ['auth', 'role:admin|course']], function () {
+  Route::post('/group_store/{id?}', 'Course\ExaminationController@examination_group_store')->name('examination_group_store');
+  Route::get('/group_delete/{id?}', 'Course\ExaminationController@examination_group_delete')->name('examination_group_delete');
+
+  Route::get('/index/{id?}', 'Course\ExaminationController@examination_index')->name('examination_index');
+  Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
+  Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
+  Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
 });
 
 // Category

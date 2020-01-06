@@ -1,4 +1,4 @@
-<div id="episodegroup" class="col-12 col-md-8 mb-4">
+<div id="episodegroup" class="col-12 col-md-10 col-xl-8 mb-4">
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
       <h4 class="card-title">EPISODE GROUP</h4>
@@ -15,11 +15,7 @@
             <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
             @foreach ($episode_group as $item)
               <li id="{{ $item->_id }}" class="list-group-item">
-                <strong>{{ $item->title }}</strong>
-                {{-- <ul class="list-group">
-                  <li>test 1 </li>
-                  <li>test 2 </li>
-                </ul> --}}
+                <a href="{{ route('episode_group_create', ['course_id' => $data->_id, 'id' => $item->_id]) }}"><strong>{{ $item->title }}</strong></a>
               </li>
             @endforeach
             </ul>

@@ -243,7 +243,7 @@ return [
     'permission' => \Maklad\Permission\Middlewares\PermissionMiddleware::class,
     'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     'Image' => Intervention\Image\Facades\Image::class,
-
+    
     /* custom */
     'User' => App\Facades\UserClass::class,
     'Member' => App\Facades\MemberClass::class,

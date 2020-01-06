@@ -1,4 +1,4 @@
-<div id="homework" class="col-12 col-md-8 mb-4">
+<div id="homework" class=" col-md-10 col-xl-8 mb-4">
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
       <h4 class="card-title">HOMEWORK</h4>
