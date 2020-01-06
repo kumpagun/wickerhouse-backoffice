@@ -1,0 +1,73 @@
+image: "php:7.2-fpm"
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - build
+  - deploy
+  
+cache:
+  untracked: true
+  paths:
+    - vendor/
+    - node_modules/
+  
+before_script:
+  - apt-get update
+  - apt-get install zip unzip libsodium-dev
+  - apt-get install nodejs npm -y
+  - pecl channel-update pecl.php.net
+  - pecl install apcu igbinary mongodb
+  - docker-php-ext-install sodium
+  - docker-php-ext-enable apcu mongodb
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php
+  - php -r "unlink('composer-setup.php');"
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+build_app:
+  stage: build
+  tags:
+    - laravel
+  script:
+    - rm -f composer.lock && php composer.phar install --no-progress --no-interaction --optimize-autoloader
+    - npm install
+    - npm run production
+
+deploy_staging:
+  stage: deploy
+  environment:
+    name: staging
+    url: https://bo-dev.jasonlinelearning.com
+  only:
+    - master
+  tags:
+    - laravel
+  variables:
+    DEPLOY_BASE: '/var/www/html/online-learning-bo'
+    USER_SSH_HOST: web@110.164.180.66
+    USER_SSH_PORT: 18106
+  script:
+    - echo "Deploying to $CI_COMMIT_SHA"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/releases ] || mkdir -p $DEPLOY_BASE/releases"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/logs ] || mkdir -p $DEPLOY_BASE/logs"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/shared/storage/app/public ] || mkdir -p $DEPLOY_BASE/shared/storage/app/public"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "mkdir $DEPLOY_BASE/releases/$CI_COMMIT_SHA"
+    - scp -P $USER_SSH_PORT -r app artisan bootstrap composer.json config database node_modules package.json public resources routes vendor webpack.* .env.example Modules $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -L $DEPLOY_BASE/current ]; then rm $DEPLOY_BASE/current; fi"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage/app/public $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/storage"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage $DEPLOY_BASE/releases/$CI_COMMIT_SHA/storage"
+    - sed -r s/^\([A-Z0-9_]\)+=\S*\$//g .env.staging > .env
+    - echo "" >> .env
+    - echo "DB_PASSWORD=$STAGING_DB_PASSWORD" >> .env
+    - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA" >> .env
+    - scp -P $USER_SSH_PORT -r .env $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -d $DEPLOY_BASE/current ]; then cp \`ls -t $DEPLOY_BASE/current/public/css/app.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/css/admin.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/app.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/admin.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/vendor.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/manifest.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; fi"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/releases/$CI_COMMIT_SHA $DEPLOY_BASE/current && chmod -R u+rwX,go+rX,go-w $DEPLOY_BASE/current/"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/releases && ls -t | awk 'NR>10' | xargs rm -rf"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/current && php artisan route:cache && php artisan config:cache && php artisan queue:restart"
