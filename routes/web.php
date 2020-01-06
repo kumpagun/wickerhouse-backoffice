@@ -58,11 +58,13 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
 Route::group(['prefix' => 'episode', 'middleware' => ['auth', 'role:admin|course']], function () {
   // GROUP
   Route::post('/group/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
-  Route::get('/group/create/{course_id}/{id?}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
+  Route::get('/group/create/{course_id}/{id}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
   // EP
-  Route::post('/group/updatelist', 'Course\EpisodeController@episode_group_updatelist')->name('episode_group_updatelist');
+  Route::post('/group/sortgroup', 'Course\EpisodeController@episode_group_sortgroup')->name('episode_group_sortgroup');
   Route::get('/create/{course_id}/{id?}', 'Course\EpisodeController@episode_create')->name('episode_create');
   Route::post('/store', 'Course\EpisodeController@episode_store')->name('episode_store');
+  Route::post('/update_group_id', 'Course\EpisodeController@episode_update_group_id')->name('episode_update_group_id');
+  
   // Upload Video
   Route::match(['get','post'],'/upload_file', 'Course\EpisodeController@episode_upload_file')->name('episode_upload_file');
   Route::match(['get','post'],'/video_delete_file', 'Course\EpisodeController@episode_video_delete_file')->name('episode_video_delete_file');
