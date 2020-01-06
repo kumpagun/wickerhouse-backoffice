@@ -8,7 +8,7 @@
     </div>
     <div class="card-content">
       <div class="card-body pt-0">
-        <form method="POST" action="{{ route('episode_group_updatelist') }}">
+        <form method="POST" action="{{ route('episode_group_sortgroup') }}">
           @csrf
           <input type="hidden" name="course_id" value="{{ $data->_id }}" />
           @if(!empty($episode_group))
@@ -71,7 +71,7 @@
 
   function update_episode_group(course_id, list_group)
   {
-    var url = "{{ route('episode_group_updatelist') }}"
+    var url = "{{ route('episode_group_sortgroup') }}"
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
     $.post(url,
     {
