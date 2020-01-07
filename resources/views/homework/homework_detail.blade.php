@@ -7,7 +7,7 @@
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('course_create', ['id' => $course_id, '#homework']) }}">Course</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('course_create', ['id' => $data->course_id, '#homework']) }}">Course</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -25,6 +25,8 @@
       <div class="card-body overflow-hidden">
         <form id="form" class="form" action="{{ route('homework_store') }}" method="POST">
           @csrf
+          <meta name="csrf-token" content="{{ csrf_token() }}">
+          <input type="hidden" name="id" value="{{ $data->_id }}">
           <div class="form-body">
             {{-- Course --}}
             <fieldset class="form-group @if($errors->course->has('course_id')) danger @endif">
@@ -93,6 +95,9 @@
       placeholder: 'รายละเอียดคำถาม',
       theme: 'snow'  // or 'bubble'
     });
+    quill.getModule("toolbar").addHandler("image", () => {
+      this.selectLocalImage(quill);
+    });
     var form = document.querySelector('form');
     form.onsubmit = function() {
       // Populate hidden form on submit
@@ -100,17 +105,55 @@
       content.value = quill.container.firstChild.innerHTML
       return true;
     };
-    quill.on('text-change', function (delta, oldDelta, source) {
-      var editor = $(".ql-editor").html();
-      var pattern = /&lt;/g
-      if(editor.match(pattern)) {
-        editor = editor.replace(/&lt;/g, '<')
-        editor = editor.replace(/&gt;/g, '>')
-        editor = editor.replace(/&nbsp;/g, ' ')
-        var content = document.querySelector('input[name=question]');
-        quill.container.firstChild.innerHTML = editor
-        content.value = editor
-      }
-    });
+
+    function selectLocalImage(quill) {
+      console.log('selectLocalImage')
+      var input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.click();
+      // Listen upload local image and save to server
+      input.onchange = () => {
+        const file = input.files[0];
+        // file type is only image.
+        if (/^image\//.test(file.type)) {
+          this.saveToServer(quill, file, "image");
+        } else {
+          console.warn("Only images can be uploaded here.");
+        }
+      };
+    }
+
+    function saveToServer(quill, file) {
+      var url = "{{ route('upload_images') }}"
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+      var formData = new FormData()
+      formData.append('_token', CSRF_TOKEN)
+      formData.append('file', file)
+      formData.append('input_path', 'quill')
+      $.ajax({
+        method: 'post',
+        processData: false,
+        contentType: false,
+        cache: false,
+        data: formData,
+        enctype: 'multipart/form-data',
+        url: url,
+        success: function (response) {
+          image_url = "{{ env('IMG_PATH') }}"+response.message
+          insertToEditor(quill,image_url)
+          console.log(response)
+        },
+        error: function(data)
+        {
+          console.log(data)
+        }
+      })
+    }
+
+    function insertToEditor(quill, url) {
+      // push image url to editor.
+      const range = quill.getSelection();
+      quill.insertEmbed(range.index, "image", url);
+    }
   </script>
 @endsection

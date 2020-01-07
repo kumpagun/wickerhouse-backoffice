@@ -2,8 +2,13 @@
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
       <h4 class="card-title">EPISODE GROUP</h4>
+      <div class="heading-elements">
+        <ul class="list-inline mb-0">
+          <li><a href="{{ route('episode_group_create', ['course_id' => $data->_id]) }}"><i class="ft-edit"></i> แก้ไข</a></li>
+        </ul>
+      </div>
       <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-        <span>EPISODE INFO</span>
+        <span>EPISODE GROUP INFO</span>
       </h6>
     </div>
     <div class="card-content">
@@ -15,15 +20,11 @@
             <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
             @foreach ($episode_group as $item)
               <li id="{{ $item->_id }}" class="list-group-item">
-                <a href="{{ route('episode_group_create', ['course_id' => $data->_id, 'id' => $item->_id]) }}"><strong>{{ $item->title }}</strong></a>
+                <strong>{{ $item->title }}</strong>
               </li>
             @endforeach
             </ul>
-            <button id="update-grouplist" type="button" class="btn btn-primary">อัพเดท list</button>
           @endif
-          <button type="button" data-repeater-create class="btn btn-secondary"  data-toggle="modal" data-target="#default">
-            <i class="ft-plus"></i> เพิ่ม Episode group
-          </button>
         </form>
       </div>
     </div>

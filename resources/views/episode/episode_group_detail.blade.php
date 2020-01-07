@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = $data->title; @endphp
+@php $title = 'episode group'; @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -22,8 +22,8 @@
           <h4 class="mb-2">EPISODE GROUP</h4>
           <div class="heading-elements">
             <ul class="list-inline mb-0">
-              <li><a href="#" onclick="handleChangeList()"><i class="ft-edit"></i> แก้ไข</a></li>
-              <li><a href="#"><i class="ft-x"></i> ลบ</a></li>
+              <li><a href="#" onclick="handleChangeList()"><i class="ft-edit"></i> เรียงลำดับ</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#addEpisodeGRoup"><i class="ft-plus"></i> เพิ่ม</a></li>
             </ul>
           </div>
         </div>
@@ -33,16 +33,22 @@
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
                 @foreach ($episode_group as $item)
-                  <li id="{{ $item->_id }}" class="list-group-item pb-0">
+                  <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 pb-0">
                     <div class="li-custom">
                       <span><i class="ft-menu mr-1 d-none"></i> <strong>{{ $item->title }}</strong></span>
                       <div class="action">
-                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editEP-{{ $item->_id }}">แก้ไข</button>
-                        <button type="button" class="btn btn-outline-danger">ลบ</button>
+                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editEP-{{ $item->_id }}">เลือก Episode</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
                       </div>
                     </div>
                     <ul class="list-group-inner">
-                      <li class="list-group-item">ยังไม่มี Episode</li>
+                      @if(!empty($episode_list_selected[$item->_id]))
+                        @foreach ($episode_list_selected[$item->_id] as $list)
+                          <li class="list-group-item">{{ $list['title'] }}</li>
+                        @endforeach
+                      @else
+                        <li class="list-group-item blue-grey lighten-2">ยังไม่มี Episode</li>
+                      @endif
                     </ul>
                   </li>
                 @endforeach
@@ -57,8 +63,9 @@
   </div>
 
   {{-- MODAL --}}
-  @foreach ($episode_group as $item)
-  <div class="modal fade text-left" id="editEP-{{ $item->_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
+
+  {{-- Modal Add Group --}}
+  <div class="modal fade text-left" id="addEpisodeGRoup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -67,19 +74,55 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
+      <form class="form-horizontal" action="{{ route('episode_group_store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="course_id" value="{{ $course_id }}" />
+        <div class="modal-body">
+          <fieldset class="form-group floating-label-form-group">
+            <label for="user-name">Title</label>
+            <input type="text" name="title" class="form-control" placeholder="Title" required>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-outline-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+    </div>
+  </div>
+
+  {{-- Modal select EP --}}
+  @foreach ($episode_group as $item)
+  <div class="modal fade text-left" id="editEP-{{ $item->_id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">{{ $item->title }}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
       <form method="POST" action="{{ route('episode_update_group_id') }}">
         <div class="modal-body">
-          <meta name="csrf-token" content="{{ csrf_token() }}">
-          <input type="hidden" value="{{ $item }}">
-          <select multiple="multiple" id="episode" name="episode[]">
-            @foreach ($episode_list_active as $item)
-              <option value='{{ $item->_id }}'>{{ $item->title }}</option>
+          @csrf
+          <input type="hidden" name="episode_group_id" value="{{ $item->_id }}">
+          <input type="hidden" name="course_id" value="{{ $course_id }}">
+          <p>กรุณาเลือก Episode สำหรับ {{ $item->title }}</p>
+          <select multiple="multiple" class="episode" name="episode[]">
+            @if(!empty($episode_list_selected[$item->_id]))
+              @foreach ($episode_list_selected[$item->_id] as $list)
+                <option value='{{ $list['id'] }}' selected>{{ $list['title'] }}</option> 
+              @endforeach
+            @endif
+            @foreach ($episode_list_active as $list)
+              <option value='{{ $list->_id }}'>{{ $list->title }}</option>
             @endforeach
           </select>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="update-grouplist" class="btn btn-outline-primary">Save changes</button>
+          <button type="submit" id="update-grouplist" class="btn btn-outline-primary">Save changes</button>
         </div>
       </form>
     </div>
@@ -112,6 +155,7 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
+    text-indent: 2em;
   }
   </style>
 @endsection
@@ -120,7 +164,14 @@
 <script src="{{ asset('multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script>
-  $('#episode').multiSelect()
+  $('.episode').multiSelect({ 
+    keepOrder: true,
+    afterSelect: function(value){
+      $('[name="episode[]"] option[value="'+value+'"]').remove();
+      $('[name="episode[]"]').append($("<option></option>").attr("value",value).attr('selected', 'selected'));
+    }
+  });
+  
   $('#update-grouplist').on('click', function(){
     var $listItems = $('#sortable li');
     var course_id = '{{ $course_id }}'
@@ -143,7 +194,8 @@
       episode_group: list_group
     },
     function(data, status){
-      swal("Update");
+      // swal("Update");
+      console.log(data, status)
     });
   }
 
@@ -164,6 +216,35 @@
     $('.btn-sortgroup').addClass('d-none');
     $("#sortable").sortable({
       disabled: true
+    });
+  }
+
+  function handleDeleteGroup(episode_group_id) {
+    url = "{{ route('episode_group_delete') }}/"+episode_group_id
+    swal({
+      title: "คุณต้องการลบใช่หรือไม่ ?",
+      icon: "warning",
+      showCancelButton: true,
+      buttons: {
+        cancel: {
+          text: "ยกเลิก",
+          value: null,
+          visible: true,
+          className: "",
+          closeModal: true,
+        },
+        confirm: {
+          text: "ลบ",
+          value: true,
+          visible: true,
+          className: "",
+          closeModal: false
+        }
+      }
+    }).then(isConfirm => {
+      if (isConfirm) {
+        window.location = url
+      } 
     });
   }
 </script>

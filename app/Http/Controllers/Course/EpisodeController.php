@@ -48,10 +48,12 @@ class EpisodeController extends Controller
 
     $count = 0;
     foreach($episode_group as $row) {
-      $update = Episode_group::find($row);
-      $update->position = $count;
-      $update->save();
-      $count++;
+      if(!empty($row)) {
+        $update = Episode_group::find($row);
+        $update->position = $count;
+        $update->save();
+        $count++;
+      }
     }
 
     return response()->json([
@@ -60,20 +62,20 @@ class EpisodeController extends Controller
     ]); 
   }
 
-  public function episode_group_create($course_id, $id)
+  public function episode_group_create($course_id)
   {
     $episode_group = $this->get_episode_group($course_id);
     $episode_list_active = Episode::where('course_id',new ObjectId($course_id))->whereNull('episode_group_id')->where('status',1)->get();
     $episode_list_selectes = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->get();
-
     $episode_list_selected = [];
     foreach($episode_list_selectes as $row) {
-      array_push($episode_list_selected[$row->episode_group_id], $row->_id);
+      $episode_list_selected[(string)$row->episode_group_id][] = [
+        'id' => $row->id,
+        'title' => $row->title
+      ];
     }
-    
-    $data = Episode_group::find($id);
+    $data = Episode_group::where('course_id',$course_id)->where('status',1)->get();
     $datas = [
-      'id' => $id,
       'course_id' => $course_id,
       'episode_group' => $episode_group,
       'episode_list_active' => $episode_list_active,
@@ -81,25 +83,6 @@ class EpisodeController extends Controller
       'data' => $data
     ];
     return view('episode.episode_group_detail', $datas);
-  }
-
-  public function episode_update_group_id(Request $request) 
-  {
-    $episode_group_id = $request->input('episode_group_id');
-    $episode = $request->input('episode');
-
-    // $count = 0;
-    // foreach($episode_group as $row) {
-    //   $update = Episode_group::find($row);
-    //   $update->position = $count;
-    //   $update->save();
-    //   $count++;
-    // }
-
-    // return response()->json([
-    //   'status' => 200,
-    //   'message' => 'Success.'
-    // ]); 
   }
 
   public function episode_group_store(Request $request)
@@ -123,7 +106,40 @@ class EpisodeController extends Controller
     $current_user = Auth::user();
     ActivityLogClass::log('เพิ่มหรือแก้ไข episode_group', new ObjectId($current_user->_id), $episode_group->getTable(), $episode_group->getAttributes(),$current_user->username);
   
-    return redirect()->route('course_create', ['id' => $course_id, '#episodegroup']);
+    return redirect()->route('episode_group_create', ['course_id' => $course_iก]);
+  }
+
+  public function episode_update_group_id(Request $request) 
+  {
+    $episode_group_id = $request->input('episode_group_id');
+    $episodes = $request->input('episode');
+    $course_id = $request->input('course_id');
+    
+    $clear_ep = Episode::where('episode_group_id',new ObjectId($episode_group_id))->unset('episode_group_id');
+
+    if(!empty($episodes)) {
+      $count = 0;
+      foreach($episodes as $row) {
+        $episode = Episode::find($row);
+        $episode->episode_group_id = new ObjectId($episode_group_id);
+        $episode->position = $count;
+        $episode->save();
+        $count++;
+      }
+    }
+
+    return redirect()->route('episode_group_create', ['course_id' => $course_id]);
+  }
+
+  public function episode_group_delete($episode_group_id) 
+  {
+    $clear_ep = Episode::where('episode_group_id',new ObjectId($episode_group_id))->unset('episode_group_id');
+
+    $episode_group = Episode_group::find($episode_group_id);
+    $episode_group->status = 0;
+    $episode_group->save();
+
+    return redirect()->route('episode_group_create', ['course_id' => $episode_group->course_id]);
   }
 
   public function episode_create($course_id, $id='')

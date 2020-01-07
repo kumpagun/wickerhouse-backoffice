@@ -22,8 +22,11 @@ Route::group(['prefix' => 'upload'], function () {
 Route::group(['prefix' => 'auth'], function () {
   Route::get('/', 'Auth\LoginController@view')->name('auth_view');
   Route::post('/signin', 'Auth\LoginController@signin')->name('auth_signin');
-  Route::group(['middleware' => ['auth', 'role:admin']], function() {
-    Route::get('/signout', 'Auth\LoginController@signout')->name('auth_signout');
+  Route::get('/signout', 'Auth\LoginController@signout')->name('auth_signout');
+
+  Route::group(['prefix' => 'jas'], function () {
+    Route::get('/signin', 'Auth\JasmineController@signin')->name('jasmine_signin');
+    Route::get('/callback', 'Auth\JasmineController@callback')->name('jasmine_callback');
   });
 });
 // Users
@@ -58,7 +61,9 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
 Route::group(['prefix' => 'episode', 'middleware' => ['auth', 'role:admin|course']], function () {
   // GROUP
   Route::post('/group/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
-  Route::get('/group/create/{course_id}/{id}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
+  Route::get('/group/create/{course_id}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
+  Route::get('/group/delete/{episode_group_id?}', 'Course\EpisodeController@episode_group_delete')->name('episode_group_delete');
+  
   // EP
   Route::post('/group/sortgroup', 'Course\EpisodeController@episode_group_sortgroup')->name('episode_group_sortgroup');
   Route::get('/create/{course_id}/{id?}', 'Course\EpisodeController@episode_create')->name('episode_create');
@@ -75,7 +80,7 @@ Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|cours
   Route::match(['get','post'], '/', 'Course\HomeworkController@homework_index')->name('homework_index');
   Route::get('/course/create/{id?}', 'Course\HomeworkController@homework_by_course_create')->name('homework_by_course_create');
   Route::get('/create/{id?}', 'Course\HomeworkController@homework_create')->name('homework_create');
-  Route::post('/store/{id?}', 'Course\HomeworkController@homework_store')->name('homework_store');
+  Route::post('/store', 'Course\HomeworkController@homework_store')->name('homework_store');
 });
 
 // Examination

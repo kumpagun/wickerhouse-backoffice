@@ -13,12 +13,14 @@
           </li>
         </ul>
       </li> --}}
+      @hasrole('admin|course')
       <li class="navigation-header">
         <span>Teacher</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Teacher"></i>
       </li>
       <li class="nav-item {{ Page::activeMenu('555') }}">
         <a href="{{ route('teacher_index') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">List Teacher</span></a>
       </li>
+      @endhasrole
 
       @hasrole('admin|course')
       <li class=" navigation-header">
@@ -30,13 +32,18 @@
       <li class="nav-item {{ Page::activeMenu(route('category_index')) }}">
         <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">Category</span></a>
       </li>
-      {{-- <li class="nav-item disabled {{ Page::activeMenu('555') }}">
-        <a href="#"><i class="ft-clipboard"></i><span class="menu-title" data-i18n="">Examination</span></a>
+      @endhasrole
+      
+      @hasrole('admin|course')
+      <li class=" navigation-header">
+        <span>Homework</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
-      <li class="nav-item {{ Page::activeMenu(route('homework_index')) }}">
-        <a href="{{ route('homework_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">Homework</span></a>
-      </li> --}}
+      <li class="nav-item disabled {{ Page::activeMenu(route('homework_index')) }}">
+        <a><i class="ft-edit"></i><span class="menu-title" data-i18n="">ตรวจการบ้าน</span></a>
+      </li>
+      @endhasrole
 
+      @hasrole('admin|course')
       <li class=" navigation-header">
         <span>Training</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>

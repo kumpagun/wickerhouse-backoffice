@@ -91,7 +91,7 @@ class HomeworkController extends Controller
       return redirect()->back()->withErrors($validator, 'homework')->withInput();
     }
 
-    if(!empty($data['id'])) {
+    if(!empty($id)) {
       $homework = Homework::find($id);
     } else {
       $homework = new Homework();

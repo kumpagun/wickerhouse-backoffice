@@ -26,6 +26,7 @@
         <div class="card-body overflow-hidden">
           <form id="form" class="form" action="{{ route('examination_store') }}" method="POST">
             @csrf
+            <meta name="csrf-token" content="{{ csrf_token() }}">
             <input type="hidden" name="examination_group_id" value="{{ $examination_group->_id }}">
             <input type="hidden" name="id" value="{{ $examination->_id }}">
             <div class="form-body">
@@ -136,9 +137,10 @@ function handleSubmit() {
     },
     theme: 'snow'  // or 'bubble'
   });
-</script>
-
-<script>
+  quill_desc.getModule("toolbar").addHandler("image", () => {
+    this.selectLocalImage(quill_desc);
+  });
+  
   var quill_choice_0 = new Quill('#choice_0', {
     modules: {
       toolbar: [
@@ -148,9 +150,10 @@ function handleSubmit() {
     },
     theme: 'snow'
   });
-</script>
-
-<script>
+  quill_choice_0.getModule("toolbar").addHandler("image", () => {
+    this.selectLocalImage(quill_choice_0);
+  });
+  
   var quill_choice_1 = new Quill('#choice_1', {
     modules: {
       toolbar: [
@@ -160,9 +163,10 @@ function handleSubmit() {
     },
     theme: 'snow'
   });
-</script>
-
-<script>
+  quill_choice_1.getModule("toolbar").addHandler("image", () => {
+    this.selectLocalImage(quill_choice_1);
+  });
+  
   var quill_choice_2 = new Quill('#choice_2', {
     modules: {
       toolbar: [
@@ -172,9 +176,10 @@ function handleSubmit() {
     },
     theme: 'snow'
   });
-</script>
-
-<script>
+  quill_choice_2.getModule("toolbar").addHandler("image", () => {
+    this.selectLocalImage(quill_choice_2);
+  });
+  
   var quill_choice_3 = new Quill('#choice_3', {
     modules: {
       toolbar: [
@@ -184,5 +189,60 @@ function handleSubmit() {
     },
     theme: 'snow'
   });
+  quill_choice_3.getModule("toolbar").addHandler("image", () => {
+    this.selectLocalImage(quill_choice_3);
+  });
+</script>
+
+<script>
+function selectLocalImage(quill) {
+  console.log('selectLocalImage')
+  var input = document.createElement("input");
+  input.setAttribute("type", "file");
+  input.click();
+  // Listen upload local image and save to server
+  input.onchange = () => {
+    const file = input.files[0];
+    // file type is only image.
+    if (/^image\//.test(file.type)) {
+      this.saveToServer(quill, file, "image");
+    } else {
+      console.warn("Only images can be uploaded here.");
+    }
+  };
+}
+
+function saveToServer(quill, file) {
+  var url = "{{ route('upload_images') }}"
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+  var formData = new FormData()
+  formData.append('_token', CSRF_TOKEN)
+  formData.append('file', file)
+  formData.append('input_path', 'quill')
+  $.ajax({
+    method: 'post',
+    processData: false,
+    contentType: false,
+    cache: false,
+    data: formData,
+    enctype: 'multipart/form-data',
+    url: url,
+    success: function (response) {
+      image_url = "{{ env('IMG_PATH') }}"+response.message
+      insertToEditor(quill,image_url)
+      console.log(response)
+    },
+    error: function(data)
+    {
+      console.log(data)
+    }
+  })
+}
+
+function insertToEditor(quill, url) {
+  // push image url to editor.
+  const range = quill.getSelection();
+  quill.insertEmbed(range.index, "image", url);
+}
 </script>
 @endsection
