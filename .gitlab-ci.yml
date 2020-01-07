@@ -61,7 +61,7 @@ deploy_staging:
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/logs ] || mkdir -p $DEPLOY_BASE/logs"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/shared/storage/app/public ] || mkdir -p $DEPLOY_BASE/shared/storage/app/public"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "mkdir $DEPLOY_BASE/releases/$CI_COMMIT_SHA"
-    - scp -P $USER_SSH_PORT -r app artisan bootstrap composer.json config database node_modules package.json public resources routes vendor webpack.* .env.example Modules $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
+    - scp -P $USER_SSH_PORT -r app artisan bootstrap composer.json config database  package.json public resources routes  webpack.* .env.example  $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -L $DEPLOY_BASE/current ]; then rm $DEPLOY_BASE/current; fi"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage/app/public $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/storage"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage $DEPLOY_BASE/releases/$CI_COMMIT_SHA/storage"
