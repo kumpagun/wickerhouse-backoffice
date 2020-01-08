@@ -41,6 +41,18 @@ class EpisodeController extends Controller
     $data = Episode::where('course_id',new ObjectId($course_id))->where('status',1)->get();
     return $data;
   }
+  public function get_episode_list($course_id) 
+  {
+    $episode_list_selectes = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->get();
+    $episode_list_selected = [];
+    foreach($episode_list_selectes as $row) {
+      $episode_list_selected[(string)$row->episode_group_id][] = [
+        'id' => $row->id,
+        'title' => $row->title
+      ];
+    }
+    return $episode_list_selected;
+  }
   public function episode_group_sortgroup(Request $request) 
   {
     $course_id = $request->input('course_id');
@@ -66,14 +78,7 @@ class EpisodeController extends Controller
   {
     $episode_group = $this->get_episode_group($course_id);
     $episode_list_active = Episode::where('course_id',new ObjectId($course_id))->whereNull('episode_group_id')->where('status',1)->get();
-    $episode_list_selectes = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->get();
-    $episode_list_selected = [];
-    foreach($episode_list_selectes as $row) {
-      $episode_list_selected[(string)$row->episode_group_id][] = [
-        'id' => $row->id,
-        'title' => $row->title
-      ];
-    }
+    $episode_list_selected = $this->get_episode_list($course_id);
     $data = Episode_group::where('course_id',$course_id)->where('status',1)->get();
     $datas = [
       'course_id' => $course_id,
@@ -103,8 +108,7 @@ class EpisodeController extends Controller
     $episode_group->position = $position;
     $episode_group->save();
 
-    $current_user = Auth::user();
-    ActivityLogClass::log('เพิ่มหรือแก้ไข episode_group', new ObjectId($current_user->_id), $episode_group->getTable(), $episode_group->getAttributes(),$current_user->username);
+    ActivityLogClass::log('เพิ่มหรือแก้ไข episode_group', new ObjectId(Auth::user()->_id), $episode_group->getTable(), $episode_group->getAttributes(),Auth::user()->username);
   
     return redirect()->route('episode_group_create', ['course_id' => $course_iก]);
   }
@@ -138,6 +142,8 @@ class EpisodeController extends Controller
     $episode_group = Episode_group::find($episode_group_id);
     $episode_group->status = 0;
     $episode_group->save();
+
+    ActivityLogClass::log('ลบ episode_group', new ObjectId(Auth::user()->_id), $episode_group->getTable(), $episode_group->getAttributes(),Auth::user()->username);
 
     return redirect()->route('episode_group_create', ['course_id' => $episode_group->course_id]);
   }
@@ -193,6 +199,17 @@ class EpisodeController extends Controller
     // dispatch(new UploadClip($episode, $path));
 
     return redirect()->route('course_create', ['id' => $course_id, '#episodelist']);
+  }
+
+  public function episode_delete($id) 
+  {
+    $episode = Episode::find($id);
+    $episode->status = 0;
+    $episode->save();
+
+    ActivityLogClass::log('ลบ episode', new ObjectId(Auth::user()->_id), $episode->getTable(), $episode->getAttributes(),Auth::user()->username);
+
+    return redirect()->route('course_create', ['id' => $episode->course_id, '#episodelist']);
   }
   
   public function episode_upload_file(Request $request)

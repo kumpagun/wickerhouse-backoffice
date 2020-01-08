@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('add ClassRoom'); @endphp
+@php $title = strtoupper('add Training'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('training_index') }}">Training List</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -23,7 +22,7 @@
           <img src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-dark.png') }}" alt="branding logo">
         </div> --}}
         <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>CLASSROOM INFO</span>
+          <span>TRAINING INFO</span>
         </h6>
       </div>
       <div class="card-content ">
@@ -32,18 +31,18 @@
             @csrf
             <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="col-12">
-              <fieldset class="form-group @if($errors->classroom->has('title')) danger @endif">
-              <label for="user-name">Classroom Title *</label>
-              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="classroom title">
-              @if($errors->classroom->has('title'))
+              <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
+              <label for="user-name">Training Title *</label>
+              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="training title">
+              @if($errors->training->has('title'))
                   <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->classroom->first('title') }}</p>
+                  <p class="mb-0">{{ $errors->training->first('title') }}</p>
                   </span>
               @endif
               </fieldset>
             </div>
             <div class="col-12">
-              <fieldset class="form-group @if($errors->classroom->has('course_id')) danger @endif">
+              <fieldset class="form-group @if($errors->training->has('course_id')) danger @endif">
                 <label for="user-name">Course *</label>
                 <select class="select2 form-control" name="course_id" @if($data->id != '')disabled @endif>
                   <option value=""> กรุณาเลือก Course</option>
@@ -55,15 +54,15 @@
                     @endforeach
                   </optgroup>
                 </select>
-                @if($errors->classroom->has('course_id'))
+                @if($errors->training->has('course_id'))
                     <span class="small" role="alert">
-                    <p class="mb-0">{{ $errors->classroom->first('course_id') }}</p>
+                    <p class="mb-0">{{ $errors->training->first('course_id') }}</p>
                     </span>
                 @endif
               </fieldset>
             </div>
             <div class="col-6">
-              <fieldset class="form-group @if($errors->classroom->has('company_id')) danger @endif">
+              <fieldset class="form-group @if($errors->training->has('company_id')) danger @endif">
               <label for="user-name">Company *</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
                 <option value=""> กรุณาเลือก Company</option>
@@ -75,22 +74,22 @@
                   @endforeach
                 </optgroup>
               </select>
-              @if($errors->classroom->has('company_id'))
+              @if($errors->training->has('company_id'))
                   <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->classroom->first('company_id') }}</p>
+                  <p class="mb-0">{{ $errors->training->first('company_id') }}</p>
                   </span>
               @endif
               </fieldset>
             </div>
             <div class="col-6">
-              <fieldset class="form-group @if($errors->classroom->has('title')) danger @endif">
+              <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
                 <label for="user-name">Department *</label>
                 <select class="select2 form-control" name="department_ids[]" multiple="multiple">
                 </select>
               </fieldset>
             </div>
             <div class="col-6">
-              <fieldset class="form-group @if($errors->classroom->has('published_at')) danger @endif">
+              <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
                 <label for="user-name">Published At *</label>
                 <div class='input-group date published_at'  id='datetimepicker'>
                   <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}"" @endif/> 
@@ -100,15 +99,15 @@
                     </span>
                   </div>
                 </div>
-                @if($errors->classroom->has('published_at'))
+                @if($errors->training->has('published_at'))
                   <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->classroom->first('published_at') }}</p>
+                  <p class="mb-0">{{ $errors->training->first('published_at') }}</p>
                   </span>
                 @endif
               </fieldset>
             </div>
             <div class="col-6">
-              <fieldset class="form-group @if($errors->classroom->has('expired_at')) danger @endif">
+              <fieldset class="form-group @if($errors->training->has('expired_at')) danger @endif">
                 <label for="user-name">Expired At *</label>
                 <div class='input-group date expired_at'  id='datetimepicker'>
                   <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}"" @endif/> 
@@ -118,9 +117,9 @@
                     </span>
                   </div>
                 </div>
-                @if($errors->classroom->has('expired_at'))
+                @if($errors->training->has('expired_at'))
                   <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->classroom->first('expired_at') }}</p>
+                  <p class="mb-0">{{ $errors->training->first('expired_at') }}</p>
                   </span>
                 @endif
               </fieldset>

@@ -4,7 +4,16 @@
       <h4 class="card-title">EPISODE GROUP</h4>
       <div class="heading-elements">
         <ul class="list-inline mb-0">
-          <li><a href="{{ route('episode_group_create', ['course_id' => $data->_id]) }}"><i class="ft-edit"></i> แก้ไข</a></li>
+          <li>
+            <a href="{{ route('episode_group_create', ['course_id' => $data->_id]) }}">
+              <button class="btn btn-round btn-secondary"><i class="ft-edit"></i> แก้ไข</button>
+            </a>
+          </li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#addEpisodeGRoup">
+              <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
+            </a>
+          </li>
         </ul>
       </div>
       <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
@@ -19,8 +28,17 @@
           @if(!empty($episode_group))
             <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
             @foreach ($episode_group as $item)
-              <li id="{{ $item->_id }}" class="list-group-item">
+              <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 pb-0">
                 <strong>{{ $item->title }}</strong>
+                <ul class="list-group-inner">
+                  @if(!empty($episode_list[$item->_id]))
+                    @foreach ($episode_list[$item->_id] as $list)
+                      <li class="list-group-item">{{ $list['title'] }}</li>
+                    @endforeach
+                  @else
+                    <li class="list-group-item blue-grey lighten-2">ยังไม่มี Episode</li>
+                  @endif
+                </ul>
               </li>
             @endforeach
             </ul>
@@ -31,7 +49,7 @@
   </div>
 </div>
 
-<div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
+<div class="modal fade text-left" id="addEpisodeGRoup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
   <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
@@ -57,6 +75,27 @@
   </div>
   </div>
 </div>
+
+@push('style')
+  <style>
+    .list-group-inner {
+      margin-top: 10px;
+      margin-left: -57px;
+      margin-right: -17px;
+    }
+    .li-custom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .list-group-inner > .list-group-item {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      text-indent: 2em;
+    }
+  </style>
+@endpush
 
 @push('scripts')
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
