@@ -55,7 +55,7 @@
               @endforeach
             </div>
             <div>
-              <button type="button" class="btn btn-block btn-primary" onclick="handleSubmit()">SAVE</button>
+              <button type="submit" class="btn btn-block btn-primary">SAVE</button>
             </div>
           </form>
         </div>
@@ -74,62 +74,8 @@
 <script src="{{ asset('stack-admin/app-assets/vendors/js/forms/icheck/icheck.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('stack-admin/app-assets/js/scripts/forms/checkbox-radio.js') }}" type="text/javascript"></script>
 <script>
-//  Desc
-function handleSubmit() {
-  var radios = document.getElementsByName('answer_key');
-  var answer_key 
-  for (var i = 0, length = radios.length; i < length; i++) {
-    if (radios[i].checked) {
-      answer_key = radios[i].value
-      break;
-    }
-  }
-
-  var question = document.querySelector('input[name=question]');
-  var choice_0 = document.querySelector('input[name=choice_0]');
-  var choice_1 = document.querySelector('input[name=choice_1]');
-  var choice_2 = document.querySelector('input[name=choice_2]');
-  var choice_3 = document.querySelector('input[name=choice_3]');
-  
-  question.value = quill_desc.container.firstChild.innerHTML
-  choice_0.value = quill_choice_0.container.firstChild.innerHTML
-  choice_1.value = quill_choice_1.container.firstChild.innerHTML
-  choice_2.value = quill_choice_2.container.firstChild.innerHTML
-  choice_3.value = quill_choice_3.container.firstChild.innerHTML
-
-  if(!question || !choice_0 || !choice_1 || !choice_2 || !choice_3 || !answer_key) {
-    swal('กรุณากรอกข้อมูลให้ครบ')
-    return false
-  }
-
-  if(quill_desc.container.firstChild.innerHTML==="<p><br></p>") {
-    swal('กรุณากรอกข้อมูลให้ครบ') 
-    return false 
-  }
-  if(quill_choice_0.container.firstChild.innerHTML==="<p><br></p>") { 
-    swal('กรุณากรอกข้อมูลให้ครบ') 
-    return false 
-  }
-  if(quill_choice_1.container.firstChild.innerHTML==="<p><br></p>") { 
-    swal('กรุณากรอกข้อมูลให้ครบ') 
-    return false 
-  }
-  if(quill_choice_2.container.firstChild.innerHTML==="<p><br></p>") { 
-    swal('กรุณากรอกข้อมูลให้ครบ') 
-    return false 
-  }
-  if(quill_choice_3.container.firstChild.innerHTML==="<p><br></p>") { 
-    swal('กรุณากรอกข้อมูลให้ครบ') 
-    return false 
-  }
-
-  document.getElementById("form").submit();
-}
-
-</script>
-<script>
   $('document').ready(function(){ 
-    var quill_desc = new Quill('#question', {
+    var quill_question = new Quill('#question', {
       modules: {
         toolbar: [
           ['bold', 'italic', 'underline'],
@@ -138,8 +84,8 @@ function handleSubmit() {
       },
       theme: 'snow'  // or 'bubble'
     });
-    quill_desc.getModule("toolbar").addHandler("image", () => {
-      selectLocalImage(quill_desc);
+    quill_question.getModule("toolbar").addHandler("image", () => {
+      selectLocalImage(quill_question);
     });
     
     var quill_choice_0 = new Quill('#choice_0', {
@@ -193,9 +139,60 @@ function handleSubmit() {
     quill_choice_3.getModule("toolbar").addHandler("image", () => {
       selectLocalImage(quill_choice_3);
     });
+    var form = document.querySelector('form');
+    form.onsubmit = function() {
+      // Populate hidden form on submit
+      var radios = document.getElementsByName('answer_key');
+      var question = document.querySelector('input[name=question]');
+      var choice_0 = document.querySelector('input[name=choice_0]');
+      var choice_1 = document.querySelector('input[name=choice_1]');
+      var choice_2 = document.querySelector('input[name=choice_2]');
+      var choice_3 = document.querySelector('input[name=choice_3]');
+      question.value = quill_question.container.firstChild.innerHTML
+      choice_0.value = quill_choice_0.container.firstChild.innerHTML
+      choice_1.value = quill_choice_1.container.firstChild.innerHTML
+      choice_2.value = quill_choice_2.container.firstChild.innerHTML
+      choice_3.value = quill_choice_3.container.firstChild.innerHTML
+      var answer_key 
+      for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+          answer_key = radios[i].value
+          break;
+        }
+      }
+
+      if(!question || !choice_0 || !choice_1 || !choice_2 || !choice_3 || !answer_key) {
+        swal('กรุณากรอกข้อมูลให้ครบ')
+        return false
+      }
+
+      if(quill_question.container.firstChild.innerHTML==="<p><br></p>") {
+        swal('กรุณากรอกข้อมูลให้ครบ') 
+        return false 
+      }
+      if(quill_choice_0.container.firstChild.innerHTML==="<p><br></p>") { 
+        swal('กรุณากรอกข้อมูลให้ครบ') 
+        return false 
+      }
+      if(quill_choice_1.container.firstChild.innerHTML==="<p><br></p>") { 
+        swal('กรุณากรอกข้อมูลให้ครบ') 
+        return false 
+      }
+      if(quill_choice_2.container.firstChild.innerHTML==="<p><br></p>") { 
+        swal('กรุณากรอกข้อมูลให้ครบ') 
+        return false 
+      }
+      if(quill_choice_3.container.firstChild.innerHTML==="<p><br></p>") { 
+        swal('กรุณากรอกข้อมูลให้ครบ') 
+        return false 
+      }
+
+      // document.getElementById("form").submit(); 
+
+      return true;
+    };
   })
 </script>
-
 <script>
   function selectLocalImage(quill) {
     console.log('selectLocalImage')
