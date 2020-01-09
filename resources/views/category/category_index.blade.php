@@ -26,37 +26,35 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header pb-0">
+        <div class="card-header">
           <h4 class="card-title">Category list</h4>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Category Name</th>
-                <th class="text-center">Slug</th>
-                <th class="text-center">code</th>
-              </tr>
-              @if (count($datas))
-                @foreach ($datas as $item)
-                  <tr>
-                    <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}"> {{  $loop->iteration  }} </a></td>
-                    <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->title  }}</a></td>
-                    <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->slug  }}</a></td>
-                    <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->code  }}</a></td>
-                  </tr>
-                @endforeach  
-              @else
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">Category Name</th>
+              <th class="text-center">Slug</th>
+              <th class="text-center">code</th>
+            </tr>
+            @if (count($datas))
+              @foreach ($datas as $item)
                 <tr>
-                  <td class="text-center" colspan="99">
-                    {{"ไม่มีข้อมูล"}}
-                  </td>
-                </tr>   
-              @endif
-            </table>
-          </div> 
-        </div>
+                  <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}"> {{  $loop->iteration  }} </a></td>
+                  <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->title  }}</a></td>
+                  <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->slug  }}</a></td>
+                  <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->code  }}</a></td>
+                </tr>
+              @endforeach  
+            @else
+              <tr>
+                <td class="text-center" colspan="99">
+                  {{"ไม่มีข้อมูล"}}
+                </td>
+              </tr>   
+            @endif
+          </table>
+        </div> 
       </div>
     </div>
   </div>

@@ -39,10 +39,16 @@
           <div class="card-body">
             <h4 class="card-title">{{ $item->title }}</h4>
             <p class="card-text text-right">
+              @if($item->type=='standard') 
+              <span >ประเภทหลักสูตรมาตรฐาน</span>
+              @else
+              <span>ประเภทหลักสูตรทั่วไป</span>
+              @endif
+
               @if($item->status==1)
-                <span class="text-success">Online</span>
+                <span class="status text-success">Online</span>
               @else 
-                <span class="text-danger">Offline</span>
+                <span class="status text-danger">Offline</span>
               @endif
             </p>
           </div>

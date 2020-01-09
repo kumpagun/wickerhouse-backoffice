@@ -135,7 +135,7 @@
             <fieldset class="form-group @if($errors->course->has('type')) danger @endif">
               <label for="user-name">Type *</label>
               <select class="select2 form-control" name="type">
-                <option value=""> กรุณาเลือก Type</option>
+                <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
                   @foreach ($type as $key => $value )
                     <option value={{ $key }} 
                       @if(!empty($data->type) && ((string)$data->type == (string)$key)) selected  @endif

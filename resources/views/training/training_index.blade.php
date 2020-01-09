@@ -36,64 +36,62 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header pb-0">
+          <div class="card-header">
             <h4 class="card-title">Training list</h4>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered">
-                <tr>
-                  <th class="text-center">#</th>
-                  <th class="text-center">Training</th>
-                  <th class="text-center">Course</th>
-                  <th class="text-center">Start Date</th>
-                  <th class="text-center">End Date</th>
-                  <th class="text-center">Import Excel</th>
-                  <th class="text-center">จำนวนผู้เข้าร่วม</th>
-                </tr>
-                @if (count($datas))
-                  @foreach ($datas as $data)
-                    <tr>
-                      @if (FuncClass::checkCurrentDate($data->published_at))
-                        <td class="align-middle text-center">{{$loop->iteration}} </td>
-                        <td class=" align-middle text-center">{{$data->title}} </td>
-                        <td class="align-middle text-center">{{CourseClass::get_name_course((string)$data->course_id)}} </td>
-                        <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</td>
-                        <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</td> 
-                      @else
-                        <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$loop->iteration}} </a></td>
-                        <td class=" align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$data->title}} </a></td>
-                        <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{CourseClass::get_name_course((string)$data->course_id)}} </a></td>
-                        <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</a></td>
-                        <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</a></td>  
-                      @endif
-                      <td class="align-middle text-center"> 
-                        
-                        @can('editor')
-                          <button type="button" class="btn btn-outline-secondary btn-min-width mx-1"  aria-hidden="true" aria-label="Close" data-toggle="modal" data-target="#AnswerModal{{$data->_id}}">
-                            Import File 
-                          </button>
-                        @else
-                          <button type="button" class="btn btn-outline-secondary btn-min-width mx-1"  data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
-                            Import File 
-                          </button>
-                        @endcan
-                      </td>
-                      <td class="align-middle text-center">
-                        <a href="{{ route('traingin_user_list', ['id' => $data->id]) }}">
-                          รายชื่อ <span class="badge badge-pill badge-primary">{{FuncClass::count_user_in_traingin($data->_id)}}</span>
-                        </a>
-                      </td>  
-                    </tr>
-                  @endforeach  
-                @else
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Training</th>
+                <th class="text-center">Course</th>
+                <th class="text-center">Start Date</th>
+                <th class="text-center">End Date</th>
+                <th class="text-center">Import Excel</th>
+                <th class="text-center">จำนวนผู้เข้าร่วม</th>
+              </tr>
+              @if (count($datas))
+                @foreach ($datas as $data)
                   <tr>
-                    <td class="text-center" colspan="99">ไม่มีข้อมูล</td>
-                  </tr>   
-                @endif
-              </table>
-            </div> 
-          </div>
+                    @if (FuncClass::checkCurrentDate($data->published_at))
+                      <td class="align-middle text-center">{{$loop->iteration}} </td>
+                      <td class=" align-middle text-center">{{$data->title}} </td>
+                      <td class="align-middle text-center">{{CourseClass::get_name_course((string)$data->course_id)}} </td>
+                      <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</td>
+                      <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</td> 
+                    @else
+                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$loop->iteration}} </a></td>
+                      <td class=" align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$data->title}} </a></td>
+                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{CourseClass::get_name_course((string)$data->course_id)}} </a></td>
+                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</a></td>
+                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</a></td>  
+                    @endif
+                    <td class="align-middle text-center"> 
+                      
+                      @can('editor')
+                        <button type="button" class="btn btn-outline-secondary btn-min-width mx-1"  aria-hidden="true" aria-label="Close" data-toggle="modal" data-target="#AnswerModal{{$data->_id}}">
+                          Import File 
+                        </button>
+                      @else
+                        <button type="button" class="btn btn-outline-secondary btn-min-width mx-1"  data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
+                          Import File 
+                        </button>
+                      @endcan
+                    </td>
+                    <td class="align-middle text-center">
+                      <a href="{{ route('traingin_user_list', ['id' => $data->id]) }}">
+                        รายชื่อ <span class="badge badge-pill badge-primary">{{FuncClass::count_user_in_traingin($data->_id)}}</span>
+                      </a>
+                    </td>  
+                  </tr>
+                @endforeach  
+              @else
+                <tr>
+                  <td class="text-center" colspan="99">ไม่มีข้อมูล</td>
+                </tr>   
+              @endif
+            </table>
+          </div> 
         </div>
       </div>
     </div>

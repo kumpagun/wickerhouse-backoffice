@@ -1,8 +1,8 @@
-body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-text .color-1 {
+.color-1 {
   color: #1b4597;
 }
 
-body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-text .color-2 {
+.color-2 {
   color: #f86718;
 }
 
@@ -31,7 +31,11 @@ a:hover {
   border-radius: 0.4em !important;
 }
 
-.card {
+.card .card-title {
+  line-height: 1.5rem;
+}
+
+.card.border-radius {
   border-radius: 1em !important;
 }
 
@@ -41,6 +45,14 @@ a:hover {
 
 .card .card-header:first-child {
   border-radius: inherit;
+}
+
+.card .status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 5px;
+  background-color: #FFFFFF;
 }
 
 @media (min-width: 576px) {

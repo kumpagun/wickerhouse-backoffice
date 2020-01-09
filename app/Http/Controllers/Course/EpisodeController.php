@@ -30,7 +30,18 @@ class EpisodeController extends Controller
   {
     $this->middleware('auth');
   }
-
+  public function update_course($course_id) {
+    $course = Course::find($course_id);
+    $course->total_episode = 0;
+    $course->save();
+    
+    $total = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->count();
+    if(!empty($total)) {
+      $course->total_episode = $total;
+    }
+    $course->save();
+    return true;
+  }
   public function get_episode_group($course_id)
   {
     $data = Episode_group::where('course_id',new ObjectId($course_id))->where('status',1)->orderBy('position')->get();
@@ -131,6 +142,8 @@ class EpisodeController extends Controller
         $count++;
       }
     }
+
+    $this->update_course($course_id);
 
     return redirect()->route('episode_group_create', ['course_id' => $course_id]);
   }

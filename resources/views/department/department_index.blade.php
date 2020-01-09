@@ -23,41 +23,39 @@
 @endsection
 
 @section('content')
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header pb-0">
-        <h4 class="card-title">Department list</h4>
-      </div>
-      <div class="card-body">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Department list</h4>
+        </div>
         <div class="table-responsive">
-          <table class="table table-bordered">
+          <table class="table table-hover">
+            <tr>
+              <th class="text-center no-table">#</th>
+              <th class="text-center content-table">Department Name</th>
+              <th class="text-center content-table">Company Name</th>
+            </tr>
+            @if (!empty($datas))
+              @foreach ($datas as $item)
                 <tr>
-                  <td class="text-center no-table">#</td>
-                  <td class="text-center content-table">Department Name</td>
-                  <td class="text-center content-table">Company Name</td>
+                  <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
+                  <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $item->title }}</a></td>
+                  <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ FuncClass::get_name_company($item->company_id) }}</a></td>
                 </tr>
-                @if (!empty($datas))
-                    @foreach ($datas as $item)
-                        <tr>
-                          <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-                          <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $item->title }}</a></td>
-                          <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ FuncClass::get_name_company($item->company_id) }}</a></td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                      <td class="text-center" colspan="99">
-                        {{"ไม่มีข้อมูล"}}
-                      </td>
-                    </tr>   
-                @endif
+              @endforeach
+            @else
+              <tr>
+                <td class="text-center" colspan="99">
+                  {{"ไม่มีข้อมูล"}}
+                </td>
+              </tr>   
+            @endif
           </table>
         </div>
       </div>
     </div>
   </div>
-</div>
 @endsection
 @section('style')
   <style>
