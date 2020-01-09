@@ -34,15 +34,15 @@
           <table class="table table-bordered">
                 <tr>
                   <td class="text-center no-table">#</td>
-                  <td class="text-center content-table">Title</td>
-                  <td class="text-center content-table">Company</td>
+                  <td class="text-center content-table">Department Name</td>
+                  <td class="text-center content-table">Company Name</td>
                 </tr>
                 @if (!empty($datas))
                     @foreach ($datas as $item)
                         <tr>
                           <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-                          <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $item->title }}</a></td>
-                          <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ FuncClass::get_name_company($item->company_id) }}</a></td>
+                          <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $item->title }}</a></td>
+                          <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ FuncClass::get_name_company($item->company_id) }}</a></td>
                         </tr>
                     @endforeach
                 @else
