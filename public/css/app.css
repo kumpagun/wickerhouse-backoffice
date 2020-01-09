@@ -6,6 +6,11 @@ body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-te
   color: #f86718;
 }
 
+.main-menu.menu-light .navigation li:active,
+.main-menu.menu-light .navigation li.open {
+  border-left: 4px solid #f86718;
+}
+
 .main-menu.menu-light .navigation li.active a {
   color: #f86718;
 }
@@ -18,12 +23,19 @@ a:hover {
   color: #f86718;
 }
 
+.bootstrap-datetimepicker-widget {
+  z-index: 9999;
+}
+
 .btn {
   border-radius: 0.4em !important;
 }
 
 .card {
   border-radius: 1em !important;
+}
+
+.card.o-hidden {
   overflow: hidden;
 }
 

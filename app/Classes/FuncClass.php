@@ -25,11 +25,11 @@ class FuncClass
       } 
     }
     public function count_user_in_traingin($training_id = ''){
-        $count = 0;
-        if ($training_id) {
-            $count = TrainingUser::query()->where('status',1)->where('training_id',new ObjectId($training_id))->count();
-        } 
-        return $count;
+      $count = 0;
+      if ($training_id) {
+        $count = TrainingUser::query()->where('status',1)->where('training_id',new ObjectId($training_id))->count();
+      } 
+      return number_format($count);
     }
     public function utc_to_carbon_with_format ($time='', $format='')
     {

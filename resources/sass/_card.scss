@@ -1,6 +1,8 @@
 .card {
   border-radius: 1em !important;
-  overflow: hidden;
+  &.o-hidden {
+    overflow: hidden;
+  }
   .card-header {
     &:first-child {
       border-radius: inherit;

@@ -14,53 +14,54 @@
     </div>
 @endsection
 @section('content-header-right')
-    <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-        @can('editor')
-            <a class="btn btn-secondary" href="{{ route('category_create') }}">Add Category</a>
-        @endcan
-    </div>
+  <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+    @can('editor')
+      <a class="btn btn-secondary" href="{{ route('category_create') }}">Add Category</a>
+    @else 
+      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>Add Category</button>
+    @endcan
+  </div>
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header pb-0">
-                    <h4 class="card-title">Category list</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">Category Name</th>
-                                <th class="text-center">Slug</th>
-                                <th class="text-center">code</th>
-                            </tr>
-                            @if (count($datas))
-                                @foreach ($datas as $item)
-                                    <tr>
-                                        <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}"> {{  $loop->iteration  }} </a></td>
-                                        <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->title  }}</a></td>
-                                        <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->slug  }}</a></td>
-                                        <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->code  }}</a></td>
-                                    </tr>
-                                @endforeach  
-                            @else
-                                <tr>
-                                    <td class="text-center" colspan="99">
-                                        {{"ไม่มีข้อมูล"}}
-                                    </td>
-                                </tr>   
-                            @endif
-                        </table>
-                    </div> 
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header pb-0">
+          <h4 class="card-title">Category list</h4>
         </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Category Name</th>
+                <th class="text-center">Slug</th>
+                <th class="text-center">code</th>
+              </tr>
+              @if (count($datas))
+                @foreach ($datas as $item)
+                  <tr>
+                    <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}"> {{  $loop->iteration  }} </a></td>
+                    <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->title  }}</a></td>
+                    <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->slug  }}</a></td>
+                    <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->code  }}</a></td>
+                  </tr>
+                @endforeach  
+              @else
+                <tr>
+                  <td class="text-center" colspan="99">
+                    {{"ไม่มีข้อมูล"}}
+                  </td>
+                </tr>   
+              @endif
+            </table>
+          </div> 
+        </div>
+      </div>
     </div>
-
-
+  </div>
 @endsection
+
 @section('script')
 
 @endsection

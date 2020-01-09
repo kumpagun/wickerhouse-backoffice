@@ -9,7 +9,11 @@ body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-te
 // Sidebar active menu
 .main-menu.menu-light .navigation {
   li{
+    &:active, &.open {
+      border-left: 4px solid $primary2-color;
+    }
     &.active {
+      // border-left: 4px solid $primary2-color;
       a {
         color: $primary2-color;
       }
@@ -33,3 +37,7 @@ a {
 //     background-color: $primary-ligthen-color !important;
 //   }
 // }
+
+.bootstrap-datetimepicker-widget {
+  z-index: 9999;
+}
