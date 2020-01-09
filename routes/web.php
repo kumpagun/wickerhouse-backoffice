@@ -22,8 +22,11 @@ Route::group(['prefix' => 'upload'], function () {
 Route::group(['prefix' => 'auth'], function () {
   Route::get('/', 'Auth\LoginController@view')->name('auth_view');
   Route::post('/signin', 'Auth\LoginController@signin')->name('auth_signin');
-  Route::group(['middleware' => ['auth', 'role:admin']], function() {
-    Route::get('/signout', 'Auth\LoginController@signout')->name('auth_signout');
+  Route::get('/signout', 'Auth\LoginController@signout')->name('auth_signout');
+
+  Route::group(['prefix' => 'jas'], function () {
+    Route::get('/signin', 'Auth\JasmineController@signin')->name('jasmine_signin');
+    Route::get('/callback', 'Auth\JasmineController@callback')->name('jasmine_callback');
   });
 });
 // Users
@@ -52,41 +55,53 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
   Route::match(['get','post'],'/', 'Course\CourseController@course_index')->name('course_index');
   Route::match(['get','post'],'/create/{id?}', 'Course\CourseController@course_create')->name('course_create');
   Route::post('/store/{id?}', 'Course\CourseController@course_store')->name('course_store');
-});
 
-// Episode
-Route::group(['prefix' => 'episode', 'middleware' => ['auth', 'role:admin|course']], function () {
-  // GROUP
-  Route::post('/group/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
-  Route::get('/group/create/{course_id}/{id}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
-  // EP
-  Route::post('/group/sortgroup', 'Course\EpisodeController@episode_group_sortgroup')->name('episode_group_sortgroup');
-  Route::get('/create/{course_id}/{id?}', 'Course\EpisodeController@episode_create')->name('episode_create');
-  Route::post('/store', 'Course\EpisodeController@episode_store')->name('episode_store');
-  Route::post('/update_group_id', 'Course\EpisodeController@episode_update_group_id')->name('episode_update_group_id');
-  
-  // Upload Video
-  Route::match(['get','post'],'/upload_file', 'Course\EpisodeController@episode_upload_file')->name('episode_upload_file');
-  Route::match(['get','post'],'/video_delete_file', 'Course\EpisodeController@episode_video_delete_file')->name('episode_video_delete_file');
-});
+  // Document
+  Route::group(['prefix' => 'document', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::get('/', 'Course\DocumentController@document_index')->name('document_index');
+    Route::get('/create/{id?}', 'Course\DocumentController@document_create')->name('document_create');
+    Route::post('/store/{id?}', 'Course\DocumentController@document_store')->name('document_store');
+    Route::get('/zip_delete/{course_id?}', 'Course\DocumentController@document_zip_delete')->name('document_zip_delete');
+    Route::get('/pdf_delete/{course_id?}/{code?}', 'Course\DocumentController@document_pdf_delete')->name('document_pdf_delete');
+  });
 
-// Homework
-Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|course']], function () {
-  Route::match(['get','post'], '/', 'Course\HomeworkController@homework_index')->name('homework_index');
-  Route::get('/course/create/{id?}', 'Course\HomeworkController@homework_by_course_create')->name('homework_by_course_create');
-  Route::get('/create/{id?}', 'Course\HomeworkController@homework_create')->name('homework_create');
-  Route::post('/store/{id?}', 'Course\HomeworkController@homework_store')->name('homework_store');
-});
+  // Episode
+  Route::group(['prefix' => 'episode', 'middleware' => ['auth', 'role:admin|course']], function () {
+    // GROUP
+    Route::post('/group/store', 'Course\EpisodeController@episode_group_store')->name('episode_group_store');
+    Route::get('/group/create/{course_id}', 'Course\EpisodeController@episode_group_create')->name('episode_group_create');
+    Route::get('/group/delete/{episode_group_id?}', 'Course\EpisodeController@episode_group_delete')->name('episode_group_delete');
+    
+    // EP
+    Route::post('/group/sortgroup', 'Course\EpisodeController@episode_group_sortgroup')->name('episode_group_sortgroup');
+    Route::get('/create/{course_id}/{id?}', 'Course\EpisodeController@episode_create')->name('episode_create');
+    Route::post('/store', 'Course\EpisodeController@episode_store')->name('episode_store');
+    Route::get('/delete/{id?}', 'Course\EpisodeController@episode_delete')->name('episode_delete');
+    Route::post('/update_group_id', 'Course\EpisodeController@episode_update_group_id')->name('episode_update_group_id');
+    
+    // Upload Video
+    Route::match(['get','post'],'/upload_file', 'Course\EpisodeController@episode_upload_file')->name('episode_upload_file');
+    Route::match(['get','post'],'/video_delete_file', 'Course\EpisodeController@episode_video_delete_file')->name('episode_video_delete_file');
+  });
 
-// Examination
-Route::group(['prefix' => 'examination', 'middleware' => ['auth', 'role:admin|course']], function () {
-  Route::post('/group_store/{id?}', 'Course\ExaminationController@examination_group_store')->name('examination_group_store');
-  Route::get('/group_delete/{id?}', 'Course\ExaminationController@examination_group_delete')->name('examination_group_delete');
+  // Homework
+  Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::match(['get','post'], '/', 'Course\HomeworkController@homework_index')->name('homework_index');
+    Route::get('/create/{course_id}/{id?}', 'Course\HomeworkController@homework_create')->name('homework_create');
+    Route::post('/store', 'Course\HomeworkController@homework_store')->name('homework_store');
+    Route::get('/delete/{id?}', 'Course\HomeworkController@homework_delete')->name('homework_delete');
+  });
 
-  Route::get('/index/{id?}', 'Course\ExaminationController@examination_index')->name('examination_index');
-  Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
-  Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
-  Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
+  // Examination
+  Route::group(['prefix' => 'examination', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::post('/group_store/{id?}', 'Course\ExaminationController@examination_group_store')->name('examination_group_store');
+    Route::get('/group_delete/{id?}', 'Course\ExaminationController@examination_group_delete')->name('examination_group_delete');
+
+    Route::get('/index/{id?}', 'Course\ExaminationController@examination_index')->name('examination_index');
+    Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
+    Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
+    Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
+  });
 });
 
 // Category

@@ -1,0 +1,35 @@
+body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-text {
+  .color-1 {
+    color: $primary-color;
+  }
+  .color-2 {
+    color: $primary2-color;
+  }
+}
+// Sidebar active menu
+.main-menu.menu-light .navigation {
+  li{
+    &.active {
+      a {
+        color: $primary2-color;
+      }
+    } 
+  }
+}
+// Link
+a {
+  color: $primary-color;
+  &:hover {
+    color: $primary2-color;
+  }
+}
+
+// Button
+// .btn-primary {
+//   border-color: $primary-ligthen-color !important;
+//   background-color: $primary-color !important;
+//   color: #FFFFFF;
+//   &:hover {
+//     background-color: $primary-ligthen-color !important;
+//   }
+// }

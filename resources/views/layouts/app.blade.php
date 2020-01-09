@@ -29,6 +29,7 @@
   <!-- BEGIN Custom CSS-->
   <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
   @yield('style')
+  @stack('style')
   <!-- END Custom CSS-->
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/selects/select2.min.css') }}">
   
@@ -85,8 +86,18 @@
   <!-- Include the Quill library -->
   <script src="{{ asset('js/quill.js')}}" type="text/javascript"></script>
   <!-- BEGIN PAGE LEVEL JS-->
+  <script>
+    $(document).ready(function() {
+      var url = window.location; 
+      var element = $('ul.navigation a').filter(function() {
+      return this.href == url || url.href.indexOf(this.href) == 0; }).parent().addClass('active');
+      if (element.is('li')) { 
+        element.addClass('active').parent().parent('li').addClass('active')
+      }
+    });
+  </script>
   @yield('script')
-  @stack('scripts')
+  @stack('script')
   <!-- END PAGE LEVEL JS-->
 </body>
 </html>

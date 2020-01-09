@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "fideloper/proxy": "^4.2",
+        "guzzlehttp/guzzle": "^6.5",
         "hashids/hashids": "^3.0",
         "intervention/image": "^2.5",
         "jenssegers/mongodb": "^3.6",

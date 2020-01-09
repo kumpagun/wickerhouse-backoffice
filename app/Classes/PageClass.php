@@ -27,9 +27,9 @@ class PageClass
   public function activeMenu ($uri='')
   {
     $active = '';
-    if (Request::is(Request::segment(0). $uri . '/*') || Request::is(Request::segment(0). $uri) || Request::is($uri)) {
-      $active = 'active';
-    }
+    // if (Request::is(Request::segment(0). $uri . '/*') || Request::is(Request::segment(0). $uri) || Request::is($uri)) {
+    //   $active = 'active';
+    // }
     
     return $active;
   }

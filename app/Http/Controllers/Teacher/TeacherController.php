@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Teacher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use MongoDB\BSON\ObjectId;
 use File;
 use Image;
+use Auth;
 // Model
 use App\Models\Teacher;
+use ActivityLogClass;
 
 class TeacherController extends Controller
 {
@@ -76,7 +79,7 @@ class TeacherController extends Controller
       $img_final = $data['img_final'];
       $input_path = $data['input_path'];
       $imgWidth = 400;
-      $imgHeight = 300;
+      $imgHeight = 400;
       // open file a image resource
       $img = Image::make(public_path($img_final));
       // crop image
@@ -84,12 +87,14 @@ class TeacherController extends Controller
       // Save file
       $name = Carbon::now()->timestamp.'.png';
       $path_file = "images/$input_path/$teacher->_id/";
-      $public_path = public_path($path_file);
-      $filename = $public_path.$name;
+      $public_path = storage_path('app/public/'.$path_file);
+      $path_for_db = "storage/".$path_file."/".$name;
+
+      $filename = $public_path.'/'.$name;
       File::isDirectory($public_path) or File::makeDirectory($public_path, 0777, true, true);
       $img->save($filename);
 
-      $teacher->profile_image = $path_file.$name;
+      $teacher->profile_image = $path_for_db;
       $teacher->save();
     }
     $current_user = Auth::user();

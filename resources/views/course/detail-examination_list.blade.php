@@ -2,6 +2,14 @@
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
       <h4 class="card-title">EXAMINATION</h4>
+      @if(!empty($examination_type)) 
+      <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+      <div class="heading-elements">
+        <ul class="list-inline mb-0">
+          <li><button class="btn btn-round btn-secondary" data-toggle="modal" data-target="#modalExamination"><i class="ft-edit"></i> เพิ่มแบบทดสอบ</button></li>
+        </ul>
+      </div>
+      @endif
       <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
         <span>EXAMINATION INFO</span>
       </h6>
@@ -17,7 +25,7 @@
           </tr>
           @foreach ($examination as $item)
             <tr>
-              <td class="align-baseline text-center">
+              <td class="align-baseline text-left">
                 <a href="{{ route('examination_index',['id' => $item->_id]) }}">{{ implode(',',$item->type) }}</a>
               </td>
               <td class="align-baseline text-center">{{ CourseClass::get_exam_total($item->_id) }}</td>
@@ -29,11 +37,6 @@
             </tr>
           @endforeach
         </table>
-        @endif
-        @if(!empty($examination_type)) 
-          <button type="button" data-repeater-create class="btn btn-secondary" data-toggle="modal" data-target="#modalExamination">
-            <i class="ft-plus"></i> เพิ่มแบบทดสอบ
-          </button>
         @endif
       </div>
     </div>
@@ -74,34 +77,34 @@
 </div>
 
 @push('script')
-<script>
-  function handleDelete(id) {
-    url = "{{ route('examination_group_delete') }}/"+id
-    swal({
-      title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
-      icon: "warning",
-      showCancelButton: true,
-      buttons: {
-        cancel: {
-          text: "ยกเลิก",
-          value: null,
-          visible: true,
-          className: "",
-          closeModal: true,
-        },
-        confirm: {
-          text: "ลบ",
-          value: true,
-          visible: true,
-          className: "",
-          closeModal: false
+  <script>
+    function handleDelete(id) {
+      url = "{{ route('examination_group_delete') }}/"+id
+      swal({
+        title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
+        icon: "warning",
+        showCancelButton: true,
+        buttons: {
+          cancel: {
+            text: "ยกเลิก",
+            value: null,
+            visible: true,
+            className: "",
+            closeModal: true,
+          },
+          confirm: {
+            text: "ลบ",
+            value: true,
+            visible: true,
+            className: "",
+            closeModal: false
+          }
         }
-      }
-    }).then(isConfirm => {
-      if (isConfirm) {
-        window.location = url
-      } 
-    });
-  }
-</script>
+      }).then(isConfirm => {
+        if (isConfirm) {
+          window.location = url
+        } 
+      });
+    }
+  </script>
 @endpush

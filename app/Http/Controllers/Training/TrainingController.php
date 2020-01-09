@@ -140,14 +140,12 @@ class TrainingController extends Controller
       if ($id) {
         $rules = [
           'title' => 'required',
-          'company_id' => 'required',
           'published_at' => 'required',
           'expired_at' => 'required',
         ];
       } else {
         $rules = [
           'title' => 'required',
-          'company_id' => 'required',
           'published_at' => 'required',
           'expired_at' => 'required',
           'course_id' => 'required',
@@ -156,7 +154,7 @@ class TrainingController extends Controller
       
       $validator = Validator::make($request->all(), $rules);
       if($validator->fails()) {
-        return redirect()->back()->withErrors($validator, 'classroom')->withInput();
+        return redirect()->back()->withErrors($validator, 'training')->withInput();
       }  
       // Date
       $start = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $published_at,'Asia/Bangkok')->startOfDay()->setTimezone('UTC')->timestamp * 1000);
@@ -188,14 +186,14 @@ class TrainingController extends Controller
         '_id' => $id
       ];
       $store = Training::UpdateOrCreate($find, $datas);
-      ActivityLogClass::log('เพิ่มหรือแก้ไข Classroom', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
+      ActivityLogClass::log('เพิ่มหรือแก้ไข Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('training_index');
     }
     public function training_delete($id=''){
       $delete = Training::find($id);
       $delete->status = 0;
       $delete->save();
-      ActivityLogClass::log('ลบข้อมูล Classroom', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
+      ActivityLogClass::log('ลบข้อมูล Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('training_index');
     }
 
