@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use File;
 use Image;
+use Storage;
 // Model
 use App\User;
 
@@ -17,21 +18,19 @@ class UploadImagesController extends Controller
 
     $extension = $images->getClientOriginalExtension();
     $name = Carbon::now()->timestamp.'.'.$extension;
+    // $path_file = "images/uploads/$input_path/original/";
+    // $public_path = storage_path('public/'.$path_file);
+    // $filename = $public_path.$name;
+
     $path_file = "images/uploads/$input_path/original/";
-    $public_path = public_path($path_file);
-    $filename = $public_path.$name;
-    File::isDirectory($public_path) or File::makeDirectory($public_path, 0777, true, true);
-    if (move_uploaded_file($images, $filename)) { 
-      return response()->json([
-        'status' => 200,
-        'message' => $path_file.$name
-      ]); 
-    } else {
-      return response()->json([
-        'status' => 400,
-        'message' => 'Error.'
-      ]); 
-    }
+    $path = Storage::putFile('public/'.$path_file, $images);
+    $filename = basename($path);  
+    $path_for_db = "storage/$path_file/$filename";
+
+    return response()->json([
+      'status' => 200,
+      'message' => $path_for_db
+    ]); 
   }
 
   public function cropImage(Request $request) {
@@ -49,7 +48,9 @@ class UploadImagesController extends Controller
     // Save file
     $name = Carbon::now()->timestamp.'.png';
     $path_file = "images/uploads/$input_path/cropimage/";
-    $public_path = public_path($path_file);
+    $public_path = storage_path('app/public/'.$path_file);
+
+    $path_for_db = "storage/$path_file/$name";
 
     $filename = $public_path.$name;
     File::isDirectory($public_path) or File::makeDirectory($public_path, 0777, true, true);
@@ -57,7 +58,7 @@ class UploadImagesController extends Controller
 
     return response()->json([
       'status' => 200,
-      'message' => $path_file.$name
+      'message' => $path_for_db
     ]); 
   }
 }

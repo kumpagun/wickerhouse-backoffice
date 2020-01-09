@@ -30,7 +30,7 @@
           @if(!empty($document['document_path']))
             <tr>
               <td class="align-baseline text-left">{{ $document['title'] }}</td>
-              <td class="align-baseline text-center"><a target="_blank" download="{{ $document['title'] }}" href="{{ Storage::url($document['document_path']) }}">Download</a></td>
+              <td class="align-baseline text-center"><a target="_blank" download="{{ $document['title'] }}" href="{{ Storage::url('public/'.$document['document_path']) }}">Download</a></td>
               <td class="align-baseline text-center">
                 <a onclick="handleDeleteDocumentPath('{{$document['course_id']}}')">
                   <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
@@ -52,7 +52,7 @@
               @foreach ($document['document_paths'] as $item)
                 <tr>
                   <td class="align-baseline text-left">{{ $item['title'] }}</td>
-                  <td class="align-baseline text-center"><a target="_blank" download="{{$item['title']}}" href="{{ Storage::url($item['path']) }}">Download</a></td>
+                  <td class="align-baseline text-center"><a target="_blank" download="{{$item['title']}}" href="{{ Storage::url('public/'.$item['path']) }}">Download</a></td>
                   <td class="align-baseline text-center">
                     <a onclick="handleDeleteDocumentPaths('{{$document['course_id']}}','{{$item['code']}}')">
                       <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
@@ -102,7 +102,7 @@
           <div class="col-12">
             <fieldset id="field-zip" class="form-group">
               <label for="basicInputFileZip">Document file</label> * ประเภทไฟล์ zip
-              <input id="input-zip" type="file" name="file_zip" class="form-control-file" id="basicInputFileZip" accept="zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed">
+              <input id="input-zip" type="file" name="file_zip" class="form-control-file" id="basicInputFileZip" accept="application/zip">
             </fieldset>
             <fieldset id="field-pdf" class="form-group">
               <label for="basicInputFilePdf">Document file</label> * ประเภทไฟล์ pdf

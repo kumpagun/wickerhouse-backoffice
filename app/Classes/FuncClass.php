@@ -17,12 +17,12 @@ use App\Models\Category;
 class FuncClass
 {   
     public function update_seq_cate($cate_id=''){
-        $update_seq = Category::find($cate_id);
-        if ($update_seq) {
-            $seq = $update_seq->seq+1;
-            $update_seq->seq  = $seq;
-            $update_seq->save();
-        } 
+      $update_seq = Category::find($cate_id);
+      if ($update_seq) {
+        $seq = $update_seq->seq+1;
+        $update_seq->seq  = $seq;
+        $update_seq->save();
+      } 
     }
     public function count_user_in_traingin($training_id = ''){
         $count = 0;

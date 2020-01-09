@@ -27,7 +27,7 @@
     @foreach ($datas as $item)
     <div class="col-6 col-md-6 col-lg-4 col-xl-3">
       <a href="{{ route('course_create', ['id' => $item->_id]) }}">
-      <div class="card border-0 box-shadow-0">
+      <div class="card">
         <div class="card-content">
           @if($item->test_status==1) 
           <img class="card-img img-fluid" src="{{ env('IMG_PATH_TUTORME').$item->thumbnail }}" alt="Card image cap">

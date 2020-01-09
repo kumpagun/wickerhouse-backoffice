@@ -91,15 +91,17 @@ class DocumentController extends Controller
     // Storage::disk('public')->put($file, 'Contents');
     $path_file = "public/document/$course_id";
     $path = Storage::putFile($path_file, $file);
+    $filename = basename($path);  
+    $path_for_db = "document/$course_id/$filename";
 
     if($file_type=='zip') {
       $document->title = $title;
-      $document->document_path = $path;
+      $document->document_path = $path_for_db;
     } else if($file_type=='pdf') {
       $hashids = new Hashids();
       $data = new \stdClass();
       $data->title = $title;
-      $data->path = $path;
+      $data->path = $path_for_db;
       $data->code = $hashids->encode(Carbon::now()->timestamp);
       array_push($document_paths, $data);
       $document->document_paths = $document_paths;

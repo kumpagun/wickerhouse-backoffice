@@ -66,10 +66,10 @@
                         </div>
                         @if(!empty($data->profile_image))
                           @php 
-                            if($item->test_status==1) {
-                              $img_thumbnail = env('IMG_PATH_TUTORME').$item->thumbnail;
+                            if($data->test_status==1) {
+                              $img_thumbnail = env('IMG_PATH_TUTORME').$data->profile_image;
                             } else {
-                              $img_thumbnail = env('IMG_PATH').$item->thumbnail;
+                              $img_thumbnail = env('IMG_PATH').$data->profile_image;
                             }
                           @endphp
                         <div class="final_images">
@@ -307,7 +307,7 @@
     function handleCrop(url) {
       $('#imageCropSrc').cropper('destroy').cropper({
         viewMode: 1,
-        aspectRatio: 4/3,
+        aspectRatio: 1/1,
         autoCropArea: 1,
         restore: false,
         zoomOnWheel: false

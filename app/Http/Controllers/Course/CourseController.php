@@ -217,9 +217,9 @@ class CourseController extends Controller
         $get_code = $get_cate->seq+1;
         $update_code = $get_code;
         $str_count = (string)$get_code;
-        $str_format = sprintf('%04d',$str_count);
+        $str_format = sprintf('%05d',$str_count);
         $code     =  $get_cate->code.'-'.$str_format;
-        FuncClass::update_seq_cate();
+        FuncClass::update_seq_cate($category_id);
       }
       $datas = [
         'title' => $title,
@@ -248,13 +248,16 @@ class CourseController extends Controller
         $img->resize($imgWidth, $imgHeight); // width, height
         // Save file
         $name = Carbon::now()->timestamp.'.png';
-        $path_file = "images/$input_path/$course->_id/";
-        $public_path = public_path($path_file);
-        $filename = $public_path.$name;
+        $path_file = "images/$input_path/$course->_id";
+        // $public_path = public_path($path_file);
+        $public_path = storage_path('app/public/'.$path_file);
+        $path_for_db = "storage/".$path_file."/".$name;
+
+        $filename = $public_path.'/'.$name;
         File::isDirectory($public_path) or File::makeDirectory($public_path, 0777, true, true);
         $img->save($filename);
   
-        $course->thumbnail = $path_file.$name;
+        $course->thumbnail = $path_for_db;
         $course->save();
       }
       ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
