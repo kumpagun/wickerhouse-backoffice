@@ -30,7 +30,7 @@
           <h4 class="card-title">Category list</h4>
         </div>
         <div class="table-responsive">
-          <table class="table table-bordered">
+          <table class="table table-hover">
             <tr>
               <th class="text-center">#</th>
               <th class="text-center">Category Name</th>

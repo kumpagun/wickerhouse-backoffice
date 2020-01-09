@@ -45,8 +45,8 @@
                 <th class="text-center">#</th>
                 <th class="text-center">Training</th>
                 <th class="text-center">Course</th>
-                <th class="text-center">Start Date</th>
-                <th class="text-center">End Date</th>
+                <th class="text-center" width="10%">Start Date</th>
+                <th class="text-center" width="10%">End Date</th>
                 <th class="text-center">Import Excel</th>
                 <th class="text-center">จำนวนผู้เข้าร่วม</th>
               </tr>
@@ -55,16 +55,16 @@
                   <tr>
                     @if (FuncClass::checkCurrentDate($data->published_at))
                       <td class="align-middle text-center">{{$loop->iteration}} </td>
-                      <td class=" align-middle text-center">{{$data->title}} </td>
-                      <td class="align-middle text-center">{{CourseClass::get_name_course((string)$data->course_id)}} </td>
-                      <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</td>
-                      <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</td> 
+                      <td class=" align-middle text-left">{{$data->title}} </td>
+                      <td class="align-middle text-left">{{CourseClass::get_name_course((string)$data->course_id)}} </td>
+                      <td class="align-middle text-center p-0">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d/m/Y')}}</td>
+                      <td class="align-middle text-center p-0">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d/m/Y')}}</td> 
                     @else
                       <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$loop->iteration}} </a></td>
-                      <td class=" align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$data->title}} </a></td>
-                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{CourseClass::get_name_course((string)$data->course_id)}} </a></td>
-                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d-m-Y H:i')}}</a></td>
-                      <td class="align-middle text-center"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d-m-Y H:i')}}</a></td>  
+                      <td class=" align-middle text-left"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{$data->title}} </a></td>
+                      <td class="align-middle text-left"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{CourseClass::get_name_course((string)$data->course_id)}} </a></td>
+                      <td class="align-middle text-center p-0"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at,'d/m/Y')}}</a></td>
+                      <td class="align-middle text-center p-0"><a href="{{ route('training_create', ['id' => $data->id]) }}">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at,'d/m/Y')}}</a></td>  
                     @endif
                     <td class="align-middle text-center"> 
                       
