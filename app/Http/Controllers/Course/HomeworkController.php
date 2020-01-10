@@ -132,7 +132,7 @@ class HomeworkController extends Controller
     } else if(!empty($type) && $type=='no_answer') {
       $query->where('result','waiting');
     }
-    $datas = $query->get();
+    $datas = $query->paginate(20);
     $withData = [
       'type' => $type,
       'training' => $training,

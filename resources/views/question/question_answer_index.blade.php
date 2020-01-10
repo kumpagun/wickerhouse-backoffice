@@ -68,6 +68,9 @@
             </table>
           </div>
         </div>
+        <div class="card-footer border-0 text-center">
+          {{ $datas->links() }}
+        </div>
       </div>
     </div>
   </div>

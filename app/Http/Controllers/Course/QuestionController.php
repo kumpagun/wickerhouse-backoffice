@@ -42,7 +42,7 @@ class QuestionController extends Controller
     } else if(!empty($type) && $type=='no_answer') {
       $query->whereNull('answer');
     }
-    $datas = $query->get();
+    $datas = $query->paginate(20);
     $withData = [
       'type' => $type,
       'course' => $course,
