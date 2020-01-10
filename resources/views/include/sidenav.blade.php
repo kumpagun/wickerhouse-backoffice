@@ -1,18 +1,7 @@
 <!-- ////////////////////////////////////////////////////////////////////////////-->
-<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+<div class="main-menu menu-fixed menu-light menu-accordion" data-scroll-to-active="true">
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-      {{-- <li class=" nav-item">
-        <a href="index.html"><i class="ft-home"></i><span class="menu-title" data-i18n="">Dashboard</span><span class="badge badge badge-primary badge-pill float-right mr-2">3</span></a>
-        <ul class="menu-content">
-          <li><a class="menu-item" href="dashboard-ecommerce.html">eCommerce</a>
-          </li>
-          <li><a class="menu-item" href="dashboard-analytics.html">Analytics</a>
-          </li>
-          <li><a class="menu-item" href="dashboard-fitness.html">Fitness</a>
-          </li>
-        </ul>
-      </li> --}}
       @hasrole('admin|course')
       <li class="navigation-header">
         <span>Teacher</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Teacher"></i>
@@ -38,8 +27,8 @@
       <li class=" navigation-header">
         <span>Homework</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
-      <li class="nav-item disabled">
-        <a href="5555"><i class="ft-edit"></i><span class="menu-title" data-i18n="">ตรวจการบ้าน</span></a>
+      <li class="nav-item">
+        <a href="{{ route('homework_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">ตรวจการบ้าน</span></a>
       </li>
       @endhasrole
 
@@ -51,10 +40,10 @@
         <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">List Training</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{route('company_index')}}"><i class="ft-filter"></i><span class="menu-title" data-i18n="">Company</span></a>
+        <a href="{{route('company_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">Company</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{route('department_index')}}"><i class="ft-filter"></i><span class="menu-title" data-i18n="">Department</span></a>
+        <a href="{{route('department_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">Department</span></a>
       </li>
       @endhasrole
 

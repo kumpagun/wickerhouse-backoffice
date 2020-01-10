@@ -20,8 +20,10 @@ use App\Http\Controllers\Course\CourseController;
 // Model
 use App\Models\Course;
 use App\Models\Homework;
+use App\Models\HomeworkAnswer;
 use App\Models\Category;
 use App\Models\Teacher;
+use App\Models\Training;
 
 
 class HomeworkController extends Controller
@@ -46,7 +48,9 @@ class HomeworkController extends Controller
     return true;
   }
   public function homework_index(){
-    $datas = Homework::query()->where('status','!=',0)->get();
+    // $datas = Homework::query()->where('status','!=',0)->get();
+    $datas = Training::where('status',1)->get();
+    
     return view('homework.homework_index',['datas' => $datas]);
   }
   public function homework_create($course_id, $id=''){
@@ -115,5 +119,47 @@ class HomeworkController extends Controller
     ActivityLogClass::log('ลบ Homework', new ObjectId($current_user->_id), $homework->getTable(), $homework->getAttributes(),$current_user->username);
 
     return redirect()->route('course_create', ['id' => $homework->course_id, '#homework']);
+  }
+  // HOMEWORK ANSWER
+
+  public function homework_answer_index($training_id){
+    // $datas = Homework::query()->where('status','!=',0)->get();
+    $training = Training::find($training_id); 
+    $homework = Homework::where('course_id',$training->course_id)->where('status',1)->first(); 
+    $datas = HomeworkAnswer::where('homework_id',new ObjectId($homework->_id))->where('training_id',new ObjectId($training_id))->where('status',1)->get();
+    $withData = [
+      'training' => $training,
+      'homework' => $homework,
+      'datas' => $datas
+    ];
+    
+    return view('homework.homework_answer_index',$withData);
+  }
+
+  public function homework_answer_store(Request $request){
+    $homework_answer_id = $request->input('homework_answer_id');
+    $description = $request->input('description');
+    $result = $request->input('result');
+
+    $rules = [
+      'result' => 'required'
+    ];
+    
+    $validator = Validator::make($request->all(), $rules);
+    if($validator->fails()) {
+      return redirect()->back()->withErrors($validator, 'homework')->withInput();
+    }
+
+    $homework = HomeworkAnswer::find($homework_answer_id);
+    if(!empty($description)) {
+      $homework->description = $description;
+    }
+    $homework->result = $result;
+    $homework->inspect_at = new UTCDateTime(Carbon::now()->timestamp * 1000);
+    $homework->inspector = new ObjectId(Auth::user()->_id);
+    $homework->save();
+
+    ActivityLogClass::log('ตรวจการบ้าน Homework_answer', new ObjectId(Auth::user()->_id), $homework->getTable(), $homework->getAttributes(),Auth::user()->username);
+    return redirect()->back();
   }
 }
