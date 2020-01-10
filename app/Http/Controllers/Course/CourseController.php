@@ -27,8 +27,8 @@ use Image;
 class CourseController extends Controller
 {
   private $type = [
-    'standard' => 'Standard',
-    'general' => 'General',
+    'standard' => 'หลักสูตรมาตรฐาน',
+    'general' => 'หลักสูตรทั่วไป',
   ];
   public function __construct()
   {
@@ -233,9 +233,11 @@ class CourseController extends Controller
         'benefits' => $arr_benefits,
         'appropriates' => $arr_appropriates,
         'teacher_id' => new ObjectId($teacher_id),
-        'category_id'  => new ObjectId($category_id),
-        'status' => 2
+        'category_id'  => new ObjectId($category_id)
       ];
+      if(empty($id)) {
+        $datas['status'] = 2;
+      }
       $find = [
         '_id' => $id
       ];

@@ -18,6 +18,8 @@
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
     @can('editor')
       <a class="btn btn-secondary" href="{{ route('course_create') }}">Add Course</a>
+    @else 
+      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>Add Course</button>
     @endcan
   </div>
 @endsection
@@ -27,7 +29,7 @@
     @foreach ($datas as $item)
     <div class="col-6 col-md-6 col-lg-4 col-xl-3">
       <a href="{{ route('course_create', ['id' => $item->_id]) }}">
-      <div class="card">
+      <div class="card o-hidden">
         <div class="card-content">
           @if($item->test_status==1) 
           <img class="card-img img-fluid" src="{{ env('IMG_PATH_TUTORME').$item->thumbnail }}" alt="Card image cap">
@@ -37,10 +39,16 @@
           <div class="card-body">
             <h4 class="card-title">{{ $item->title }}</h4>
             <p class="card-text text-right">
+              @if($item->type=='standard') 
+              <span >ประเภทหลักสูตรมาตรฐาน</span>
+              @else
+              <span>ประเภทหลักสูตรทั่วไป</span>
+              @endif
+
               @if($item->status==1)
-                <span class="text-success">Online</span>
+                <span class="status text-success">Online</span>
               @else 
-                <span class="text-danger">Offline</span>
+                <span class="status text-danger">Offline</span>
               @endif
             </p>
           </div>

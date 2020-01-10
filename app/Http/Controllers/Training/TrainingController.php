@@ -6,15 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Category;
-use App\Models\Member;
-use App\Models\TrainingUser;
-use App\Models\Training;
-use App\Models\Member_jasmine;
-use App\Models\Company;
-use App\Models\Department;
-use App\Models\Course;
-use App\Models\MyTraining;
 use App\ImportExcels\MembersImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -28,6 +19,16 @@ use File;
 use User;
 use Auth;
 use ActivityLogClass;
+// Model
+use App\Models\Category;
+use App\Models\Member;
+use App\Models\TrainingUser;
+use App\Models\Training;
+use App\Models\Member_jasmine;
+use App\Models\Company;
+use App\Models\Department;
+use App\Models\Course;
+use App\Models\MyTraining;
 
 class TrainingController extends Controller
 {
@@ -36,7 +37,13 @@ class TrainingController extends Controller
     {
       $this->middleware('auth');
     }
-
+    public function update_training_total_employee($training_id) {
+      $training_user = TrainingUser::where('training_id',new ObjectId($training_id))->where('status',1)->count();
+      $training = Training::find($training_id);
+      $training->total_employee = $training_user;
+      $training->save();
+      return true;
+    }
     public function training_index(){
       $datas = Training::query()->where('status',1)->get();
       return view('training.training_index',['datas' => $datas]);
@@ -186,6 +193,9 @@ class TrainingController extends Controller
         '_id' => $id
       ];
       $store = Training::UpdateOrCreate($find, $datas);
+
+      $this->update_training_total_employee($store->_id);
+
       ActivityLogClass::log('เพิ่มหรือแก้ไข Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('training_index');
     }
@@ -386,6 +396,8 @@ class TrainingController extends Controller
       ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
       return redirect()->back()->with('msg', 'รูปแบบไฟล์ Excel ไม่ถูกต้อง');    
     }
+    $this->update_training_total_employee($class_id);
+
     ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
     return redirect()->route('training_index');
   }

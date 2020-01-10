@@ -5,9 +5,13 @@
       <div class="heading-elements">
         <ul class="list-inline mb-0">
           <li>
-            <a class="p-0" href="{{ route('episode_create', ['course_id' => $data->_id]) }}">
-              <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
-            </a>
+            @can('editor')
+              <a href="{{ route('episode_create', ['course_id' => $data->_id]) }}">
+                <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
+              </a>
+            @else
+              <a><button class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-plus"></i> เพิ่ม</button></a>
+            @endcan
           </li>
         </ul>
       </div>
@@ -29,9 +33,13 @@
               <td class="align-baseline text-left"><a href="{{ route('episode_create', ['course_id' => $data->_id ,'id' => $item->_id]) }}">{{ $item->title }}</a></td>
               <td class="align-baseline text-center @if($item->transcode_status=='done') text-success @else @endif">{{ $item->transcode_status }}</td>
               <td class="align-baseline text-center">
-                <a href="#{{$item->_id}}" onclick="handleDeleteEp('{{$item->_id}}')">
-                  <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
-                </a>
+                @can('editor')
+                  <a href="#{{$item->_id}}" onclick="handleDeleteEp('{{$item->_id}}')">
+                    <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                  </a>
+                @else
+                  <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
+                @endcan
               </td>
             </tr>
           @endforeach

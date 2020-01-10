@@ -135,7 +135,7 @@
             <fieldset class="form-group @if($errors->course->has('type')) danger @endif">
               <label for="user-name">Type *</label>
               <select class="select2 form-control" name="type">
-                <option value=""> กรุณาเลือก Type</option>
+                <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
                   @foreach ($type as $key => $value )
                     <option value={{ $key }} 
                       @if(!empty($data->type) && ((string)$data->type == (string)$key)) selected  @endif
@@ -261,9 +261,9 @@
             </div>
             <div>
               @can('editor')
-              <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                <button type="submit" class="btn btn-primary btn-block">SAVE</button>
               @else
-              <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
+                <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
               @endcan
             </div>
           </form>

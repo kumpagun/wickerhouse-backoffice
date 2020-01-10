@@ -1,10 +1,24 @@
 .card {
-  border-radius: 1em !important;
-  overflow: hidden;
+  .card-title {
+    line-height: 1.5rem;
+  }
+  &.border-radius {
+    border-radius: 1em !important;
+  }
+  &.o-hidden {
+    overflow: hidden;
+  }
   .card-header {
     &:first-child {
       border-radius: inherit;
     }
+  }
+  .status {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 5px;
+    background-color: #FFFFFF;
   }
 }
 
