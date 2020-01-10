@@ -16,7 +16,7 @@
 
 @section('content')
   <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+    <div class="col-12 col-md-10 col-xl-8">
       <div class="card">
         <div class="card-header pb-0">
           <h4 class="card-title">{{ $title }}</h4>
