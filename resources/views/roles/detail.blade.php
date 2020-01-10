@@ -16,7 +16,7 @@
 
 @section('content')
 <div class="row align-items-center justify-content-center">
-  <div class="col-lg-6 col-md-8 col-10">
+  <div class="col-12 col-md-10 col-xl-8">
     <div class="card px-1 py-1 m-0">
       <div class="card-header border-0 pb-0">
         <div class="card-title text-center">

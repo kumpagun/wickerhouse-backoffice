@@ -34,7 +34,7 @@
   <div class="row match-height">
     @foreach ($datas as $data)
     <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card">
+      <div class="card o-hidden">
         <div class="card-content">
           <div class="card-body">
             <h4 class="card-title">{{ $data->name }}</h4>

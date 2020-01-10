@@ -33,6 +33,7 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th class="text-center">#</th>
+                                <th class="text-center">EmployeeId</th>
                                 <th class="text-center">Name</th>
                                 <th class="text-center">Created At</th>
                                 <th class="text-center">Action</th>
@@ -41,13 +42,20 @@
                                 @foreach ($datas as $data)
                                     <tr id="{{ $data->employee_id }}">
                                       <td class="align-middle text-center">{{$loop->iteration}} </td>
-                                      <td class=" align-middle text-center">{{Member::get_name_member_jasmine($data->employee_id)}} </td>
-                                      <td class="align-middle text-center">{{FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->created_at,'d-m-Y H:i')}}</td>
+                                      <td class="align-middle text-left">{{ $data->employee_id }} </td>
+                                      <td class="align-middle text-left">{{ Member::get_name_member_jasmine($data->employee_id) }} </td>
+                                      <td class="align-middle text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->created_at,'d-m-Y H:i')}}</td>
                                       <td class="text-center">
-                                        <button class="btn btn-danger" 
-                                          onclick="handleClickDel('{{$data->training_id}}','{{$data->employee_id}}','{{Member::get_name_member_jasmine($data->employee_id)}}')">
-                                          ลบ
-                                        </button>
+                                        @can('editor')
+                                          <button class="btn btn-danger" 
+                                            onclick="handleClickDel('{{$data->training_id}}','{{$data->employee_id}}','{{Member::get_name_member_jasmine($data->employee_id)}}')">
+                                            ลบ
+                                          </button>
+                                        @else
+                                          <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
+                                            ลบ
+                                          </button>
+                                        @endcan
                                       </td>
                                     </tr>
                                 @endforeach  

@@ -126,9 +126,9 @@
             </div>
             <div class="col-12">
               @can('editor')
-                <button type="submit" class="btn btn-primary btn-block">@if(!empty($data->id)) UPDATE @else SAVE @endif</button>
+                <button type="submit" class="btn btn-primary btn-block">SAVE</button>
               @else
-                <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>CANCLE</button>
+                <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
               @endcan
             </div>
           </form>

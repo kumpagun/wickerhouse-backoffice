@@ -43,7 +43,11 @@
                 </div>
               </div>
               <div class="col-12 mt-2 text-right">
-                <button id="btnSubmit" class="btn btn-primary btn-block" type="submit">Save</button>
+                @can('editor')
+                <button type="submit" id="btnSubmit" class="btn btn-primary btn-block">Save</button>
+                @else
+                <button type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
+                @endcan
               </div>
             </div>
           </div>

@@ -122,12 +122,19 @@ class HomeworkController extends Controller
   }
   // HOMEWORK ANSWER
 
-  public function homework_answer_index($training_id){
+  public function homework_answer_index($training_id,$type=''){
     // $datas = Homework::query()->where('status','!=',0)->get();
     $training = Training::find($training_id); 
     $homework = Homework::where('course_id',$training->course_id)->where('status',1)->first(); 
-    $datas = HomeworkAnswer::where('homework_id',new ObjectId($homework->_id))->where('training_id',new ObjectId($training_id))->where('status',1)->get();
+    $query = HomeworkAnswer::where('homework_id',new ObjectId($homework->_id))->where('training_id',new ObjectId($training_id))->where('status',1);
+    if(!empty($type) && $type=='answer') {
+      $query->where('result','<>','waiting');
+    } else if(!empty($type) && $type=='no_answer') {
+      $query->where('result','waiting');
+    }
+    $datas = $query->get();
     $withData = [
+      'type' => $type,
       'training' => $training,
       'homework' => $homework,
       'datas' => $datas

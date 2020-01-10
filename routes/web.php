@@ -106,14 +106,14 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
 // Homework
 Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|homework']], function () {
   Route::get('/', 'Course\HomeworkController@homework_index')->name('homework_index');
-  Route::get('/answer/{homework_id}', 'Course\HomeworkController@homework_answer_index')->name('homework_answer_index');
+  Route::get('/answer/{homework_id}/{type?}', 'Course\HomeworkController@homework_answer_index')->name('homework_answer_index');
   Route::post('/answer_store', 'Course\HomeworkController@homework_answer_store')->name('homework_answer_store');
 });
 
 // Question
 Route::group(['prefix' => 'question', 'middleware' => ['auth', 'role:admin|qa']], function () {
   Route::get('/', 'Course\QuestionController@question_index')->name('question_index');
-  Route::get('/answer/{question_id}', 'Course\QuestionController@question_answer_index')->name('question_answer_index');
+  Route::get('/answer/{question_id}/{type?}', 'Course\QuestionController@question_answer_index')->name('question_answer_index');
   Route::post('/answer_store', 'Course\QuestionController@question_answer_store')->name('question_answer_store');
 });
 

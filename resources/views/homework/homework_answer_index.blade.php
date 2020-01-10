@@ -20,6 +20,25 @@
       <div class="card">
         <div class="card-header pb-0">
           <h4 class="card-title">{{ $title }}</h4>
+          <div class="heading-elements">
+            <ul class="list-inline mb-0">
+              <li>
+                <a href="{{ route('homework_answer_index', ['training_id' => $training->_id]) }}">
+                  <button class="badge badge @if(empty($type)) badge-primary @else badge-secondary @endif badge-pill">ทั้งหมด</button>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('homework_answer_index', ['training_id' => $training->_id, 'type' => 'no_answer']) }}">
+                  <button class="badge badge @if(!empty($type) && $type=='no_answer') badge-primary @else badge-secondary @endif badge-pill">ยังไม่ได้ตรวจ</button>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('homework_answer_index', ['training_id' => $training->_id, 'type' => 'answer']) }}">
+                  <button class="badge badge @if(!empty($type) && $type=='answer') badge-primary @else badge-secondary @endif badge-pill">ตรวจแล้ว</button>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="card-body">
           <div class="table-responsive">

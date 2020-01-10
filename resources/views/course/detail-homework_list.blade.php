@@ -7,9 +7,13 @@
       <div class="heading-elements">
         <ul class="list-inline mb-0">
           <li>
-            <a href="{{ route('homework_create', ['course_id' => $data->_id]) }}">
-              <button class="btn btn-round btn-secondary"><i class="ft-edit"></i> เพิ่มการบ้าน</button>
-            </a>
+            @can('editor')
+              <a href="{{ route('homework_create', ['course_id' => $data->_id]) }}">
+                <button class="btn btn-round btn-secondary"><i class="ft-edit"></i> เพิ่มการบ้าน</button>
+              </a>
+            @else
+              <a><button class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-edit"></i> เพิ่มการบ้าน</button></a>
+            @endcan
           </li>
         </ul>
       </div>
@@ -29,9 +33,13 @@
           <tr>
             <td class="align-baseline text-left"><a href="{{ route('homework_create', ['course_id'=>$data->_id ,'id' => $homework->_id]) }}">แก้ไขการบ้าน</a></td>
             <td class="align-baseline text-center">
-              <a href="#{{$homework->_id}}" onclick="handleDeleteHomework('{{$homework->_id}}')">
-                <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
-              </a>
+              @can('editor')
+                <a href="#{{$homework->_id}}" onclick="handleDeleteHomework('{{$homework->_id}}')">
+                  <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                </a>
+              @else
+                <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
+              @endcan
             </td>
           </tr>
         </table>

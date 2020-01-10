@@ -5,9 +5,13 @@
       <div class="heading-elements">
         <ul class="list-inline mb-0">
           <li>
-            <a href="#" data-toggle="modal" data-target="#addDocument">
-              <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
-            </a>
+            @can('editor')
+              <a href="#" data-toggle="modal" data-target="#addDocument">
+                <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
+              </a>
+            @else
+              <button type="button" class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-plus"></i> เพิ่ม</button>
+            @endcan
           </li>
         </ul>
       </div>
@@ -32,9 +36,13 @@
               <td class="align-baseline text-left">{{ $document['title'] }}</td>
               <td class="align-baseline text-center"><a target="_blank" download="{{ $document['title'] }}" href="{{ Storage::url('public/'.$document['document_path']) }}">Download</a></td>
               <td class="align-baseline text-center">
-                <a onclick="handleDeleteDocumentPath('{{$document['course_id']}}')">
-                  <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
-                </a>
+                @can('editor')
+                  <a onclick="handleDeleteDocumentPath('{{$document['course_id']}}')">
+                    <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                  </a>
+                @else
+                  <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button>
+                @endcan
               </td>
             </tr>
           @else 
@@ -54,9 +62,13 @@
                   <td class="align-baseline text-left">{{ $item['title'] }}</td>
                   <td class="align-baseline text-center"><a target="_blank" download="{{$item['title']}}" href="{{ Storage::url('public/'.$item['path']) }}">Download</a></td>
                   <td class="align-baseline text-center">
+                    @can('editor')
                     <a onclick="handleDeleteDocumentPaths('{{$document['course_id']}}','{{$item['code']}}')">
                       <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
                     </a>
+                    @else
+                      <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button>
+                    @endcan
                   </td>
                 </tr>
               @endforeach

@@ -1,9 +1,14 @@
-body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-text .color-1 {
+.color-1 {
   color: #1b4597;
 }
 
-body.vertical-layout.vertical-menu.menu-expanded .navbar .navbar-brand .brand-text .color-2 {
+.color-2 {
   color: #f86718;
+}
+
+.main-menu.menu-light .navigation li:active,
+.main-menu.menu-light .navigation li.open {
+  border-left: 4px solid #f86718;
 }
 
 .main-menu.menu-light .navigation li.active a {
@@ -18,17 +23,36 @@ a:hover {
   color: #f86718;
 }
 
+.bootstrap-datetimepicker-widget {
+  z-index: 9999;
+}
+
 .btn {
   border-radius: 0.4em !important;
 }
 
-.card {
+.card .card-title {
+  line-height: 1.5rem;
+}
+
+.card.border-radius {
   border-radius: 1em !important;
+}
+
+.card.o-hidden {
   overflow: hidden;
 }
 
 .card .card-header:first-child {
   border-radius: inherit;
+}
+
+.card .status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 5px;
+  background-color: #FFFFFF;
 }
 
 @media (min-width: 576px) {

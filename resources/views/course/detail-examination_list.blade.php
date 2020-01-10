@@ -6,7 +6,13 @@
       <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
       <div class="heading-elements">
         <ul class="list-inline mb-0">
-          <li><button class="btn btn-round btn-secondary" data-toggle="modal" data-target="#modalExamination"><i class="ft-edit"></i> เพิ่มแบบทดสอบ</button></li>
+          <li>
+            @can('editor')
+              <a><button class="btn btn-round btn-secondary" data-toggle="modal" data-target="#modalExamination"><i class="ft-edit"></i> เพิ่มแบบทดสอบ</button></a>
+            @else
+              <a><button class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-edit"></i> เพิ่มแบบทดสอบ</button></a>
+            @endcan
+          </li>
         </ul>
       </div>
       @endif
@@ -30,9 +36,13 @@
               </td>
               <td class="align-baseline text-center">{{ CourseClass::get_exam_total($item->_id) }}</td>
               <td class="align-baseline text-center">
-                <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
-                  <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
-                </a>
+                @can('editor')
+                  <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
+                    <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                  </a>
+                @else
+                  <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
+                @endcan
               </td>
             </tr>
           @endforeach

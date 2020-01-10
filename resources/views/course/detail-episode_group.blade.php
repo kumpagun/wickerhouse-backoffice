@@ -5,14 +5,22 @@
       <div class="heading-elements">
         <ul class="list-inline mb-0">
           <li>
-            <a href="{{ route('episode_group_create', ['course_id' => $data->_id]) }}">
-              <button class="btn btn-round btn-secondary"><i class="ft-edit"></i> แก้ไข</button>
-            </a>
+            @can('editor')
+              <a href="{{ route('episode_group_create', ['course_id' => $data->_id]) }}">
+                <button class="btn btn-round btn-secondary"><i class="ft-edit"></i> แก้ไข</button>
+              </a>
+            @else
+              <button class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-edit"></i> แก้ไข</button>
+            @endcan
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#addEpisodeGRoup">
-              <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
-            </a>
+            @can('editor')
+              <a href="#" data-toggle="modal" data-target="#addEpisodeGRoup">
+                <button class="btn btn-round btn-secondary"><i class="ft-plus"></i> เพิ่ม</button>
+              </a>
+            @else
+              <a><button class="btn btn-round btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-plus"></i> เพิ่ม</button></a>
+            @endcan
           </li>
         </ul>
       </div>
