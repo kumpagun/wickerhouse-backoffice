@@ -12,7 +12,7 @@
       @endhasrole
 
       @hasrole('admin|course')
-      <li class=" navigation-header">
+      <li class="navigation-header">
         <span>Course</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
@@ -23,17 +23,26 @@
       </li>
       @endhasrole
       
-      @hasrole('admin|course')
-      <li class=" navigation-header">
+      @hasrole('admin|homework')
+      <li class="navigation-header">
         <span>Homework</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('homework_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">ตรวจการบ้าน</span></a>
       </li>
       @endhasrole
+      
+      @hasrole('admin|question')
+      <li class="navigation-header">
+        <span>Question</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('question_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">Q&A</span></a>
+      </li>
+      @endhasrole
 
       @hasrole('admin|course')
-      <li class=" navigation-header">
+      <li class="navigation-header">
         <span>Training</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
@@ -48,7 +57,7 @@
       @endhasrole
 
       @hasrole('admin')
-      <li class=" navigation-header">
+      <li class="navigation-header">
         <span>Admin</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Admin"></i>
       </li>
       <li class="nav-item">

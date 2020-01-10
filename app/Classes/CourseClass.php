@@ -15,6 +15,7 @@ use App\Models\Examination;
 use App\Models\Training;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
+use App\Models\Question;
 
 class CourseClass
 {   
@@ -54,6 +55,14 @@ class CourseClass
       $count++;
     }
     return $count;
+  }
+  public function get_question_total($course_id) {
+    $homework = Question::where('course_id',new ObjectId($course_id))->where('status',1)->count();
+    return $homework;
+  }
+  public function get_question_answer_total($course_id) {
+    $homework = Question::where('course_id',new ObjectId($course_id))->whereNotNull('answer')->where('status',1)->count();
+    return $homework;
   }
   public function get_have_homework($course_id) {
     $data = Course::find($course_id);
