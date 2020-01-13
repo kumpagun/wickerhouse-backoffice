@@ -23,7 +23,7 @@
       <div class="card-body pt-0">
         @if(count($episode) > 0) 
         <table class="table table-bordered mb-2">
-          <tr>
+          <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center">Title</th>
             <th class="text-center">Transcode Status</th>
             <th class="text-center">Action</th>

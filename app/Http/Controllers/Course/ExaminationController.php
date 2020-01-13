@@ -58,12 +58,8 @@ class ExaminationController extends Controller
       if(in_array('pretest',$row->type)) {
         $course->have_pretest = true;
         $course->total_pretest = $total;
-      } else if(in_array('posttest',$row->type)) {
-        $course->have_posttest = true;
-        $course->total_posttest = $total;
-      } else {
-        $course->have_pretest = true;
-        $course->total_pretest = $total;
+      } 
+      if(in_array('posttest',$row->type)) {
         $course->have_posttest = true;
         $course->total_posttest = $total;
       }
@@ -108,34 +104,76 @@ class ExaminationController extends Controller
   public function examination_index($id){
     $examination_group = Examination_group::where('_id',new ObjectId($id))->first();
     $examination = Examination::where('exam_group_id',new ObjectId($id))->where('status',1)->get();
-
+    $course = Course::find($examination_group->course_id);
     $datas = [
       'examination_group' => $examination_group,
-      'examination' => $examination
+      'examination' => $examination,
+      'course' => $course
     ];
 
     return view('examination.examination_index',$datas);
   }
 
-  public function course_posttest_update(Request $request) {
-    $posttest_limit = true;
-    $posttest_limit_total = 10;
+  public function examination_posttest_update(Request $request) {
+    $course_id = $request->input('course_id');
+    $posttest_limit_total = $request->input('posttest_limit_total');
+    $posttest_duration_sec = $request->input('posttest_duration_sec');
+    $posttest_passing_point = $request->input('posttest_passing_point');
+    $posttest_display_answer = $request->input('posttest_display_answer');
+    
+    $examination_group_id = $request->input('examination_group_id');
+    $examination = Examination_group::find($examination_group_id);
+    $course = Course::find($course_id);
+    if(in_array('posttest',$examination->type)) {
+      if(!empty($posttest_limit_total)) {
+        $course->have_posttest_limit = true;
+        $course->posttest_limit_total = $posttest_limit_total;
+      } else {
+        $course->have_posttest_limit = false;
+        $course->posttest_limit_total = 0;
+      }
 
-    $posttest_duretion = true;
-    $posttest_duretion_sec = 10;
+      if(!empty($posttest_duration_sec)) {
+        if(count($examination->type)>1) {
+          $course->have_pretest_duration = true;
+          $course->pretest_duration_sec = $pretest_duration_sec;
+          $course->have_posttest_duration = true;
+          $course->posttest_duration_sec = $posttest_duration_sec;
+        } else {
+          $course->have_posttest_duration = true;
+        $course->posttest_duration_sec = $posttest_duration_sec;
+        }
+      } else {
+        $course->have_pretest_duration = false;
+        $course->pretest_duration_sec = 0;
+        $course->have_posttest_duration = false;
+        $course->posttest_duration_sec = 0;
+      }
+      
+      if(!empty($posttest_passing_point)) {
+        $course->have_posttest_passing_point = true;
+        $course->posttest_passing_point = $posttest_passing_point;
+      } else {
+        $course->have_posttest_passing_point = false;
+        $course->posttest_passing_point = 0;
+      }
+      
+      if(!empty($posttest_display_answer)) {
+        $course->posttest_display_answer = true;
+      } else {
+        $course->posttest_display_answer = false;
+      }
+    }
+    $course->save();
 
-    $posttest_passing_point = 10;
-
-    $have_pretest = true;
-    $total_pretest = 10;
-
-    $have_posttest = true;
-    $total_posttest = 10;
+    ActivityLogClass::log('เพิ่มหรือแก้ไข course', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
+    
+    return redirect()->route('examination_index', ['id' => $examination_group_id]);
   }
 
   public function examination_create($examination_group_id, $id=''){
     $examination_group = Examination_group::where('_id',new ObjectId($examination_group_id))->first();
-
+    
     if(empty($id)) {
       $examination = new \stdClass();
       $examination->_id = '';

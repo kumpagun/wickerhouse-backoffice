@@ -96,10 +96,19 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::post('/group_store/{id?}', 'Course\ExaminationController@examination_group_store')->name('examination_group_store');
     Route::get('/group_delete/{id?}', 'Course\ExaminationController@examination_group_delete')->name('examination_group_delete');
 
+    Route::post('/posttest_update/{id?}', 'Course\ExaminationController@examination_posttest_update')->name('examination_posttest_update');
+    
+
     Route::get('/index/{id?}', 'Course\ExaminationController@examination_index')->name('examination_index');
     Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
     Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
     Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
+  });
+  
+  // Revuew url
+  Route::group(['prefix' => 'reviewurl', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::post('/store', 'Course\CourseController@course_review_url_store')->name('course_review_url_store');
+    Route::get('/delete/{id?}', 'Course\CourseController@course_review_url_delete')->name('course_review_url_delete');
   });
 });
 

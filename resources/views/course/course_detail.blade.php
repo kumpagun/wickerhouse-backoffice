@@ -271,13 +271,15 @@
       </div>
     </div>
   </div>
+  {{-- Review URL --}}
+  @include('course.detail-review_url')
+  {{-- Document --}}
+  @include('course.detail-document')
+  {{-- Episode group --}}
+  @include('course.detail-episode_group')
+  {{-- Episode list --}}
+  @include('course.detail-episode_list')
   @if($data->type=='standard')
-    {{-- Episode group --}}
-    @include('course.detail-document')
-    {{-- Episode group --}}
-    @include('course.detail-episode_group')
-    {{-- Episode list --}}
-    @include('course.detail-episode_list')
     {{-- Homework --}}
     @include('course.detail-homework_list')
     {{-- Examination --}}

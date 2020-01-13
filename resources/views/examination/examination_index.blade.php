@@ -24,20 +24,21 @@
       </div>
       <div class="card-content">
         <div class="card-body overflow-hidden">
-          <form id="form" class="form" action="#" method="POST">
+          <form id="form" class="form" action="{{ route('examination_posttest_update') }}" method="POST">
             @csrf
-            <input type="hidden" name="id" value="{{ $examination_group->_id }}" >
+            <input type="hidden" name="examination_group_id" value="{{ $examination_group->_id }}" >
+            <input type="hidden" name="course_id" value="{{ $course->_id }}" >
             <div class="form-body">
               <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="form-group">
-                    {{-- Duration_limit --}}
-                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('duration_limit')) danger @endif">
+                    {{-- posttest_limit_total --}}
+                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('posttest_limit_total')) danger @endif">
                       <label for="user-name">แบบทดสอบหลังเรียน ทำได้กี่ครั้ง</label>
-                      <input type="number" name="duration_limit" class="form-control" value="{{ old('duration_limit', $examination_group->duration_limit) }}" placeholder="duration_limit" required>
-                      @if($errors->course->has('duration_limit'))
+                      <input type="number" name="posttest_limit_total" class="form-control" value="{{ old('posttest_limit_total', $course->posttest_limit_total) }}" placeholder="posttest_limit_total">
+                      @if($errors->course->has('posttest_limit_total'))
                         <span class="small" role="alert">
-                          <p class="mb-0">{{ $errors->course->first('duration_limit') }}</p>
+                          <p class="mb-0">{{ $errors->course->first('posttest_limit_total') }}</p>
                         </span>
                       @endif
                     </fieldset>
@@ -45,13 +46,13 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="form-group">
-                    {{-- Duration_sec --}}
-                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('duration_sec')) danger @endif">
+                    {{-- posttest_duration_sec --}}
+                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('posttest_duration_sec')) danger @endif">
                       <label for="user-name">ระยะเวลาทำแบบทดสอบแต่ละข้อ</label>
-                      <input type="number" name="duration_sec" class="form-control" value="{{ old('duration_sec', $examination_group->duration_sec) }}" placeholder="duration_sec" required>
-                      @if($errors->course->has('duration_sec'))
+                      <input type="number" name="posttest_duration_sec" class="form-control" value="{{ old('posttest_duration_sec', $course->posttest_duration_sec) }}" placeholder="posttest_duration_sec" >
+                      @if($errors->course->has('posttest_duration_sec'))
                         <span class="small" role="alert">
-                          <p class="mb-0">{{ $errors->course->first('duration_sec') }}</p>
+                          <p class="mb-0">{{ $errors->course->first('posttest_duration_sec') }}</p>
                         </span>
                       @endif
                     </fieldset>
@@ -59,17 +60,26 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="form-group">
-                    {{-- posttest_passing_score --}}
-                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('posttest_passing_score')) danger @endif">
+                    {{-- posttest_passing_point --}}
+                    <fieldset class="form-group floating-label-form-group @if($errors->course->has('posttest_passing_point')) danger @endif">
                       <label for="user-name">คะแนนผ่านเกณฑ์</label>
-                      <input type="number" name="posttest_passing_score" class="form-control" value="{{ old('posttest_passing_score', $examination_group->posttest_passing_score) }}" placeholder="posttest_passing_score" required>
-                      @if($errors->course->has('posttest_passing_score'))
+                      <input type="number" name="posttest_passing_point" class="form-control" value="{{ old('posttest_passing_point', $course->posttest_passing_point) }}" placeholder="posttest_passing_point">
+                      @if($errors->course->has('posttest_passing_point'))
                         <span class="small" role="alert">
-                          <p class="mb-0">{{ $errors->course->first('posttest_passing_score') }}</p>
+                          <p class="mb-0">{{ $errors->course->first('posttest_passing_point') }}</p>
                         </span>
                       @endif
                     </fieldset>
                   </div>
+                </div>
+                <div class="col-12">
+                  {{-- display answer --}}
+                  <fieldset>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="posttest_display_answer" id="posttest_display_answer" @if($course->posttest_display_answer) checked @endif>
+                      <label class="custom-control-label" for="posttest_display_answer">แสดงเฉลยเมื่อทำแบบทดสอบหลังเรียนเสร็จ</label>
+                    </div>
+                  </fieldset>
                 </div>
                 <div class="col-12 mt-2 text-right">
                   <button id="btnSubmit" class="btn btn-primary btn-block" type="submit">Save</button>

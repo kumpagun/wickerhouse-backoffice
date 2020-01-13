@@ -49,7 +49,7 @@ class UploadClip implements ShouldQueue
           ['name' => 'callback_url',  'contents' => 'https://bo.tutorme.in.th/api/course/transcode/callback']
         ];
       } else if (in_array($this->episode->type, ['free', 'payment'])) {
-        $content_id     = $this->episode->content_id;
+        $content_id = $this->episode->content_id;
         $params = [
           ['name' => 'service',       'contents' => 'tutorme_drm'],
           ['name' => 'source',        'contents' => $source],

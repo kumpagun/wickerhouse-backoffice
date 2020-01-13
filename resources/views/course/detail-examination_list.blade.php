@@ -24,7 +24,7 @@
       <div class="card-body pt-0">
         @if(count($examination) > 0) 
         <table class="table table-bordered">
-          <tr>
+          <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center">Type</th>
             <th class="text-center">Total</th>
             <th class="text-center">Action</th>
