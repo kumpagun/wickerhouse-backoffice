@@ -16,9 +16,9 @@
 
 @section('content')
   <div class="row justify-content-center">
-    <div class="col-12 col-md-10 col-xl-8">
+    <div class="col-12 ">
       <div class="card">
-        <div class="card-header pb-0">
+        <div class="card-header">
           <h4 class="card-title">{{ $title }}</h4>
           <div class="heading-elements">
             <ul class="list-inline mb-0">
@@ -40,33 +40,31 @@
             </ul>
           </div>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-hover">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <tr>
+              <th class="text-center table-no">#</th>
+              <th class="text-center">คำถาม</th>
+              <th class="text-center">Result</th>
+            </tr>
+            @if(count($datas)>0)
+            @foreach ($datas as $item)
               <tr>
-                <th class="text-center table-no">#</th>
-                <th class="text-center">คำถาม</th>
-                <th class="text-center">Result</th>
+                <td class="text-center">{{ $loop->iteration }}</td>
+                <td>  
+                  <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ $item->question }}</a>
+                </td>
+                @if(!empty($item->answer))
+                <td class="text-center text-success">ตอบแล้ว</td>
+                @else
+                <td class="text-center text-warning">ยังไม่ได้ตอบ</td>
+                @endif
               </tr>
-              @if(count($datas)>0)
-              @foreach ($datas as $item)
-                <tr>
-                  <td class="text-center">{{ $loop->iteration }}</td>
-                  <td>  
-                    <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ $item->question }}</a>
-                  </td>
-                  @if(!empty($item->answer))
-                  <td class="text-center text-success">ตอบแล้ว</td>
-                  @else
-                  <td class="text-center text-warning">ยังไม่ได้ตอบ</td>
-                  @endif
-                </tr>
-              @endforeach
-              @else
-                <tr><td colspan="99" class="text-center">ไม่มีข้อมูล</td></tr>
-              @endif
-            </table>
-          </div>
+            @endforeach
+            @else
+              <tr><td colspan="99" class="text-center">ไม่มีข้อมูล</td></tr>
+            @endif
+          </table>
         </div>
         <div class="card-footer border-0 text-center">
           {{ $datas->links() }}
