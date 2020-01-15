@@ -18,6 +18,7 @@ Route::group(['prefix' => 'upload'], function () {
   Route::post('/upload', 'UploadImagesController@upload')->name('upload_images');
   Route::post('/cropimage', 'UploadImagesController@cropImage')->name('upload_cropimages');
 });
+
 // Auth
 Route::group(['prefix' => 'auth'], function () {
   Route::get('/', 'Auth\LoginController@view')->name('auth_view');
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/callback', 'Auth\JasmineController@callback')->name('jasmine_callback');
   });
 });
+
 // Users
 Route::group(['prefix' => 'users', 'middleware' => ['auth', 'role:admin']], function () {
   Route::get('/', 'UsersController@index')->name('users_index');
@@ -37,12 +39,14 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth', 'role:admin']], func
   Route::post('/register/store', 'Auth\RegisterController@store')->name('users_store');
   Route::post('/resetpassword', 'Auth\RegisterController@resetpassword')->name('users_resetpassword');
 });
+
 // Roles
 Route::group(['prefix' => 'roles', 'middleware' => ['auth', 'role:admin']], function () {
   Route::get('/', 'RolesController@index')->name('roles_index');
   Route::get('/create/{id?}', 'RolesController@create')->name('roles_create');
   Route::post('/store', 'RolesController@store')->name('roles_store');
 });
+
 // Permissions
 Route::group(['prefix' => 'permissions', 'middleware' => ['auth', 'role:admin']], function () {
   Route::get('/', 'PermissionsController@index')->name('permissions_index');
@@ -97,7 +101,6 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::get('/group_delete/{id?}', 'Course\ExaminationController@examination_group_delete')->name('examination_group_delete');
 
     Route::post('/posttest_update/{id?}', 'Course\ExaminationController@examination_posttest_update')->name('examination_posttest_update');
-    
 
     Route::get('/index/{id?}', 'Course\ExaminationController@examination_index')->name('examination_index');
     Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
@@ -110,6 +113,11 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::post('/store', 'Course\CourseController@course_review_url_store')->name('course_review_url_store');
     Route::get('/delete/{id?}', 'Course\CourseController@course_review_url_delete')->name('course_review_url_delete');
   });
+});
+
+// Transcode
+Route::group(['prefix' => 'transcode'], function () {
+  Route::post('/callback', 'Course\TranscodeController@transcode_callback')->name('transcode_callback');
 });
 
 // Homework
