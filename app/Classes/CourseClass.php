@@ -44,16 +44,20 @@ class CourseClass
   public function get_homework_answer_total($training_id){
     $training = Training::find($training_id);
     $homework = Homework::where('course_id',new ObjectId($training->course_id))->where('status',1)->first();
-    $data = HomeworkAnswer::where('training_id', new ObjectId($training_id))
+    $count = 0;
+    if(!empty($homework)) {
+      $data = HomeworkAnswer::where('training_id', new ObjectId($training_id))
       ->where('homework_id',new ObjectId($homework->_id))
       ->where('status',1)
       ->select('user_id')
       ->groupBy('user_id')
       ->get(); 
-    $count = 0;
-    foreach($data as $row) {
-      $count++;
+
+      foreach($data as $row) {
+        $count++;
+      }
     }
+    
     return $count;
   }
   public function get_question_total($course_id) {
