@@ -203,13 +203,13 @@ class EpisodeController extends Controller
     $episode->course_id = new ObjectId($course_id);
     $episode->require_episode = $arr_require;
     $episode->code = $hashids->encode(Carbon::now()->timestamp);
-    $episode->content_id = 'jasmine:'.Carbon::now()->timestamp;
+    $episode->content_id = 'jasonline:'.Carbon::now()->timestamp;
     $episode->status = 1;
     $episode->save();
 
     // Transcode
-    // $path = 'videos/temp/'.$file;
-    // dispatch(new UploadClip($episode, $path));
+    $path = 'videos/temp/'.$file;
+    dispatch(new UploadClip($episode, $path));
 
     return redirect()->route('course_create', ['id' => $course_id, '#episodelist']);
   }

@@ -265,4 +265,28 @@ class CourseController extends Controller
       ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('course_index');
   }
+  public function course_review_url_store(Request $request){
+    $course_id = $request->input('course_id');
+    $review_url = $request->input('review_url');
+    $rules = [
+      'review_url' => 'required'
+    ];
+    $validator = Validator::make($request->all(), $rules);
+    if($validator->fails()) {
+      return redirect()->back()->withErrors($validator, 'review_url')->withInput();
+    }
+    $course = Course::find($course_id);
+    $course->review_url = $review_url;
+    $course->save();
+
+    ActivityLogClass::log('แก้ไข review_url', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
+  
+    return redirect()->route('course_create', ['id' => $course_id, '#review_url']);
+  }
+  public function course_review_url_delete($course_id){
+    $course = Course::find($course_id);
+    $clear_ep = Course::where('_id',new ObjectId($course_id))->unset('review_url');
+    ActivityLogClass::log('ลบ review_url', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
+    return redirect()->route('course_create', ['id' => $course_id, '#review_url']);
+  }
 }

@@ -26,8 +26,8 @@
       <div class="card-body pt-0">
         @if(!empty($homework))
         <table class="table table-bordered">
-          <tr>
-            <th class="text-center"></th>
+          <tr class="bg-blue-grey bg-lighten-5">
+            <th class="text-center">การบ้าน</th>
             <th class="text-center">Action</th>
           </tr>
           <tr>
@@ -45,9 +45,6 @@
         </table>
         @else 
         <table class="table table-bordered">
-          {{-- <tr>
-            <th class="text-center"></th>
-          </tr> --}}
           <tr>
             <td class="align-baseline text-center">ยังไม่มีการบ้าน</td>
           </tr>

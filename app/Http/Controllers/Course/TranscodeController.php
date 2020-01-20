@@ -11,7 +11,7 @@ use App\Models\TranscodeCallback;
 
 class TranscodeController extends Controller
 {
-  public function callback_transcode(Request $request){
+  public function transcode_callback(Request $request){
     $new_callback = new TranscodeCallback;
     $new_callback->callback = $request->all();
     $new_callback->status = $request->status;

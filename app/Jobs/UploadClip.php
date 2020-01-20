@@ -43,15 +43,15 @@ class UploadClip implements ShouldQueue
       $source = Storage::disk('local')->readStream($this->path);
       if ($this->episode->type == 'preview') {
         $params = [
-          ['name' => 'service',       'contents' => 'tutorme_clear'],
+          ['name' => 'service',       'contents' => 'jasonline_clear'],
           ['name' => 'source',        'contents' => $source],
           ['name' => 'priority',      'contents' => 'default'],
           ['name' => 'callback_url',  'contents' => 'https://bo.tutorme.in.th/api/course/transcode/callback']
         ];
       } else if (in_array($this->episode->type, ['free', 'payment'])) {
-        $content_id     = $this->episode->content_id;
+        $content_id = $this->episode->content_id;
         $params = [
-          ['name' => 'service',       'contents' => 'tutorme_drm'],
+          ['name' => 'service',       'contents' => 'jasonline_drm'],
           ['name' => 'source',        'contents' => $source],
           ['name' => 'priority',      'contents' => 'default'],
           ['name' => 'callback_url',  'contents' => 'https://bo.tutorme.in.th/api/course/transcode/callback'],
