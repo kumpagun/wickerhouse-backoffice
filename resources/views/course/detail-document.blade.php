@@ -21,7 +21,7 @@
     </div>
     <div class="card-content">
       <div class="card-body pt-0">
-        @if(!empty($document)) 
+        @if(!empty($document) && count($document) > 0) 
         <table class="table table-bordered mb-2">
           <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center" colspan="3">ZIP file</th>
@@ -75,6 +75,12 @@
             @else 
               <tr><td colspan="3" class="align-baseline text-center blue-grey lighten-2">ไม่มีไฟล์</td></tr>
             @endif
+        </table>
+        @else
+        <table class="table table-bordered">
+          <tr>
+            <td class="align-baseline text-center">ยังไม่มีไฟล์</td>
+          </tr>
         </table>
         @endif
       </div>

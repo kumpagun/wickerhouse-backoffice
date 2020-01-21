@@ -33,7 +33,7 @@
         <form method="POST" action="{{ route('episode_group_sortgroup') }}">
           @csrf
           <input type="hidden" name="course_id" value="{{ $data->_id }}" />
-          @if(!empty($episode_group))
+          @if(!empty($episode_group) && count($episode_group) > 0)
             <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
             @foreach ($episode_group as $item)
               <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 pb-0">
@@ -50,6 +50,12 @@
               </li>
             @endforeach
             </ul>
+          @else
+          <table class="table table-bordered">
+            <tr>
+              <td class="align-baseline text-center">ยังไม่มี Episode Group</td>
+            </tr>
+          </table>
           @endif
         </form>
       </div>

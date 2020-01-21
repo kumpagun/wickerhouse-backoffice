@@ -32,29 +32,33 @@
   </div>
   @endif
   <div class="row match-height">
-    @foreach ($datas as $data)
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card o-hidden">
-        <div class="card-content">
-          <div class="card-body">
-            <h4 class="card-title">{{ $data->name }}</h4>
-            <h6 class="card-subtitle text-muted">{{ $data->label }}</h6>
-          </div>
-          @if($data->test_status==1) 
-          <img class="img-fluid" src="{{ env('IMG_PATH_TUTORME').$data->profile_image }}" alt="Card image cap">
-          @else 
-            <img class="img-fluid" src="{{ env('IMG_PATH').$data->profile_image }}" alt="Card image cap">
-          @endif
-          <div class="card-body">
-            <p class="card-text">{{ $data->subtitle }}</p>
-            <p class="text-right mb-0">
-              <a href="{{ route('teacher_create', ['id' => $data->_id]) }}" class="card-link pink">Edit</a>
-            </p>
+    @if(!empty($datas) && count($datas) > 0)
+      @foreach ($datas as $data)
+      <div class="col-xl-3 col-md-6 col-sm-12">
+        <div class="card o-hidden">
+          <div class="card-content">
+            <div class="card-body">
+              <h4 class="card-title">{{ $data->name }}</h4>
+              <h6 class="card-subtitle text-muted">{{ $data->label }}</h6>
+            </div>
+            @if($data->test_status==1) 
+            <img class="img-fluid" src="{{ env('IMG_PATH_TUTORME').$data->profile_image }}" alt="Card image cap">
+            @else 
+              <img class="img-fluid" src="{{ env('IMG_PATH').$data->profile_image }}" alt="Card image cap">
+            @endif
+            <div class="card-body">
+              <p class="card-text">{{ $data->subtitle }}</p>
+              <p class="text-right mb-0">
+                <a href="{{ route('teacher_create', ['id' => $data->_id]) }}" class="card-link pink">Edit</a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    @endforeach
+      @endforeach
+    @else
+      <div class="col-12">ไม่มีข้อมูล</div>
+    @endif
   </div>
 @endsection
 

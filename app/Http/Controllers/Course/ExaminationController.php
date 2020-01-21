@@ -120,6 +120,10 @@ class ExaminationController extends Controller
     $posttest_duration_sec = $request->input('posttest_duration_sec');
     $posttest_passing_point = $request->input('posttest_passing_point');
     $posttest_display_answer = $request->input('posttest_display_answer');
+
+    $posttest_limit_total = intval($posttest_limit_total);
+    $posttest_duration_sec = intval($posttest_duration_sec);
+    $posttest_passing_point = intval($posttest_passing_point);
     
     $examination_group_id = $request->input('examination_group_id');
     $examination = Examination_group::find($examination_group_id);
@@ -136,7 +140,7 @@ class ExaminationController extends Controller
       if(!empty($posttest_duration_sec)) {
         if(count($examination->type)>1) {
           $course->have_pretest_duration = true;
-          $course->pretest_duration_sec = $pretest_duration_sec;
+          $course->pretest_duration_sec = $posttest_duration_sec;
           $course->have_posttest_duration = true;
           $course->posttest_duration_sec = $posttest_duration_sec;
         } else {

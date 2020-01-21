@@ -1,3 +1,11 @@
 .btn {
   border-radius: .4em !important;
 }
+.btn-primary {
+  background-color: $primary-color !important;
+  border: 1px solid $primary-color !important;
+  &:hover {
+    background-color: $primary-ligthen-color !important;
+    border: 1px solid $primary-ligthen-color !important;
+  }
+}
