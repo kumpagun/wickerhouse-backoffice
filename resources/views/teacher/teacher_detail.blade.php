@@ -46,7 +46,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <div class="card border-primary text-center bg-transparent">
+                  <div class="card border-primary text-center bg-transparent mt-1">
                     <div class="card-header text-left">
                       <label for="basicInputFile">Profile Image *</label>
                       <div>

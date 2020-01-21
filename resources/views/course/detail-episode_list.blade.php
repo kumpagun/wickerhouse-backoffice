@@ -21,7 +21,7 @@
     </div>
     <div class="card-content">
       <div class="card-body pt-0">
-        @if(count($episode) > 0) 
+        @if(!empty($episode) && count($episode) > 0) 
         <table class="table table-bordered mb-2">
           <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center">Title</th>
@@ -43,6 +43,12 @@
               </td>
             </tr>
           @endforeach
+        </table>
+        @else
+        <table class="table table-bordered">
+          <tr>
+            <td class="align-baseline text-center">ยังไม่มี Episode</td>
+          </tr>
         </table>
         @endif
       </div>
