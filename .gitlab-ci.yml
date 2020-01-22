@@ -52,7 +52,7 @@ deploy_staging:
   tags:
     - laravel
   variables:
-    DEPLOY_BASE: '/var/www/html/online-learning-bo'
+    DEPLOY_BASE: '/var/www/html/bo-dev.jasonlinelearning.com'
     USER_SSH_HOST: web@110.164.180.66
     USER_SSH_PORT: 18106
   script:
