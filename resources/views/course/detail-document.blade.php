@@ -21,7 +21,7 @@
     </div>
     <div class="card-content">
       <div class="card-body pt-0">
-        @if(!empty($document) && count($document) > 0) 
+        @if(!empty($document)) 
         <table class="table table-bordered mb-2">
           <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center" colspan="3">ZIP file</th>
