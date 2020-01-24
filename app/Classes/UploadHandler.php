@@ -3,7 +3,6 @@ namespace App\Classes;
 
 class UploadHandler
 {
-
     protected $options;
     // protected $course;
     // PHP File Upload error message codes:
