@@ -115,11 +115,6 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
   });
 });
 
-// Transcode
-Route::group(['prefix' => 'transcode'], function () {
-  Route::post('/callback', 'Course\TranscodeController@transcode_callback')->name('transcode_callback');
-});
-
 // Homework
 Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|homework']], function () {
   Route::get('/', 'Course\HomeworkController@homework_index')->name('homework_index');

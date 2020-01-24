@@ -46,7 +46,7 @@ class UploadClip implements ShouldQueue
         ['name' => 'service',       'contents' => 'jasonline_drm'],
         ['name' => 'source',        'contents' => $source],
         ['name' => 'priority',      'contents' => 'default'],
-        ['name' => 'callback_url',  'contents' => 'https://bo.tutorme.in.th/api/course/transcode/callback'],
+        ['name' => 'callback_url',  'contents' => env('TRANSCODE_CALLBACK')],
         ['name' => 'content_id',    'contents' => $content_id]
       ];
 
