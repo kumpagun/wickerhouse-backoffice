@@ -16,6 +16,7 @@ use File;
 use Image;
 use App\Classes\UploadHandler;
 use Hashids\Hashids;
+use App\Jobs\UploadClip;
 
 // Controller
 use  App\Http\Controllers\Course\HomeworkController;
@@ -190,6 +191,7 @@ class EpisodeController extends Controller
     $title = $request->input('title');
     $description = $request->input('description');
     $require_episode = $request->input('require_episode');
+    $file_name = $request->input('file_name');
 
     $arr_require = [];
     array_push($arr_require, new ObjectId($require_episode));
@@ -207,10 +209,12 @@ class EpisodeController extends Controller
     $episode->status = 1;
     $episode->save();
 
-    // Transcode
-    $path = 'videos/temp/'.$file;
-    dispatch(new UploadClip($episode, $path));
-
+    if(!empty($file_name)) {
+      // Transcode
+      $path = 'videos/temp/'.$file_name;
+      dispatch(new UploadClip($episode, $path));
+    }
+    
     return redirect()->route('course_create', ['id' => $course_id, '#episodelist']);
   }
 
