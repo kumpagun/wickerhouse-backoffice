@@ -47,6 +47,12 @@
             </tr>
           @endforeach
         </table>
+        @else
+        <table class="table table-bordered">
+          <tr>
+            <td class="align-baseline text-center">ยังไม่มีแบบทดสอบ</td>
+          </tr>
+        </table>
         @endif
       </div>
     </div>

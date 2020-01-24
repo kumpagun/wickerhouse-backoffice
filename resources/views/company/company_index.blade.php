@@ -35,7 +35,7 @@
               <th class="text-center no-table">#</th>
               <th class="text-center content-table">Company Name</th>
             </tr>
-            @if (!empty($datas))
+            @if (!empty($datas) && count($datas) > 0)
               @foreach ($datas as $item)
                 <tr> 
                   <td class="text-center"><a href="{{ route('company_create', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>

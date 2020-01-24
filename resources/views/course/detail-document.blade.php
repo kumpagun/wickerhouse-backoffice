@@ -76,6 +76,12 @@
               <tr><td colspan="3" class="align-baseline text-center blue-grey lighten-2">ไม่มีไฟล์</td></tr>
             @endif
         </table>
+        @else
+        <table class="table table-bordered">
+          <tr>
+            <td class="align-baseline text-center">ยังไม่มีไฟล์</td>
+          </tr>
+        </table>
         @endif
       </div>
     </div>

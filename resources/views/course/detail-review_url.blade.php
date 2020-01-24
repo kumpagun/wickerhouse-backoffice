@@ -65,7 +65,7 @@
       <div class="modal-body">
         <fieldset class="form-group floating-label-form-group @if($errors->course->has('title')) danger @endif">
           <label for="user-name">URL</label>
-          <input type="text" name="review_url" class="form-control" placeholder="Title" value="{{ $data->review_url }}" required>
+        <input type="text" name="review_url" class="form-control" placeholder="Title" value="@if(!empty($data->review_url)) {{$data->review_url}} @endif" required>
         </fieldset>
       </div>
       <div class="modal-footer">

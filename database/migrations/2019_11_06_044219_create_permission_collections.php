@@ -33,7 +33,7 @@ class CreatePermissionCollections extends Migration
     {
         $collectionNames = config('permission.collection_names');
 
-        Schema::drop($collectionNames['roles']);
-        Schema::drop($collectionNames['permissions']);
+        Schema::dropIfExists($collectionNames['roles']);
+        Schema::dropIfExists($collectionNames['permissions']);
     }
 }

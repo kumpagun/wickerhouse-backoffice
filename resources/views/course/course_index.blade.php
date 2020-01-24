@@ -26,37 +26,41 @@
 
 @section('content')
   <div class="row match-height">
-    @foreach ($datas as $item)
-    <div class="col-6 col-md-6 col-lg-4 col-xl-3">
-      <a href="{{ route('course_create', ['id' => $item->_id]) }}">
-      <div class="card o-hidden">
-        <div class="card-content">
-          @if($item->test_status==1) 
-          <img class="card-img img-fluid" src="{{ env('IMG_PATH_TUTORME').$item->thumbnail }}" alt="Card image cap">
-          @else
-          <img class="card-img img-fluid" src="{{ env('IMG_PATH').$item->thumbnail }}" alt="Card image cap">
-          @endif
-          <div class="card-body">
-            <h4 class="card-title">{{ $item->title }}</h4>
-            <p class="card-text text-right">
-              @if($item->type=='standard') 
-              <span >ประเภทหลักสูตรมาตรฐาน</span>
-              @else
-              <span>ประเภทหลักสูตรทั่วไป</span>
-              @endif
+    @if(!empty($datas) && count($datas) > 0)
+      @foreach ($datas as $item)
+      <div class="col-6 col-md-6 col-lg-4 col-xl-3">
+        <a href="{{ route('course_create', ['id' => $item->_id]) }}">
+        <div class="card o-hidden">
+          <div class="card-content">
+            @if($item->test_status==1) 
+            <img class="card-img img-fluid" src="{{ env('IMG_PATH_TUTORME').$item->thumbnail }}" alt="Card image cap">
+            @else
+            <img class="card-img img-fluid" src="{{ env('IMG_PATH').$item->thumbnail }}" alt="Card image cap">
+            @endif
+            <div class="card-body">
+              <h4 class="card-title">{{ $item->title }}</h4>
+              <p class="card-text text-right">
+                @if($item->type=='standard') 
+                <span >ประเภทหลักสูตรมาตรฐาน</span>
+                @else
+                <span>ประเภทหลักสูตรทั่วไป</span>
+                @endif
 
-              @if($item->status==1)
-                <span class="status text-success">Online</span>
-              @else 
-                <span class="status text-danger">Offline</span>
-              @endif
-            </p>
+                @if($item->status==1)
+                  <span class="status text-success">Online</span>
+                @else 
+                  <span class="status text-danger">Offline</span>
+                @endif
+              </p>
+            </div>
           </div>
         </div>
+        </a>
       </div>
-      </a>
-    </div>
-    @endforeach  
+      @endforeach  
+    @else
+      <div class="col-12">ไม่มีข้อมูล</div>
+    @endif
   </div>
 @endsection
 

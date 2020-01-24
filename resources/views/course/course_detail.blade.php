@@ -47,7 +47,7 @@
             {{-- thumbnail --}}
             <fieldset class="form-group floating-label-form-group @if($errors->course->has('thumbnail')) danger @endif">
               <div class="form-group">
-                <div class="card border-primary text-center bg-transparent">
+                <div class="card border-primary text-center bg-transparent p-1">
                   <div class="card-header text-left">
                     <label for="basicInputFile"> Thumbnail *</label>
                     <div>
@@ -271,19 +271,22 @@
       </div>
     </div>
   </div>
-  {{-- Review URL --}}
-  @include('course.detail-review_url')
-  {{-- Document --}}
-  @include('course.detail-document')
-  {{-- Episode group --}}
-  @include('course.detail-episode_group')
-  {{-- Episode list --}}
-  @include('course.detail-episode_list')
-  @if($data->type=='standard')
-    {{-- Homework --}}
-    @include('course.detail-homework_list')
-    {{-- Examination --}}
-    @include('course.detail-examination_list')
+
+  @if(!empty($data->_id))
+    {{-- Review URL --}}
+    @include('course.detail-review_url')
+    {{-- Document --}}
+    @include('course.detail-document')
+    {{-- Episode group --}}
+    @include('course.detail-episode_group')
+    {{-- Episode list --}}
+    @include('course.detail-episode_list')
+    @if($data->type=='standard')
+      {{-- Homework --}}
+      @include('course.detail-homework_list')
+      {{-- Examination --}}
+      @include('course.detail-examination_list')
+    @endif
   @endif
 </div>
 @endsection

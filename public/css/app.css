@@ -31,6 +31,16 @@ a:hover {
   border-radius: 0.4em !important;
 }
 
+.btn-primary {
+  background-color: #1b4597 !important;
+  border: 1px solid #1b4597 !important;
+}
+
+.btn-primary:hover {
+  background-color: #204fad !important;
+  border: 1px solid #204fad !important;
+}
+
 .card .card-title {
   line-height: 1.5rem;
 }
