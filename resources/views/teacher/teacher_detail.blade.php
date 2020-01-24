@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('add teacher'); @endphp
+@php $title = strtoupper('เพิ่มวิทยากร'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('teacher_index') }}">Teacher</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('teacher_index') }}">วิทยากร</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -19,7 +19,7 @@
   <div class="col-12 col-md-10 col-xl-8">
   <div class="card">
     <div class="card-header">
-      <h4 class="card-title">Teacher Detail</h4>
+      <h4 class="card-title">รายละเอียดวิทยากร</h4>
     </div>
     <div class="card-content">
       <div class="card-body overflow-hidden">
@@ -46,9 +46,9 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <div class="card border-primary text-center bg-transparent mt-1">
+                  <div class="card border-primary text-center bg-transparent mt-1 px-3">
                     <div class="card-header text-left">
-                      <label for="basicInputFile">Profile Image *</label>
+                      <label for="basicInputFile">รูปวิทยากร *</label>
                       <div>
                         <div class="controls">
                           <input type="file" name="profile_image" class="form-control"  id="uploadfile" accept="image/*" >
@@ -146,7 +146,7 @@
               
               <div class="col-12 mt-2 text-right">
                 @can('editor')
-                <button type="submit" id="btnSubmit" class="btn btn-primary btn-block">Save</button>
+                <button type="submit" id="btnSubmit" class="btn btn-primary btn-block">บันทึก</button>
                 @else
                 <button type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
                 @endcan

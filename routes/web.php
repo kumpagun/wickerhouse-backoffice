@@ -115,11 +115,6 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
   });
 });
 
-// Transcode
-Route::group(['prefix' => 'transcode'], function () {
-  Route::post('/callback', 'Course\TranscodeController@transcode_callback')->name('transcode_callback');
-});
-
 // Homework
 Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|homework']], function () {
   Route::get('/', 'Course\HomeworkController@homework_index')->name('homework_index');
@@ -128,7 +123,7 @@ Route::group(['prefix' => 'homework', 'middleware' => ['auth', 'role:admin|homew
 });
 
 // Question
-Route::group(['prefix' => 'question', 'middleware' => ['auth', 'role:admin|qa']], function () {
+Route::group(['prefix' => 'question', 'middleware' => ['auth', 'role:admin|question']], function () {
   Route::get('/', 'Course\QuestionController@question_index')->name('question_index');
   Route::get('/answer/{question_id}/{type?}', 'Course\QuestionController@question_answer_index')->name('question_answer_index');
   Route::post('/answer_store', 'Course\QuestionController@question_answer_store')->name('question_answer_store');

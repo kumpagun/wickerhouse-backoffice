@@ -14,5 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
+});
+
+// Transcode
+Route::group(['prefix' => 'transcode'], function () {
+  Route::post('/callback', 'Course\TranscodeController@transcode_callback')->name('transcode_callback');
 });
