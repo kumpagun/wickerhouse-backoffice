@@ -40,7 +40,8 @@ class UploadClip implements ShouldQueue
     $this->episode->update(['transcode_status' => 'transfering']);
     $client = new Client(['headers' => ['Authorization' => 'Bearer 4styVfeWRWtLEqZYu5v53me1qIODJ6W6RLwkiPQVFPxwdxGHb1oHC2hHwArF']]);
     try {
-      $source = Storage::disk('local')->readStream($this->path);
+      // $source = Storage::disk('public')->readStream($this->path);
+      $source = Storage::disk('public')->readStream($this->path);
       $content_id = $this->episode->content_id;
       $params = [
         ['name' => 'service',       'contents' => 'jasonline_drm'],
@@ -49,6 +50,7 @@ class UploadClip implements ShouldQueue
         ['name' => 'callback_url',  'contents' => env('TRANSCODE_CALLBACK')],
         ['name' => 'content_id',    'contents' => $content_id]
       ];
+      Log::info($params);
 
       $transcode_url = 'http://upload-seeme.mthai.com/api/transcode';
       $res = $client->request('POST', $transcode_url, [
@@ -58,6 +60,7 @@ class UploadClip implements ShouldQueue
       $status_code = $res->getStatusCode();
       $body = $res->getBody();
 
+      Log::info("Status code: ".$status_code);
       if ($status_code == 200) {
         $data = json_decode($body, true);
         if (is_array($data)) {
@@ -72,7 +75,7 @@ class UploadClip implements ShouldQueue
           $this->episode->transcode_status = 'queued';
           $this->episode->save();
 
-          $disk = Storage::disk('local');
+          $disk = Storage::disk('public');
           if ($disk->exists($this->path)) {
             $disk->delete($this->path);
           }

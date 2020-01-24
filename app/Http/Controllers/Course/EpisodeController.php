@@ -17,6 +17,7 @@ use Image;
 use App\Classes\UploadHandler;
 use Hashids\Hashids;
 use App\Jobs\UploadClip;
+use Illuminate\Support\Facades\Storage;
 
 // Controller
 use  App\Http\Controllers\Course\HomeworkController;
@@ -242,11 +243,11 @@ class EpisodeController extends Controller
   public function episode_video_delete_file(Request $request) {
     $file = $request->input('file');
     $path = 'videos/temp/'.$file;
-    $exists = Storage::disk('local')->exists($path);
+    $exists = Storage::disk('public')->exists($path);
     $status = 200;
     $response = new \stdClass();
     if ($exists) {
-      $result = Storage::disk('local')->delete($path);
+      $result = Storage::disk('public')->delete($path);
       // Storage::allFiles
       if ($result) {
         $response->status = 'DELETE_SUCCESS';
