@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('Course List'); @endphp
+@php $title = strtoupper('หลักสูตรทั้งหมด'); @endphp
 
 @section('content-header-left')
   <h3 class="content-header-title mb-2">{{ $title }}</h3>
   <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item">Course</li>
+      <li class="breadcrumb-item">หลักสูตรการเรียน</li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -17,9 +17,9 @@
 @section('content-header-right')
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
     @can('editor')
-      <a class="btn btn-secondary" href="{{ route('course_create') }}">Add Course</a>
+      <a class="btn btn-secondary" href="{{ route('course_create') }}">เพิ่มหลักสูตร</a>
     @else 
-      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>Add Course</button>
+      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>เพิ่มหลักสูตร</button>
     @endcan
   </div>
 @endsection

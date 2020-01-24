@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('Category List'); @endphp
+@php $title = strtoupper('ประเภทของหลักสูตร'); @endphp
 
 @section('content-header-left')
     <h3 class="content-header-title mb-2">{{ $title }}</h3>
     <div class="row breadcrumbs-top">
     <div class="breadcrumb-wrapper col-12">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item">Category</li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
     </div>
@@ -16,9 +15,9 @@
 @section('content-header-right')
   <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
     @can('editor')
-      <a class="btn btn-secondary" href="{{ route('category_create') }}">Add Category</a>
+      <a class="btn btn-secondary" href="{{ route('category_create') }}">เพิ่มประเภทของหลักสูตร</a>
     @else 
-      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>Add Category</button>
+      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>เพิ่มประเภทของหลักสูตร</button>
     @endcan
   </div>
 @endsection
@@ -27,7 +26,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title">Category list</h4>
+          <h4 class="card-title">ประเภทของหลักสูตร</h4>
         </div>
         <div class="table-responsive">
           <table class="table table-hover">
