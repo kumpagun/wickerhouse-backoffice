@@ -187,6 +187,7 @@ class EpisodeController extends Controller
 
   public function episode_store(Request $request)
   {
+    $id = $request->input('id');
     $course_id = $request->input('course_id');
     $title = $request->input('title');
     $description = $request->input('description');
@@ -198,8 +199,11 @@ class EpisodeController extends Controller
 
     $hashids = new Hashids();
     
-
-    $episode = new Episode();
+    if(!empty($id)) {
+      $episode = Episode::find($id);
+    } else {
+      $episode = new Episode();
+    }
     $episode->title = $title;
     $episode->description = $description;
     $episode->course_id = new ObjectId($course_id);
