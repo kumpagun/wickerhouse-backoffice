@@ -40,14 +40,13 @@ class UploadClip implements ShouldQueue
     $this->episode->update(['transcode_status' => 'transfering']);
     $client = new Client(['headers' => ['Authorization' => 'Bearer 4styVfeWRWtLEqZYu5v53me1qIODJ6W6RLwkiPQVFPxwdxGHb1oHC2hHwArF']]);
     try {
-      // $source = Storage::disk('local')->readStream($this->path);
       $source = Storage::disk('local')->readStream($this->path);
       $content_id = $this->episode->content_id;
       $params = [
         ['name' => 'service',       'contents' => 'jasonline_drm'],
         ['name' => 'source',        'contents' => $source],
         ['name' => 'priority',      'contents' => 'default'],
-        ['name' => 'callback_url',  'contents' => env('TRANSCODE_CALLBACK')],
+        ['name' => 'callback_url',  'contents' => config('app.transcode_callback')],
         ['name' => 'content_id',    'contents' => $content_id]
       ];
       Log::info($params);
