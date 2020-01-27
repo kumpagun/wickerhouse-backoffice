@@ -34,7 +34,7 @@ class UploadHandler
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
-            'upload_dir' => storage_path('app/public/videos/temp/'),
+            'upload_dir' => storage_path('app/videos/temp/'),
             'upload_url' => $this->get_full_url().'/videos/temp/',
             // 'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
             // 'upload_url' => $this->get_full_url().'/files/',

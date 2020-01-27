@@ -216,7 +216,7 @@ class EpisodeController extends Controller
 
     if(!empty($file_name)) {
       // Transcode
-      $path = 'videos/temp/'.$file_name;
+      $path = 'app/videos/temp/'.$file_name;
       dispatch(new UploadClip($episode, $path));
     }
     
@@ -242,12 +242,12 @@ class EpisodeController extends Controller
   }
   public function episode_video_delete_file(Request $request) {
     $file = $request->input('file');
-    $path = 'videos/temp/'.$file;
-    $exists = Storage::disk('public')->exists($path);
+    $path = 'app/videos/temp/'.$file;
+    $exists = Storage::disk('local')->exists($path);
     $status = 200;
     $response = new \stdClass();
     if ($exists) {
-      $result = Storage::disk('public')->delete($path);
+      $result = Storage::disk('local')->delete($path);
       // Storage::allFiles
       if ($result) {
         $response->status = 'DELETE_SUCCESS';

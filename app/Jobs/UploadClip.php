@@ -40,8 +40,8 @@ class UploadClip implements ShouldQueue
     $this->episode->update(['transcode_status' => 'transfering']);
     $client = new Client(['headers' => ['Authorization' => 'Bearer 4styVfeWRWtLEqZYu5v53me1qIODJ6W6RLwkiPQVFPxwdxGHb1oHC2hHwArF']]);
     try {
-      // $source = Storage::disk('public')->readStream($this->path);
-      $source = Storage::disk('public')->readStream($this->path);
+      // $source = Storage::disk('local')->readStream($this->path);
+      $source = Storage::disk('local')->readStream($this->path);
       $content_id = $this->episode->content_id;
       $params = [
         ['name' => 'service',       'contents' => 'jasonline_drm'],
@@ -75,7 +75,7 @@ class UploadClip implements ShouldQueue
           $this->episode->transcode_status = 'queued';
           $this->episode->save();
 
-          $disk = Storage::disk('public');
+          $disk = Storage::disk('local');
           if ($disk->exists($this->path)) {
             $disk->delete($this->path);
           }
