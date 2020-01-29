@@ -34,7 +34,7 @@
           @if(!empty($document['document_path']))
             <tr>
               <td class="align-baseline text-left">{{ $document['title'] }}</td>
-              <td class="align-baseline text-center"><a target="_blank" download="{{ $document['title'] }}" href="{{ Storage::url('public/'.$document['document_path']) }}">Download</a></td>
+              <td class="align-baseline text-center"><a target="_blank" download="{{ $document['title'] }}" href="{{ Storage::url($document['document_path']) }}">Download</a></td>
               <td class="align-baseline text-center">
                 @can('editor')
                   <a onclick="handleDeleteDocumentPath('{{$document['course_id']}}')">
@@ -60,7 +60,7 @@
               @foreach ($document['document_paths'] as $item)
                 <tr>
                   <td class="align-baseline text-left">{{ $item['title'] }}</td>
-                  <td class="align-baseline text-center"><a target="_blank" download="{{$item['title']}}" href="{{ Storage::url('public/'.$item['path']) }}">Download</a></td>
+                  <td class="align-baseline text-center"><a target="_blank" download="{{$item['title']}}" href="{{ Storage::url($item['path']) }}">Download</a></td>
                   <td class="align-baseline text-center">
                     @can('editor')
                     <a onclick="handleDeleteDocumentPaths('{{$document['course_id']}}','{{$item['code']}}')">
