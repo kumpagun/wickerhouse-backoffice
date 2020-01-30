@@ -66,11 +66,7 @@
                         <button id="btnCrop" class="btn btn-danger btn-block mt-1" type="button">Crop Images</button>
                       </div>
                       @php 
-                        if($data->test_status==1) {
-                          $img_thumbnail = env('IMG_PATH_TUTORME').$data->thumbnail;
-                        } else {
-                          $img_thumbnail = env('IMG_PATH').$data->thumbnail;
-                        }
+                        $img_thumbnail = env('IMG_PATH').'storage/'.$data->thumbnail;
                       @endphp
                       @if(!empty($data->thumbnail))
                       <div class="final_images">

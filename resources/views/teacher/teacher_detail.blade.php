@@ -66,11 +66,7 @@
                         </div>
                         @if(!empty($data->profile_image))
                           @php 
-                            if($data->test_status==1) {
-                              $img_thumbnail = env('IMG_PATH_TUTORME').$data->profile_image;
-                            } else {
-                              $img_thumbnail = env('IMG_PATH').$data->profile_image;
-                            }
+                            $img_thumbnail = env('IMG_PATH').'storage/'.$data->profile_image;
                           @endphp
                         <div class="final_images">
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="{{ $img_thumbnail }}" name="" alt="Picture">
