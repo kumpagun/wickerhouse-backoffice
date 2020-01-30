@@ -253,7 +253,7 @@ class CourseController extends Controller
         $path_file = "images/$input_path/$course->_id";
         // $public_path = public_path($path_file);
         $public_path = storage_path('app/public/'.$path_file);
-        $path_for_db = "storage/".$path_file."/".$name;
+        $path_for_db = $path_file."/".$name;
 
         $filename = $public_path.'/'.$name;
         File::isDirectory($public_path) or File::makeDirectory($public_path, 0777, true, true);

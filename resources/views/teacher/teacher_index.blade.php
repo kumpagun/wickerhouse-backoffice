@@ -41,11 +41,7 @@
               <h4 class="card-title">{{ $data->name }}</h4>
               <h6 class="card-subtitle text-muted">{{ $data->label }}</h6>
             </div>
-            @if($data->test_status==1) 
-            <img class="img-fluid" src="{{ env('IMG_PATH_TUTORME').$data->profile_image }}" alt="Card image cap">
-            @else 
-              <img class="img-fluid" src="{{ env('IMG_PATH').$data->profile_image }}" alt="Card image cap">
-            @endif
+            <img class="img-fluid" src="{{ env('IMG_PATH').'storage/'.$data->profile_image }}" alt="Card image cap">
             <div class="card-body">
               <p class="card-text">{{ $data->subtitle }}</p>
               <p class="text-right mb-0">
