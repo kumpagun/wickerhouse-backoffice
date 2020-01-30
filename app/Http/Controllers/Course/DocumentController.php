@@ -89,7 +89,7 @@ class DocumentController extends Controller
     }
     // UPLOAD FILE STORAGE
     // Storage::disk('public')->put($file, 'Contents');
-    $path_file = "public/document/$course_id";
+    $path_file = "app/public/document/$course_id";
     $path = Storage::putFile($path_file, $file);
     $filename = basename($path);  
     $path_for_db = "document/$course_id/$filename";

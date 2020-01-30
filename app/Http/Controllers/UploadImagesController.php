@@ -18,12 +18,9 @@ class UploadImagesController extends Controller
 
     $extension = $images->getClientOriginalExtension();
     $name = Carbon::now()->timestamp.'.'.$extension;
-    // $path_file = "images/uploads/$input_path/original/";
-    // $public_path = storage_path('public/'.$path_file);
-    // $filename = $public_path.$name;
 
     $path_file = "images/uploads/$input_path/original/";
-    $path = Storage::putFile('public/'.$path_file, $images);
+    $path = Storage::putFile('app/public/'.$path_file, $images);
     $filename = basename($path);  
     $path_for_db = "storage/$path_file/$filename";
 
