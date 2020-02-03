@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('List department'); @endphp
+@php $title = strtoupper('แผนก'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item">Department</li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -17,7 +16,7 @@
 @section('content-header-right')
 <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
   @can('editor')
-    <a class="btn btn-secondary" href="{{ route('create_department') }}"><i class="ft-user"></i> Add Department</a>
+    <a class="btn btn-secondary" href="{{ route('create_department') }}"><i class="ft-user"></i> เพิ่มแผนก</a>
   @endcan
 </div>
 @endsection
@@ -27,7 +26,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title">Department list</h4>
+          <h4 class="card-title">แผนก</h4>
         </div>
         <div class="table-responsive">
           <table class="table table-hover">

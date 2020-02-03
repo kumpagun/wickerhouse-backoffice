@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('add Training'); @endphp
+@php $title = strtoupper('เพิ่มรอบอบรมทั้งหมด'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -22,7 +22,7 @@
           <img src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-dark.png') }}" alt="branding logo">
         </div> --}}
         <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>TRAINING INFO</span>
+          <span>รายละเอียดรอบอบรมทั้งหมด</span>
         </h6>
       </div>
       <div class="card-content ">
@@ -32,7 +32,7 @@
             <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="col-12">
               <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
-              <label for="user-name">Training Title *</label>
+              <label for="user-name">Title *</label>
               <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="training title">
               @if($errors->training->has('title'))
                   <span class="small" role="alert">
@@ -63,7 +63,7 @@
             </div>
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('company_id')) danger @endif">
-              <label for="user-name">Company *</label>
+              <label for="user-name">Company</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
                 <option value=""> กรุณาเลือก Company</option>
                 <optgroup label="Company">
@@ -83,7 +83,7 @@
             </div>
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
-                <label for="user-name">Department *</label>
+                <label for="user-name">Department</label>
                 <select class="select2 form-control" name="department_ids[]" multiple="multiple">
                 </select>
               </fieldset>
@@ -126,7 +126,7 @@
             </div>
             <div class="col-12">
               @can('editor')
-                <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                <button type="submit" class="btn btn-primary btn-block">บันทึก</button>
               @else
                 <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
               @endcan

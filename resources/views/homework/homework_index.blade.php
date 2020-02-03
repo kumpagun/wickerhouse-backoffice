@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('Homework'); @endphp
+@php $title = strtoupper('ตรวจแบบฝึกหัดหลังเรียน'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active">Homework</li>
+      <li class="breadcrumb-item active">ตรวจแบบฝึกหัดหลังเรียน</li>
     </ol>
   </div>
 </div>
@@ -24,7 +24,7 @@
         <table class="table table-hover">
           <tr>
             <th class="text-center table-no">#</th>
-            <th class="text-center">Training Name</th>
+            <th class="text-center">แบบฝึกหัดหลังเรียน</th>
             <th class="text-center">จำนวนคน / ตอบคำถาม</th>
           </tr>
           @if(count($datas)>0)

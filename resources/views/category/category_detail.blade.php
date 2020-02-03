@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('add category'); @endphp
+@php $title = strtoupper('เพิ่มประเภทของหลักสูตร'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('category_index') }}">Category List</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('category_index') }}">ประเภทของหลักสูตร</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -23,7 +23,7 @@
           <img src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-dark.png') }}" alt="branding logo">
         </div> --}}
         <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>CATEGORY INFO</span>
+          <span>รายละเอียดประเภทของหลักสูตร</span>
         </h6>
       </div>
       <div class="card-content ">
@@ -33,7 +33,7 @@
             <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="col-6">
               <fieldset class="form-group @if($errors->category->has('title')) danger @endif">
-              <label for="user-name">Category Title *</label>
+              <label for="user-name">Title *</label>
               <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="category Name">
               @if($errors->category->has('title'))
                 <span class="small" role="alert">
@@ -78,7 +78,7 @@
             </div>
             <div class="col-12">
               @can('editor')
-                <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                <button type="submit" class="btn btn-primary btn-block">บันทึก</button>
               @else
                 <button type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
               @endcan

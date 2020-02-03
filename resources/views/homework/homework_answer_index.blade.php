@@ -7,7 +7,7 @@
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('homework_index') }}">Homework</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('homework_index') }}">ตรวจแบบฝึกหัดหลังเรียน</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -91,12 +91,12 @@
             <div class="modal-body">
               <div class="row mb-2">
                 <div class="col-12"><strong>คำถาม</strong></div>
-                <div class="col-12">{!! $homework->question !!}</div>
+                <div class="col-12 max-width">{!! $homework->question !!}</div>
               </div>
               <div class="row mb-2">
                 <div class="col-12"><strong>คำตอบ</strong></div>
                 <div class="col-12">{!! $item->answer_text !!}</div>
-                <div class="col-12">ไฟล์ : <a href="{{ $item->answer_file }}" target="_blank">คลิก</a></div>
+                <div class="col-12">ไฟล์ : <a href="{{ env('APP_URL').'storage/'.$item->answer_file }}" target="_blank">คลิก</a></div>
               </div>
               <div class="row skin skin-square mb-2">
                 <div class="col-12 mb-2">
@@ -134,6 +134,9 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/icheck.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/custom.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/plugins/forms/checkboxes-radios.css') }}">
+  <style>
+    img{max-width:100% !important;}
+  </style>
 @endsection
 
 @section('script')

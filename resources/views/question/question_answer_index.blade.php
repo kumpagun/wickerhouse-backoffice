@@ -7,7 +7,7 @@
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('question_index') }}">Question</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('question_index') }}">ถาม-ตอบ</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
