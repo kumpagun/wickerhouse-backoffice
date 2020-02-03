@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('User Training List'); @endphp
+@php $title = strtoupper('รายชื่อผู้เข้าอบรมทั้งหมด'); @endphp
 
 @section('content-header-left')
     <h3 class="content-header-title mb-2">{{ $title }}</h3>
     <div class="row breadcrumbs-top">
     <div class="breadcrumb-wrapper col-12">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('training_index') }}">Training List</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('training_index') }}">รอบอบรมทั้งหมด</a></li>
             <li class="breadcrumb-item active">{{ $title }}</li>
         </ol>
     </div>
@@ -26,7 +26,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <h4 class="card-title">User Training List</h4>
+                    <h4 class="card-title">รายชื่อผู้เข้าอบรมทั้งหมด</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

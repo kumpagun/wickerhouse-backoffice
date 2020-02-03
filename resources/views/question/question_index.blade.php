@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('Q&A'); @endphp
+@php $title = strtoupper('ถาม-ตอบ'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -24,7 +24,7 @@
         <table class="table table-hover">
           <tr>
             <th class="text-center table-no">#</th>
-            <th class="text-center">Course Name</th>
+            <th class="text-center">ชื่อคอร์ส</th>
             <th class="text-center">จำนวนคนถาม / ตอบคำถาม</th>
           </tr>
           @if(count($datas)>0)

@@ -97,7 +97,7 @@
             </fieldset>
             <div>
               @can('editor')
-              <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+              <button type="submit" class="btn btn-primary btn-block">บันทึก</button>
               @else
               <button  type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
               @endcan

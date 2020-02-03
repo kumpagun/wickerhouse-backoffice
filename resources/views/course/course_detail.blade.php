@@ -165,7 +165,7 @@
             </fieldset>
             {{-- slug --}}
             <fieldset class="form-group floating-label-form-group @if($errors->course->has('slug')) danger @endif">
-              <label for="user-name">Slug</label>
+              <label for="user-name">Slug *</label>
               <input type="text" name="slug" class="form-control" value="{{ old('slug', $data->slug) }}" placeholder="Slug" required>
               @if($errors->course->has('slug'))
                 <span class="small" role="alert">

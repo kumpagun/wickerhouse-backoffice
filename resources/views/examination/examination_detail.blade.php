@@ -55,7 +55,7 @@
               @endforeach
             </div>
             <div>
-              <button type="submit" class="btn btn-block btn-primary">SAVE</button>
+              <button type="submit" class="btn btn-block btn-primary">บันทึก</button>
             </div>
           </form>
         </div>
