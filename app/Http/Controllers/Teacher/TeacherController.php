@@ -75,7 +75,7 @@ class TeacherController extends Controller
     $teacher->status = 1;
     $teacher->save();
 
-    if(!empty($data['profile_image'])) {
+    if(!empty($data['profile_image']) && !empty($data['img_final'])) {
       $img_final = $data['img_final'];
       $input_path = $data['input_path'];
       $imgWidth = 400;

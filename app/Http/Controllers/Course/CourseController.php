@@ -242,7 +242,7 @@ class CourseController extends Controller
         '_id' => $id
       ];
       $store = Course::UpdateOrCreate($find, $datas);
-      if(!empty($thumbnail)) {
+      if(!empty($thumbnail) && !empty($img_final)) {
         $course = Course::find($store->_id);
         // open file a image resource
         $img = Image::make(public_path($img_final));
