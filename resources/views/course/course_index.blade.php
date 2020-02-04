@@ -32,7 +32,7 @@
         <a href="{{ route('course_create', ['id' => $item->_id]) }}">
         <div class="card o-hidden">
           <div class="card-content">
-            <img class="card-img img-fluid" src="{{ env('IMG_PATH').'storage/'.$item->thumbnail }}" alt="Card image cap">
+            <img class="card-img img-fluid" src="{{ config('app.url').'storage/'.$item->thumbnail }}" alt="Card image cap">
             <div class="card-body">
               <h4 class="card-title">{{ $item->title }}</h4>
               <p class="card-text text-right">

@@ -227,7 +227,7 @@
       enctype: 'multipart/form-data',
       url: url,
       success: function (response) {
-        image_url = "{{ env('IMG_PATH') }}"+response.message
+        image_url = "{{ config('app.url') }}"+response.message
         insertToEditor(quill,image_url)
         // console.log(response)
       },

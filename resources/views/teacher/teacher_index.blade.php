@@ -41,7 +41,7 @@
               <h4 class="card-title">{{ $data->name }}</h4>
               <h6 class="card-subtitle text-muted">{{ $data->label }}</h6>
             </div>
-            <img class="img-fluid" src="{{ env('IMG_PATH').'storage/'.$data->profile_image }}" alt="Card image cap">
+            <img class="img-fluid" src="{{ config('app.url').'storage/'.$data->profile_image }}" alt="Card image cap">
             <div class="card-body">
               <p class="card-text">{{ $data->subtitle }}</p>
               <p class="text-right mb-0">

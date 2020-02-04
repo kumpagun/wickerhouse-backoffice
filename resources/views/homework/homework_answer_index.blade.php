@@ -96,7 +96,7 @@
               <div class="row mb-2">
                 <div class="col-12"><strong>คำตอบ</strong></div>
                 <div class="col-12">{!! $item->answer_text !!}</div>
-                <div class="col-12">ไฟล์ : <a href="{{ env('APP_URL').'storage/'.$item->answer_file }}" target="_blank">คลิก</a></div>
+                <div class="col-12">ไฟล์ : <a href="{{ config('app.url').'storage/'.$item->answer_file }}" target="_blank">คลิก</a></div>
               </div>
               <div class="row skin skin-square mb-2">
                 <div class="col-12 mb-2">

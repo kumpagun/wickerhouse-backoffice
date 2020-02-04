@@ -66,7 +66,7 @@
                         <button id="btnCrop" class="btn btn-danger btn-block mt-1" type="button">Crop Images</button>
                       </div>
                       @php 
-                        $img_thumbnail = env('IMG_PATH').'storage/'.$data->thumbnail;
+                        $img_thumbnail = config('app.url').'storage/'.$data->thumbnail;
                       @endphp
                       @if(!empty($data->thumbnail))
                       <div class="final_images">
