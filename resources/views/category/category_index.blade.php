@@ -35,14 +35,18 @@
               <th class="text-center">Category Name</th>
               <th class="text-center">Slug</th>
               <th class="text-center">code</th>
+              <th class="text-center">Action</th>
             </tr>
             @if (count($datas))
               @foreach ($datas as $item)
                 <tr>
-                  <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}"> {{  $loop->iteration  }} </a></td>
-                  <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->title  }}</a></td>
-                  <td  class="text-left"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->slug  }}</a></td>
-                  <td  class="text-center"><a href="{{ route('category_create', ['id' => $item->id]) }}">{{  $item->code  }}</a></td>
+                  <td class="text-center align-baseline"><a href="{{ route('category_create', ['id' => $item->_id]) }}"> {{  $loop->iteration  }} </a></td>
+                  <td class="text-left align-baseline"><a href="{{ route('category_create', ['id' => $item->_id]) }}">{{  $item->title  }}</a></td>
+                  <td class="text-left align-baseline"><a href="{{ route('category_create', ['id' => $item->_id]) }}">{{  $item->slug  }}</a></td>
+                  <td class="text-center align-baseline"><a href="{{ route('category_create', ['id' => $item->_id]) }}">{{  $item->code  }}</a></td>
+                  <td class="text-center align-baseline">
+                    <button class="btn btn-danger" onclick="handleClickDel('{{(string)$item->_id}}','{{$item->title}}')">ลบ</button>
+                  </td>
                 </tr>
               @endforeach  
             @else
@@ -60,5 +64,51 @@
 @endsection
 
 @section('script')
+<script>
+  function handleClickDel(category_id, category_name) {
+    url = "{{ route('category_delete') }}"
+    postData = {
+      _token: "{{ csrf_token() }}",
+      id: category_id,
+    }
+    swal({
+      title: "คุณต้องการลบ " +category_name+ " ใช่หรือไม่ ?",
+      icon: "warning",
+      showCancelButton: true,
+      buttons: {
+        cancel: {
+          text: "ยกเลิก",
+          value: null,
+          visible: true,
+          className: "",
+          closeModal: true,
+        },
+        confirm: {
+          text: "ลบ",
+          value: true,
+          visible: true,
+          className: "",
+          closeModal: false
+        }
+      }
+    }).then(isConfirm => {
+      if (isConfirm) {
+        $.get(url, postData, function(data, status){
+          if(data.status==400) {
+            var message = data.message
+            courses = data.course.join()
+            swal(message + courses)
+          } else {
+            swal('ดำนินการเรียบร้อย')
+            .then(
+              location.reload()
+            )
+          }
+        });
+      } else {
 
+      }
+    });
+  }
+</script>
 @endsection

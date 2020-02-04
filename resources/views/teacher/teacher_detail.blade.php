@@ -77,6 +77,7 @@
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                         </div>
                         @endif
+                        <span class="text-warning">* ขนาดที่แนะนำ 480 x 480</span>
                       </div>
                     </div>
                   </div>

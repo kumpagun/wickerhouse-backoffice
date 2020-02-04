@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Course;
 
 use MongoDB\BSON\ObjectId;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -86,12 +87,28 @@ class CategoryController extends Controller
 
       return redirect()->route('category_index');
     }
-    public function category_delete($id=''){
+    public function category_delete(Request $request){
+      $id = $request->input('id');
+      $courses = Course::where('category_id',new ObjectId($id))->get();
+      if(!empty($courses) && count($courses) > 0) {
+        $course_arr = [];
+        foreach($courses as $course) {
+          array_push($course_arr, $course->title);
+        }
+        return response()->json([
+          'status' => 400,
+          'message' => 'คอร์สเรียนเหล่านี้ใช้ประเภทหลักสูตรนี้อยู่ ',
+          'course' => $course_arr
+        ]); 
+      }
       $delete = Category::find($id);
       $delete->status = 0;
       $delete->save();
-      ActivityLogClass::log('ลบข้อมูล Category', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('category_index');
+      ActivityLogClass::log('ลบข้อมูล Category', new ObjectId(Auth::user()->_id), $delete->getTable(), $delete->getAttributes(),Auth::user()->username);
+      return response()->json([
+        'status' => 200,
+        'message' => 'ดำเนินการเรียบน้อยแล้ว'
+      ]); 
     }
 
 }

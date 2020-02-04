@@ -19,9 +19,14 @@ class TeacherController extends Controller
   {
     $this->middleware('auth');
   }
-  public function teacher_index(){
-    $datas = Teacher::where('status',1)->get();
-    return view('teacher.teacher_index',['datas' => $datas]);
+  public function teacher_index(Request $request){
+    $search = $request->input('search');
+    $query = Teacher::where('status',1);
+    if(!empty($search)) {
+      $query->where('name','like',"%$search%");
+    }
+    $datas = $query->get();
+    return view('teacher.teacher_index',['datas' => $datas, 'search' => $search]);
   }
   public function teacher_create($id=''){
     if(empty($id)) {

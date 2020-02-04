@@ -64,9 +64,14 @@ class CourseController extends Controller
     }
     return  $result;
   }
-  public function course_index(){
-    $datas = Course::query()->where('status','!=',0)->get();
-    return view('course.course_index',['datas' => $datas]);
+  public function course_index(Request $request){
+    $search = $request->input('search');
+    $query = Course::query()->where('status','!=',0);
+    if(!empty($search)) {
+      $query->where('title','like',"%$search%");
+    }
+    $datas = $query->get();
+    return view('course.course_index',['datas' => $datas, 'search' => $search]);
   }
   public function course_create($id=''){
     $teacher = $this->get_teacher();
