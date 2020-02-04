@@ -50,18 +50,17 @@ class FuncClass
         return '-';
         // ->timezone('Asia/Bangkok')->toDateTimeString()
     }
-    public function checkCurrentDate ($date = '')
+    public function checkCurrentDate ($published, $expired)
     {
         $current  = Carbon::now()->getTimestamp();
-        if ($date) {
-          $date = $date->toDateTime()->getTimestamp();
-          if ($current < $date) {
-            return false;
-          }else{
-            return true;
-          }
-        }else{
-            return true;
+        $published = $published->toDateTime()->getTimestamp();
+        $expired = $expired->toDateTime()->getTimestamp();
+        if ($current < $published) {
+          return 'ยังไม่เริ่ม';
+        } else if ($current >= $published && $current <= $expired) {
+          return 'อยู่ระหว่างอบรม';
+        } else if ($current > $expired) {
+          return 'จบแล้ว';
         }
     }
     public function utc_to_carbon_format_time_zone_bkk_in_format ($time='',$format='d-m-Y')

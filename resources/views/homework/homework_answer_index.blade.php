@@ -44,8 +44,9 @@
           <table class="table table-hover">
             <tr>
               <th class="text-center table-no">#</th>
-              <th class="text-center">Employee Name</th>
-              <th class="text-center">Result</th>
+              <th class="text-center">ชื่อพนักงาน</th>
+              <th class="text-center">วันที่ตอบ</th>
+              <th class="text-center">ผล</th>
             </tr>
             @if(count($datas)>0)
             @foreach ($datas as $item)
@@ -54,6 +55,7 @@
                 <td>  
                   <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ Member::get_name_member_jasmine_by_id($item->user_id) }}</a>
                 </td>
+                <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</td>
                 @if($item->result=='fail')
                 <td class="text-center text-danger">ไม่ผ่าน</td>
                 @elseif($item->result=='pass')
@@ -93,36 +95,43 @@
                 <div class="col-12"><strong>คำถาม</strong></div>
                 <div class="col-12 max-width">{!! $homework->question !!}</div>
               </div>
+              <hr>
               <div class="row mb-2">
                 <div class="col-12"><strong>คำตอบ</strong></div>
                 <div class="col-12">{!! $item->answer_text !!}</div>
-                <div class="col-12">ไฟล์ : <a href="{{ config('app.url').'storage/'.$item->answer_file }}" target="_blank">คลิก</a></div>
+                <div class="col-12 mb-2"><img src="http://bo-dev.jasonlinelearning.com/storage/homeworks/5e31523f3d1420696e1a1ee3/1580719887002.png" alt=""></div>
+                <div class="col-12"><strong>วันที่ตอบ </strong>{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</div>
               </div>
+              <hr>
               <div class="row skin skin-square mb-2">
                 <div class="col-12 mb-2">
                   <strong for="user-status">รายละเอียดการตรวจ</strong>
-                  <textarea name="description" class="form-control mt-1" rows="10">{{ $item->description }}</textarea>
+                  <textarea name="description" class="form-control mt-1" rows="10" @if(!empty($item->inspect_at)) disabled @endif >{{ $item->description }}</textarea>
                 </div>
-                <div class="col-12">
+                <div class="col-12 mb-2">
                   <strong for="user-status">ผลการตรวจ</strong>
                   <div class="mt-1">
                     <fieldset>
-                      <input type="radio" name="result" id="input-radio-active-{{$item->_id}}" value="pass" @if(!empty($item->result) && $item->result=='pass') checked @endif required>
+                      <input type="radio" name="result" id="input-radio-active-{{$item->_id}}" value="pass" @if(!empty($item->result) && $item->result=='pass') checked @endif required @if(!empty($item->inspect_at)) disabled @endif>
                       <label for="input-radio-active-{{$item->_id}}">ผ่าน</label>
                     </fieldset>
                     <fieldset>
-                      <input type="radio" name="result" id="input-radio-inactive-{{$item->_id}}" value="fail" @if(!empty($item->result) && $item->result=='fail') checked @endif required>
+                      <input type="radio" name="result" id="input-radio-inactive-{{$item->_id}}" value="fail" @if(!empty($item->result) && $item->result=='fail') checked @endif required @if(!empty($item->inspect_at)) disabled @endif>
                       <label for="input-radio-inactive-{{$item->_id}}">ไม่ผ่าน</label>
                     </fieldset>
                   </div>
-                 
                 </div>
+                @if(!empty($item->inspect_at))
+                <div class="col-12 mb-2"><strong>วันที่ตรวจ </strong>{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->inspect_at) }}</div>
+                @endif
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-outline-primary">Save changes</button>
-            </div>
+            @if(empty($item->inspect_at)) 
+              <div class="modal-footer">
+                <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+                <button type="submit" class="btn btn-outline-primary">บันทึก</button>
+              </div>
+            @endif
           </form>
         </div>
       </div>

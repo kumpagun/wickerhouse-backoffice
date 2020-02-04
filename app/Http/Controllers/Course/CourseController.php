@@ -158,6 +158,7 @@ class CourseController extends Controller
       $thumbnail = $request->input('thumbnail');
       $img_final = $request->input('img_final');
       $input_path = $request->input('input_path');
+      $status = $request->input('status');
       $imgWidth = 1200;
       $imgHeight = 675;
 
@@ -237,6 +238,8 @@ class CourseController extends Controller
       ];
       if(empty($id)) {
         $datas['status'] = 2;
+      } else {
+        $datas['status'] = intval($status);
       }
       $find = [
         '_id' => $id

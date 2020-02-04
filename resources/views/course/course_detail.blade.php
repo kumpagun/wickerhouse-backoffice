@@ -255,6 +255,19 @@
                 </button>
               </div>
             </div>
+            @if(!empty($data->_id))
+            <div class="mb-2 skin skin-square">
+              <label for="user-name">สถานะคอร์สเรียน</label>
+              <fieldset>
+                <input type="radio" name="status" id="input-radio-active" value=1 @if($data->status==1) checked @endif >
+                <label for="input-radio-active">ออนไลน์</label>
+              </fieldset>
+              <fieldset>
+                <input type="radio" name="status" id="input-radio-inactive" value=2 @if(empty($data->status) || $data->status==2) checked @endif>
+                <label for="input-radio-inactive">ออฟไลน์</label>
+              </fieldset>
+            </div>
+            @endif
             <div>
               @can('editor')
                 <button type="submit" class="btn btn-primary btn-block">บันทึก</button>

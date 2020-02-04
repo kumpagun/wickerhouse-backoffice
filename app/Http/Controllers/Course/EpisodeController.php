@@ -56,7 +56,7 @@ class EpisodeController extends Controller
   }
   public function get_episode_list($course_id) 
   {
-    $episode_list_selectes = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->get();
+    $episode_list_selectes = Episode::where('course_id',new ObjectId($course_id))->whereNotNull('episode_group_id')->where('status',1)->orderBy('position')->get();
     $episode_list_selected = [];
     foreach($episode_list_selectes as $row) {
       $episode_list_selected[(string)$row->episode_group_id][] = [
@@ -123,7 +123,7 @@ class EpisodeController extends Controller
 
     ActivityLogClass::log('เพิ่มหรือแก้ไข episode_group', new ObjectId(Auth::user()->_id), $episode_group->getTable(), $episode_group->getAttributes(),Auth::user()->username);
   
-    return redirect()->route('episode_group_create', ['course_id' => $course_iก]);
+    return redirect()->route('episode_group_create', ['course_id' => $course_id]);
   }
 
   public function episode_update_group_id(Request $request) 

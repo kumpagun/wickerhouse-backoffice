@@ -176,7 +176,7 @@
       })
       $( document ).ready(function() {
         var company_id = "{{ $data->company_id }}"
-        var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`)
+        var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`) 
           handleCompany(company_id,department_ids)
           $('select[name="company_id"]').change(function () {
             var department_ids = [];
@@ -188,13 +188,11 @@
       function handleCompany(company_id,department_ids){
         if(company_id){
           var url = "{{ route('get_department_by_company') }}/"+company_id
-          
           $.get(url, function (data) {
             // console.log(data)
             $("[name='department_ids[]']").empty();
 
-            if(department_ids.count>0) {
-              console.log('if')
+            if(department_ids) {
               data.forEach(function (ch) {
                 department_ids.map((departnmentId,index) => {
                   if (departnmentId.$oid === ch.id) {
@@ -216,7 +214,6 @@
                 })
               })
             } else {
-              console.log('else')
               data.forEach(function (ch) {
                 $("[name='department_ids[]']").append(
                   $('<option> ', {

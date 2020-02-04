@@ -53,8 +53,8 @@
                   </li>
                 @endforeach
               </ul>
-              <button id="update-grouplist" type="button" class="btn btn-sortgroup btn-primary d-none">Save Change</button>
-              <button id="cancel-grouplist" type="button" class="btn btn-sortgroup btn-danger d-none">Cancel</button>
+              <button id="update-grouplist" type="button" class="btn btn-sortgroup btn-primary d-none">บันทึก</button>
+              <button id="cancel-grouplist" type="button" class="btn btn-sortgroup btn-danger d-none">ปิด</button>
             </form>
           </div>
         </div>
@@ -84,8 +84,8 @@
           </fieldset>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-outline-primary">Save changes</button>
+          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+          <button type="submit" class="btn btn-outline-primary">บันทึก</button>
         </div>
       </form>
     </div>
@@ -121,8 +121,8 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" id="update-grouplist" class="btn btn-outline-primary">Save changes</button>
+          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+          <button type="submit" id="update-grouplist" class="btn btn-outline-primary">บันทึก</button>
         </div>
       </form>
     </div>

@@ -37,7 +37,7 @@
               <h4 class="card-title">{{ $item->title }}</h4>
               <p class="card-text text-right">
                 @if($item->type=='standard') 
-                <span >ประเภทหลักสูตรมาตรฐาน</span>
+                <span>ประเภทหลักสูตรมาตรฐาน</span>
                 @else
                 <span>ประเภทหลักสูตรทั่วไป</span>
                 @endif
