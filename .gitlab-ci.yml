@@ -74,3 +74,37 @@ deploy_staging:
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/releases/$CI_COMMIT_SHA $DEPLOY_BASE/current && chmod -R u+rwX,go+rX,go-w $DEPLOY_BASE/current/"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/releases && ls -t | awk 'NR>10' | xargs rm -rf"
     - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/current  && php artisan config:cache && php artisan queue:restart"
+    
+deploy_production:
+  stage: deploy
+  environment:
+    name: production
+    url: https://bo.jasonlinelearning.com
+  only:
+    - master
+  tags:
+    - laravel
+  variables:
+    DEPLOY_BASE: '/var/www/html/bo-dev.jasonlinelearning.com'
+    USER_SSH_HOST: web@110.164.180.66
+    USER_SSH_PORT: 33106
+  script:
+    - echo "Deploying to $CI_COMMIT_SHA"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/releases ] || mkdir -p $DEPLOY_BASE/releases"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/logs ] || mkdir -p $DEPLOY_BASE/logs"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "[ -d $DEPLOY_BASE/shared/storage/app/public ] || mkdir -p $DEPLOY_BASE/shared/storage/app/public"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "mkdir $DEPLOY_BASE/releases/$CI_COMMIT_SHA"
+    - scp -P $USER_SSH_PORT -r app artisan bootstrap composer.json config database  package.json public resources routes node_modules vendor webpack.* .env.example  $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -L $DEPLOY_BASE/current ]; then rm $DEPLOY_BASE/current; fi"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage/app/public $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/storage"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/shared/storage $DEPLOY_BASE/releases/$CI_COMMIT_SHA/storage"
+    - sed -r s/^\([A-Z0-9_]\)+=\S*\$//g .env.production > .env
+    - echo "" >> .env
+    - echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+    - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA" >> .env
+    - scp -P $USER_SSH_PORT -r .env $USER_SSH_HOST:$DEPLOY_BASE/releases/$CI_COMMIT_SHA/
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "if [ -d $DEPLOY_BASE/current ]; then cp \`ls -t $DEPLOY_BASE/current/public/css/app.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/css/admin.*.css\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/css/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/app.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/admin.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/vendor.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; cp \`ls -t $DEPLOY_BASE/current/public/js/manifest.*.js\` $DEPLOY_BASE/releases/$CI_COMMIT_SHA/public/js/ ; fi"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "ln -s $DEPLOY_BASE/releases/$CI_COMMIT_SHA $DEPLOY_BASE/current && chmod -R u+rwX,go+rX,go-w $DEPLOY_BASE/current/"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/releases && ls -t | awk 'NR>10' | xargs rm -rf"
+    - ssh $USER_SSH_HOST -p $USER_SSH_PORT "cd $DEPLOY_BASE/current  && php artisan config:cache && php artisan queue:restart"
+    
