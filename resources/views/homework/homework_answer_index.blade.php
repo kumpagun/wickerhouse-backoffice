@@ -52,6 +52,7 @@
           <table class="table table-hover">
             <tr>
               <th class="text-center table-no">#</th>
+              <th class="text-center">รหัสพนักงาน</th>
               <th class="text-center">ชื่อพนักงาน</th>
               <th class="text-center">วันที่ตอบ</th>
               <th class="text-center">ผล</th>
@@ -60,6 +61,9 @@
             @foreach ($datas as $item)
               <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
+                <td class="text-center">  
+                  <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ Member::get_employeeId_member_jasmine_by_id($item->user_id) }}</a>
+                </td>
                 <td>  
                   <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ Member::get_name_member_jasmine_by_id($item->user_id) }}</a>
                 </td>
