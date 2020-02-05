@@ -16,6 +16,14 @@
 
 @section('content-header-right')
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
+    <form action="">
+      <div class="input-group px-1">
+        <input type="text" class="form-control" name="search" aria-describedby="basic-addon2" placeholder="ชื่อคอร์ส" value="{{ $search }}">
+        <div class="input-group-append">
+          <button type="submit" class="input-group-text" id="basic-addon2">ค้นหา</button>
+        </div>
+      </div>
+    </form>
     @can('editor')
       <a class="btn btn-secondary" href="{{ route('course_create') }}">เพิ่มหลักสูตร</a>
     @else 
@@ -25,6 +33,14 @@
 @endsection
 
 @section('content')
+  @if (session('status'))
+  <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+  </div>
+  @endif
   <div class="row match-height">
     @if(!empty($datas) && count($datas) > 0)
       @foreach ($datas as $item)
@@ -32,12 +48,12 @@
         <a href="{{ route('course_create', ['id' => $item->_id]) }}">
         <div class="card o-hidden">
           <div class="card-content">
-            <img class="card-img img-fluid" src="{{ env('IMG_PATH').'storage/'.$item->thumbnail }}" alt="Card image cap">
+            <img class="card-img img-fluid" src="{{ config('app.url').'storage/'.$item->thumbnail }}" alt="Card image cap">
             <div class="card-body">
               <h4 class="card-title">{{ $item->title }}</h4>
               <p class="card-text text-right">
                 @if($item->type=='standard') 
-                <span >ประเภทหลักสูตรมาตรฐาน</span>
+                <span>ประเภทหลักสูตรมาตรฐาน</span>
                 @else
                 <span>ประเภทหลักสูตรทั่วไป</span>
                 @endif

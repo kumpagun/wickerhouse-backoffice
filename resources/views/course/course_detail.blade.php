@@ -20,6 +20,14 @@
 @section('content')
 <div class="row align-items-center justify-content-center">
   <div class="col-12 col-md-10 col-xl-8 mb-4">
+    @if (session('status'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+    @endif
     <div class="card px-1 py-1 m-0">
       <div class="card-header border-0 pb-0 mb-2">
         <h4 class="card-title">หลักสูตร</h4>
@@ -66,7 +74,7 @@
                         <button id="btnCrop" class="btn btn-danger btn-block mt-1" type="button">Crop Images</button>
                       </div>
                       @php 
-                        $img_thumbnail = env('IMG_PATH').'storage/'.$data->thumbnail;
+                        $img_thumbnail = config('app.url').'storage/'.$data->thumbnail;
                       @endphp
                       @if(!empty($data->thumbnail))
                       <div class="final_images">
@@ -77,6 +85,7 @@
                         <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                       </div>
                       @endif
+                      <span class="text-warning">* ขนาดที่แนะนำ 1024 x 576</span>
                     </div>
                   </div>
                 </div>
@@ -97,15 +106,13 @@
               <label for="user-name"> Require Course </label>
               <select class="select2 form-control" name="require_course">
                 <option value="">ไม่ Require Course</option>
-                <optgroup label="Course">
-                  @foreach ($course as $item )
-                    <option value={{ $item }} 
-                      @if(!empty($data->require_course) && in_array($item, $data->require_course)) selected  @endif
-                      >
-                      {{ CourseClass::get_name_course($item) }}
-                    </option>
-                  @endforeach
-                </optgroup>
+                @foreach ($course as $item )
+                  <option value={{ $item }} 
+                    @if(!empty($data->require_course) && in_array($item, $data->require_course)) selected  @endif
+                    >
+                    {{ CourseClass::get_name_course($item) }}
+                  </option>
+                @endforeach
               </select>
             </fieldset>
             {{-- Category --}}
@@ -113,13 +120,11 @@
               <label for="user-name">Category *</label>
               <select class="select2 form-control" name="category_id">
                 <option value=""> กรุณาเลือก Category</option>
-                <optgroup label="Category">
-                  @foreach ($category as $item )
-                    <option value={{ $item }} 
-                      @if(!empty($data->category_id) && ((string)$data->category_id == (string)$item)) selected  @endif
-                    >{{ CourseClass::get_name_category($item) }}</option>
-                  @endforeach
-                </optgroup>
+                @foreach ($category as $item )
+                  <option value={{ $item }} 
+                    @if(!empty($data->category_id) && ((string)$data->category_id == (string)$item)) selected  @endif
+                  >{{ CourseClass::get_name_category($item) }}</option>
+                @endforeach
               </select>
               @if($errors->course->has('category_id'))
                   <span class="small" role="alert">
@@ -146,16 +151,14 @@
             </fieldset>
             {{-- Teacher --}}
             <fieldset class="form-group @if($errors->course->has('teacher_id')) danger @endif">
-              <label for="user-name">Teacher *</label>
+              <label for="user-name">วิทยากร *</label>
               <select class="select2 form-control" name="teacher_id">
-                <option value=""> กรุณาเลือก Teacher</option>
-                <optgroup label="Teacher">
-                  @foreach ($teacher as $item )
-                    <option value={{ $item }} 
-                      @if(!empty($data->teacher_id) && ((string)$data->teacher_id == (string)$item)) selected  @endif
-                    >{{ TeacherClass::get_name_teacher($item) }}</option>
-                  @endforeach
-                </optgroup>
+                <option value=""> กรุณาเลือกวิทยากร</option>
+                @foreach ($teacher as $item )
+                  <option value={{ $item }} 
+                    @if(!empty($data->teacher_id) && ((string)$data->teacher_id == (string)$item)) selected  @endif
+                  >{{ TeacherClass::get_name_teacher($item) }}</option>
+                @endforeach
               </select>
               @if($errors->course->has('teacher_id'))
                   <span class="small" role="alert">
@@ -225,12 +228,12 @@
             </div>
             {{-- Appropriates --}}
             <div class="form-group mb-2 appropriates-repeater">
-              <label for="user-name">เหมาสมกับผู้เรียน</label>
+              <label for="user-name">เหมาะสมกับผู้เรียน</label>
               <div data-repeater-list="appropriates">
                 @if(!empty($data->appropriates) && count($data->appropriates) > 0)
                   @foreach ($data->appropriates as $item)
                     <div class="input-group mb-1" data-repeater-item>
-                      <input type="text" name="appropriates" placeholder="เหมาสมกับผู้เรียน" class="form-control" value="{{ $item }}">
+                      <input type="text" name="appropriates" placeholder="เหมาะสมกับผู้เรียน" class="form-control" value="{{ $item }}">
                       <div class="input-group-append">
                         <span class="input-group-btn" id="button-addon2">
                           <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
@@ -240,7 +243,7 @@
                   @endforeach
                 @else
                   <div class="input-group mb-1" data-repeater-item>
-                    <input type="text" name="appropriates" placeholder="เหมาสมกับผู้เรียน" class="form-control">
+                    <input type="text" name="appropriates" placeholder="เหมาะสมกับผู้เรียน" class="form-control">
                     <div class="input-group-append">
                       <span class="input-group-btn" id="button-addon2">
                         <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
@@ -251,10 +254,23 @@
               </div>
               <div class="text-center">
                 <button type="button" data-repeater-create class="btn btn-outline-secondary">
-                  <i class="ft-plus"></i> เพิ่มเหมาสมกับผู้เรียน
+                  <i class="ft-plus"></i> เพิ่มเหมาะสมกับผู้เรียน
                 </button>
               </div>
             </div>
+            @if(!empty($data->_id))
+            <div class="mb-2 skin skin-square">
+              <label for="user-name">สถานะคอร์สเรียน</label>
+              <fieldset>
+                <input type="radio" name="status" id="input-radio-active" value=1 @if($data->status==1) checked @endif >
+                <label for="input-radio-active">ออนไลน์</label>
+              </fieldset>
+              <fieldset>
+                <input type="radio" name="status" id="input-radio-inactive" value=2 @if(empty($data->status) || $data->status==2) checked @endif>
+                <label for="input-radio-inactive">ออฟไลน์</label>
+              </fieldset>
+            </div>
+            @endif
             <div>
               @can('editor')
                 <button type="submit" class="btn btn-primary btn-block">บันทึก</button>
@@ -269,14 +285,12 @@
   </div>
 
   @if(!empty($data->_id))
-    {{-- Review URL --}}
-    @include('course.detail-review_url')
     {{-- Document --}}
     @include('course.detail-document')
-    {{-- Episode group --}}
-    @include('course.detail-episode_group')
     {{-- Episode list --}}
     @include('course.detail-episode_list')
+    {{-- Episode group --}}
+    @include('course.detail-episode_group')
     @if($data->type=='standard')
       {{-- Homework --}}
       @include('course.detail-homework_list')

@@ -16,6 +16,14 @@
 
 @section('content-header-right')
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
+    <form action="">
+      <div class="input-group px-1">
+        <input type="text" class="form-control" name="search" aria-describedby="basic-addon2" placeholder="ชื่อวิทยากร" value="{{ $search }}">
+        <div class="input-group-append">
+          <button type="submit" class="input-group-text" id="basic-addon2">ค้นหา</button>
+        </div>
+      </div>
+    </form>
     @can('editor')
       <a class="btn btn-secondary" href="{{ route('teacher_create') }}">เพิ่มวิทยากร</a>
     @endcan
@@ -41,7 +49,7 @@
               <h4 class="card-title">{{ $data->name }}</h4>
               <h6 class="card-subtitle text-muted">{{ $data->label }}</h6>
             </div>
-            <img class="img-fluid" src="{{ env('IMG_PATH').'storage/'.$data->profile_image }}" alt="Card image cap">
+            <img class="img-fluid" src="{{ config('app.url').'storage/'.$data->profile_image }}" alt="Card image cap">
             <div class="card-body">
               <p class="card-text">{{ $data->subtitle }}</p>
               <p class="text-right mb-0">

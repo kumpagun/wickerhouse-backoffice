@@ -78,6 +78,12 @@
               </div> --}}
               <button type="submit" class="btn btn-primary btn-block"><i class="ft-unlock"></i> Login</button>
             </form>
+            <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
+              <span>Login with Jasmine</span>
+            </h6>
+            <a href="{{ route('jasmine_signin') }}">
+              <button type="submit" class="btn btn-primary2 btn-block"><i class="ft-unlock"></i> Login Jasmin</button>
+            </a>
           </div>
           {{-- <div class="card-body">
             <a href="register-with-bg.html" class="btn btn-outline-secondary btn-block"><i class="ft-user"></i> Register</a>

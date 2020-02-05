@@ -2,14 +2,27 @@
 
 @php $title = strtoupper('รายชื่อผู้เข้าอบรมทั้งหมด'); @endphp
 
+@section('content-header-right')
+  <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
+    <form action="">
+      <div class="input-group">
+        <input type="text" class="form-control" name="search" aria-describedby="basic-addon2" placeholder="employee id" value="{{ $search }}">
+        <div class="input-group-append">
+          <button type="submit" class="input-group-text" id="basic-addon2">ค้นหา</button>
+        </div>
+      </div>
+    </form>
+  </div>
+@endsection
+
 @section('content-header-left')
     <h3 class="content-header-title mb-2">{{ $title }}</h3>
     <div class="row breadcrumbs-top">
     <div class="breadcrumb-wrapper col-12">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('training_index') }}">รอบอบรมทั้งหมด</a></li>
-            <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('training_index') }}">รอบอบรมทั้งหมด</a></li>
+        <li class="breadcrumb-item active">{{ $title }}</li>
+      </ol>
     </div>
     </div>
 @endsection
@@ -26,7 +39,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <h4 class="card-title">รายชื่อผู้เข้าอบรมทั้งหมด</h4>
+                  <h4 class="card-title">รายชื่อผู้เข้าอบรมทั้งหมด</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

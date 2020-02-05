@@ -14,7 +14,15 @@
 </div>
 @endsection
 
-@section('content')
+@section('content') 
+  @if (session('status'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+  @endif
   <div class="row justify-content-center">
     <div class="col-12 ">
       <div class="card">
@@ -45,7 +53,8 @@
             <tr>
               <th class="text-center table-no">#</th>
               <th class="text-center">คำถาม</th>
-              <th class="text-center">Result</th>
+              <th class="text-center">วันที่ตอบ</th>
+              <th class="text-center">ผล</th>
             </tr>
             @if(count($datas)>0)
             @foreach ($datas as $item)
@@ -54,6 +63,7 @@
                 <td>  
                   <a href="#" data-toggle="modal" data-target="#answer-{{$item->_id}}">{{ $item->question }}</a>
                 </td>
+                <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</td>
                 @if(!empty($item->answer))
                 <td class="text-center text-success">ตอบแล้ว</td>
                 @else
@@ -89,19 +99,25 @@
             <div class="modal-body">
               <div class="row mb-2">
                 <div class="col-12"><strong>คำถาม</strong></div>
-                <div class="col-12">{!! $item->question !!}</div>
+                <div class="col-12 word-break">{!! $item->question !!}</div>
               </div>
               <div class="row skin skin-square mb-2">
                 <div class="col-12 mb-2">
                   <strong for="user-status">คำตอบ</strong>
-                  <textarea name="answer" class="form-control mt-1" rows="10">{{ $item->answer }}</textarea>
+                  <textarea name="answer" class="form-control mt-1" rows="10" @if(!empty($item->answer)) disabled @endif>{{ $item->answer }}</textarea>
                 </div>
+                @if(!empty($item->answer))
+                  <div class="col-12 mb-2"><strong>วันที่ตอบ</strong> {{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->answer_at) }}</div>
+                @endif
               </div>
+              
             </div>
+            @if(empty($item->answer))
             <div class="modal-footer">
-              <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-outline-primary">Save changes</button>
+              <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+              <button type="submit" class="btn btn-outline-primary">ตอบคำถาม</button>
             </div>
+            @endif
           </form>
         </div>
       </div>
@@ -113,6 +129,14 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/icheck.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/custom.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/plugins/forms/checkboxes-radios.css') }}">
+  <style>
+    td {
+      max-width: 200px;
+    }
+    .word-break {
+      word-break: break-all;
+    }
+  </style>
 @endsection
 
 @section('script')

@@ -64,9 +64,14 @@ class CourseController extends Controller
     }
     return  $result;
   }
-  public function course_index(){
-    $datas = Course::query()->where('status','!=',0)->get();
-    return view('course.course_index',['datas' => $datas]);
+  public function course_index(Request $request){
+    $search = $request->input('search');
+    $query = Course::query()->where('status','!=',0);
+    if(!empty($search)) {
+      $query->where('title','like',"%$search%");
+    }
+    $datas = $query->get();
+    return view('course.course_index',['datas' => $datas, 'search' => $search]);
   }
   public function course_create($id=''){
     $teacher = $this->get_teacher();
@@ -158,6 +163,7 @@ class CourseController extends Controller
       $thumbnail = $request->input('thumbnail');
       $img_final = $request->input('img_final');
       $input_path = $request->input('input_path');
+      $status = $request->input('status');
       $imgWidth = 1200;
       $imgHeight = 675;
 
@@ -237,12 +243,14 @@ class CourseController extends Controller
       ];
       if(empty($id)) {
         $datas['status'] = 2;
+      } else {
+        $datas['status'] = intval($status);
       }
       $find = [
         '_id' => $id
       ];
       $store = Course::UpdateOrCreate($find, $datas);
-      if(!empty($thumbnail)) {
+      if(!empty($thumbnail) && !empty($img_final)) {
         $course = Course::find($store->_id);
         // open file a image resource
         $img = Image::make(public_path($img_final));
@@ -263,7 +271,7 @@ class CourseController extends Controller
         $course->save();
       }
       ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('course_index');
+      return redirect()->route('course_index')->with('status',200);
   }
   public function course_review_url_store(Request $request){
     $course_id = $request->input('course_id');

@@ -18,12 +18,12 @@ class MemberClass
         return $name;
     }
     public function get_name_member_jasmine_by_id($user_id){
-        $name = '-';
-        $employee_data = Member_jasmine::find($user_id);
-        if ( $employee_data) {
-            $name = $employee_data->tf_name." ".$employee_data->tl_name; 
-        } 
-        return $name;
+      $name = '-';
+      $employee_data = Member::find($user_id);
+      if ( $employee_data) {
+        $name = $employee_data->fullname; 
+      } 
+      return $name;
     }
     public function get_name_role($user_id = ''){
         $user = User::find($user_id);

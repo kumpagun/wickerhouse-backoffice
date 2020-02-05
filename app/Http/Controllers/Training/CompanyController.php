@@ -81,7 +81,7 @@ class CompanyController extends Controller
         $store = Company::UpdateOrCreate($find, $datas);
         ActivityLogClass::log('เพิ่มหรือแก้ไข Company', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
 
-        return redirect()->route('company_index');
+        return redirect()->route('company_index')->with('status',200);
     }
     public function company_delete($id=''){
         $delete = Company::find($id);

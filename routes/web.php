@@ -134,7 +134,7 @@ Route::group(['prefix' => 'category', 'middleware' => ['auth', 'role:admin|cours
   Route::match(['get','post'], '/', 'Course\CategoryController@category_index')->name('category_index');
   Route::match(['get','post'], '/create/{id?}', 'Course\CategoryController@category_create')->name('category_create');
   Route::match(['get','post'], '/store', 'Course\CategoryController@category_store')->name('category_store');
-  Route::match(['get','post'],'/delete/{id?}', 'Course\CategoryController@category_delete')->name('category_delete');
+  Route::get('/delete', 'Course\CategoryController@category_delete')->name('category_delete');
 });
 
 // Class Room

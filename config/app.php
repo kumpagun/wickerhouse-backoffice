@@ -125,6 +125,26 @@ return [
 
   /*
   |--------------------------------------------------------------------------
+  | JASMIN API
+  |--------------------------------------------------------------------------
+  |
+  | This key is used by the Illuminate encrypter service and should be set
+  | to a random, 32 character string, otherwise these encrypted strings
+  | will not be safe. Please do this before deploying an application!
+  |
+  */
+  
+  'JAS_LOGIN_URL' => env('JAS_LOGIN_URL'),
+  'JAS_TOKEN' => env('JAS_TOKEN'),
+  'JAS_PROFILE' => env('JAS_PROFILE'),
+  'JAS_GRANT_TYPE' => env('JAS_GRANT_TYPE'),
+  'JAS_RESPONE_TYPE' => env('JAS_RESPONE_TYPE'),
+  'JAS_CLIENT_ID' => env('JAS_CLIENT_ID'),
+  'JAS_CLIENT_SECRET' => env('JAS_CLIENT_SECRET'),
+  'JAS_CALLBACK' => env('JAS_CALLBACK'),
+
+  /*
+  |--------------------------------------------------------------------------
   | Transcode VDO URL
   |--------------------------------------------------------------------------
   |

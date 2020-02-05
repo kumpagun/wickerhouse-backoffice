@@ -84,8 +84,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-outline-primary">Save changes</button>
+        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+        <button type="submit" class="btn btn-outline-primary">บันทึก</button>
       </div>
     </form>
   </div>

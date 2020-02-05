@@ -44,13 +44,25 @@ class TrainingController extends Controller
       $training->save();
       return true;
     }
-    public function training_index(){
-      $datas = Training::query()->where('status',1)->get();
-      return view('training.training_index',['datas' => $datas]);
+    public function training_index(Request $request) {
+      $search = $request->input('search');
+      $query = Training::query()->where('status',1);
+      if(!empty($search)) {
+        $query->where('title','like',"%$search%");
+      }
+      $datas = $query->get();
+      return view('training.training_index',['datas' => $datas, 'search' => $search]);
     }
-    public function traingin_user_list($training_id){
-      $datas = TrainingUser::query()->where('status',1)->where('training_id',new ObjectId($training_id))->paginate(25);
-      return view('training.user_training_index',['datas' => $datas]);
+    public function traingin_user_list(Request $request,$training_id){
+      $search = $request->input('search');
+      // dd($search);
+      $query = TrainingUser::query()->where('status',1);
+      $query->where('training_id',new ObjectId($training_id));
+      if(!empty($search)) {
+        $query->where('employee_id','like',"%$search%");
+      }
+      $datas = $query->paginate(25);
+      return view('training.user_training_index',['datas' => $datas, 'search' => $search]);
     }
     public function traingin_user_delete(Request $request) {
       $training_id = $request->input('training_id');
@@ -197,7 +209,7 @@ class TrainingController extends Controller
       $this->update_training_total_employee($store->_id);
 
       ActivityLogClass::log('เพิ่มหรือแก้ไข Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('training_index');
+      return redirect()->route('training_index')->with('status',200);
     }
     public function training_delete($id=''){
       $delete = Training::find($id);
@@ -399,6 +411,6 @@ class TrainingController extends Controller
     $this->update_training_total_employee($class_id);
 
     ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
-    return redirect()->route('training_index');
+    return redirect()->route('training_index')->with('status',200);
   }
 }

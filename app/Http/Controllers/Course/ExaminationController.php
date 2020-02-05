@@ -172,7 +172,7 @@ class ExaminationController extends Controller
 
     ActivityLogClass::log('เพิ่มหรือแก้ไข course', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
     
-    return redirect()->route('examination_index', ['id' => $examination_group_id]);
+    return redirect()->route('examination_index', ['id' => $examination_group_id])->with('status',200);
   }
 
   public function examination_create($examination_group_id, $id=''){
@@ -230,7 +230,7 @@ class ExaminationController extends Controller
 
     ActivityLogClass::log('เพิ่มหรือแก้ไข examination', new ObjectId(Auth::user()->_id), $examination->getTable(), $examination->getAttributes(),Auth::user()->username);
     
-    return redirect()->route('examination_index', ['id' => $examination_group_id, '#'.$id]);
+    return redirect()->route('examination_index', ['id' => $examination_group_id, '#'.$id])->with('status',200);
   }
 
   public function examination_format_choice($choice_0,$choice_1,$choice_2,$choice_3) {
@@ -267,6 +267,6 @@ class ExaminationController extends Controller
     $this->update_course($examination->course_id);
 
     ActivityLogClass::log('ลบ examination', new ObjectId(Auth::user()->_id), $examination->getTable(), $examination->getAttributes(),Auth::user()->username);
-    return redirect()->route('examination_index', ['id' => $examination->exam_group_id, '#'.$id]);
+    return redirect()->route('examination_index', ['id' => $examination->exam_group_id, '#'.$id])->with('status',200);
   }
 }

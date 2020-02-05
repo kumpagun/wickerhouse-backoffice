@@ -19,9 +19,14 @@ class TeacherController extends Controller
   {
     $this->middleware('auth');
   }
-  public function teacher_index(){
-    $datas = Teacher::where('status',1)->get();
-    return view('teacher.teacher_index',['datas' => $datas]);
+  public function teacher_index(Request $request){
+    $search = $request->input('search');
+    $query = Teacher::where('status',1);
+    if(!empty($search)) {
+      $query->where('name','like',"%$search%");
+    }
+    $datas = $query->get();
+    return view('teacher.teacher_index',['datas' => $datas, 'search' => $search]);
   }
   public function teacher_create($id=''){
     if(empty($id)) {
@@ -75,7 +80,7 @@ class TeacherController extends Controller
     $teacher->status = 1;
     $teacher->save();
 
-    if(!empty($data['profile_image'])) {
+    if(!empty($data['profile_image']) && !empty($data['img_final'])) {
       $img_final = $data['img_final'];
       $input_path = $data['input_path'];
       $imgWidth = 400;

@@ -19,13 +19,13 @@ class JasmineController extends Controller
 {
   public function signin() {
     $params = [
-      'response_type' => env('JAS_RESPONE_TYPE'),
-      'client_id' => env('JAS_CLIENT_ID'),
-      'redirect_uri' => env('JAS_CALLBACK')
+      'response_type' => config('app.JAS_RESPONE_TYPE'),
+      'client_id' => config('app.JAS_CLIENT_ID'),
+      'redirect_uri' => config('app.JAS_CALLBACK')
     ];
 
     $postdata = http_build_query($params);
-    $oauth_login_url = env('JAS_LOGIN_URL')."?".$postdata;
+    $oauth_login_url = config('app.JAS_LOGIN_URL')."?".$postdata;
 
     return redirect()->to($oauth_login_url);
   }
@@ -33,17 +33,17 @@ class JasmineController extends Controller
   public function callback(Request $request) {
     $code = $request->input('code');
     $params = [
-      'grant_type' => env('JAS_GRANT_TYPE'),
-      'client_id' => env('JAS_CLIENT_ID'),
-      'redirect_uri' => env('JAS_CALLBACK'),
+      'grant_type' => config('app.JAS_GRANT_TYPE'),
+      'client_id' => config('app.JAS_CLIENT_ID'),
+      'redirect_uri' => config('app.JAS_CALLBACK'),
       'code' => $code
     ];
     $OAUTH_STR = http_build_query($params);
     $client = new Client();
-    $response = $client->request('POST', env('JAS_TOKEN'), [
+    $response = $client->request('POST', config('app.JAS_TOKEN'), [
       'auth' => [
-        env('JAS_CLIENT_ID'), 
-        env('JAS_CLIENT_SECRET')
+        config('app.JAS_CLIENT_ID'), 
+        config('app.JAS_CLIENT_SECRET')
       ],
       'form_params' => $params
     ]);
@@ -68,7 +68,7 @@ class JasmineController extends Controller
       'Authorization' => 'Bearer ' . $token,        
       'Accept'        => 'application/json',
     ];
-    $response = $client->request('GET', env('JAS_PROFILE'), [
+    $response = $client->request('GET', config('app.JAS_PROFILE'), [
       'headers' => $headers
     ]);
     $data = json_decode($response->getBody());

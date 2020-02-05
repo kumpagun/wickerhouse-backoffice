@@ -71,6 +71,6 @@ class QuestionController extends Controller
     $question->save();
 
     ActivityLogClass::log('ตอบคำถาม question', new ObjectId(Auth::user()->_id), $question->getTable(), $question->getAttributes(),Auth::user()->username);
-    return redirect()->back();
+    return redirect()->back()->with('status',200);
   }
 }

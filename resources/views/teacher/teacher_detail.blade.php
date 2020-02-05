@@ -66,7 +66,7 @@
                         </div>
                         @if(!empty($data->profile_image))
                           @php 
-                            $img_thumbnail = env('IMG_PATH').'storage/'.$data->profile_image;
+                            $img_thumbnail = config('app.url').'storage/'.$data->profile_image;
                           @endphp
                         <div class="final_images">
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="{{ $img_thumbnail }}" name="" alt="Picture">
@@ -77,6 +77,7 @@
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                         </div>
                         @endif
+                        <span class="text-warning">* ขนาดที่แนะนำ 480 x 480</span>
                       </div>
                     </div>
                   </div>
