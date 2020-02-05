@@ -209,7 +209,7 @@ class TrainingController extends Controller
       $this->update_training_total_employee($store->_id);
 
       ActivityLogClass::log('เพิ่มหรือแก้ไข Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('training_index');
+      return redirect()->route('training_index')->with('status',200);
     }
     public function training_delete($id=''){
       $delete = Training::find($id);
@@ -411,6 +411,6 @@ class TrainingController extends Controller
     $this->update_training_total_employee($class_id);
 
     ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
-    return redirect()->route('training_index');
+    return redirect()->route('training_index')->with('status',200);
   }
 }

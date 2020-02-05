@@ -123,7 +123,7 @@ class EpisodeController extends Controller
 
     ActivityLogClass::log('เพิ่มหรือแก้ไข episode_group', new ObjectId(Auth::user()->_id), $episode_group->getTable(), $episode_group->getAttributes(),Auth::user()->username);
   
-    return redirect()->route('episode_group_create', ['course_id' => $course_id]);
+    return redirect()->route('episode_group_create', ['course_id' => $course_id])->with('status',200);
   }
 
   public function episode_update_group_id(Request $request) 
@@ -220,7 +220,7 @@ class EpisodeController extends Controller
       dispatch(new UploadClip($episode, $path));
     }
     
-    return redirect()->route('course_create', ['id' => $course_id, '#episodelist']);
+    return redirect()->route('course_create', ['id' => $course_id, '#episodelist'])->with('status',200);
   }
 
   public function episode_delete($id) 

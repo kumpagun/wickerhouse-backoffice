@@ -85,7 +85,7 @@ class DepartmentController extends Controller
         ];
         $store = Department::UpdateOrCreate($find, $datas);
         ActivityLogClass::log('เพิ่มหรือแก้ไข Department', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-        return redirect()->route('department_index');
+        return redirect()->route('department_index')->with('status',200);
     }
     public function delete_department($id=''){
         $delete = Department::find($id);

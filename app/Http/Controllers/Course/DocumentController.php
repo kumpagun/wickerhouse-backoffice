@@ -117,7 +117,7 @@ class DocumentController extends Controller
     $current_user = Auth::user();
     ActivityLogClass::log('เพิ่มหรือแก้ไข document', new ObjectId($current_user->_id), $document->getTable(), $document->getAttributes(),$current_user->username);
   
-    return redirect()->route('course_create', ['id' => $course_id, '#document']);
+    return redirect()->route('course_create', ['id' => $course_id, '#document'])->with('status',200);
   }
 
   public function document_zip_delete($course_id){

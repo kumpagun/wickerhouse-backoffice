@@ -85,7 +85,7 @@ class CategoryController extends Controller
       $store = Category::UpdateOrCreate($find, $datas);
       ActivityLogClass::log('เพิ่มหรือแก้ไข Category', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
 
-      return redirect()->route('category_index');
+      return redirect()->route('category_index')->with('status',200);
     }
     public function category_delete(Request $request){
       $id = $request->input('id');

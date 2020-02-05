@@ -20,6 +20,14 @@
 @section('content')
 <div class="row align-items-center justify-content-center">
   <div class="col-12 col-md-10 col-xl-8 mb-4">
+    @if (session('status'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+    @endif
     <div class="card px-1 py-1 m-0">
       <div class="card-header border-0 pb-0 mb-2">
         <h4 class="card-title">หลักสูตร</h4>

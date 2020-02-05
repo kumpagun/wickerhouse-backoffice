@@ -105,7 +105,7 @@ class HomeworkController extends Controller
     ActivityLogClass::log('เพิ่มหรือแก้ไข Homework', new ObjectId($current_user->_id), $homework->getTable(), $homework->getAttributes(),$current_user->username);
     // return redirect()->route('homework_index');
   
-    return redirect()->route('course_create', ['id' => $course_id, '#homework']);
+    return redirect()->route('course_create', ['id' => $course_id, '#homework'])->with('status',200);
   }
 
   public function homework_delete($id){
@@ -167,6 +167,6 @@ class HomeworkController extends Controller
     $homework->save();
 
     ActivityLogClass::log('ตรวจการบ้าน Homework_answer', new ObjectId(Auth::user()->_id), $homework->getTable(), $homework->getAttributes(),Auth::user()->username);
-    return redirect()->back();
+    return redirect()->back()->with('status',200);
   }
 }

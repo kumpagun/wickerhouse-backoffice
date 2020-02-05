@@ -12,6 +12,7 @@
     </div>
   </div>
 @endsection
+
 @section('content-header-right')
   <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
     <form action="">
@@ -31,7 +32,16 @@
     @endcan
   </div>
 @endsection
+
 @section('content')
+  @if (session('status'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+  @endif
     @if(Session::has('msg'))
       <div class="alert alert-danger mb-2" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

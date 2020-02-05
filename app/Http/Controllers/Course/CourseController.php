@@ -271,7 +271,7 @@ class CourseController extends Controller
         $course->save();
       }
       ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('course_index');
+      return redirect()->route('course_index')->with('status',200);
   }
   public function course_review_url_store(Request $request){
     $course_id = $request->input('course_id');

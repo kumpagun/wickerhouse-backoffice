@@ -22,6 +22,14 @@
   </div>
 @endsection
 @section('content')
+  @if (session('status'))
+  <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+  </div>
+  @endif
   <div class="row">
     <div class="col-12">
       <div class="card">

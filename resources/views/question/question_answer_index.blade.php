@@ -14,7 +14,15 @@
 </div>
 @endsection
 
-@section('content')
+@section('content') 
+  @if (session('status'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+  @endif
   <div class="row justify-content-center">
     <div class="col-12 ">
       <div class="card">
@@ -91,7 +99,7 @@
             <div class="modal-body">
               <div class="row mb-2">
                 <div class="col-12"><strong>คำถาม</strong></div>
-                <div class="col-12">{!! $item->question !!}</div>
+                <div class="col-12 word-break">{!! $item->question !!}</div>
               </div>
               <div class="row skin skin-square mb-2">
                 <div class="col-12 mb-2">
@@ -121,6 +129,14 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/icheck.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/custom.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/plugins/forms/checkboxes-radios.css') }}">
+  <style>
+    td {
+      max-width: 200px;
+    }
+    .word-break {
+      word-break: break-all;
+    }
+  </style>
 @endsection
 
 @section('script')
