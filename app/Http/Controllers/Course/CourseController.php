@@ -13,6 +13,7 @@ use  App\Http\Controllers\Course\HomeworkController;
 use  App\Http\Controllers\Course\EpisodeController;
 use  App\Http\Controllers\Course\ExaminationController;
 use  App\Http\Controllers\Course\DocumentController;
+use  App\Http\Controllers\ReviewController;
 // Model
 use App\Models\Course;
 use App\Models\Category;
@@ -114,6 +115,8 @@ class CourseController extends Controller
       $examination = $examination_controller->get_examination_group($id);
       $document_controller = new DocumentController;
       $document = $document_controller->get_document($id);
+      $review_controller = new ReviewController;
+      $review_group = $review_controller->get_review_group($id);
       $examination_type = ['pretest & posttest','pretest','posttest'];
       if(!empty($examination)) {
         // ลบ Type ที่มีแล้วออกจาก select list
@@ -142,7 +145,8 @@ class CourseController extends Controller
       'homework' => $homework,
       'examination' => $examination,
       'examination_type' => $examination_type,
-      'document' => $document
+      'document' => $document,
+      'review_group' => $review_group
     ]; 
     return view('course.course_detail',$withData);
   }
@@ -272,29 +276,5 @@ class CourseController extends Controller
       }
       ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('course_index')->with('status',200);
-  }
-  public function course_review_url_store(Request $request){
-    $course_id = $request->input('course_id');
-    $review_url = $request->input('review_url');
-    $rules = [
-      'review_url' => 'required'
-    ];
-    $validator = Validator::make($request->all(), $rules);
-    if($validator->fails()) {
-      return redirect()->back()->withErrors($validator, 'review_url')->withInput();
-    }
-    $course = Course::find($course_id);
-    $course->review_url = $review_url;
-    $course->save();
-
-    ActivityLogClass::log('แก้ไข review_url', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
-  
-    return redirect()->route('course_create', ['id' => $course_id, '#review_url']);
-  }
-  public function course_review_url_delete($course_id){
-    $course = Course::find($course_id);
-    $clear_ep = Course::where('_id',new ObjectId($course_id))->unset('review_url');
-    ActivityLogClass::log('ลบ review_url', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
-    return redirect()->route('course_create', ['id' => $course_id, '#review_url']);
   }
 }

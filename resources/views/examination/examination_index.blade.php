@@ -48,7 +48,7 @@
                   <div class="form-group">
                     {{-- posttest_duration_sec --}}
                     <fieldset class="form-group floating-label-form-group @if($errors->course->has('posttest_duration_sec')) danger @endif">
-                      <label for="user-name">ระยะเวลาทำแบบทดสอบแต่ละข้อ</label>
+                      <label for="user-name">ระยะเวลาทำแบบทดสอบแต่ละข้อ (วินาที)</label>
                       <input type="number" name="posttest_duration_sec" class="form-control" value="{{ old('posttest_duration_sec', $course->posttest_duration_sec) }}" placeholder="posttest_duration_sec" >
                       @if($errors->course->has('posttest_duration_sec'))
                         <span class="small" role="alert">
@@ -108,7 +108,6 @@
     <div id="{{$item}}" class="col-12 col-md-10 col-xl-8">
       <div class="card">
         <div class="card-header pb-0">
-          <h4 class="card-title">{!! $item->question !!}</h4>
           <div class="heading-elements">
             <ul class="list-inline mb-0">
               <li><a href="{{ route('examination_create', ['examination_group_id' => $examination_group->_id, 'id' => $item->_id]) }}"><i class="ft-edit"></i> แก้ไข</a></li>
@@ -118,6 +117,7 @@
         </div>
         <div class="card-content">
           <div class="card-body overflow-hidden">
+            <h4 class="card-title">{!! $item->question !!}</h4>
             <div class="row">
               @foreach ($item->choice as $index => $choice)
               <div class="col-12 col-md-6">

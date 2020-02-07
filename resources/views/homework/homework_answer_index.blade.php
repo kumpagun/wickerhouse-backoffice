@@ -111,7 +111,9 @@
               <div class="row mb-2">
                 <div class="col-12"><strong>คำตอบ</strong></div>
                 <div class="col-12">{!! $item->answer_text !!}</div>
-                <div class="col-12 mb-2"><img src="http://bo-dev.jasonlinelearning.com/storage/homeworks/5e31523f3d1420696e1a1ee3/1580719887002.png" alt=""></div>
+                @if(!empty($item->answer_file))
+                <div class="col-12 mb-2"><img src="{{ config('app.url').'storage/'.$item->answer_file }}" alt=""></div>
+                @endif
                 <div class="col-12"><strong>วันที่ตอบ </strong>{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</div>
               </div>
               <hr>

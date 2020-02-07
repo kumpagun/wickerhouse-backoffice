@@ -68,12 +68,12 @@
                           @php 
                             $img_thumbnail = config('app.url').'storage/'.$data->profile_image;
                           @endphp
-                        <div class="final_images">
+                        <div class="final_images mb-1">
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="{{ $img_thumbnail }}" name="" alt="Picture">
                         </div>
                         
                         @else
-                        <div class="final_images">
+                        <div class="final_images mb-1">
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                         </div>
                         @endif

@@ -107,12 +107,6 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
     Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
   });
-  
-  // Revuew url
-  Route::group(['prefix' => 'reviewurl', 'middleware' => ['auth', 'role:admin|course']], function () {
-    Route::post('/store', 'Course\CourseController@course_review_url_store')->name('course_review_url_store');
-    Route::get('/delete/{id?}', 'Course\CourseController@course_review_url_delete')->name('course_review_url_delete');
-  });
 });
 
 // Homework
@@ -148,6 +142,19 @@ Route::group(['prefix' => 'training', 'middleware' => ['auth', 'role:admin|cours
   Route::post('/user_del','Training\TrainingController@traingin_user_delete')->name('training_user_delete');
 });
 
+// Assessment
+Route::group(['prefix' => 'review', 'middleware' => ['auth', 'role:admin|course']], function () {
+  Route::group(['prefix' => 'group'], function () {
+    Route::post('/store', 'ReviewController@review_group_store')->name('review_group_store');
+    Route::get('/delete/{id?}', 'ReviewController@review_group_delete')->name('review_group_delete');
+  });
+  Route::get('/{review_group_id}', 'ReviewController@review_index')->name('review_index');
+  Route::get('/create/{id?}', 'ReviewController@review_create')->name('review_create');
+  Route::post('/store', 'ReviewController@review_store')->name('review_store');
+  Route::match(['get','post'],'/delete/{id?}', 'ReviewController@review_delete')->name('review_delete');
+  // Choice
+  Route::post('/choice/store', 'ReviewController@review_choice_store')->name('review_choice_store');
+});
 // Company
 Route::group(['prefix' => 'company', 'middleware' => ['auth', 'role:admin|course']], function () {
   Route::match(['get','post'],'/', 'Training\CompanyController@company_index')->name('company_index');

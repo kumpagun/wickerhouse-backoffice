@@ -1,7 +1,7 @@
 <div class="col-12 col-md-10 col-xl-8 mb-4">
   <div id="document" class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
-      <h4 class="card-title">DOCUMENT LIST</h4>
+      <h4 class="card-title">เอกสารประกอบการเรียน</h4>
       <div class="heading-elements">
         <ul class="list-inline mb-0">
           <li>
@@ -16,7 +16,7 @@
         </ul>
       </div>
       <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-        <span>DOCUMENT INFO</span>
+        <span>รายละเอียดเอกสารประกอบการเรียน</span>
       </h6>
     </div>
     <div class="card-content">

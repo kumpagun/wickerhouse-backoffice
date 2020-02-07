@@ -20,9 +20,16 @@ class RoleTableSeeder extends Seeder
       $role->save();
 
       $role = new Role();
-      $role->name         = 'content';
-      $role->display_name = 'Conent'; // optional
-      $role->description  = 'Description Conent'; // optional
+      $role->name         = 'guest';
+      $role->display_name = 'Guest'; // optional
+      $role->description  = 'Description Guest'; // optional
+      $role->status       = 1;
+      $role->save();
+
+      $role = new Role();
+      $role->name         = 'course';
+      $role->display_name = 'Course'; // optional
+      $role->description  = 'Description Course'; // optional
       $role->status       = 1;
       $role->save();
 
@@ -30,6 +37,20 @@ class RoleTableSeeder extends Seeder
       $role->name         = 'teacher';
       $role->display_name = 'Teacher'; // optional
       $role->description  = 'Description Teacher'; // optional
+      $role->status       = 1;
+      $role->save();
+
+      $role = new Role();
+      $role->name         = 'homework';
+      $role->display_name = 'Homework'; // optional
+      $role->description  = 'Description Homework'; // optional
+      $role->status       = 1;
+      $role->save();
+
+      $role = new Role();
+      $role->name         = 'question';
+      $role->display_name = 'Question'; // optional
+      $role->description  = 'Description Question'; // optional
       $role->status       = 1;
       $role->save();
     }
