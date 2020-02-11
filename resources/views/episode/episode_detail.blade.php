@@ -80,9 +80,9 @@
               @endif
             </fieldset>
             {{-- Requier Episode --}}
-            <fieldset class="form-group @if($errors->course->has('require_course')) danger @endif">
+            <fieldset class="form-group @if($errors->course->has('require_episode')) danger @endif">
               <label for="user-name"> Require Episode </label>
-              <select class="select2 form-control" name="require_course">
+              <select class="select2 form-control" name="require_episode">
                 <option value="">ไม่ Require Episode</option>
                 <optgroup label="Course">
                   @foreach ($episode_list as $item )
