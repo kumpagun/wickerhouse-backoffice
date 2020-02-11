@@ -72,7 +72,7 @@ class ReviewController extends Controller
 
     ActivityLogClass::log('แก้ไข review', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
   
-    return redirect()->route('review_index', ['id' => $course_id, '#review']);
+    return redirect()->route('review_index', ['id' => $course->_id]);
   }
   public function review_group_delete($review_group_id){
     $review_group = Review_group::find($review_group_id);
@@ -81,50 +81,36 @@ class ReviewController extends Controller
     ActivityLogClass::log('ลบ review group', new ObjectId(Auth::user()->_id), $review_group->getTable(), $review_group->getAttributes(),Auth::user()->username);
     return redirect()->route('review_index', ['id' => $review_group->course_id, '#review']);
   }
-  
-  public function review_answer_index($course_id,$type=''){
-    $course = Course::find($course_id);
-    $query = Review_group::where('course_id',new ObjectId($course_id))->where('status',1);
-    if(!empty($type) && $type=='answer') {
-      $query->whereNotNull('answer');
-    } else if(!empty($type) && $type=='no_answer') {
-      $query->whereNull('answer');
+  public function review_create($type,$review_group_id,$id='') {
+    $review_group = Review_group::where('_id',new ObjectId($review_group_id))->where('status',1)->first();
+    $choices = Review_choice::where('status',1)->get();
+    if(empty($id)) {
+      $data = new \stdClass();
+      $data->_id = '';
+      $data->title = '';
+      $data->review_group_id = '';
+      $data->type = '';
+      $data->choice_id = '';
+      $data->questions = [];
+      $data->require = '';
+      $data->status = 1;
+    } else {
+      $data = Review::find($id);
     }
-    $datas = $query->paginate(20);
     $withData = [
+      'review_group_id' => $review_group_id,
+      'review_group' => $review_group,
+      'choices' => $choices,
       'type' => $type,
-      'course' => $course,
-      'datas' => $datas
-    ];
-    return view('review.review_answer_index',$withData);
-  }
-
-  public function review_answer_store(Request $request){
-    $review_answer_id = $request->input('review_answer_id');
-    $answer = $request->input('answer');
-
-    $rules = [
-      'answer' => 'required'
-    ];
-    
-    $validator = Validator::make($request->all(), $rules);
-    if($validator->fails()) {
-      return redirect()->back()->withErrors($validator, 'question')->withInput();
-    }
-
-    $question = Review_group::find($review_answer_id);
-    $question->answer = $answer;
-    $question->answer_at = new UTCDateTime(Carbon::now()->timestamp * 1000);
-    $question->answer_by = new ObjectId(Auth::user()->_id);
-    $question->save();
-
-    ActivityLogClass::log('ตอบคำถาม question', new ObjectId(Auth::user()->_id), $question->getTable(), $question->getAttributes(),Auth::user()->username);
-    return redirect()->back()->with('status',200);
+      'data' => $data,
+    ]; 
+    return view('review.review_detail',$withData);
   }
   public function review_store(Request $request){
     $review_group_id = $request->input('review_group_id');
     $title = $request->input('title');
     $type = $request->input('type');
+    $course_id = $request->input('course_id');
     $choice_id = $request->input('choice_id'); 
     $questions = $request->input('questions');
     $require = $request->input('require');
@@ -154,17 +140,20 @@ class ReviewController extends Controller
       $course = new Review();
     }
     $course->review_group_id = new ObjectId($review_group_id);
+    $course->course_id = new ObjectId($course_id);
     $course->title = $title;
     $course->type = $type;
-    $course->choice_id = new ObjectId($choice_id);
-    $course->questions = $arr_question;
+    if($type=='choice') {
+      $course->choice_id = new ObjectId($choice_id);
+      $course->questions = $arr_question;
+    } 
     $course->require = $require; // boolean
     $course->status = intval($status);
     $course->save();
 
     ActivityLogClass::log('เพิ่ม review_choice', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
   
-    return redirect()->back()->with('status',200);
+    return redirect()->route('review_index',['review_group_id'=>$review_group_id])->with('status',200);
   }
   public function review_choice_store(Request $request){
     $title = $request->input('title');
@@ -196,5 +185,12 @@ class ReviewController extends Controller
     ActivityLogClass::log('เพิ่ม review_choice', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
   
     return redirect()->back()->with('status',200);
+  }
+  public function review_delete($review_id){
+    $review = Review::find($review_id);
+    $review->status = 0;
+    $review->save();
+    ActivityLogClass::log('ลบ review', new ObjectId(Auth::user()->_id), $review->getTable(), $review->getAttributes(),Auth::user()->username);
+    return redirect()->back();
   }
 }

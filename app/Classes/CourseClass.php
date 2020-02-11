@@ -16,6 +16,7 @@ use App\Models\Training;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
 use App\Models\Question;
+use App\Models\Review_choice;
 
 class CourseClass
 {   
@@ -71,5 +72,10 @@ class CourseClass
   public function get_have_homework($course_id) {
     $data = Course::find($course_id);
     return $data->have_homework;
+  }
+
+  public function get_review_choice($review_choice_id) {
+    $datas = Review_choice::find($review_choice_id);
+    return $datas;
   }
 }

@@ -149,7 +149,7 @@ Route::group(['prefix' => 'review', 'middleware' => ['auth', 'role:admin|course'
     Route::get('/delete/{id?}', 'ReviewController@review_group_delete')->name('review_group_delete');
   });
   Route::get('/{review_group_id}', 'ReviewController@review_index')->name('review_index');
-  Route::get('/create/{id?}', 'ReviewController@review_create')->name('review_create');
+  Route::get('/create/{type}/{review_group_id}/{id?}', 'ReviewController@review_create')->name('review_create');
   Route::post('/store', 'ReviewController@review_store')->name('review_store');
   Route::match(['get','post'],'/delete/{id?}', 'ReviewController@review_delete')->name('review_delete');
   // Choice
