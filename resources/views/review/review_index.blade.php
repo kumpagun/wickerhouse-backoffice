@@ -73,7 +73,7 @@
             </div>
             @foreach ($item->questions as $question)
               <div class="question__choice">
-                <div class="question__choice--title">{{ $question['title'] }}</div>
+                <div class="question__choice--title">{{ $question }}</div>
                 <div class="question__choice--choice">
                   @foreach ($review_choice->choices as $choice)
                     <span>{{ $choice['title'] }}</span>

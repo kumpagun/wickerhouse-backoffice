@@ -57,7 +57,7 @@
               @if(!empty($data->questions) && count($data->questions) > 0)
                 @foreach ($data->questions as $item)
                   <div class="input-group mb-1" data-repeater-item>
-                    <input type="text" name="questions" placeholder="คำถาม" class="form-control" value="{{ $item['title'] }}">
+                    <input type="text" name="questions" placeholder="คำถาม" class="form-control" value="{{ $item }}">
                     <div class="input-group-append">
                       <span class="input-group-btn" id="button-addon2">
                         <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>

@@ -117,16 +117,11 @@ class ReviewController extends Controller
     $require = $request->input('require');
     $status = $request->input('status');
     $arr_question = [];
-    $count = 0;
     if(!empty($questions)) {
       foreach($questions as $row) {
         if(!empty($row) && $row['questions']!='') {
-          $result = [
-            'key' => $count,
-            'title' => $row['questions']
-          ];
+          $result = $row['questions'];
           array_push($arr_question,$result);
-          $count++;
         }
       }
     }
