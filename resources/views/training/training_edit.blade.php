@@ -46,13 +46,11 @@
                 <label for="user-name">Course *</label>
                 <select class="select2 form-control" name="course_id" @if($data->id != '')disabled @endif>
                   <option value=""> กรุณาเลือก Course</option>
-                  <optgroup label="Course">
-                    @foreach ($course as $item )
-                      <option value={{ $item }} 
-                        @if(((string)$data->course_id == (string)$item)) selected  @endif
-                      >{{ CourseClass::get_name_course($item) }}</option>
-                    @endforeach
-                  </optgroup>
+                  @foreach ($course as $item )
+                    <option value={{ $item }} 
+                      @if(((string)$data->course_id == (string)$item)) selected  @endif
+                    >{{ CourseClass::get_name_course($item) }}</option>
+                  @endforeach
                 </select>
                 @if($errors->training->has('course_id'))
                     <span class="small" role="alert">
@@ -66,13 +64,11 @@
               <label for="user-name">Company</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
                 <option value=""> กรุณาเลือก Company</option>
-                <optgroup label="Company">
-                  @foreach ($company as $item )
-                    <option value={{ $item }} 
-                      @if( !empty($data->company_id)  && ((string)$data->company_id == (string)$item)) selected  @endif >{{ FuncClass::get_name_company($item) }} 
-                    </option>
-                  @endforeach
-                </optgroup>
+                @foreach ($company as $item )
+                  <option value={{ $item }} 
+                    @if( !empty($data->company_id)  && ((string)$data->company_id == (string)$item)) selected  @endif >{{ FuncClass::get_name_company($item) }} 
+                  </option>
+                @endforeach
               </select>
               @if($errors->training->has('company_id'))
                   <span class="small" role="alert">
@@ -169,7 +165,7 @@
     <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
     <script>
       $('.published_at').datetimepicker({
-        format: 'DD-MM-YYYY',
+        format: 'DD-MM-YYYY'
       })
       $('.expired_at').datetimepicker({
         format: 'DD-MM-YYYY',

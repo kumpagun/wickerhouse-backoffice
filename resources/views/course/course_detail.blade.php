@@ -77,11 +77,11 @@
                         $img_thumbnail = config('app.url').'storage/'.$data->thumbnail;
                       @endphp
                       @if(!empty($data->thumbnail))
-                      <div class="final_images">
+                      <div class="final_images mb-1">
                         <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="{{ $img_thumbnail }}" name="" alt="Picture">
                       </div>
                       @else
-                      <div class="final_images">
+                      <div class="final_images mb-1">
                         <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                       </div>
                       @endif
@@ -285,6 +285,8 @@
   </div>
 
   @if(!empty($data->_id))
+    {{-- Review --}}
+    @include('course.detail-review')
     {{-- Document --}}
     @include('course.detail-document')
     {{-- Episode list --}}

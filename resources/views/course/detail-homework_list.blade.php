@@ -1,7 +1,7 @@
 <div id="homework" class=" col-md-10 col-xl-8 mb-4">
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
-      <h4 class="card-title">HOMEWORK</h4>
+      <h4 class="card-title">แบบฝึกหัดหลังเรียน</h4>
       @if(empty($homework))
       <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
       <div class="heading-elements">
@@ -19,7 +19,7 @@
       </div>
       @endif
       <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-        <span>HOMEWORK INFO</span>
+        <span>รายละเอียดแบบฝึกหัดหลังเรียน</span>
       </h6>
     </div>
     <div class="card-content">
@@ -27,7 +27,7 @@
         @if(!empty($homework))
         <table class="table table-bordered">
           <tr class="bg-blue-grey bg-lighten-5">
-            <th class="text-center">การบ้าน</th>
+            <th class="text-center"></th>
             <th class="text-center">Action</th>
           </tr>
           <tr>

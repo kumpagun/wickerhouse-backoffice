@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
       $newUser->password = Hash::make('admin');
       $newUser->status = 1;
       $newUser->save();
-      $newUser->syncRoles(['admin','content']);
+      $newUser->syncRoles(['admin']);
       $newUser->syncPermissions(['viewer','editor']);
     }
 }
