@@ -22,6 +22,7 @@
       <form class="form-horizontal" action="{{ route('review_store') }}" method="POST">
         @csrf
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <input type="hidden" name="id" value="{{ $data->_id }}">
         <input type="hidden" name="review_group_id" value="{{ $review_group_id }}">
         <input type="hidden" name="course_id" value="{{ $review_group->course_id }}">
         <input type="hidden" name="type" value="{{ $type }}">
@@ -90,7 +91,6 @@
           </fieldset>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
           <button type="submit" class="btn btn-outline-primary">บันทึก</button>
         </div>
       </form>

@@ -108,6 +108,7 @@ class ReviewController extends Controller
   }
   public function review_store(Request $request){
     $review_group_id = $request->input('review_group_id');
+    $id = $request->input('id');
     $title = $request->input('title');
     $type = $request->input('type');
     $course_id = $request->input('course_id');
