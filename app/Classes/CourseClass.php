@@ -12,6 +12,7 @@ use App\Models\Course;
 use App\Models\Category;
 use App\Models\Examination_group;
 use App\Models\Examination;
+use App\Models\Episode;
 use App\Models\Training;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
@@ -77,5 +78,22 @@ class CourseClass
   public function get_review_choice($review_choice_id) {
     $datas = Review_choice::find($review_choice_id);
     return $datas;
+  }
+  public function count_ep_by_course ($course_id = '')
+  {   
+    $data = 0;
+    if ($course_id) {
+      $data = Episode::where('status',1)->where('course_id',$course_id)->count();
+    } 
+    return $data;
+  }
+
+  public function get_course_passing_score($course_id) {
+    $query = Course::where('_id',$course_id)->first();
+    $data = 0;
+    if(!empty($query->posttest_passing_point)) {
+      $data = $query->posttest_passing_point;
+    }
+    return $data;
   }
 }

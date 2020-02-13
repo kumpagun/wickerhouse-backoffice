@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('index');
+// Route::get('/', 'HomeController@index')->name('index');
 
 // UPLOAD IMAGE
 Route::group(['prefix' => 'upload'], function () {
@@ -180,6 +180,11 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:admin|course
   Route::post('/store/{id?}', 'Teacher\TeacherController@teacher_store')->name('teacher_store');
 });
 
+// REPORT
+// Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
+  Route::match(['get','post'],'/', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('index');
+  // Route::match(['get','post'],'/', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
+// });
 
 // CRONTAB
 Route::group(['prefix' => 'crontab'], function () {
