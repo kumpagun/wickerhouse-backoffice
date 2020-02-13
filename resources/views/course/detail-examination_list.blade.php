@@ -1,7 +1,7 @@
 <div id="examination" class="col-12 col-md-10 col-xl-8 mb-4">
   <div class="card px-1 py-1 m-0">
     <div class="card-header border-0 pb-0">
-      <h4 class="card-title">บบทดสอบ</h4>
+      <h4 class="card-title">แบบทดสอบ</h4>
       @if(!empty($examination_type)) 
       <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
       <div class="heading-elements">

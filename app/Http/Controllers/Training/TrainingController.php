@@ -55,14 +55,30 @@ class TrainingController extends Controller
     }
     public function traingin_user_list(Request $request,$training_id){
       $search = $request->input('search');
-      // dd($search);
+
+      $arr_employee_id = [];
+      if(!empty($search)) {
+        $member_jasmine = Member_jasmine::where('status',1);
+        $member_jasmine->where(function ($q) use ($search) {
+          $q->orWhere('tf_name','like',"%$search%");
+          $q->orWhere('tl_name','like',"%$search%");
+          $q->orWhere('employee_id','like',"%$search%");
+        });
+        $data_member = $member_jasmine->get();
+        foreach($data_member as $row) {
+          array_push($arr_employee_id, $row->employee_id);
+        }
+      }
+      
       $query = TrainingUser::query()->where('status',1);
       $query->where('training_id',new ObjectId($training_id));
-      if(!empty($search)) {
-        $query->where('employee_id','like',"%$search%");
+      if(!empty($arr_employee_id)) {
+        $query->whereIn('employee_id',$arr_employee_id);
       }
       $datas = $query->paginate(25);
-      return view('training.user_training_index',['datas' => $datas, 'search' => $search]);
+      
+
+      return view('training.user_training_index',['datas' => $datas, 'search' => $search, 'training_id' => $training_id]);
     }
     public function traingin_user_delete(Request $request) {
       $training_id = $request->input('training_id');

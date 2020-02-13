@@ -103,6 +103,7 @@ class CourseController extends Controller
       $examination = '';
       $examination_type = '';
       $document = '';
+      $review_group = '';
     } else {
       $data = Course::find($id);
       $episode_group_controller = new EpisodeController;
@@ -132,7 +133,7 @@ class CourseController extends Controller
         }
       }
     }
-    
+
     $withData = [
       'data' => $data,
       'teacher' => $teacher,

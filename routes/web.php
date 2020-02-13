@@ -179,3 +179,11 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:admin|course
   Route::match(['get','post'],'/create/{id?}', 'Teacher\TeacherController@teacher_create')->name('teacher_create');
   Route::post('/store/{id?}', 'Teacher\TeacherController@teacher_store')->name('teacher_store');
 });
+
+
+// CRONTAB
+Route::group(['prefix' => 'crontab'], function () {
+  Route::group(['prefix' => 'report'], function () {
+    Route::get('/access-content-by-user', 'Crontab\ReportController@access_content_by_user')->name('crontab_report_access_content_by_user');
+  });
+});

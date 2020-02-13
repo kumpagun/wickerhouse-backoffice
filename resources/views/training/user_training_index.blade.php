@@ -52,26 +52,47 @@
                                 <th class="text-center">Action</th>
                             </tr>
                             @if (count($datas))
-                                @foreach ($datas as $data)
-                                    <tr id="{{ $data->employee_id }}">
-                                      <td class="align-middle text-center">{{$loop->iteration}} </td>
-                                      <td class="align-middle text-left">{{ $data->employee_id }} </td>
-                                      <td class="align-middle text-left">{{ Member::get_name_member_jasmine($data->employee_id) }} </td>
-                                      <td class="align-middle text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->created_at,'d-m-Y H:i')}}</td>
-                                      <td class="text-center">
-                                        @can('editor')
-                                          <button class="btn btn-danger" 
-                                            onclick="handleClickDel('{{$data->training_id}}','{{$data->employee_id}}','{{Member::get_name_member_jasmine($data->employee_id)}}')">
-                                            ลบ
-                                          </button>
-                                        @else
-                                          <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
-                                            ลบ
-                                          </button>
-                                        @endcan
-                                      </td>
-                                    </tr>
-                                @endforeach  
+                              @foreach ($datas as $data)
+                                @if(!empty($data->employee_id))
+                                <tr id="{{ $data->employee_id }}">
+                                  <td class="align-middle text-center">{{$loop->iteration}} </td>
+                                  <td class="align-middle text-left">{{ $data->employee_id }} </td>
+                                  <td class="align-middle text-left">{{ Member::get_name_member_jasmine($data->employee_id) }} </td>
+                                  <td class="align-middle text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->created_at,'d-m-Y H:i')}}</td>
+                                  <td class="text-center">
+                                    @can('editor')
+                                      <button class="btn btn-danger" 
+                                        onclick="handleClickDel('{{$training_id}}','{{$data->employee_id}}','{{Member::get_name_member_jasmine($data->employee_id)}}')">
+                                        ลบ
+                                      </button>
+                                    @else
+                                      <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
+                                        ลบ
+                                      </button>
+                                    @endcan
+                                  </td>
+                                </tr>
+                                @else 
+                                <tr id="{{ $data->_id['employee_id'] }}">
+                                  <td class="align-middle text-center">{{$loop->iteration}} </td>
+                                  <td class="align-middle text-left">{{ $data->_id['employee_id'] }} </td>
+                                  <td class="align-middle text-left">{{ Member::get_name_member_jasmine($data->_id['employee_id']) }} </td>
+                                  {{-- <td class="align-middle text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->_id['created_at'],'d-m-Y H:i')}}</td> --}}
+                                  <td class="text-center">
+                                    @can('editor')
+                                      <button class="btn btn-danger" 
+                                        onclick="handleClickDel('{{$training_id}}','{{$data->_id['employee_id']}}','{{Member::get_name_member_jasmine($data->_id['employee_id'])}}')">
+                                        ลบ
+                                      </button>
+                                    @else
+                                      <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
+                                        ลบ
+                                      </button>
+                                    @endcan
+                                  </td>
+                                </tr>
+                                @endif
+                              @endforeach  
                             @else
                                 <tr>
                                     <td class="text-center" colspan="99">
@@ -82,7 +103,7 @@
                         </table>
                     </div> 
                     <div class="text-right">
-                        {{ $datas->links() }}
+                      {{ $datas->appends(['search' => $search])->links() }}
                     </div>
                 </div>
             </div>
