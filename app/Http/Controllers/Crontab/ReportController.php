@@ -7,8 +7,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
+use DB;
 // Model
 use App\Models\Member;
+use App\Models\Member_jasmine;
 use App\Models\Report_member_access;
 use App\Models\Training;
 use App\Models\TrainingUser;
@@ -27,7 +29,7 @@ class ReportController extends Controller
     Report_member_access::where('created_at', '<', $date)->where('status', 1)->update(['status' => 0]);
     Report_member_access::where('created_at', '>=', $date)->where('status',1)->delete();
 
-    // $training_groups = GroupOnline::where('status',1)->where('_id',new ObjectId('5df35869ff101537d0780ce8'))->get();
+    // $training_ids = GroupOnline::where('status',1)->where('_id',new ObjectId('5df35869ff101537d0780ce8'))->get();
     $trainings = Training::where('status',1)->get();
     foreach($trainings as $row) {
       $this->get_data($row);
@@ -37,7 +39,7 @@ class ReportController extends Controller
   public function get_data($input_datas) {
     $datas = [];
     $training_id = new ObjectId($input_datas->_id);
-    $courseId = new ObjectId($input_datas->course_id);
+    $course_id = new ObjectId($input_datas->course_id);
     $user_test = [
       new ObjectId("5de5e565bc48d45e27e5f349")
     ];
@@ -49,31 +51,33 @@ class ReportController extends Controller
       array_push($members_jas_employee_id, $row->employee_id);
     }
 
-    // Members provider jasmine
-    $members = Member::raw(function ($collection) use ($training_id, $user_test) {
+    $training_user = TrainingUser::where('status',1)->where('training_id', $training_id)->get();
+    $arr_employee_id = [];
+    foreach($training_user as $row) {
+      array_push($arr_employee_id, $row->employee_id);
+    }
+    // Members login
+    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test) {
       return $collection->aggregate([
         [
           '$lookup' => [
-            'from' =>  "training_users",
+            'from' =>  "member_jasmines",
             'localField' =>  "employee_id",
             'foreignField' =>  "employee_id",
-            'as' =>  "training_users"
+            'as' =>  "member_jasmines"
           ]
         ],
         [
           '$match' => [
-            'active'        => 1,
-            '_id'       => [ '$nin' => $user_test ],
-            'training_users.training_id' => $training_id,
-            'training_users.status' => 1
+            'active' => 1,
+            'employee_id' => [ '$in' => $arr_employee_id ],
           ]
         ],
         [
-          '$unwind' => '$training_users'
+          '$unwind' => '$member_jasmines'
         ]
       ]);
     });
-  
     // user_id members
     $memberId_jas = [];
     $jas_in_members_table = [];
@@ -81,28 +85,27 @@ class ReportController extends Controller
       array_push($memberId_jas, new ObjectId($row->_id));
       array_push($jas_in_members_table, $row['employee_id']);
     }
-    // Member jasmine not login
-    $members_jasmine = TrainingUser::where('status',1)->where('training_id', $training_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
-    // Play course
-    $play_courses = User_play_course_log::select('user_id')->where('courseId',$courseId)->whereIn('user_id',$memberId_jas)->groupBy('user_id')->get();
+    // Member not login
+    $members_jasmine = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
     // Pretest
-    $pretests = Examination_answer::select('userId','point')->where('courseId',$courseId)->whereIn('userId',$memberId_jas)->where('answertype','pretest')->groupBy('userId','point')->get();
+    $pretests = Examination_answer::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('answertype','pretest')->groupBy('user_id','point')->get();
     // Posttest
-    $posttests = Examination_answer::raw(function ($collection) use ($memberId_jas, $courseId, $user_test) {
+    $posttests = Examination_answer::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'answertype' => 'posttest',
-            'userId' => [ '$in' => $memberId_jas ],
-            'userId' => ['$nin' => $user_test],
-            'courseId' => $courseId
+            'user_id' => [ '$in' => $memberId_jas ],
+            'user_id' => ['$nin' => $user_test],
+            'course_id' => $course_id,
+            'training_id' => $training_id
           ]
         ],
         [
           '$group' => 
             [
               '_id' => [
-                "userId" => '$userId'
+                "user_id" => '$user_id'
               ],
               'maxTotalAmount' => [
                 '$max' => '$point'
@@ -112,20 +115,21 @@ class ReportController extends Controller
       ]);
     });
     // Play course
-    $play_courses = User_play_course_log::raw(function ($collection) use ($memberId_jas, $courseId, $user_test) {
+    $play_courses = User_play_course_log::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'user_id'       => ['$nin' => $user_test],
-            'courseId' => $courseId
+            'user_id' => ['$nin' => $user_test],
+            'course_id' => $course_id,
+            'training_id' => $training_id
           ]
         ], [
           '$group' => [
             '_id' => [
               "user_id" => '$user_id'
             ],
-            'ep' => ['$addToSet' => '$episodeId'] 
+            'ep' => ['$addToSet' => '$episode_id'] 
           ]
         ],  [
           '$project' => [
@@ -138,20 +142,21 @@ class ReportController extends Controller
       ]);
     });
     // Play course end
-    $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $courseId, $user_test) {
+    $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
             'user_id'       => ['$nin' => $user_test],
-            'courseId' => $courseId
+            'course_id' => $course_id,
+            'training_id' => $training_id
           ]
         ], [
           '$group' => [
             '_id' => [
               "user_id" => '$user_id'
             ],
-            'ep' => ['$addToSet' => '$episodeId'] 
+            'ep' => ['$addToSet' => '$episode_id'] 
           ]
         ],  [
           '$project' => [
@@ -163,19 +168,6 @@ class ReportController extends Controller
         ]
       ]);
     });
-    
-    foreach($members as $member) {
-      $datas[$member->_id]['tinitial'] = '';
-      $datas[$member->_id]['tf_name'] = '';
-      $datas[$member->_id]['tl_name'] = '';
-      $datas[$member->_id]['workplace'] = '';
-      $datas[$member->_id]['title_name'] = '';
-      $datas[$member->_id]['division_name'] = '';
-      $datas[$member->_id]['section_name'] = '';
-      $datas[$member->_id]['dept_name'] = '';
-      $datas[$member->_id]['staff_grade'] = '';
-      $datas[$member->_id]['job_family'] = '';
-    }
     // Member ที่ login เข้าระบบแล่้ว
     foreach($members as $member) {
       foreach($member->member_jasmines as $index => $value) {
@@ -212,22 +204,22 @@ class ReportController extends Controller
 
     // Pretest
     foreach($pretests as $pretest) {
-      if(!empty($datas[(string)$pretest->userId])) {
-        $datas[(string)$pretest->userId]['pretest'] = $pretest->point;
+      if(!empty($datas[(string)$pretest->user_id])) {
+        $datas[(string)$pretest->user_id]['pretest'] = $pretest->point;
       }
     }
 
     // Posttest
     foreach($posttests as $posttest) {
-      if(!empty($datas[(string)$posttest->_id['userId']])) {
-        $datas[(string)$posttest->_id['userId']]['posttest'] = $posttest->maxTotalAmount;
+      if(!empty($datas[(string)$posttest->_id['user_id']])) {
+        $datas[(string)$posttest->_id['user_id']]['posttest'] = $posttest->maxTotalAmount;
       }
     }
 
-    $this->formatData($training_group, $courseId, $datas);
+    $this->formatData($training_id, $course_id, $datas);
   }
 
-  public function formatData($training_group, $courseId, $datas) {
+  public function formatData($training_id, $course_id, $datas) {
     $dataArray = [];
     $now = new UTCDateTime(Carbon::now()->timestamp * 1000);
     foreach ($datas as $data) {
@@ -261,28 +253,30 @@ class ReportController extends Controller
       if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } 
       if(!empty($data['pretest'])) { $pretest = $data['pretest']; } 
       if(!empty($data['posttest'])) { $posttest = $data['posttest']; }
-      $dataArray[] = [
-        'online_group_id' => $training_group,
-        'courseId' => $courseId,
-        'employee_id' => $employee_id,
-        'tinitial' => $tinitial,
-        'tf_name' => $tf_name,
-        'tl_name' => $tl_name,
-        'workplace' => $workplace,
-        'title_name' => $title_name,
-        'division_name' => $division_name,
-        'section_name' => $section_name,
-        'dept_name' => $dept_name,
-        'staff_grade' => $staff_grade,
-        'job_family' => $job_family,
-        'play_course' => $play_course,
-        'play_course_end' => $play_course_end,
-        'pretest' => $pretest,
-        'posttest' => $posttest,
-        'status' => 1,
-        'created_at' => $now,
-        'updated_at' => $now
-      ];
+      if(!empty($employee_id)) {
+        $dataArray[] = [
+          'training_id' => $training_id,
+          'course_id' => $course_id,
+          'employee_id' => $employee_id,
+          'tinitial' => $tinitial,
+          'tf_name' => $tf_name,
+          'tl_name' => $tl_name,
+          'workplace' => $workplace,
+          'title_name' => $title_name,
+          'division_name' => $division_name,
+          'section_name' => $section_name,
+          'dept_name' => $dept_name,
+          'staff_grade' => $staff_grade,
+          'job_family' => $job_family,
+          'play_course' => $play_course,
+          'play_course_end' => $play_course_end,
+          'pretest' => $pretest,
+          'posttest' => $posttest,
+          'status' => 1,
+          'created_at' => $now,
+          'updated_at' => $now
+        ];
+      }
     }
     $this->insertDataArray($dataArray);
   }
