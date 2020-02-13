@@ -2,6 +2,11 @@
 <div class="main-menu menu-fixed menu-light menu-accordion" data-scroll-to-active="true">
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      
+      <li class="nav-item">
+        <a href="{{ route('report_member_access_content_by_RO') }}"><i class="ft-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+      </li>
+
       @hasrole('admin|course')
       <li class="navigation-header">
         <span>วิทยากร</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Teacher"></i>

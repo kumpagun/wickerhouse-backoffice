@@ -24,7 +24,7 @@
             <label class="col-12 col-md-8 text-right"> Training List</label>
             <div class="col-12 col-md-4">
               <div class="form-group">
-                <form action="{{route('index')}}" method="POST">
+                <form action="{{route('report_member_access_content_by_RO')}}" method="POST">
                   {{ csrf_field() }}
                   <select name="search_group" class="form-control select2" onchange="this.form.submit()">
                     @foreach($query_group as $key)
@@ -220,10 +220,6 @@
 @endsection
 
 @section('script')
-  <script src="{{asset('stack-admin/app-assets/vendors/js/forms/select/select2.full.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('stack-admin/app-assets/js/scripts/forms/select/form-select2.js')}}" type="text/javascript"></script>
-  <script src="{{ asset('stack-admin/app-assets/vendors/js/vendors.min.js') }}" type="text/javascript"></script>
-  <!-- BEGIN VENDOR JS-->
   <!-- BEGIN PAGE VENDOR JS-->
   <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/chart.min.js') }}" type="text/javascript"></script>
   <!-- END PAGE VENDOR JS-->
