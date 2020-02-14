@@ -23,6 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-      return view('home');
+      return redirect()->route('report_member_access_content_by_RO');
     }
 }

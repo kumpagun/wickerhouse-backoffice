@@ -106,6 +106,8 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
     Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
     Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
+
+    Route::post('/import-excel', 'Course\ExaminationController@examination_import_excel')->name('examination_import_excel');
   });
 });
 
@@ -180,6 +182,11 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:admin|course
   Route::post('/store/{id?}', 'Teacher\TeacherController@teacher_store')->name('teacher_store');
 });
 
+// REPORT
+// Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
+  Route::match(['get','post'],'/dashboard', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
+  // Route::match(['get','post'],'/', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
+// });
 
 // CRONTAB
 Route::group(['prefix' => 'crontab'], function () {

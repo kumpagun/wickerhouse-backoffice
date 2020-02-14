@@ -35,7 +35,7 @@ class ReviewController extends Controller
     return $data;
   }
   public function review_index($review_group_id){
-    $review_group = Review_group::where('_id',new ObjectId($review_group_id))->where('status',1)->first();
+    $review_group = Review_group::where('_id',new ObjectId($review_group_id))->first();
     $review = Review::where('review_group_id',new ObjectId($review_group_id))->where('status',1)->get();
     $choices = Review_choice::where('status',1)->get();
     $withData = [
@@ -79,7 +79,7 @@ class ReviewController extends Controller
     $review_group->status = 0;
     $review_group->save();
     ActivityLogClass::log('ลบ review group', new ObjectId(Auth::user()->_id), $review_group->getTable(), $review_group->getAttributes(),Auth::user()->username);
-    return redirect()->route('review_index', ['id' => $review_group->course_id, '#review']);
+    return redirect()->route('course_create', ['id' => $review_group->course_id, '#review']);
   }
   public function review_create($type,$review_group_id,$id='') {
     $review_group = Review_group::where('_id',new ObjectId($review_group_id))->where('status',1)->first();
@@ -187,6 +187,6 @@ class ReviewController extends Controller
     $review->status = 0;
     $review->save();
     ActivityLogClass::log('ลบ review', new ObjectId(Auth::user()->_id), $review->getTable(), $review->getAttributes(),Auth::user()->username);
-    return redirect()->back();
+    return redirect()->route('course_create', ['id' => $review->course_id, '#review']);
   }
 }

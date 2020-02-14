@@ -97,7 +97,10 @@
 <div class="row align-items-center justify-content-center mb-2">
   <div class="col-12 col-md-10 col-xl-8 text-center">
     <a href="{{ route('examination_create',['examination_group_id' => $examination_group->_id]) }}">
-      <button class="btn btn-secondary">เพิ่มแบบทดสอบ</button>
+      <button class="btn btn-secondary mx-1">เพิ่มแบบทดสอบ</button>
+    </a>
+    <a href="#" data-toggle="modal" data-target="#importexcel">
+      <button class="btn btn-secondary mx-1">Import EXCEL</button>
     </a>
   </div>
 </div>
@@ -139,11 +142,43 @@
 <div class="row align-items-center justify-content-center mb-2">
   <div class="col-12 col-md-10 col-xl-8 text-center">
     <a href="{{ route('examination_create',['examination_group_id' => $examination_group->_id]) }}">
-      <button class="btn btn-secondary">เพิ่มแบบทดสอบ</button>
+      <button class="btn btn-secondary mx-1">เพิ่มแบบทดสอบ</button>
+    </a>
+    <a href="#" data-toggle="modal" data-target="#importexcel">
+      <button class="btn btn-secondary mx-1">Import EXCEL</button>
     </a>
   </div>
 </div>
 @endif
+
+
+<div class="modal fade text-left" id="importexcel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel1">IMPORT EXCEL</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form class="form-horizontal" action="{{ route('examination_import_excel') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      <input type="hidden" name="examination_group_id" value="{{ $examination_group->_id }}" />
+      <div class="modal-body">
+        <fieldset class="form-group floating-label-form-group @if($errors->course->has('title')) danger @endif">
+          <label for="user-name">File excel</label>
+          <input name="excel" class="form-control" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          <a target="_blank" href="/File/exam-test.xlsx"><p class="mt-1">ตัวอย่างไฟล์</p></a>
+        </fieldset>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปืด</button>
+        <button type="submit" class="btn btn-outline-primary">บันทึก</button>
+      </div>
+    </form>
+  </div>
+  </div>
+</div>
 @endsection
 
 @section('style')

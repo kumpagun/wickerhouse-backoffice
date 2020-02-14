@@ -2,6 +2,11 @@
 <div class="main-menu menu-fixed menu-light menu-accordion" data-scroll-to-active="true">
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      
+      <li class="nav-item">
+        <a href="{{ route('report_member_access_content_by_RO') }}"><i class="ft-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+      </li>
+
       @hasrole('admin|course')
       <li class="navigation-header">
         <span>วิทยากร</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Teacher"></i>
@@ -16,10 +21,10 @@
         <span>หลักสูตรการเรียน</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('course_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">หลักสูตรทั้งหมด</span></a>
+        <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
+        <a href="{{ route('course_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">หลักสูตรทั้งหมด</span></a>
       </li>
       @endhasrole
       
@@ -46,13 +51,13 @@
         <span>รอบการอบรม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
-      </li>
-      <li class="nav-item">
         <a href="{{route('company_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">บริษัท</span></a>
       </li>
       <li class="nav-item">
         <a href="{{route('department_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">แผนก</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
       </li>
       @endhasrole
 

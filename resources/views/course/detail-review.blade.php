@@ -64,7 +64,7 @@
     <form class="form-horizontal" action="{{ route('review_group_store') }}" method="POST">
       @csrf
       <input type="hidden" name="course_id" value="{{ $data->_id }}" />
-      <input type="hidden" name="status" value="{{ $data->status }}" />
+      <input type="hidden" name="status" value=1 />
       <div class="modal-body">
         <fieldset class="form-group floating-label-form-group @if($errors->course->has('title')) danger @endif">
           <label for="user-name">หัวข้อแบบประเมิน</label>
