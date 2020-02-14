@@ -99,9 +99,6 @@
     <a href="{{ route('examination_create',['examination_group_id' => $examination_group->_id]) }}">
       <button class="btn btn-secondary mx-1">เพิ่มแบบทดสอบ</button>
     </a>
-    {{-- <a href="{{ route('examination_create',['examination_group_id' => $examination_group->_id]) }}">
-      <button class="btn btn-secondary mx-1">Import EXCEL</button>
-    </a> --}}
     <a href="#" data-toggle="modal" data-target="#importexcel">
       <button class="btn btn-secondary mx-1">Import EXCEL</button>
     </a>
@@ -145,7 +142,10 @@
 <div class="row align-items-center justify-content-center mb-2">
   <div class="col-12 col-md-10 col-xl-8 text-center">
     <a href="{{ route('examination_create',['examination_group_id' => $examination_group->_id]) }}">
-      <button class="btn btn-secondary">เพิ่มแบบทดสอบ</button>
+      <button class="btn btn-secondary mx-1">เพิ่มแบบทดสอบ</button>
+    </a>
+    <a href="#" data-toggle="modal" data-target="#importexcel">
+      <button class="btn btn-secondary mx-1">Import EXCEL</button>
     </a>
   </div>
 </div>
