@@ -285,20 +285,20 @@
   </div>
 
   @if(!empty($data->_id))
-    {{-- Review --}}
-    @include('course.detail-review')
-    {{-- Document --}}
-    @include('course.detail-document')
     {{-- Episode list --}}
     @include('course.detail-episode_list')
     {{-- Episode group --}}
     @include('course.detail-episode_group')
+    {{-- Document --}}
+    @include('course.detail-document')
     @if($data->type=='standard')
-      {{-- Homework --}}
-      @include('course.detail-homework_list')
       {{-- Examination --}}
       @include('course.detail-examination_list')
+      {{-- Homework --}}
+      @include('course.detail-homework_list')
     @endif
+    {{-- Review --}}
+    @include('course.detail-review')
   @endif
 </div>
 @endsection

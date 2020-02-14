@@ -21,10 +21,10 @@
         <span>หลักสูตรการเรียน</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('course_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">หลักสูตรทั้งหมด</span></a>
+        <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
+        <a href="{{ route('course_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">หลักสูตรทั้งหมด</span></a>
       </li>
       @endhasrole
       
@@ -51,13 +51,13 @@
         <span>รอบการอบรม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
-      </li>
-      <li class="nav-item">
         <a href="{{route('company_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">บริษัท</span></a>
       </li>
       <li class="nav-item">
         <a href="{{route('department_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">แผนก</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
       </li>
       @endhasrole
 
