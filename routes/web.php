@@ -106,6 +106,8 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
     Route::get('/create/{examination_group_id}/{id?}', 'Course\ExaminationController@examination_create')->name('examination_create');
     Route::post('/store', 'Course\ExaminationController@examination_store')->name('examination_store');
     Route::get('/delete/{id?}', 'Course\ExaminationController@examination_delete')->name('examination_delete');
+
+    Route::post('/import-excel', 'Course\ExaminationController@examination_import_excel')->name('examination_import_excel');
   });
 });
 

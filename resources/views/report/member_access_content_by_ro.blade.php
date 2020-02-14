@@ -13,29 +13,33 @@
 </div>
 @endsection
 
+@section('content-header-right')
+  <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
+    <form action="{{route('report_member_access_content_by_RO')}}" method="POST">
+      {{ csrf_field() }}
+      <label class="text-left"> Training List</label>
+      <select name="search_group" class="form-control select2" onchange="this.form.submit()">
+        @foreach($query_group as $key)
+          <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
+        @endforeach
+      </select>
+    </form>
+  </div>
+@endsection
+
 @section('content')
 <!-- Basic Tables start -->
+@if(!empty($datas))
 <div class="row align-items-stretch">
   <div class="col-12">
     <div class="card">
       <div class="card-content collapse show">
         <div class="card-body">
           <div class="row align-items-baseline">
-            <label class="col-12 col-md-8 text-right"> Training List</label>
-            <div class="col-12 col-md-4">
-              <div class="form-group">
-                <form action="{{route('report_member_access_content_by_RO')}}" method="POST">
-                  {{ csrf_field() }}
-                  <select name="search_group" class="form-control select2" onchange="this.form.submit()">
-                    @foreach($query_group as $key)
-                      <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
-                    @endforeach
-                  </select>
-                </form>
-              </div>
+            <div class="col-12">
+              <h4 class="card-title">Member access content</h4>
             </div>
           </div>
-
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
@@ -217,6 +221,24 @@
     </div>
   </div>
 </div>
+@else
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card">
+      <div class="card-content collapse show">
+        <div class="card-body">
+          <div class="row align-items-baseline">
+            <div class="col-12">
+              <h4 class="card-title text-center my-1">ไม่มีข้อมูล</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
 @endsection
 
 @section('script')

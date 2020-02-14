@@ -8,6 +8,9 @@ use MongoDB\BSON\ObjectId as ObjectId;
 use IIlluminate\Http\UploadedFile;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use App\ImportExcels\ExaminationImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Auth;
 use ActivityLogClass;
@@ -21,6 +24,7 @@ use App\Http\Controllers\Course\CourseController;
 use App\Models\Examination_group;
 use App\Models\Examination;
 use App\Models\Course;
+use App\Models\Training;
 
 class ExaminationController extends Controller
 {
@@ -268,5 +272,80 @@ class ExaminationController extends Controller
 
     ActivityLogClass::log('ลบ examination', new ObjectId(Auth::user()->_id), $examination->getTable(), $examination->getAttributes(),Auth::user()->username);
     return redirect()->route('examination_index', ['id' => $examination->exam_group_id, '#'.$id])->with('status',200);
+  }
+
+  public function examination_import_excel(Request $request) {
+    $examination_group_id = $request->input('examination_group_id');
+    $excel = $request->file('excel');
+    $rules  = [
+      'excel'       => 'required',
+    ];
+    $validator = Validator::make($request->all(), $rules);
+    if($validator->fails()) {
+      return redirect()->back()->with('msg', 'รูปแบบไฟล์ Excel');
+    }
+    $examination_group = Examination_group::find($examination_group_id); 
+    $course_id = $examination_group->course_id;
+    $user_action = Auth::user()->_id;
+    $original_filename = $excel->getClientOriginalName();
+    $file_path = '';
+    
+    $path = $excel->getRealPath();
+    $extension = $excel->getClientOriginalExtension();
+    $current_date =  Carbon::now()->timestamp;
+    $name_excel = $current_date.'_excel.'.$extension;
+    $path_file ='File/excel_examination/backup/'.(string)$examination_group_id;
+    
+    try{
+      File::isDirectory($path_file) or File::makeDirectory($path_file, 0777, true, true);
+      $excel->move($path_file,$name_excel);
+    } catch (\Exception  $e) {
+      return redirect()->back()->with('msg', 'ไม่สามารถ เก็บ File ได้');    
+    }
+    $path_file_name = $path_file.'/'.$name_excel;
+    $file_path = $path_file_name;
+    try{
+      $datas = Excel::toCollection(new ExaminationImport,public_path($path_file_name));
+      $data_insert = [];
+      foreach($datas[0] as $key => $value){
+        if($key>3 && !empty($value[1]) && !empty($value[2]) && !empty($value[3]) && !empty($value[4]) && !empty($value[5]) && !empty($value[6])) {
+          $question = $value[1];
+          $choice_0 = $value[2];
+          $choice_1 = $value[3];
+          $choice_2 = $value[4];
+          $choice_3 = $value[5];
+          $answer_value = $value[6];
+          $answer_key = 0;
+          if($answer_value==$choice_0) {
+            $answer_key = 0;
+          } else if($answer_value==$choice_1) {
+            $answer_key = 1;
+          } else if($answer_value==$choice_2) {
+            $answer_key = 2;
+          } else if($answer_value==$choice_3) {
+            $answer_key = 3;
+          }
+          $choice = $this->examination_format_choice($choice_0,$choice_1,$choice_2,$choice_3);
+
+          $examination = new Examination();
+          $examination->course_id = new ObjectId($examination_group->course_id);
+          $examination->exam_group_id = new ObjectId($examination_group->_id);
+          $examination->question = $question;
+          $examination->answer_key = (int)$answer_key;
+          $examination->answer_value = $choice[$answer_key];
+          $examination->choice = $choice;
+          $examination->status = 1;
+          $examination->save();
+
+          $this->update_course($examination_group->course_id);
+        }
+      }
+      ActivityLogClass::log('เพิ่มหรือแก้ไข examination', new ObjectId(Auth::user()->_id), $examination->getTable(), $examination->getAttributes(),Auth::user()->username);
+      return redirect()->route('examination_index', ['id' => $examination_group_id, '#'.$id])->with('status',200);
+
+    } catch (\Exception  $e) {
+      // ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
+      return redirect()->back()->with('msg', 'รูปแบบไฟล์ Excel ไม่ถูกต้อง');    
+    }
   }
 }
