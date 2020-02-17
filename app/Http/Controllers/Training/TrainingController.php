@@ -329,6 +329,7 @@ class TrainingController extends Controller
                       'company'   => $value[16], 
                       'staff_grade'   => intval($value[17]), 
                       'job_family'   => $value[18],
+                      'status'  => 1,
                     ];
                     $find = [
                       '_id' => $check_member_jasmine->_id
