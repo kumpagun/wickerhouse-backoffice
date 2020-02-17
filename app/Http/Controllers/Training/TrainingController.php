@@ -60,8 +60,8 @@ class TrainingController extends Controller
       if(!empty($search)) {
         $member_jasmine = Member_jasmine::where('status',1);
         $member_jasmine->where(function ($q) use ($search) {
-          $q->orWhere('tf_name','like',"%$search%");
-          $q->orWhere('tl_name','like',"%$search%");
+          $q->orWhere('firstname','like',"%$search%");
+          $q->orWhere('lastname','like',"%$search%");
           $q->orWhere('employee_id','like',"%$search%");
         });
         $data_member = $member_jasmine->get();

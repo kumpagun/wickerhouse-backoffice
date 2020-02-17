@@ -13,7 +13,7 @@ class MemberClass
         $name = '-';
         $employee_data = Member_jasmine::where('status',1)->where('employee_id',$employee_id)->first();
         if ( $employee_data) {
-            $name = $employee_data->tf_name." ".$employee_data->tl_name; 
+            $name = $employee_data->firstname." ".$employee_data->lastname; 
         } 
         return $name;
     }
