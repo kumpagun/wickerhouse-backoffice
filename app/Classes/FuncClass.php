@@ -99,4 +99,14 @@ class FuncClass
         return $name;   
     }
 
+    public function utc_to_carbon_format_date_no_format ($time='')
+    {
+      if ($time) {
+        $timestamp  = $time->toDateTime()->getTimestamp();
+        $carbon = Carbon::createFromTimestamp($timestamp);
+        return $carbon;
+      }
+      return '-';
+    }
+
 }

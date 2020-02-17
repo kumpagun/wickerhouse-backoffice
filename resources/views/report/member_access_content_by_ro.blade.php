@@ -14,6 +14,7 @@
 @endsection
 
 @section('content-header-right')
+  @if(count($query_group)>0)
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
     <form action="{{route('report_member_access_content_by_RO')}}" method="POST">
       {{ csrf_field() }}
@@ -25,6 +26,7 @@
       </select>
     </form>
   </div>
+  @endif
 @endsection
 
 @section('content')

@@ -9,6 +9,7 @@ use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
 use DB;
 use CourseClass;
+use FuncClass;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
@@ -37,10 +38,11 @@ class MemberAccessContentController extends Controller
     $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->get();
     if(empty($search_group)){
       $query = Training::query()->where('status',1)->where('total_employee','>',0)->first();
-      $training_id_select = (string)$query->_id;
     } else {
       $query = Training::find($search_group);
-      $training_id_select =  (string)$query->_id;
+    }
+    if(!empty($query)) {
+      $training_id_select = (string)$query->_id;
     }
     $training_title = '';
     $ep = '';
@@ -66,19 +68,19 @@ class MemberAccessContentController extends Controller
       $data_insert = [];
 
       foreach($datas_active as $row) {
-        $datas[$row->_id->dept_name]['user_active'] = $row->total;
+        $datas[$row->_id->department]['user_active'] = $row->total;
         $total_user_active += $row->total;
       }
       foreach($datas_active_passing_score as $row) {
-        $datas[$row->_id->dept_name]['user_active_passing_score'] = $row->total;
+        $datas[$row->_id->department]['user_active_passing_score'] = $row->total;
         $total_user_active_passing_score += $row->total;
       }
       foreach($datas_active_not_passing_score as $row) {
-        $datas[$row->_id->dept_name]['user_active_not_passing_score'] = $row->total;
+        $datas[$row->_id->department]['user_active_not_passing_score'] = $row->total;
         $total_user_active_not_passing_score += $row->total;
       }
       foreach($datas_inactive as $row) {
-        $datas[$row->_id->dept_name]['user_inactive'] = $row->total;
+        $datas[$row->_id->department]['user_inactive'] = $row->total;
         $total_user_inactive += $row->total;
       }
 
@@ -115,7 +117,7 @@ class MemberAccessContentController extends Controller
       ];
 
       // PIE CHART เข้าเรียน / ไม่เข้าเรียน 
-      $datas_chart = $this->get_data_chart($training_id);
+      $datas_chart = $this->get_data_chart($training_id); 
       $pie_chart_total['active'] = 0;
       $pie_chart_total['inactive'] = 0;
       foreach($new_datas as $index => $values) {
@@ -125,14 +127,22 @@ class MemberAccessContentController extends Controller
       $pie_chart['label'] = ['เข้าเรียน','ยังไม่เข้าเรียน'];
       $pie_chart['total'] = [$pie_chart_total['active'],$pie_chart_total['inactive']];
       // CHART เข้าเรียน / ไม่เข้าเรียน
-      $datas_chart = $this->get_data_chart($training_id);
       $chart['label'] = [];
       $chart['active'] = [];
-      $chart['inactive'] = [];
+      $chart['inactive'] = []; 
       foreach($datas_chart as $index => $values) {
+        $value_active = 0;
+        $value_inactive = 0;
         array_push($chart['label'], $index);
-        array_push($chart['active'], $values['active']);
-        array_push($chart['inactive'], $values['inactive']);
+        if(!empty($values['active'])) {
+          $value_active = $values['active'];
+        }
+        if(!empty($values['inactive'])) {
+          $value_inactive = $values['inactive'];
+        }
+        array_push($chart['active'], $value_active);
+        
+        array_push($chart['inactive'], $value_inactive);
       }
       // CHART เข้าเรียน / ผ่าน / ไม่ผ่าน
       $chart_active['label'] = [];
@@ -200,13 +210,13 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => new ObjectId($training_id),
-            'dept_name' => ['$in' => $this->deptname]
+            'training_id'  => $training_id,
+            'department' => ['$in' => $this->deptname]
           ]
         ],
         [
           '$group' =>[
-            '_id' => [ 'dept_name'  => '$dept_name'],
+            '_id' => [ 'department'  => '$department'],
             'total' => [ '$sum' => 1 ]
           ]
         ],
@@ -226,14 +236,14 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => new ObjectId($training_id),
+            'training_id'  => $training_id,
             'posttest' => [ '$gte' => $passing_score ],
-            'dept_name' => ['$in' => $this->deptname]
+            'department' => ['$in' => $this->deptname]
           ]
         ],
         [
           '$group' =>[
-            '_id' => [ 'dept_name'  => '$dept_name'],
+            '_id' => [ 'department'  => '$department'],
             'total' => [ '$sum' => 1 ]
           ]
         ],
@@ -253,17 +263,17 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => new ObjectId($training_id),
+            'training_id'  => $training_id,
             '$or' => [
               ['posttest' => [ '$lt' => $passing_score ]], 
               ['posttest' => [ '$eq' => null ]]
             ] ,
-            'dept_name' => ['$in' => $this->deptname]
+            'department' => ['$in' => $this->deptname]
           ]
         ],
         [
           '$group' =>[
-            '_id' => [ 'dept_name'  => '$dept_name'],
+            '_id' => [ 'department'  => '$department'],
             'total' => [ '$sum' => 1 ]
           ]
         ],
@@ -284,13 +294,13 @@ class MemberAccessContentController extends Controller
           '$match' => [
             'status'  => 1,
             'play_course'  => ['$eq'  => 0],
-            'training_id'  => new ObjectId($training_id),
-            'dept_name' => ['$in' => $this->deptname]
+            'training_id'  => $training_id,
+            'department' => ['$in' => $this->deptname]
           ]
         ],
         [
           '$group' => [
-            '_id' => [ 'dept_name'  => '$dept_name'],
+            '_id' => [ 'department'  => '$department'],
             'total' => [ '$sum' => 1 ]
           ]
         ],
@@ -306,26 +316,20 @@ class MemberAccessContentController extends Controller
 
   public function get_data_chart($training_id) 
   {
-    $group_online = Training::find(new ObjectId($training_id)); 
-    $published_at = $group_online->courses[0]['published_at'];
-    $expired_at = $group_online->courses[0]['expired_at'];
-
-    // $published_at = Func::utc_to_carbon_format_date_no_format($published_at); 
-    // $expired_at = Func::utc_to_carbon_format_date_no_format($expired_at); 
-
-    // $published_at = new UTCDateTime($published_at->startOfDay());
-    // $expired_at = new UTCDateTime($expired_at->endOfDay());
+    $group_online = Training::find($training_id); 
+    $published_at = $group_online->published_at;
+    $expired_at = $group_online->expired_at;
 
     $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at);
-    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at);
+    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at); 
     
     $datas = [];
     foreach($user_active as $row) {
-      $date = Func::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
+      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['active'] = $row->total;
     }
     foreach($user_inactive as $row) {
-      $date = Func::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
+      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['inactive'] = $row->total;
     }
     return $datas;
@@ -336,8 +340,8 @@ class MemberAccessContentController extends Controller
       return $collection->aggregate([
         [ '$match' => [
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => new ObjectId($training_id),
-            'dept_name' => ['$in' => $this->deptname],
+            'training_id'  => $training_id,
+            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
@@ -366,8 +370,8 @@ class MemberAccessContentController extends Controller
         [ 
           '$match' => [
             'play_course'  => ['$eq'  => 0],
-            'training_id'  => new ObjectId($training_id),
-            'dept_name' => ['$in' => $this->deptname],
+            'training_id'  => $training_id,
+            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
