@@ -11,7 +11,7 @@ class MemberClass
 {
     public function get_name_member_jasmine($employee_id){
         $name = '-';
-        $employee_data = Member_jasmine::where('status',1)->where('employee_id',$employee_id)->first();
+        $employee_data = Member_jasmine::where('status',1)->where('employee_id',$employee_id)->first(); 
         if ( $employee_data) {
             $name = $employee_data->firstname." ".$employee_data->lastname; 
         } 
