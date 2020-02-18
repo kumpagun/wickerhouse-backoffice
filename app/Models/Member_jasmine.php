@@ -23,6 +23,7 @@ class Member_jasmine extends Eloquent
     'company' ,
     'staff_grade' ,
     'job_family' ,
+    'status'
   ];
   protected $date = ['joined_date','birthdate'];
   
