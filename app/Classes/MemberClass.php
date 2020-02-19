@@ -7,14 +7,20 @@ use App\Models\Member;
 use App\User;
 use Maklad\Permission\Models\Role;
 use App\Models\Member_jasmine;
+use App\Models\Employee;
 class MemberClass
 {
     public function get_name_member_jasmine($employee_id){
         $name = '-';
         $employee_data = Member_jasmine::where('status',1)->where('employee_id',$employee_id)->first(); 
-        if ( $employee_data) {
-            $name = $employee_data->firstname." ".$employee_data->lastname; 
+        $employee = Employee::where('employee_id',$employee_id)->first(); 
+        if($employee_data) {
+          $name = $employee_data->firstname." ".$employee_data->lastname; 
         } 
+        if($employee) {
+          $name = $employee->tf_name." ".$employee->tl_name; 
+        } 
+        
         return $name;
     }
     public function get_name_member_jasmine_by_id($user_id){

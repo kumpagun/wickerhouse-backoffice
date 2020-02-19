@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('Dashboeard'); @endphp
+@php $title = strtoupper('Dashboard'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -45,10 +45,6 @@
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
-                {{-- <tr class="">
-                  <th colspan="1" class="align-middle text-center head-table">Count of Status </th>
-                  <th colspan="5" class="align-middle text-center">Status</th>
-                </tr> --}}
                 <tr class="second-row">
                   <th class="align-middle text-center">DeptName</th>
                   <th class="align-middle text-center">เข้าเรียน</th>

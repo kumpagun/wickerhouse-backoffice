@@ -14,8 +14,8 @@
 @endsection
 
 @section('content')
-<div class="row align-items-center justify-content-center">
-  <div class="col-lg-12 ">
+<div class="row align-items-center justify-content-center mb-2">
+  <div class="col-12 col-md-10 col-lg-10 col-xl-8">
     <div class="card px-1 py-1 m-0">
       <div class="card-header border-0 pb-0">
         {{-- <div class="card-title text-center">
@@ -59,7 +59,7 @@
                 @endif
               </fieldset>
             </div>
-            <div class="col-6">
+            {{-- <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('company_id')) danger @endif">
               <label for="user-name">Company</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
@@ -83,7 +83,7 @@
                 <select class="select2 form-control" name="department_ids[]" multiple="multiple">
                 </select>
               </fieldset>
-            </div>
+            </div> --}}
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
                 <label for="user-name">Published At *</label>
@@ -133,101 +133,272 @@
     </div>
   </div>
 </div>
+
+@if(!empty($data->id))
+<div class="row align-items-center justify-content-center pb-2">
+  <div class="col-12 col-md-10 col-lg-10 col-xl-8">
+    <div class="card px-1 py-2 m-0">
+      <div class="card-header border-0 pb-0">
+        <div class="card-title">
+          เลือกพนักงาน
+        </div>
+        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
+          <span>เงื่อนไข</span>
+        </h6>
+      </div>
+      <div class="card-content ">
+        <div class="card-body py-0 ">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">รหัสพนักงาน</label>
+                <input type="text" class="form-control" id="employee_id" name="employee_id" />
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">ชื่อพนักงาน</label>
+                <input type="text" class="form-control" id="employee_name" name="employee_name" />
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">หน่วยงาน</label>
+                <select class="select2 form-control" id="dept_name" name="dept_name">
+                  <option value="">กรุณาหน่วยงาน</option>
+                  @foreach ($dept_name as $item )
+                    <option value="{{ $item->dept_name }}">{{ $item->dept_name }}</option>
+                  @endforeach
+                </select>
+              </fieldset>
+            </div>
+            @if(Auth()->user()->type=='jasmine')
+            <div class="col-12">
+              <fieldset>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="in_dept" id="in_dept">
+                  <label class="custom-control-label" for="in_dept">ภายในหน่วยงาน</label>
+                </div>
+              </fieldset>
+            </div>
+            @endif
+            <div class="col-12 my-2">
+              <button class="btn btn-outline-secondary" onclick="search_result()">ค้นหา</button>
+            </div>
+          </div>
+
+          <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
+            <span>รายชื่อพนักงาน</span>
+          </h6>
+          <form class="form-group" action="{{ route('training_import_employees') }}" method="POST">
+            @csrf
+            <input type="hidden" name="training_id" value="{{ $data->id }}">
+            <div class="row mb-2">
+              <div class="col-12 text-center div-loading">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+              </div>
+              <div class="col-12 div-employee">
+                <select multiple="multiple" class="employees" name="employees[]"></select>
+                <div class="row mb-2">
+                  <div class="col-6 text-center">
+                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="select_all()">เลือกทั้งหมด</button>
+                  </div>
+                  <div class="col-6 text-center">
+                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="delete_all()">ลบทั้งหมด</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <button class="btn btn-block btn-secondary">บันทึก</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
 @endsection
 
 @section('style')
-    <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/selects/select2.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/icheck.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/custom.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/plugins/forms/checkboxes-radios.css') }}">
-    {{-- <!-- Include Quill stylesheet -->
-    <link rel="stylesheet" type="text/css" href="{{asset('css/quill.snow.css')}}"> --}}
-    {{-- Date Time --}}
-    <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/daterange/daterangepicker.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/datetime/bootstrap-datetimepicker.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/pickadate/pickadate.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/selects/select2.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/icheck.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/icheck/custom.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/plugins/forms/checkboxes-radios.css') }}">
+  {{-- <!-- Include Quill stylesheet -->
+  <link rel="stylesheet" type="text/css" href="{{asset('css/quill.snow.css')}}"> --}}
+  {{-- Date Time --}}
+  <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/daterange/daterangepicker.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/datetime/bootstrap-datetimepicker.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/pickers/pickadate/pickadate.css')}}">
+
+  <link href="{{ asset('multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
+  {{-- Fontawesome --}}
+  <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" />
+  <style>
+  .ms-container {
+    width: 100%;
+  }
+  </style>
 @endsection
 
 @section('script')
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/forms/select/select2.full.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/js/scripts/forms/select/form-select2.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/forms/icheck/icheck.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/js/scripts/forms/checkbox-radio.js') }}" type="text/javascript"></script>
-    {{-- <!-- Include the Quill library -->
-    <script src="{{ asset('js/quill.js')}}" type="text/javascript"></script> --}}
-    {{-- Include Time Date --}}
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/dateTime/moment-with-locales.min.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/dateTime/bootstrap-datetimepicker.min.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.date.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.time.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/legacy.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
-    <script>
-      $('.published_at').datetimepicker({
-        format: 'DD-MM-YYYY'
-      })
-      $('.expired_at').datetimepicker({
-        format: 'DD-MM-YYYY',
-      })
-      $( document ).ready(function() {
-        var company_id = "{{ $data->company_id }}"
-        var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`) 
-          handleCompany(company_id,department_ids)
-          $('select[name="company_id"]').change(function () {
-            var department_ids = [];
-            var company_id = $(this).val()
-            handleCompany(company_id,department_ids)
-           })
-      })
-    
-      function handleCompany(company_id,department_ids){
-        if(company_id){
-          var url = "{{ route('get_department_by_company') }}/"+company_id
-          $.get(url, function (data) {
-            // console.log(data)
-            $("[name='department_ids[]']").empty();
+<script src="{{ asset('stack-admin/app-assets/vendors/js/forms/select/select2.full.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/js/scripts/forms/select/form-select2.js') }}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/forms/icheck/icheck.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/js/scripts/forms/checkbox-radio.js') }}" type="text/javascript"></script>
+{{-- <!-- Include the Quill library -->
+<script src="{{ asset('js/quill.js')}}" type="text/javascript"></script> --}}
+{{-- Include Time Date --}}
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/dateTime/moment-with-locales.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/dateTime/bootstrap-datetimepicker.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.date.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.time.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/legacy.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
 
-            if(department_ids) {
-              data.forEach(function (ch) {
-                department_ids.map((departnmentId,index) => {
-                  if (departnmentId.$oid === ch.id) {
-                    $("[name='department_ids[]']").append(
-                      $('<option> ', {
-                        value: ch.id,
-                        text: ch.topic,
-                        selected: true
-                      })
-                    );
-                  } else {
-                    $("[name='department_ids[]']").append(
-                      $('<option> ', {
-                        value: ch.id,
-                        text: ch.topic
-                      })
-                    );
-                  }
-                })
-              })
-            } else {
-              data.forEach(function (ch) {
+<script src="{{ asset('multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+  $('.published_at').datetimepicker({
+    format: 'DD-MM-YYYY'
+  })
+  $('.expired_at').datetimepicker({
+    format: 'DD-MM-YYYY',
+  })
+
+  $( document ).ready(function() {
+    $('.div-loading').hide();
+    $('.div-employee').hide();
+
+    var company_id = "{{ $data->company_id }}"
+    var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`) 
+    handleCompany(company_id,department_ids)
+    $('select[name="company_id"]').change(function () {
+      var department_ids = [];
+      var company_id = $(this).val()
+      handleCompany(company_id,department_ids)
+    })
+  })
+  
+  function handleCompany(company_id,department_ids){
+    if(company_id){
+      var url = "{{ route('get_department_by_company') }}/"+company_id
+      $.get(url, function (data) {
+        // console.log(data)
+        $("[name='department_ids[]']").empty();
+
+        if(department_ids) {
+          data.forEach(function (ch) {
+            department_ids.map((departnmentId,index) => {
+              if (departnmentId.$oid === ch.id) {
+                $("[name='department_ids[]']").append(
+                  $('<option> ', {
+                    value: ch.id,
+                    text: ch.topic,
+                    selected: true
+                  })
+                );
+              } else {
                 $("[name='department_ids[]']").append(
                   $('<option> ', {
                     value: ch.id,
                     text: ch.topic
                   })
-                )
-              })
-            }
-            $("[name='department_ids[]']").attr('disabled', false)
+                );
+              }
+            })
           })
         } else {
-          $("[name='department_ids[]']").find('option').remove()
-          $("[name='department_ids[]']").append($('<option>', {
-            value: '',
-            text: 'Choose'
-          }));
-        } 
+          data.forEach(function (ch) {
+            $("[name='department_ids[]']").append(
+              $('<option> ', {
+                value: ch.id,
+                text: ch.topic
+              })
+            )
+          })
+        }
+        $("[name='department_ids[]']").attr('disabled', false)
+      })
+    } else {
+      $("[name='department_ids[]']").find('option').remove()
+      $("[name='department_ids[]']").append($('<option>', {
+        value: '',
+        text: 'Choose'
+      }));
+    } 
+  }
+
+  function search_result() {
+    $('.div-loading').show();
+    $('.div-employee').hide();
+    var type = "{{ Auth()->user()->type }}";
+    var employee_id = $('#employee_id').val()
+    var employee_name = $('#employee_name').val()
+    var dept_name = $('#dept_name').val()
+    var in_dept = $('#in_dept').val()
+    var url = "{{ route('training_employee_filter') }}"
+
+    console.log(dept_name)
+
+    if(type=='jasmine' && !employee_id && !employee_name && !dept_name && !in_dept) {
+      swal('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
+      $('.div-loading').hide();
+      $('.div-employee').hide();
+      return false
+    } else if(!employee_id && !employee_name && !dept_name) {
+      swal('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
+      $('.div-loading').hide();
+      $('.div-employee').hide();
+      return false
     }
+    $("[name='employees[]']").empty()
+    $.get(url, 
+    {
+      employee_id: employee_id,
+      employee_name: employee_name,
+      dept_name: dept_name,
+      in_dept: in_dept
+    },
+    function(data, status){
+      console.log(data)
+      data.datas.map((values,index) => {
+        $("[name='employees[]']").append(
+          $('<option> ', {
+            value: values.employee_id,
+            text: values.tinitial+' '+ values.tf_name + ' ' + values.tl_name + ' ('+values.employee_id+')'
+          })
+        );
+      })
+      $('.employees').multiSelect('refresh',{ 
+        keepOrder: true,
+        afterSelect: function(value){
+          $('[name="employees[]"] option[value="'+value+'"]').remove();
+          $('[name="employees[]"]').append($("<option></option>").attr("value",value).attr('selected', 'selected'));
+        }
+      });
+      if(data.datas.length==0) {
+        $('.div-loading').hide();
+        $('.div-employee').hide();
+      } else {
+        $('.div-loading').hide();
+        $('.div-employee').show();
+      }
+    })
+  }
+
+  function select_all() {
+    $('.employees option').attr('selected', 'selected');
+    $('.employees').multiSelect('refresh')
+  }
+  function delete_all() {
+    $('.employees option').attr('selected', false);
+    $('.employees').multiSelect('refresh')
+  }
 </script>
 @endsection
