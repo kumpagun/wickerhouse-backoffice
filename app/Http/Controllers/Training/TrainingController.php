@@ -29,6 +29,7 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\Course;
 use App\Models\MyTraining;
+use App\Models\Employee;
 
 class TrainingController extends Controller
 {
@@ -142,7 +143,13 @@ class TrainingController extends Controller
       $department = $this->get_department();
       $company = $this->get_company();
       $course = $this->get_course();
-      
+
+      $query = Employee::query();
+      $query->select('dept_name');
+      $query->whereNotNull('dept_name');
+      $query->groupBy('dept_name');
+      $dept_name = $query->get();
+
       if(empty($id)) {
         $data = new \stdClass();
         $data->id = '';
@@ -159,7 +166,8 @@ class TrainingController extends Controller
         'data' => $data,
         'department' => $department,
         'company' => $company,
-        'course' => $course
+        'course' => $course,
+        'dept_name' => $dept_name
       ]; 
       return view('training.training_edit',$withData);
     }
@@ -225,7 +233,7 @@ class TrainingController extends Controller
       $this->update_training_total_employee($store->_id);
 
       ActivityLogClass::log('เพิ่มหรือแก้ไข Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
-      return redirect()->route('training_index')->with('status',200);
+      return redirect()->route('training_create',['id' => $store->_id])->with('success','success');
     }
     public function training_delete($id=''){
       $delete = Training::find($id);
@@ -345,6 +353,7 @@ class TrainingController extends Controller
                     $insert->employee_id =  (string)$value[1]; 
                     $insert->member_jasmine_id = new ObjectId($member_jasmine_id);
                     $insert->course_id = new ObjectId($course_id);
+                    $insert->type = 'excel';
                     $insert->status = 1;
                     $insert->save();
                   }else{
@@ -428,6 +437,72 @@ class TrainingController extends Controller
     $this->update_training_total_employee($class_id);
 
     ActivityLogClass::log_end_import_excel($id_log,$total_import,$total_error,$total_duplicate);
-    return redirect()->route('training_index')->with('status',200);
+
+    return redirect()->back()->with('success','success');
+  }
+
+  public function training_employee_filter(Request $request) {
+    $employee_id = $request->input('employee_id');
+    $employee_name = $request->input('employee_name');
+    $dept_name = $request->input('dept_name');
+    $in_dept = $request->input('in_dept');
+
+    $head_employee_id = [];
+    if(Auth()->user()->type=='jasmine') {
+      array_push($head_employee_id, Auth()->user()->user_info->employee_id);
+    }
+
+    $query = Employee::query();
+    $query->select('employee_id', 'tinitial','tf_name','tl_name');
+    if(!empty($employee_id)) {
+      $query->where('employee_id',$employee_id);
+    }
+    if(!empty($employee_name)) {
+      $query->where(function ($q) use ($employee_name) {
+        $q->orWhere('tf_name','like',"%$employee_name%");
+        $q->orWhere('tl_name','like',"%$employee_name%");
+      });
+    }
+    if(!empty($dept_name)) {
+      $query->where('dept_name',$dept_name);
+    }
+    if(count($head_employee_id)>0) {
+      $query->whereIn('heads',$head_employee_id);
+    }
+    $datas = $query->get();
+
+    $data_back = [
+      'status' => 200,
+      'datas' => $datas
+    ];
+    
+    return response()->json($data_back); 
+  }
+
+  public function training_import_employees(Request $request) {
+    $employees = $request->input('employees');
+    $training_id = $request->input('training_id');
+
+    $query = Training::find($training_id);
+    $course_id = new ObjectId($query->course_id);
+
+    if(!empty($employees)) {
+      foreach($employees as $employee) {
+        $check_user = TrainingUser::where('employee_id',(string)$employee)->where('status',1)->where('training_id',new ObjectId($training_id))->first();
+        $check_member_jasmine = Employee::where('employee_id',(string)$employee)->first();
+        if (empty($check_user)) {
+          $insert =  new TrainingUser();
+          $insert->training_id = new ObjectId($training_id);
+          $insert->employee_id =  (string)$employee; 
+          $insert->member_jasmine_id = new ObjectId($check_member_jasmine->_id);
+          $insert->course_id = new ObjectId($course_id);
+          $insert->type = 'filter';
+          $insert->status = 1;
+          $insert->save();
+        }
+      }
+    }
+
+    return redirect()->back()->with('success','success');
   }
 }

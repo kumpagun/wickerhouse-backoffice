@@ -133,7 +133,7 @@ Route::group(['prefix' => 'category', 'middleware' => ['auth', 'role:admin|cours
   Route::get('/delete', 'Course\CategoryController@category_delete')->name('category_delete');
 });
 
-// Class Room
+// Training
 Route::group(['prefix' => 'training', 'middleware' => ['auth', 'role:admin|course']], function () {
   Route::match(['get','post'],'/', 'Training\TrainingController@training_index')->name('training_index');
   Route::match(['get','post'],'/user/{id?}', 'Training\TrainingController@traingin_user_list')->name('traingin_user_list');
@@ -142,6 +142,11 @@ Route::group(['prefix' => 'training', 'middleware' => ['auth', 'role:admin|cours
   Route::match(['get','post'],'/import/excel', 'Training\TrainingController@import_excel')->name('import_excel');
   Route::match(['get','post'],'/delete/{id?}', 'Course\CategoryController@training_delete')->name('training_delete');
   Route::post('/user_del','Training\TrainingController@traingin_user_delete')->name('training_user_delete');
+
+  Route::match(['get','post'],'/employee-filter', 'Training\TrainingController@training_employee_filter')->name('training_employee_filter');
+  Route::post('/import_employees', 'Training\TrainingController@training_import_employees')->name('training_import_employees');
+  
+  
 });
 
 // Assessment
