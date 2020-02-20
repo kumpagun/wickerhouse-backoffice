@@ -10,7 +10,7 @@ use MongoDB\BSON\ObjectId as ObjectId;
 use DB;
 // Model
 use App\Models\Member;
-use App\Models\Member_jasmine;
+use App\Models\Employee;
 use App\Models\Report_member_access;
 use App\Models\Training;
 use App\Models\TrainingUser;
@@ -61,10 +61,10 @@ class ReportController extends Controller
       return $collection->aggregate([
         [
           '$lookup' => [
-            'from' =>  "member_jasmines",
+            'from' =>  "employees",
             'localField' =>  "employee_id",
             'foreignField' =>  "employee_id",
-            'as' =>  "member_jasmines"
+            'as' =>  "employees"
           ]
         ],
         [
@@ -74,7 +74,7 @@ class ReportController extends Controller
           ]
         ],
         [
-          '$unwind' => '$member_jasmines'
+          '$unwind' => '$employees'
         ]
       ]);
     });
@@ -86,7 +86,7 @@ class ReportController extends Controller
       array_push($jas_in_members_table, $row['employee_id']);
     }
     // Member not login
-    $members_jasmine = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
+    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
     // Pretest
     $pretests = Examination_answer::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('answertype','pretest')->groupBy('user_id','point')->get();
     // Posttest
@@ -170,7 +170,7 @@ class ReportController extends Controller
     });
     // Member ที่ login เข้าระบบแล่้ว
     foreach($members as $member) {
-      foreach($member->member_jasmines as $index => $value) {
+      foreach($member->employees as $index => $value) {
         $datas[$member->_id][$index] = $value;
       }
     }
@@ -178,13 +178,13 @@ class ReportController extends Controller
     foreach($members_jasmine as $value) {
       $datas[$value->_id]['employee_id'] = $value->employee_id;
       $datas[$value->_id]['tinitial'] = $value->tinitial;
-      $datas[$value->_id]['firstname'] = $value->firstname;
-      $datas[$value->_id]['lastname'] = $value->lastname;
+      $datas[$value->_id]['firstname'] = $value->tf_name;
+      $datas[$value->_id]['lastname'] = $value->tl_name;
       $datas[$value->_id]['workplace'] = $value->workplace;
-      $datas[$value->_id]['title'] = $value->title;
-      $datas[$value->_id]['division'] = $value->division;
-      $datas[$value->_id]['section'] = $value->section;
-      $datas[$value->_id]['department'] = $value->department;
+      $datas[$value->_id]['title'] = $value->title_name;
+      $datas[$value->_id]['division'] = $value->division_name;
+      $datas[$value->_id]['section'] = $value->section_name;
+      $datas[$value->_id]['department'] = $value->dept_name;
       $datas[$value->_id]['staff_grade'] = $value->staff_grade;
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
