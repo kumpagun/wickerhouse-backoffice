@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('เพิ่มรอบอบรมทั้งหมด'); @endphp
+@if(!empty($data->id))
+  @php $title = strtoupper('แก้ไขรอบอบรม'); @endphp
+@else 
+  @php $title = strtoupper('เพิ่มรอบอบรม'); @endphp
+@endif
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>

@@ -21,6 +21,7 @@
     <div class="breadcrumb-wrapper col-12">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('training_index') }}">รอบอบรมทั้งหมด</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('training_create', ['id'=>$training_id]) }}">แก้ไขรอบอบรม</a></li>
         <li class="breadcrumb-item active">{{ $title }}</li>
       </ol>
     </div>
