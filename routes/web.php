@@ -133,7 +133,7 @@ Route::group(['prefix' => 'category', 'middleware' => ['auth', 'role:admin|cours
   Route::get('/delete', 'Course\CategoryController@category_delete')->name('category_delete');
 });
 
-// Class Room
+// Training
 Route::group(['prefix' => 'training', 'middleware' => ['auth', 'role:admin|course']], function () {
   Route::match(['get','post'],'/', 'Training\TrainingController@training_index')->name('training_index');
   Route::match(['get','post'],'/user/{id?}', 'Training\TrainingController@traingin_user_list')->name('traingin_user_list');

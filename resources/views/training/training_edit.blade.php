@@ -16,14 +16,17 @@
 @section('content')
 <div class="row align-items-center justify-content-center mb-2">
   <div class="col-12 col-md-10 col-lg-10 col-xl-8">
+    @if (session('success'))
+    <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+    @endif
     <div class="card px-1 py-1 m-0">
-      <div class="card-header border-0 pb-0">
-        {{-- <div class="card-title text-center">
-          <img src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-dark.png') }}" alt="branding logo">
-        </div> --}}
-        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>รายละเอียดรอบอบรมทั้งหมด</span>
-        </h6>
+      <div class="card-header border-0">
+        <div class="card-title text-center"> รายละเอียดรอบอบรมทั้งหมด </div>
       </div>
       <div class="card-content ">
         <div class="card-body py-0 ">
@@ -33,7 +36,7 @@
             <div class="col-12">
               <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
               <label for="user-name">Title *</label>
-              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="training title">
+              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="training title" required>
               @if($errors->training->has('title'))
                   <span class="small" role="alert">
                   <p class="mb-0">{{ $errors->training->first('title') }}</p>
@@ -44,7 +47,7 @@
             <div class="col-12">
               <fieldset class="form-group @if($errors->training->has('course_id')) danger @endif">
                 <label for="user-name">Course *</label>
-                <select class="select2 form-control" name="course_id" @if($data->id != '')disabled @endif>
+                <select class="select2 form-control" name="course_id" @if($data->id != '')disabled @endif required>
                   <option value=""> กรุณาเลือก Course</option>
                   @foreach ($course as $item )
                     <option value={{ $item }} 
@@ -88,7 +91,7 @@
               <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
                 <label for="user-name">Published At *</label>
                 <div class='input-group date published_at'  id='datetimepicker'>
-                  <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}"" @endif/> 
+                  <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}"" @endif required/> 
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <span class="fa fa-calendar"></span>
@@ -106,7 +109,7 @@
               <fieldset class="form-group @if($errors->training->has('expired_at')) danger @endif">
                 <label for="user-name">Expired At *</label>
                 <div class='input-group date expired_at'  id='datetimepicker'>
-                  <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}"" @endif/> 
+                  <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}"" @endif required/> 
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <span class="fa fa-calendar"></span>
@@ -135,19 +138,39 @@
 </div>
 
 @if(!empty($data->id))
+<div class="row justify-content-center mb-2">
+  <div class="col-12 col-md-10 col-lg-10 col-xl-8">
+    <a href="{{ route('traingin_user_list', ['id' => $data->id]) }}">ดูรายชื่อพนักงาน {{ FuncClass::count_user_in_traingin($data->_id) }} คน</a>
+  </div>
+</div>
 <div class="row align-items-center justify-content-center pb-2">
   <div class="col-12 col-md-10 col-lg-10 col-xl-8">
     <div class="card px-1 py-2 m-0">
-      <div class="card-header border-0 pb-0">
-        <div class="card-title">
-          เลือกพนักงาน
-        </div>
-        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>เงื่อนไข</span>
-        </h6>
+      <div class="card-header border-0">
+        <div class="card-title text-center"> เลือกพนักงาน </div>
       </div>
       <div class="card-content ">
         <div class="card-body py-0 ">
+          <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
+            <span>Import Excel</span>
+          </h6>
+          <div class="row mb-1">
+            <div class="col-12">
+              @can('editor')
+              <button type="button" class="btn btn-outline-secondary btn-min-width"  aria-hidden="true" aria-label="Close" data-toggle="modal" data-target="#AnswerModal{{$data->_id}}">
+                Import File Excel
+              </button>
+              @else
+                <button type="button" class="btn btn-outline-secondary btn-min-width"  data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>
+                  Import File Excel
+                </button>
+              @endcan
+              <p class="text-danger my-1">* Import File Excel เพิ่มเพิ่มพนักงานที่ต้องการให้เข้าอบรมในรอบนี้</p>
+            </div>
+          </div>
+          <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
+            <span>เลือกแบบใส่เงื่อนไข</span>
+          </h6>
           <div class="row">
             <div class="col-12 col-sm-6">
               <fieldset class="form-group">
@@ -186,10 +209,6 @@
               <button class="btn btn-outline-secondary" onclick="search_result()">ค้นหา</button>
             </div>
           </div>
-
-          <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-            <span>รายชื่อพนักงาน</span>
-          </h6>
           <form class="form-group" action="{{ route('training_import_employees') }}" method="POST">
             @csrf
             <input type="hidden" name="training_id" value="{{ $data->id }}">
@@ -201,15 +220,17 @@
                 <select multiple="multiple" class="employees" name="employees[]"></select>
                 <div class="row mb-2">
                   <div class="col-6 text-center">
-                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="select_all()">เลือกทั้งหมด</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="select_all()">เลือกทั้งหมด</button>
                   </div>
                   <div class="col-6 text-center">
-                    <button class="btn btn-sm btn-outline-secondary mt-1" onclick="delete_all()">ลบทั้งหมด</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="delete_all()">ลบทั้งหมด</button>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    <button class="btn btn-block btn-secondary">บันทึก</button>
+                    @can('editor')
+                    <button type="submit" class="btn btn-block btn-secondary">บันทึก</button>
+                    @endcan
                   </div>
                 </div>
               </div>
@@ -217,6 +238,41 @@
           </form>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-alert modal fade" id="AnswerModal{{$data->_id}}" tabindex="-1" role="dialog" aria-labelledby="AnswerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form class="form" method="POST" action="{{ URL::route('import_excel') }}" enctype="multipart/form-data">
+        {{ csrf_field() }}
+        <div class="modal-header">
+        <h3 class="modal-title" id="AnswerModalLabel"> กรุณาเลือก File Excel</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <div class="row">
+          <input name="class_id" type="hidden" value="{{ $data->_id }}" />
+          <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+            <div class="form-group">
+              <label class="text">Excel</label>
+              <input name="excel" class="form-control" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" >
+            </div>
+            @if($errors->first('excel'))<p><small class="danger text-muted">{{$errors->first('excel')}}</small></p>@endif
+          </div>
+          <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+            <a href="{{ asset("Files/example.xlsx") }}">ตัวอย่างไฟล์สำหรับ import</a>
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+          <button type="submit" class="btn btn-primary">ยืนยัน</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -262,7 +318,9 @@
 <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
 
 <script src="{{ asset('multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
 <script>
   $('.published_at').datetimepicker({
     format: 'DD-MM-YYYY'
