@@ -148,7 +148,15 @@ class TrainingController extends Controller
       $query->select('dept_name');
       $query->whereNotNull('dept_name');
       $query->groupBy('dept_name');
+      $query->orderBy('dept_name');
       $dept_name = $query->get();
+
+      $query = Employee::query();
+      $query->select('company');
+      $query->whereNotNull('company');
+      $query->groupBy('company');
+      $query->orderBy('company');
+      $company_name = $query->get();
 
       if(empty($id)) {
         $data = new \stdClass();
@@ -167,7 +175,8 @@ class TrainingController extends Controller
         'department' => $department,
         'company' => $company,
         'course' => $course,
-        'dept_name' => $dept_name
+        'dept_name' => $dept_name,
+        'company_name' => $company_name
       ]; 
       return view('training.training_edit',$withData);
     }
@@ -444,8 +453,11 @@ class TrainingController extends Controller
   public function training_employee_filter(Request $request) {
     $employee_id = $request->input('employee_id');
     $employee_name = $request->input('employee_name');
+    $company_name = $request->input('company_name');
     $dept_name = $request->input('dept_name');
     $in_dept = $request->input('in_dept');
+    $longevity = $request->input('longevity');
+    $longevity_condition = $request->input('longevity_condition');
 
     $head_employee_id = [];
     if(Auth()->user()->type=='jasmine') {
@@ -463,17 +475,38 @@ class TrainingController extends Controller
         $q->orWhere('tl_name','like',"%$employee_name%");
       });
     }
+    if(!empty($company_name)) {
+      $query->where('company',$company_name);
+    }
     if(!empty($dept_name)) {
       $query->where('dept_name',$dept_name);
     }
     if(count($head_employee_id)>0) {
       $query->whereIn('heads',$head_employee_id);
     }
+    if(!empty($longevity)) {
+      foreach($longevity as $index => $row) {
+        if(!empty($longevity_condition[$index]) && !empty($longevity[$index])) {
+          $condition = $longevity_condition[$index];
+          if($condition=='=') {
+            $date_start = Carbon::now()->subYears($longevity[$index])->startOfDay();
+            $date_end = Carbon::now()->subYears($longevity[$index]+1)->startOfDay();
+            // เช่นถ้าเลือกอายุงาน = 1 ปี
+            // จะเป็นอายุการทำงานมากกว่าเท่ากับ 1 ปี แต่ไม่มากกว่า 2 ปี เป็นต้น
+            $query->where('date_joined','<=',$date_start);
+            $query->where('date_joined','>',$date_end);
+          } else {
+            $date = Carbon::now()->subYears($longevity[$index])->startOfDay();
+            $query->where('date_joined',$condition,$date);
+          }
+        }
+      }
+    }
     $datas = $query->get();
 
     $data_back = [
       'status' => 200,
-      'datas' => $datas
+      'datas' => $datas,
     ];
     
     return response()->json($data_back); 

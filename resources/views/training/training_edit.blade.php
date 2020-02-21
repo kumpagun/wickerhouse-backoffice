@@ -67,7 +67,7 @@
                 @endif
               </fieldset>
             </div>
-            {{-- <div class="col-6">
+            <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('company_id')) danger @endif">
               <label for="user-name">Company</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
@@ -91,7 +91,7 @@
                 <select class="select2 form-control" name="department_ids[]" multiple="multiple">
                 </select>
               </fieldset>
-            </div> --}}
+            </div>
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
                 <label for="user-name">Published At *</label>
@@ -191,6 +191,17 @@
             </div>
             <div class="col-12 col-sm-6">
               <fieldset class="form-group">
+                <label for="user-name">บริษัท</label>
+                <select class="select2 form-control" id="company_name" name="company_name">
+                  <option value="">กรุณาบริษัท</option>
+                  @foreach ($company_name as $item )
+                    <option value="{{ $item->company }}">{{ $item->company }}</option>
+                  @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
                 <label for="user-name">หน่วยงาน</label>
                 <select class="select2 form-control" id="dept_name" name="dept_name">
                   <option value="">กรุณาหน่วยงาน</option>
@@ -200,16 +211,40 @@
                 </select>
               </fieldset>
             </div>
-            @if(Auth()->user()->type=='jasmine')
             <div class="col-12">
-              <fieldset>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" name="in_dept" id="in_dept">
-                  <label class="custom-control-label" for="in_dept">ภายในหน่วยงาน</label>
+              <div class="form-group mb-2 longevity-repeater">
+                <label for="user-name">อายุงาน</label>
+                <div data-repeater-list="longevity">
+                  <div class="mb-1" data-repeater-item>
+                    <div class="row">
+                      <div class="col-4">
+                        <select class="form-control" name="longevity_condition">
+                          <option value="">กรุณาเลือกเงื่อนไข</option>
+                          <option value="<">มากกว่า</option>
+                          <option value="<=">มากกว่าหรือเท่ากับ</option>
+                          <option value=">">น้อยกว่า</option>
+                          <option value=">=">น้อยกว่าหรือเท่ากับ</option>
+                          <option value="=">เท่ากับ</option>
+                        </select>
+                      </div>
+                      <div class="col-8 input-group ">
+                        <input type="number" name="longevity" placeholder="อายุงาน (ปี)" class="form-control">
+                        <div class="input-group-append">
+                          <span class="input-group-btn" id="button-addon2">
+                            <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </fieldset>
+                <div class="text-center">
+                  <button type="button" data-repeater-create class="btn btn-outline-secondary">
+                    <i class="ft-plus"></i> เพิ่มเงื่อนไข
+                  </button>
+                </div>
+              </div>
             </div>
-            @endif
             <div class="col-12 my-2">
               <button class="btn btn-outline-secondary" onclick="search_result()">ค้นหา</button>
             </div>
@@ -222,6 +257,9 @@
                 <i class="fas fa-spinner fa-spin fa-2x"></i>
               </div>
               <div class="col-12 div-employee">
+                <div class="mockup-loading">
+                  <i class="fas fa-spinner fa-spin fa-2x"></i>
+                </div>
                 <select multiple="multiple" class="employees" name="employees[]"></select>
                 <div class="row mb-2">
                   <div class="col-6 text-center">
@@ -300,9 +338,27 @@
   {{-- Fontawesome --}}
   <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" />
   <style>
-  .ms-container {
-    width: 100%;
-  }
+    .ms-container {
+      width: 100%;
+    }
+    .div-employee {
+      position: relative;
+      padding: 15px;
+    }
+    .mockup-loading {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: RGBA(0,0,0,0.1);
+      padding: 10px;
+      display: flex;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
   </style>
 @endsection
 
@@ -321,6 +377,7 @@
 <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/picker.time.js')}}" type="text/javascript"></script>
 <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/pickadate/legacy.js')}}" type="text/javascript"></script>
 <script src="{{ asset('stack-admin/app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
+<script src="{{ asset('stack-admin/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}" type="text/javascript"></script>
 
 <script src="{{ asset('multiselect/js/jquery.multi-select.js') }}" type="text/javascript"></script>
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> --}}
@@ -334,9 +391,21 @@
     format: 'DD-MM-YYYY',
   })
 
+  $('.longevity-repeater').repeater({
+    show: function () {
+      $(this).slideDown();
+    },
+    hide: function(remove) {
+      if (confirm('Are you sure you want to remove this item?')) {
+        $(this).slideUp(remove);
+      }
+    }
+  });
+
   $( document ).ready(function() {
     $('.div-loading').hide();
     $('.div-employee').hide();
+    $('.mockup-loading').hide();
 
     var company_id = "{{ $data->company_id }}"
     var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`) 
@@ -403,18 +472,34 @@
     var type = "{{ Auth()->user()->type }}";
     var employee_id = $('#employee_id').val()
     var employee_name = $('#employee_name').val()
+    var company_name = $('#company_name').val()
     var dept_name = $('#dept_name').val()
     var in_dept = $('#in_dept').val()
     var url = "{{ route('training_employee_filter') }}"
+    var longevity = []
+    var longevity_condition = []
+    var count = 0
+    jQuery('input[name*="longevity"]').each(function(e)
+    {
+      var result = parseInt($(this).val())
+      if(result &&  Number.isInteger(result)) {
+        longevity.push(result)
+      }
+    })
+    jQuery('select[name*="longevity_condition"]').each(function(e)
+    {
+      var result = $(this).val()
+      if(result) {
+        longevity_condition.push(result) 
+      }
+    })
 
-    console.log(dept_name)
-
-    if(type=='jasmine' && !employee_id && !employee_name && !dept_name && !in_dept) {
-      swal('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
-      $('.div-loading').hide();
-      $('.div-employee').hide();
+    if(longevity.length!=longevity_condition.length) {
+      swal('กรุณาใส่เงื่อนไข "อายุงาน" ให้ถูกต้อง')
       return false
-    } else if(!employee_id && !employee_name && !dept_name) {
+    }
+
+    if(!employee_id && !employee_name && !company_name && !dept_name && longevity.length==0) {
       swal('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
       $('.div-loading').hide();
       $('.div-employee').hide();
@@ -425,11 +510,13 @@
     {
       employee_id: employee_id,
       employee_name: employee_name,
+      company_name: company_name,
       dept_name: dept_name,
-      in_dept: in_dept
+      in_dept: in_dept,
+      longevity: longevity,
+      longevity_condition: longevity_condition
     },
     function(data, status){
-      console.log(data)
       data.datas.map((values,index) => {
         $("[name='employees[]']").append(
           $('<option> ', {
@@ -456,12 +543,18 @@
   }
 
   function select_all() {
-    $('.employees option').attr('selected', 'selected');
-    $('.employees').multiSelect('refresh')
+    $('.mockup-loading').show(function(){
+      $('.employees option').attr('selected', 'selected');
+      $('.employees').multiSelect('refresh')
+      $('.mockup-loading').hide()
+    })
   }
   function delete_all() {
-    $('.employees option').attr('selected', false);
-    $('.employees').multiSelect('refresh')
+    $('.mockup-loading').show(function(){
+      $('.employees option').attr('selected', false);
+      $('.employees').multiSelect('refresh')
+      $('.mockup-loading').hide()
+    })
   }
 </script>
 @endsection
