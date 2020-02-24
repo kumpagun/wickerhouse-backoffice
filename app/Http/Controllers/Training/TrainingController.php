@@ -184,9 +184,7 @@ class TrainingController extends Controller
       $current_user   = Auth::user();
       $id = $request->input('id');
       $title = $request->input('title'); 
-      $company_id = $request->input('company_id'); 
       $course_id = $request->input('course_id'); 
-      $department_ids = $request->input('department_ids'); 
       $published_at = $request->input('published_at'); 
       $expired_at = $request->input('expired_at'); 
       if ($id) {
@@ -213,12 +211,6 @@ class TrainingController extends Controller
       $published_at = $start;
       $end = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $expired_at,'Asia/Bangkok')->endOfDay()->setTimezone('UTC')->timestamp * 1000);
       $expired_at = $end;
-      $department_ids_array = [];
-      if(!empty($department_ids)){
-        foreach($department_ids as $each){
-          array_push($department_ids_array,new ObjectId($each));
-        }
-      }
       if ($id) {
         $query = Training::find($id);
         $course_id = new ObjectId($query->course_id);
@@ -227,9 +219,7 @@ class TrainingController extends Controller
       }
       $datas = [
         'title' => $title,
-        'company_id' =>  new ObjectId($company_id),
         'course_id' => new ObjectId($course_id),
-        'department_ids' => $department_ids_array,
         'published_at' => $published_at,
         'expired_at' => $expired_at,
         'status' => 1

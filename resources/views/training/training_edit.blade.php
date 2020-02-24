@@ -67,7 +67,7 @@
                 @endif
               </fieldset>
             </div>
-            <div class="col-6">
+            {{-- <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('company_id')) danger @endif">
               <label for="user-name">Company</label>
               <select class="select2 form-control" id="div_content" name="company_id" onchange="handleCompany(this.value)">
@@ -91,7 +91,7 @@
                 <select class="select2 form-control" name="department_ids[]" multiple="multiple">
                 </select>
               </fieldset>
-            </div>
+            </div> --}}
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
                 <label for="user-name">Published At *</label>
@@ -273,6 +273,8 @@
                   <div class="col-12">
                     @can('editor')
                     <button type="submit" class="btn btn-block btn-secondary">บันทึก</button>
+                    @else
+                    555
                     @endcan
                   </div>
                 </div>

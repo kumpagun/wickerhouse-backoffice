@@ -26,13 +26,18 @@ class ReportController extends Controller
     $date_now = Carbon::now();
     $date = new UTCDateTime($date_now->startOfDay());
 
-    Report_member_access::where('created_at', '<', $date)->where('status', 1)->update(['status' => 0]);
-    Report_member_access::where('created_at', '>=', $date)->where('status',1)->delete();
-
-    // $training_ids = GroupOnline::where('status',1)->where('_id',new ObjectId('5df35869ff101537d0780ce8'))->get();
-    $trainings = Training::where('status',1)->get();
-    foreach($trainings as $row) {
-      $this->get_data($row);
+    $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
+    $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
+    $query = Training::where('status',1)->get();
+    $query->where('published_at','<=',$date_start);
+    $query->where('expired_at','>=',$date_end);
+    $trainings = $query->get();
+    if(!empty($trainings)) {
+      Report_member_access::where('created_at', '<', $date)->where('status', 1)->update(['status' => 0]);
+      Report_member_access::where('created_at', '>=', $date)->where('status',1)->delete();
+      foreach($trainings as $row) {
+        $this->get_data($row);
+      }
     }
   }
 
