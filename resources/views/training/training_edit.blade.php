@@ -40,8 +40,8 @@
             <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="col-12">
               <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
-              <label for="user-name">Title *</label>
-              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="training title" required>
+              <label for="user-name">ชื่อรอบการอบรม *</label>
+              <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="รอบการอบรม" required>
               @if($errors->training->has('title'))
                   <span class="small" role="alert">
                   <p class="mb-0">{{ $errors->training->first('title') }}</p>
@@ -51,9 +51,9 @@
             </div>
             <div class="col-12">
               <fieldset class="form-group @if($errors->training->has('course_id')) danger @endif">
-                <label for="user-name">Course *</label>
+                <label for="user-name">ชื่อคอร์ส *</label>
                 <select class="select2 form-control" name="course_id" @if($data->id != '')disabled @endif required>
-                  <option value=""> กรุณาเลือก Course</option>
+                  <option value=""> กรุณาเลือกคอร์ส</option>
                   @foreach ($course as $item )
                     <option value={{ $item }} 
                       @if(((string)$data->course_id == (string)$item)) selected  @endif
@@ -94,9 +94,9 @@
             </div> --}}
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('published_at')) danger @endif">
-                <label for="user-name">Published At *</label>
+                <label for="user-name">วันที่เริ่มใช้งาน *</label>
                 <div class='input-group date published_at'  id='datetimepicker'>
-                  <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}"" @endif required/> 
+                  <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}" @endif required/> 
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <span class="fa fa-calendar"></span>
@@ -112,9 +112,9 @@
             </div>
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('expired_at')) danger @endif">
-                <label for="user-name">Expired At *</label>
+                <label for="user-name">วันที่สิ้นสุดการใช้งาน *</label>
                 <div class='input-group date expired_at'  id='datetimepicker'>
-                  <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}"" @endif required/> 
+                  <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}" @endif required/> 
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <span class="fa fa-calendar"></span>
