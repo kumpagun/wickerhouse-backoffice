@@ -49,8 +49,8 @@ class MemberAccessContentController extends Controller
     $passing_score = '';
     if(!empty($query)) {
       $training_title = $query->title;
-      $ep = CourseClass::count_ep_by_course($query->courses[0]['course_id']);
-      $passing_score = CourseClass::get_course_passing_score($query->courses[0]['course_id']);
+      $ep = CourseClass::count_ep_by_course($query->course_id);
+      $passing_score = CourseClass::get_course_passing_score($query->course_id); 
     }
     if(!empty($training_id_select)) {
       $training_id = new ObjectId($training_id_select);
@@ -171,7 +171,7 @@ class MemberAccessContentController extends Controller
       }
 
       // GET LAST UPDATE
-      $last_update = Report_member_access::where('status',1)->first();
+      $last_update = Report_member_access::where('status',1)->first(); 
       $last_update = $last_update->created_at;
     } else {
       $new_datas = [];
@@ -230,7 +230,7 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User เข้าเรียน และสอบผ่าน
-  public function user_active_passing_score($training_id,$passing_score){
+  public function user_active_passing_score($training_id,$passing_score){ 
     $query = Report_member_access::raw(function ($collection) use ($training_id,$passing_score) {
       return $collection->aggregate([
         [ '$match' => [
