@@ -112,7 +112,7 @@
                 <div class="col-12"><strong>คำตอบ</strong></div>
                 <div class="col-12">{!! $item->answer_text !!}</div>
                 @if(!empty($item->answer_file))
-                <div class="col-12 mb-2"><img src="{{ config('app.url').'storage/'.$item->answer_file }}" alt=""></div>
+                  <div class="col-12 mb-2"><a target="_blank" href="{{ Storage::url($item->answer_file) }}">ดาวโหลดเอกสารแนบ</a></div>
                 @endif
                 <div class="col-12"><strong>วันที่ตอบ </strong>{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</div>
               </div>
