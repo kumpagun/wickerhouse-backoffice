@@ -9,7 +9,7 @@
 
       @hasrole('admin|course')
       <li class="navigation-header">
-        <span>วิทยากร</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Teacher"></i>
+        <span>วิทยากร</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="วิทยากร"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('teacher_index') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">วิทยากรทั้งหมด</span></a>
@@ -18,7 +18,7 @@
 
       @hasrole('admin|course')
       <li class="navigation-header">
-        <span>หลักสูตรการเรียน</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
+        <span>หลักสูตรการเรียน</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="หลักสูตรการเรียน"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('category_index') }}"><i class="ft-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
@@ -30,7 +30,7 @@
       
       @hasrole('admin|homework')
       <li class="navigation-header">
-        <span>แบบฝึกหัด</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
+        <span>แบบฝึกหัด</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="แบบฝึกหัด"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('homework_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">ตรวจแบบฝึกหัดหลังเรียน</span></a>
@@ -39,7 +39,7 @@
       
       @hasrole('admin|question')
       <li class="navigation-header">
-        <span>คำถาม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
+        <span>คำถาม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="คำถาม"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('question_index') }}"><i class="ft-edit"></i><span class="menu-title" data-i18n="">ถาม-ตอบ</span></a>
@@ -48,7 +48,7 @@
 
       @hasrole('admin|course')
       <li class="navigation-header">
-        <span>รอบการอบรม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Course"></i>
+        <span>รอบการอบรม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รอบการอบรม"></i>
       </li>
       <li class="nav-item">
         <a href="{{route('company_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">บริษัท</span></a>
@@ -61,9 +61,18 @@
       </li>
       @endhasrole
 
+      @hasrole('admin|report')
+      <li class="navigation-header">
+        <span>รีพอร์ท</span><i class="ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รีพอร์ท"></i>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('report_access_content_by_user') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">Report By User</span></a>
+      </li>
+      @endhasrole
+
       @hasrole('admin')
       <li class="navigation-header">
-        <span>Admin</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Admin"></i>
+        <span>Admin</span><i class="ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="Admin"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('users_index') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">List user</span></a>

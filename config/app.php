@@ -221,8 +221,6 @@ return [
     App\Providers\ActivityLogClassServiceProvider::class,
     App\Providers\MemberClassServiceProvider::class,
     App\Providers\TeacherClassServiceProvider::class,
-
-
   ],
 
   /*

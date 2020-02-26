@@ -247,7 +247,6 @@
   <script src="{{ asset('stack-admin/app-assets/js/core/app-menu.js') }}" type="text/javascript"></script>
   <script src="{{ asset('stack-admin/app-assets/js/core/app.js') }}" type="text/javascript"></script>
   <!-- END STACK JS-->
-
   <script>
   $(window).on("load", function(){
 

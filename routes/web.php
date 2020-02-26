@@ -188,14 +188,17 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:admin|course
 });
 
 // REPORT
-// Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
   Route::match(['get','post'],'/dashboard', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
-  // Route::match(['get','post'],'/', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
-// });
+  Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
+    Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
+    Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
+  });
 
 // CRONTAB
 Route::group(['prefix' => 'crontab'], function () {
   Route::group(['prefix' => 'report'], function () {
     Route::get('/access-content-by-user', 'Crontab\ReportController@access_content_by_user')->name('crontab_report_access_content_by_user');
+    Route::get('/access-content-excel', 'Report\MemberAccessByUserController@crontab_access_content_excel')->name('crontab_report_crontab_access_content_excel');
+    
   });
 });
