@@ -50,11 +50,11 @@
       <li class="navigation-header">
         <span>รอบการอบรม</span><i class=" ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รอบการอบรม"></i>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a href="{{route('company_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">บริษัท</span></a>
-      </li>
+      </li> --}}
       <li class="nav-item">
-        <a href="{{route('department_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">แผนก</span></a>
+        <a href="{{route('department_index')}}"><i class="ft-users"></i><span class="menu-title" data-i18n="">บริษัท / แผนก</span></a>
       </li>
       <li class="nav-item">
         <a href="{{ route('training_index') }}"><i class="ft-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>

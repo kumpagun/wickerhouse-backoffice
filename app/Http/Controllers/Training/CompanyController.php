@@ -32,19 +32,19 @@ use App\Models\Department;
 class CompanyController extends Controller
 {   
     public function get_company(){
-        $result = [];
-        $datas = Company::query()->where('status',1)->get();
-        if(!empty($datas)){
-            foreach($datas as $each){
-                array_push($result,new ObjectId($each->_id));
-            }
+      $result = [];
+      $datas = Company::query()->where('status',1)->get();
+      if(!empty($datas)){
+        foreach($datas as $each){
+          array_push($result,new ObjectId($each->_id));
         }
-        return  $result;
+      }
+      return  $result;
     }
 
     public function company_index(){
-        $datas = Company::query()->where('status',1)->get();
-        return view('company.company_index',['datas' => $datas]);
+      $datas = Company::query()->where('status',1)->orderBy('title','asc')->get();
+      return view('company.company_index',['datas' => $datas]);
     }
     public function company_create($id=''){
         if(empty($id)) {

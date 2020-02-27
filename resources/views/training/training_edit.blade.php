@@ -194,9 +194,6 @@
                 <label for="user-name">บริษัท</label>
                 <select class="select2 form-control" id="company_name" name="company_name">
                   <option value="">กรุณาบริษัท</option>
-                  {{-- @foreach ($company_name as $item )
-                    <option value="{{ $item->company }}">{{ $item->company }}</option>
-                  @endforeach --}}
                   @foreach ($company as $item )
                   <option value={{ $item }} 
                     @if( !empty($data->company_id)  && ((string)$data->company_id == (string)$item)) selected  @endif >{{ FuncClass::get_name_company($item) }} 
@@ -208,7 +205,10 @@
             <div class="col-12 col-sm-6">
               <fieldset class="form-group">
                 <label for="user-name">หน่วยงาน</label>
-                <select class="select2 form-control" id="dept_name" name="dept_name"></select>
+                <div id="dept_name-loading"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+                <div id="dept_name-container">
+                  <select class="select2 form-control" id="dept_name" name="dept_name"></select>
+                </div>
               </fieldset>
             </div>
             <div class="col-12">
@@ -273,8 +273,6 @@
                   <div class="col-12">
                     @can('editor')
                     <button type="submit" class="btn btn-block btn-secondary">บันทึก</button>
-                    @else
-                    555
                     @endcan
                   </div>
                 </div>
@@ -408,6 +406,8 @@
     $('.div-loading').hide();
     $('.div-employee').hide();
     $('.mockup-loading').hide();
+    $('#dept_name-loading').hide();
+    $('#dept_name-container').hide();
 
     handleCompany()
     $('select[name="company_name"]').change(function () {
@@ -419,9 +419,15 @@
   
   function handleCompany(company_id,department_ids){
     if(company_id){
+      $("[name='dept_name']").empty()
+      $('#dept_name-loading').show();
+      $('#dept_name-container').hide();
       var url = "{{ route('get_department_by_company') }}/"+company_id
       $.get(url, function (data) {
-        $("[name='dept_name']").empty()
+        $("[name='dept_name']").append($('<option>', {
+          value: '',
+          text: 'กรุณาเลือกหน่วยงาน'
+        }));
         data.forEach(function (ch) {
           $("[name='dept_name']").append(
             $('<option> ', {
@@ -431,6 +437,8 @@
           )
         })
         $("[name='dept_name']").attr('disabled', false)
+      $('#dept_name-loading').hide();
+      $('#dept_name-container').show();
       })
     } else {
       $("[name='dept_name']").find('option').remove()
@@ -438,7 +446,9 @@
         value: '',
         text: 'กรุณาเลือกหน่วยงาน'
       }));
-    } 
+      $('#dept_name-loading').hide();
+      $('#dept_name-container').show();
+    }
   }
 
   function search_result() {
