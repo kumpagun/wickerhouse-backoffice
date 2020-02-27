@@ -88,7 +88,7 @@
             <div class="col-6">
               <fieldset class="form-group @if($errors->training->has('title')) danger @endif">
                 <label for="user-name">Department</label>
-                <select class="select2 form-control" name="department_ids[]" multiple="multiple">
+                <select class="select2 form-control" name="dept_name" multiple="multiple">
                 </select>
               </fieldset>
             </div> --}}
@@ -194,21 +194,21 @@
                 <label for="user-name">บริษัท</label>
                 <select class="select2 form-control" id="company_name" name="company_name">
                   <option value="">กรุณาบริษัท</option>
-                  @foreach ($company_name as $item )
+                  {{-- @foreach ($company_name as $item )
                     <option value="{{ $item->company }}">{{ $item->company }}</option>
-                  @endforeach
+                  @endforeach --}}
+                  @foreach ($company as $item )
+                  <option value={{ $item }} 
+                    @if( !empty($data->company_id)  && ((string)$data->company_id == (string)$item)) selected  @endif >{{ FuncClass::get_name_company($item) }} 
+                  </option>
+                @endforeach
                 </select>
               </fieldset>
             </div>
             <div class="col-12 col-sm-6">
               <fieldset class="form-group">
                 <label for="user-name">หน่วยงาน</label>
-                <select class="select2 form-control" id="dept_name" name="dept_name">
-                  <option value="">กรุณาหน่วยงาน</option>
-                  @foreach ($dept_name as $item )
-                    <option value="{{ $item->dept_name }}">{{ $item->dept_name }}</option>
-                  @endforeach
-                </select>
+                <select class="select2 form-control" id="dept_name" name="dept_name"></select>
               </fieldset>
             </div>
             <div class="col-12">
@@ -409,10 +409,8 @@
     $('.div-employee').hide();
     $('.mockup-loading').hide();
 
-    var company_id = "{{ $data->company_id }}"
-    var department_ids = JSON.parse(`{!! json_encode($data->department_ids) !!}`) 
-    handleCompany(company_id,department_ids)
-    $('select[name="company_id"]').change(function () {
+    handleCompany()
+    $('select[name="company_name"]').change(function () {
       var department_ids = [];
       var company_id = $(this).val()
       handleCompany(company_id,department_ids)
@@ -423,47 +421,22 @@
     if(company_id){
       var url = "{{ route('get_department_by_company') }}/"+company_id
       $.get(url, function (data) {
-        // console.log(data)
-        $("[name='department_ids[]']").empty();
-
-        if(department_ids) {
-          data.forEach(function (ch) {
-            department_ids.map((departnmentId,index) => {
-              if (departnmentId.$oid === ch.id) {
-                $("[name='department_ids[]']").append(
-                  $('<option> ', {
-                    value: ch.id,
-                    text: ch.topic,
-                    selected: true
-                  })
-                );
-              } else {
-                $("[name='department_ids[]']").append(
-                  $('<option> ', {
-                    value: ch.id,
-                    text: ch.topic
-                  })
-                );
-              }
+        $("[name='dept_name']").empty()
+        data.forEach(function (ch) {
+          $("[name='dept_name']").append(
+            $('<option> ', {
+              value: ch.id,
+              text: ch.topic
             })
-          })
-        } else {
-          data.forEach(function (ch) {
-            $("[name='department_ids[]']").append(
-              $('<option> ', {
-                value: ch.id,
-                text: ch.topic
-              })
-            )
-          })
-        }
-        $("[name='department_ids[]']").attr('disabled', false)
+          )
+        })
+        $("[name='dept_name']").attr('disabled', false)
       })
     } else {
-      $("[name='department_ids[]']").find('option').remove()
-      $("[name='department_ids[]']").append($('<option>', {
+      $("[name='dept_name']").find('option').remove()
+      $("[name='dept_name']").append($('<option>', {
         value: '',
-        text: 'Choose'
+        text: 'กรุณาเลือกหน่วยงาน'
       }));
     } 
   }
