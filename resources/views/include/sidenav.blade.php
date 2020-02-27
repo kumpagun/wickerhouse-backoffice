@@ -66,7 +66,10 @@
         <span>รีพอร์ท</span><i class="ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รีพอร์ท"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">Report By User</span></a>
+        <a href="{{ route('report_access_content_by_user') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('report_review_index') }}"><i class="ft-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
       </li>
       @endhasrole
 

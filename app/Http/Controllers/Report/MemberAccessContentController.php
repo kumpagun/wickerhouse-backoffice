@@ -86,26 +86,26 @@ class MemberAccessContentController extends Controller
 
       // เรียง Data  ใหม่ เรียงตาม RO1 - RO10
       $new_datas = [];
-      foreach($this->deptname as $row) {
-        if(!empty($datas[$row]['user_active'])) {
-          $new_datas[$row]['user_active'] = $datas[$row]['user_active'];
+      foreach($datas as $key => $values) {
+        if(!empty($datas[$key]['user_active'])) {
+          $new_datas[$key]['user_active'] = $datas[$key]['user_active'];
         } else {
-          $new_datas[$row]['user_active'] = 0;
+          $new_datas[$key]['user_active'] = 0;
         }
-        if(!empty($datas[$row]['user_active_passing_score'])) {
-          $new_datas[$row]['user_active_passing_score'] = $datas[$row]['user_active_passing_score'];
+        if(!empty($datas[$key]['user_active_passing_score'])) {
+          $new_datas[$key]['user_active_passing_score'] = $datas[$key]['user_active_passing_score'];
         } else {
-          $new_datas[$row]['user_active_passing_score'] = 0;
+          $new_datas[$key]['user_active_passing_score'] = 0;
         }
-        if(!empty($datas[$row]['user_active_not_passing_score'])) {
-          $new_datas[$row]['user_active_not_passing_score'] = $datas[$row]['user_active_not_passing_score'];
+        if(!empty($datas[$key]['user_active_not_passing_score'])) {
+          $new_datas[$key]['user_active_not_passing_score'] = $datas[$key]['user_active_not_passing_score'];
         } else {
-          $new_datas[$row]['user_active_not_passing_score'] = 0;
+          $new_datas[$key]['user_active_not_passing_score'] = 0;
         }
-        if(!empty($datas[$row]['user_inactive'])) {
-          $new_datas[$row]['user_inactive'] = $datas[$row]['user_inactive'];
+        if(!empty($datas[$key]['user_inactive'])) {
+          $new_datas[$key]['user_inactive'] = $datas[$key]['user_inactive'];
         } else {
-          $new_datas[$row]['user_inactive'] = 0;
+          $new_datas[$key]['user_inactive'] = 0;
         }
       }
 
@@ -117,7 +117,7 @@ class MemberAccessContentController extends Controller
       ];
 
       // PIE CHART เข้าเรียน / ไม่เข้าเรียน 
-      $datas_chart = $this->get_data_chart($training_id); 
+      $datas_chart = $this->get_data_chart($training_id);  //dd($datas_chart);
       $pie_chart_total['active'] = 0;
       $pie_chart_total['inactive'] = 0;
       foreach($new_datas as $index => $values) {
@@ -210,8 +210,7 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname]
+            'training_id'  => $training_id
           ]
         ],
         [
@@ -237,8 +236,7 @@ class MemberAccessContentController extends Controller
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
             'training_id'  => $training_id,
-            'posttest' => [ '$gte' => $passing_score ],
-            'department' => ['$in' => $this->deptname]
+            'posttest' => [ '$gte' => $passing_score ]
           ]
         ],
         [
@@ -267,8 +265,7 @@ class MemberAccessContentController extends Controller
             '$or' => [
               ['posttest' => [ '$lt' => $passing_score ]], 
               ['posttest' => [ '$eq' => null ]]
-            ] ,
-            'department' => ['$in' => $this->deptname]
+            ] 
           ]
         ],
         [
@@ -294,8 +291,7 @@ class MemberAccessContentController extends Controller
           '$match' => [
             'status'  => 1,
             'play_course'  => ['$eq'  => 0],
-            'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname]
+            'training_id'  => $training_id
           ]
         ],
         [
@@ -341,7 +337,6 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'play_course'  => ['$ne'  => 0],
             'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
@@ -356,7 +351,7 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            '_id.created_at' => 1
           ]
         ]
       ]);
@@ -371,7 +366,6 @@ class MemberAccessContentController extends Controller
           '$match' => [
             'play_course'  => ['$eq'  => 0],
             'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
@@ -386,7 +380,7 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            '_id.created_at' => 1
           ]
         ]
       ]);
