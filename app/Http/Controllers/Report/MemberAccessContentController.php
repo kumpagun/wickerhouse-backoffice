@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
 use DB;
+use PDF;
 use CourseClass;
 use FuncClass;
 // Model
@@ -189,7 +190,21 @@ class MemberAccessContentController extends Controller
       $chart_inactive['total'] = [];
       $last_update = '';
     }
-    
+    // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+    // $pdf = PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])->loadView('report.member_access_content_by_ro',[
+    //   'training_title' => $training_title,
+    //   'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
+    //   'query_group' => $query_group,
+    //   'search_group' => $search_group,
+    //   'datas' =>  $new_datas,
+    //   'data_total' =>  $data_total,
+    //   'pie_chart' => $pie_chart,
+    //   'chart' => $chart,
+    //   'chart_active' => $chart_active,
+    //   'chart_inactive' => $chart_inactive
+    // ]);
+    // return $pdf->stream('invoice.pdf');
+
     return view('report.member_access_content_by_ro',[
       'training_title' => $training_title,
       'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
