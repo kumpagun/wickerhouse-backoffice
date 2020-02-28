@@ -63,7 +63,7 @@
 
       @hasrole('admin|report')
       <li class="navigation-header">
-        <span>รีพอร์ท</span><i class="ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รีพอร์ท"></i>
+        <span>รายงาน</span><i class="ft-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
       </li>
       <li class="nav-item">
         <a href="{{ route('report_access_content_by_user') }}"><i class="ft-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>

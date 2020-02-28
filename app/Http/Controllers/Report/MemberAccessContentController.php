@@ -172,8 +172,14 @@ class MemberAccessContentController extends Controller
       }
 
       // GET LAST UPDATE
-      $last_update = Report_member_access::where('status',1)->first(); 
+      $first_update = Report_member_access::where('training_id',$training_id)->orderBy('created_at','asc')->first(); 
+      $last_update = Report_member_access::where('status',1)->where('training_id',$training_id)->first(); 
+      $first_update = $first_update->created_at;
       $last_update = $last_update->created_at;
+
+      $first_date = new Carbon($first_update);
+      $last_date = new Carbon($last_update);
+      $diff = $first_date->diffInDays($last_date);
     } else {
       $new_datas = [];
       $data_total = [];
@@ -188,7 +194,9 @@ class MemberAccessContentController extends Controller
       $chart_active['not_pass'] = [];
       $chart_inactive['label'] = [];
       $chart_inactive['total'] = [];
+      $first_update = '';
       $last_update = '';
+      $diff = 5;
     }
     // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
     // $pdf = PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])->loadView('report.member_access_content_by_ro',[
@@ -205,6 +213,10 @@ class MemberAccessContentController extends Controller
     // ]);
     // return $pdf->stream('invoice.pdf');
 
+    if($diff<5) {
+      $diff=5;
+    }
+
     return view('report.member_access_content_by_ro',[
       'training_title' => $training_title,
       'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
@@ -215,7 +227,8 @@ class MemberAccessContentController extends Controller
       'pie_chart' => $pie_chart,
       'chart' => $chart,
       'chart_active' => $chart_active,
-      'chart_inactive' => $chart_inactive
+      'chart_inactive' => $chart_inactive,
+      'diff' => $diff
     ]);
   }
   // User เข้าเรียน
