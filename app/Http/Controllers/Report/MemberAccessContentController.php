@@ -19,26 +19,27 @@ class MemberAccessContentController extends Controller
 {
   public function __construct()
   {
-    $this->deptname = [
-      'ภาคตะวันออก (RO1)',
-      'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
-      'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
-      'ภาคเหนือตอนล่าง (RO4)',
-      'ภาคเหนือตอนบน (RO5)',
-      'ภาคตะวันตก (RO6)',
-      'ภาคใต้ตอนบน (RO7)',
-      'ภาคใต้ตอนล่าง (RO8)',
-      'ภาคกลาง (RO9)',
-      'กรุงเทพฯและปริมณฑล (RO10)'
-    ];
+    $this->middleware('auth');
+    // $this->deptname = [
+    //   'ภาคตะวันออก (RO1)',
+    //   'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
+    //   'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
+    //   'ภาคเหนือตอนล่าง (RO4)',
+    //   'ภาคเหนือตอนบน (RO5)',
+    //   'ภาคตะวันตก (RO6)',
+    //   'ภาคใต้ตอนบน (RO7)',
+    //   'ภาคใต้ตอนล่าง (RO8)',
+    //   'ภาคกลาง (RO9)',
+    //   'กรุงเทพฯและปริมณฑล (RO10)'
+    // ];
   }
 
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
-    $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->get();
+    $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->get();
     if(empty($search_group)){
-      $query = Training::query()->where('status',1)->where('total_employee','>',0)->first();
+      $query = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->first();
     } else {
       $query = Training::find($search_group);
     }
@@ -127,6 +128,15 @@ class MemberAccessContentController extends Controller
       }
       $pie_chart['label'] = ['เข้าเรียน','ยังไม่เข้าเรียน'];
       $pie_chart['total'] = [$pie_chart_total['active'],$pie_chart_total['inactive']];
+      $pie_chart['data'] = [];
+      array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['active'],
+        'name' => 'เข้าเรียน'
+      ]);
+      array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['inactive'],
+        'name' => 'ยังไม่เข้าเรียน'
+      ]);
       // CHART เข้าเรียน / ไม่เข้าเรียน
       $chart['label'] = [];
       $chart['active'] = [];
@@ -330,7 +340,8 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            'department' => 1
+            // 'total' => -1
           ]
         ]
       ]);

@@ -165,7 +165,7 @@
         </div>
         <div class="card-content collapse show">
           <div class="card-body">
-            <canvas id="simple-pie-chart" height="400"></canvas>
+            <div id="simple-pie-chart" class="height-500 echart-container"></div>
           </div>
         </div>
       </div>
@@ -247,12 +247,9 @@
   @for($i=1;$i<=$diff;$i++) 
     @php
       $value = $i * 100;
+      echo "<style>.height-".$value." { height: ".$value."px; } </style>";
     @endphp
-    <style>
-      .height-{{$value}} {
-        height: {{$value}}px;
-      }
-    </style>
+   
   @endfor
 @endsection
 
@@ -266,40 +263,117 @@
   <script src="{{ asset('stack-admin/app-assets/js/core/app.js') }}" type="text/javascript"></script>
   <!-- END STACK JS-->
   <script>
-  $(window).on("load", function(){
+    $(window).on("load", function(){
 
-    //Get the context of the Chart canvas element we want to select
-    var ctx = $("#simple-pie-chart");
+// Set paths
+// ------------------------------
 
-    // Chart Options
-    var chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      responsiveAnimationDuration:500,
-    };
+require.config({
+    paths: {
+        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
+    }
+});
 
-    // Chart Data
-    var chartData = {
-      labels: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
-      datasets: [{
-        label: "My First dataset",
-        data: JSON.parse(`{!! json_encode($pie_chart['total']) !!}`),
-        backgroundColor: ['#00A5A8', '#626E82', '#FF7D4D','#FF4558', '#16D39A'],
-      }]
-    };
 
-    var config = {
-      type: 'pie',
+// Configuration
+// ------------------------------
 
-      // Chart Options
-      options : chartOptions,
+require(
+    [
+        'echarts',
+        'echarts/chart/pie',
+        'echarts/chart/funnel'
+    ],
 
-      data : chartData
-    };
 
-    // Create the chart
-    var pieSimpleChart = new Chart(ctx, config);
-  });
+    // Charts setup
+    function (ec) {
+        // Initialize chart
+        // ------------------------------
+        var myChart = ec.init(document.getElementById('simple-pie-chart'));
+
+        // Chart Options
+        // ------------------------------
+        chartOptions = {
+
+            // Add title
+            // title: {
+            //     text: 'Browser popularity',
+            //     subtext: 'Open source information',
+            //     x: 'center'
+            // },
+
+            // Add tooltip
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+
+            // Add legend
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
+            },
+
+            // Add custom colors
+            color: ['#16D39A', '#F98E76'],
+
+            // Display toolbox
+            toolbox: {
+              show: true,
+              orient: 'vertical',
+              feature: {
+                saveAsImage: {
+                  show: true,
+                  title: 'Save as image',
+                  name: Date.now(),
+                  lang: ['Save']
+                }
+              }
+            },
+
+            // Enable drag recalculate
+            calculable: true,
+
+            // Add series
+            series: [{
+              show: true,
+                name: 'พนักงาน',
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '57.5%'],
+                data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
+            }]
+        };
+
+        // Apply options
+        // ------------------------------
+
+        myChart.setOption(chartOptions);
+
+
+        // Resize chart
+        // ------------------------------
+
+        $(function () {
+
+            // Resize chart on menu width change and window resize
+            $(window).on('resize', resize);
+            $(".menu-toggle").on('click', resize);
+
+            // Resize function
+            function resize() {
+                setTimeout(function() {
+
+                    // Resize chart
+                    myChart.resize();
+                }, 200);
+            }
+        });
+    }
+);
+});
   </script>
 
   {{-- คนเข้าเรียน ไม่เข้าเรียน --}}
@@ -345,6 +419,22 @@
           // Add tooltip
           tooltip: {
             trigger: 'axis'
+          },
+
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Save as image',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
           },
 
           // Add legend
@@ -458,6 +548,22 @@
             trigger: 'axis',
             axisPointer : {            // Axis indicator axis trigger effective
               type : 'shadow'        // The default is a straight line, optionally: 'line' | 'shadow'
+            }
+          },
+
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Save as image',
+                name: Date.now(),
+                lang: ['Save']
+              }
             }
           },
 
@@ -583,6 +689,22 @@
             }
           },
 
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Save as image',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
+          },
+
           // Add legend
           legend: {
             data: ['% คนไม่เข้าเรียน']
@@ -638,6 +760,15 @@
         });
       }
     );
+  });
+  </script>
+  <script>
+   
+   $("#btn-download").click(function () {
+    var canvas = $(".basic-bar").toDataURL("image/jpeg");
+    console.log(canvas)
+    // var dataURL = canvas.toDataURL('image/jpeg');
+    // $("#btn-download").attr("href", dataURL);
   });
   </script>
 @endsection

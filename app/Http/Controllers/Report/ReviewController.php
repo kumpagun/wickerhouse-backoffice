@@ -18,7 +18,7 @@ class ReviewController extends Controller
 {
   public function __construct()
   {
-
+    $this->middleware('auth');
   }
 
   public function get_choice($id) {
