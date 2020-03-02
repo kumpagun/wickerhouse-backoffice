@@ -249,7 +249,6 @@
       $value = $i * 100;
       echo "<style>.height-".$value." { height: ".$value."px; } </style>";
     @endphp
-   
   @endfor
 @endsection
 
@@ -326,7 +325,7 @@ require(
               feature: {
                 saveAsImage: {
                   show: true,
-                  title: 'Save as image',
+                  title: 'Preview',
                   name: Date.now(),
                   lang: ['Save']
                 }
@@ -430,7 +429,7 @@ require(
             feature : {
               saveAsImage: {
                 show: true,
-                title: 'Save as image',
+                title: 'Preview',
                 name: Date.now(),
                 lang: ['Save']
               }
@@ -560,7 +559,7 @@ require(
             feature : {
               saveAsImage: {
                 show: true,
-                title: 'Save as image',
+                title: 'Preview',
                 name: Date.now(),
                 lang: ['Save']
               }
@@ -698,7 +697,7 @@ require(
             feature : {
               saveAsImage: {
                 show: true,
-                title: 'Save as image',
+                title: 'Preview',
                 name: Date.now(),
                 lang: ['Save']
               }
