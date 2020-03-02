@@ -186,12 +186,17 @@ class MemberAccessContentController extends Controller
       // GET LAST UPDATE
       $first_update = Report_member_access::where('training_id',$training_id)->orderBy('created_at','asc')->first(); 
       $last_update = Report_member_access::where('status',1)->where('training_id',$training_id)->first(); 
-      $first_update = $first_update->created_at;
-      $last_update = $last_update->created_at;
-
-      $first_date = new Carbon($first_update);
-      $last_date = new Carbon($last_update);
-      $diff = $first_date->diffInDays($last_date);
+      if(!empty($first_update)) {
+        $first_update = $first_update->created_at;
+      }
+      if(!empty($last_update)) {
+        $last_update = $last_update->created_at;
+        $first_date = new Carbon($first_update);
+        $last_date = new Carbon($last_update);
+        $diff = $first_date->diffInDays($last_date);
+      } else {
+        $diff = 5;
+      }
     } else {
       $new_datas = [];
       $data_total = [];

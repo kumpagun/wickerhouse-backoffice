@@ -28,7 +28,7 @@ class ReportController extends Controller
 
     $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
     $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
-    $query = Training::where('status',1)->get();
+    $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
     $trainings = $query->get();
