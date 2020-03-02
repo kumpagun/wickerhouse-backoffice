@@ -13,13 +13,13 @@
 </div>
 @endsection
 
-@section('content-header-right')
+{{-- @section('content-header-right')
 <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
   @can('editor')
     <a class="btn btn-secondary" href="{{ route('create_department') }}"><i class="ft-user"></i> เพิ่มแผนก</a>
   @endcan
 </div>
-@endsection
+@endsection --}}
 
 @section('content')
   @if (session('status'))
@@ -40,15 +40,15 @@
           <table class="table table-hover">
             <tr>
               <th class="text-center no-table">#</th>
-              <th class="text-center content-table">Department Name</th>
-              <th class="text-center content-table">Company Name</th>
+              <th class="text-center content-table">บริษัท</th>
+              <th class="text-center content-table">แผนก</th>
             </tr>
             @if (!empty($datas) && count($datas) > 0)
               @foreach ($datas as $item)
                 <tr>
-                  <td class="text-center"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-                  <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ $item->title }}</a></td>
-                  <td class="text-left"><a href="{{ route('create_department', ['id' => $item->id]) }}">{{ FuncClass::get_name_company($item->company_id) }}</a></td>
+                  <td class="text-center">{{ $loop->iteration }}</td>
+                  <td class="text-left">{{ $item->companys->title }}</td>
+                  <td class="text-left">{{ $item->title }}</td>
                 </tr>
               @endforeach
             @else

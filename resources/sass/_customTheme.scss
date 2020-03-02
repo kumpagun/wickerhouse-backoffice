@@ -39,3 +39,27 @@ a {
 .bootstrap-datetimepicker-widget {
   z-index: 9999;
 }
+
+.pagination {
+  justify-content: center;
+}
+.page-item.disabled .page-link {
+  color:#DDDDDD;
+  pointer-events: none;
+  cursor: auto;
+  background-color: #fff;
+  border-color: #DDDDDD;
+}
+
+.content-header-title {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.breadcrumb-item {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

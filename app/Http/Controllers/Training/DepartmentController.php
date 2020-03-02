@@ -32,18 +32,46 @@ use App\Models\Department;
 class DepartmentController extends Controller
 {   
     public function get_company(){
-        $result = [];
-        $datas = Company::query()->where('status',1)->get();
-        if(!empty($datas)){
-          foreach($datas as $each){
-            array_push($result,new ObjectId($each->_id));
-          }
+      $result = [];
+      $datas = Company::query()->where('status',1)->get();
+      if(!empty($datas)){
+        foreach($datas as $each){
+          array_push($result,new ObjectId($each->_id));
         }
-        return  $result;
+      }
+      return  $result;
     }
 
     public function department_index(){
-        $datas = Department::query()->where('status',1)->get();
+        $datas = Department::query()->where('status',1)->orderBy('title','asc')->get();
+
+        $datas = Department::raw(function ($collection) {
+          return $collection->aggregate([
+            [
+              '$lookup' => [
+                'from' =>  "companys",
+                'localField' =>  "company_id",
+                'foreignField' =>  "_id",
+                'as' =>  "companys"
+              ]
+            ],
+            [
+              '$match' => [
+                'status' => 1,
+              ]
+            ],
+            [
+              '$sort'=> [
+                'companys.title'=> 1,
+                'title'=> 1
+              ]
+            ],
+            [
+              '$unwind' => '$companys'
+            ]
+          ]);
+        });
+
         return view('department.department_index',['datas' => $datas]);
     }
     public function create_department($id=''){

@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
 use DB;
+use PDF;
 use CourseClass;
 use FuncClass;
+use Excel;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
@@ -18,26 +20,28 @@ class MemberAccessContentController extends Controller
 {
   public function __construct()
   {
-    $this->deptname = [
-      'ภาคตะวันออก (RO1)',
-      'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
-      'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
-      'ภาคเหนือตอนล่าง (RO4)',
-      'ภาคเหนือตอนบน (RO5)',
-      'ภาคตะวันตก (RO6)',
-      'ภาคใต้ตอนบน (RO7)',
-      'ภาคใต้ตอนล่าง (RO8)',
-      'ภาคกลาง (RO9)',
-      'กรุงเทพฯและปริมณฑล (RO10)'
-    ];
+    $this->middleware('auth');
+    // $this->deptname = [
+    //   'ภาคตะวันออก (RO1)',
+    //   'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
+    //   'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
+    //   'ภาคเหนือตอนล่าง (RO4)',
+    //   'ภาคเหนือตอนบน (RO5)',
+    //   'ภาคตะวันตก (RO6)',
+    //   'ภาคใต้ตอนบน (RO7)',
+    //   'ภาคใต้ตอนล่าง (RO8)',
+    //   'ภาคกลาง (RO9)',
+    //   'กรุงเทพฯและปริมณฑล (RO10)'
+    // ];
   }
 
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
-    $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->get();
+    $platform = $request->input('platform'); 
+    $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->get();
     if(empty($search_group)){
-      $query = Training::query()->where('status',1)->where('total_employee','>',0)->first();
+      $query = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->first();
     } else {
       $query = Training::find($search_group);
     }
@@ -86,26 +90,26 @@ class MemberAccessContentController extends Controller
 
       // เรียง Data  ใหม่ เรียงตาม RO1 - RO10
       $new_datas = [];
-      foreach($this->deptname as $row) {
-        if(!empty($datas[$row]['user_active'])) {
-          $new_datas[$row]['user_active'] = $datas[$row]['user_active'];
+      foreach($datas as $key => $values) {
+        if(!empty($datas[$key]['user_active'])) {
+          $new_datas[$key]['user_active'] = $datas[$key]['user_active'];
         } else {
-          $new_datas[$row]['user_active'] = 0;
+          $new_datas[$key]['user_active'] = 0;
         }
-        if(!empty($datas[$row]['user_active_passing_score'])) {
-          $new_datas[$row]['user_active_passing_score'] = $datas[$row]['user_active_passing_score'];
+        if(!empty($datas[$key]['user_active_passing_score'])) {
+          $new_datas[$key]['user_active_passing_score'] = $datas[$key]['user_active_passing_score'];
         } else {
-          $new_datas[$row]['user_active_passing_score'] = 0;
+          $new_datas[$key]['user_active_passing_score'] = 0;
         }
-        if(!empty($datas[$row]['user_active_not_passing_score'])) {
-          $new_datas[$row]['user_active_not_passing_score'] = $datas[$row]['user_active_not_passing_score'];
+        if(!empty($datas[$key]['user_active_not_passing_score'])) {
+          $new_datas[$key]['user_active_not_passing_score'] = $datas[$key]['user_active_not_passing_score'];
         } else {
-          $new_datas[$row]['user_active_not_passing_score'] = 0;
+          $new_datas[$key]['user_active_not_passing_score'] = 0;
         }
-        if(!empty($datas[$row]['user_inactive'])) {
-          $new_datas[$row]['user_inactive'] = $datas[$row]['user_inactive'];
+        if(!empty($datas[$key]['user_inactive'])) {
+          $new_datas[$key]['user_inactive'] = $datas[$key]['user_inactive'];
         } else {
-          $new_datas[$row]['user_inactive'] = 0;
+          $new_datas[$key]['user_inactive'] = 0;
         }
       }
 
@@ -117,7 +121,7 @@ class MemberAccessContentController extends Controller
       ];
 
       // PIE CHART เข้าเรียน / ไม่เข้าเรียน 
-      $datas_chart = $this->get_data_chart($training_id); 
+      $datas_chart = $this->get_data_chart($training_id);  //dd($datas_chart);
       $pie_chart_total['active'] = 0;
       $pie_chart_total['inactive'] = 0;
       foreach($new_datas as $index => $values) {
@@ -126,6 +130,15 @@ class MemberAccessContentController extends Controller
       }
       $pie_chart['label'] = ['เข้าเรียน','ยังไม่เข้าเรียน'];
       $pie_chart['total'] = [$pie_chart_total['active'],$pie_chart_total['inactive']];
+      $pie_chart['data'] = [];
+      array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['active'],
+        'name' => 'เข้าเรียน'
+      ]);
+      array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['inactive'],
+        'name' => 'ยังไม่เข้าเรียน'
+      ]);
       // CHART เข้าเรียน / ไม่เข้าเรียน
       $chart['label'] = [];
       $chart['active'] = [];
@@ -171,8 +184,14 @@ class MemberAccessContentController extends Controller
       }
 
       // GET LAST UPDATE
-      $last_update = Report_member_access::where('status',1)->first(); 
+      $first_update = Report_member_access::where('training_id',$training_id)->orderBy('created_at','asc')->first(); 
+      $last_update = Report_member_access::where('status',1)->where('training_id',$training_id)->first(); 
+      $first_update = $first_update->created_at;
       $last_update = $last_update->created_at;
+
+      $first_date = new Carbon($first_update);
+      $last_date = new Carbon($last_update);
+      $diff = $first_date->diffInDays($last_date);
     } else {
       $new_datas = [];
       $data_total = [];
@@ -187,21 +206,32 @@ class MemberAccessContentController extends Controller
       $chart_active['not_pass'] = [];
       $chart_inactive['label'] = [];
       $chart_inactive['total'] = [];
+      $first_update = '';
       $last_update = '';
+      $diff = 5;
     }
     
-    return view('report.member_access_content_by_ro',[
-      'training_title' => $training_title,
-      'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
-      'query_group' => $query_group,
-      'search_group' => $search_group,
-      'datas' =>  $new_datas,
-      'data_total' =>  $data_total,
-      'pie_chart' => $pie_chart,
-      'chart' => $chart,
-      'chart_active' => $chart_active,
-      'chart_inactive' => $chart_inactive
-    ]);
+    if($diff<5) {
+      $diff=5;
+    }
+
+    if($platform=='excel') {
+      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas), Carbon::now()->timestamp.'.xlsx');
+    } else {
+      return view('report.member_access_content_by_ro',[
+        'training_title' => $training_title,
+        'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
+        'query_group' => $query_group,
+        'search_group' => $search_group,
+        'datas' =>  $new_datas,
+        'data_total' =>  $data_total,
+        'pie_chart' => $pie_chart,
+        'chart' => $chart,
+        'chart_active' => $chart_active,
+        'chart_inactive' => $chart_inactive,
+        'diff' => $diff
+      ]);
+    }
   }
   // User เข้าเรียน
   public function user_active($training_id){
@@ -210,8 +240,7 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname]
+            'training_id'  => $training_id
           ]
         ],
         [
@@ -237,8 +266,7 @@ class MemberAccessContentController extends Controller
             'status'  => 1,
             'play_course'  => ['$ne'  => 0],
             'training_id'  => $training_id,
-            'posttest' => [ '$gte' => $passing_score ],
-            'department' => ['$in' => $this->deptname]
+            'posttest' => [ '$gte' => $passing_score ]
           ]
         ],
         [
@@ -267,8 +295,7 @@ class MemberAccessContentController extends Controller
             '$or' => [
               ['posttest' => [ '$lt' => $passing_score ]], 
               ['posttest' => [ '$eq' => null ]]
-            ] ,
-            'department' => ['$in' => $this->deptname]
+            ] 
           ]
         ],
         [
@@ -294,8 +321,7 @@ class MemberAccessContentController extends Controller
           '$match' => [
             'status'  => 1,
             'play_course'  => ['$eq'  => 0],
-            'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname]
+            'training_id'  => $training_id
           ]
         ],
         [
@@ -306,7 +332,8 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            'department' => 1
+            // 'total' => -1
           ]
         ]
       ]);
@@ -341,7 +368,6 @@ class MemberAccessContentController extends Controller
         [ '$match' => [
             'play_course'  => ['$ne'  => 0],
             'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
@@ -356,7 +382,7 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            '_id.created_at' => 1
           ]
         ]
       ]);
@@ -371,7 +397,6 @@ class MemberAccessContentController extends Controller
           '$match' => [
             'play_course'  => ['$eq'  => 0],
             'training_id'  => $training_id,
-            'department' => ['$in' => $this->deptname],
             'created_at' => [
               '$gte' => $published_at,
               '$lte' => $expired_at,
@@ -386,7 +411,7 @@ class MemberAccessContentController extends Controller
         ],
         [
           '$sort' => [
-            'total' => -1
+            '_id.created_at' => 1
           ]
         ]
       ]);

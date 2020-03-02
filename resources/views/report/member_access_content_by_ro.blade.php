@@ -32,193 +32,204 @@
 @section('content')
 <!-- Basic Tables start -->
 @if(!empty($datas))
-<div class="row align-items-stretch">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <div class="row align-items-baseline">
-            <div class="col-12">
-              <h4 class="card-title">Member access content</h4>
+  <div class="row align-items-stretch">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-content collapse show">
+          <div class="card-header border-0">
+            <h4 class="card-title">Member access content</h4>
+            <div class="heading-elements">
+              <ul class="list-inline mb-0">
+                <li>
+                  <a href="{{ route('report_member_access_content_by_RO', ['search_group'=>$search_group,'platform'=>'excel']) }}">
+                    <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr class="second-row">
-                  <th class="align-middle text-center">DeptName</th>
-                  <th class="align-middle text-center">เข้าเรียน</th>
-                  <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
-                  <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
-                  <th class="align-middle text-center">ไม่เข้าเรียน</th>
-                  <th class="align-middle text-center">Total</th>
-                </tr>
-              </thead>
-              <tbody>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr class="second-row">
+                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center">เข้าเรียน</th>
+                    <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
+                    <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
+                    <th class="align-middle text-center">ไม่เข้าเรียน</th>
+                    <th class="align-middle text-center">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if(count($datas))
+                    @foreach($datas as $key => $value)
+                    <tr>
+                      <td class="">
+                        {{ $key }}
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active']))
+                          {{ number_format($value['user_active']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active_passing_score']))
+                          {{ number_format($value['user_active_passing_score']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active_not_passing_score']))
+                          {{ number_format($value['user_active_not_passing_score']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_inactive']))
+                          {{ number_format($value['user_inactive']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active']) && !empty($value['user_inactive']))
+                          {{ number_format($value['user_active'] + $value['user_inactive']) }}
+                        @elseif(!empty($value['user_active']))
+                          {{ number_format($value['user_active']) }}
+                        @elseif(!empty($value['user_inactive']))
+                          {{ number_format($value['user_inactive']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                    </tr>
+                    @endforeach
+                  @else
+                    <tr>
+                      <td class="text-center" colspan="6">ไม่มีข้อมูล</td>
+                    </tr>
+                  @endif
+                </tbody>
                 @if(count($datas))
-                  @foreach($datas as $key => $value)
+                <tfoot>
                   <tr>
-                    <td class="">
-                      {{ $key }}
-                    </td>
-                    <td class="text-right">
-                      @if (!empty($value['user_active']))
-                        {{ number_format($value['user_active']) }}
-                      @else
-                        0
-                      @endif
-                    </td>
-                    <td class="text-right">
-                      @if (!empty($value['user_active_passing_score']))
-                        {{ number_format($value['user_active_passing_score']) }}
-                      @else
-                        0
-                      @endif
-                    </td>
-                    <td class="text-right">
-                      @if (!empty($value['user_active_not_passing_score']))
-                        {{ number_format($value['user_active_not_passing_score']) }}
-                      @else
-                        0
-                      @endif
-                    </td>
-                    <td class="text-right">
-                      @if (!empty($value['user_inactive']))
-                        {{ number_format($value['user_inactive']) }}
-                      @else
-                        0
-                      @endif
-                    </td>
-                    <td class="text-right">
-                      @if (!empty($value['user_active']) && !empty($value['user_inactive']))
-                        {{ number_format($value['user_active'] + $value['user_inactive']) }}
-                      @elseif(!empty($value['user_active']))
-                        {{ number_format($value['user_active']) }}
-                      @elseif(!empty($value['user_inactive']))
-                        {{ number_format($value['user_inactive']) }}
-                      @else
-                        0
-                      @endif
-                    </td>
+                    <td class="text-right"><Strong>Total</Strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active_passing_score']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active_not_passing_score']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_inactive']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active'] + $data_total['user_inactive']) }}</strong></td>
                   </tr>
-                  @endforeach
-                @else
+                  @php
+                    if($data_total['user_active']==0) {
+                      $total_user_active_percent = 0;
+                      $total_user_active_passing_percent = 0;
+                      $total_user_active_not_passing_percent = 0;
+                    } else {
+                      $total_user_active_percent = ($data_total['user_active']/($data_total['user_active']+$data_total['user_inactive']))*100;
+                      $total_user_active_passing_percent = ($data_total['user_active_passing_score']/$data_total['user_active'])*100;
+                      $total_user_active_not_passing_percent = ($data_total['user_active_not_passing_score']/$data_total['user_active'])*100;
+                    }
+                    if($data_total['user_inactive']==0) {
+                      $total_inactive_percent = 0;
+                    } else {
+                      $total_inactive_percent = ($data_total['user_inactive']/($data_total['user_inactive']+$data_total['user_active']))*100;
+                    }
+                    
+                    $total_user_percent = 100;
+                  @endphp
                   <tr>
-                    <td class="text-center" colspan="6">ไม่มีข้อมูล</td>
+                    <td class="text-right"><Strong>Total Percent</Strong></td>
+                    <td class="text-right"><strong>{{ number_format($total_user_active_percent,2).'%' }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($total_user_active_passing_percent,2).'%' }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($total_user_active_not_passing_percent,2).'%' }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($total_inactive_percent,2).'%' }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($total_user_percent,2).'%' }}</strong></td>
                   </tr>
+                </tfoot>
                 @endif
-              </tbody>
-              @if(count($datas))
-              <tfoot>
-                <tr>
-                  <td class="text-right"><Strong>Total</Strong></td>
-                  <td class="text-right"><strong>{{ number_format($data_total['user_active']) }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($data_total['user_active_passing_score']) }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($data_total['user_active_not_passing_score']) }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($data_total['user_inactive']) }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($data_total['user_active'] + $data_total['user_inactive']) }}</strong></td>
-                </tr>
-                @php
-                  if($data_total['user_active']==0) {
-                    $total_user_active_percent = 0;
-                    $total_user_active_passing_percent = 0;
-                    $total_user_active_not_passing_percent = 0;
-                  } else {
-                    $total_user_active_percent = ($data_total['user_active']/($data_total['user_active']+$data_total['user_inactive']))*100;
-                    $total_user_active_passing_percent = ($data_total['user_active_passing_score']/$data_total['user_active'])*100;
-                    $total_user_active_not_passing_percent = ($data_total['user_active_not_passing_score']/$data_total['user_active'])*100;
-                  }
-                  if($data_total['user_inactive']==0) {
-                    $total_inactive_percent = 0;
-                  } else {
-                    $total_inactive_percent = ($data_total['user_inactive']/($data_total['user_inactive']+$data_total['user_active']))*100;
-                  }
-                  
-                  $total_user_percent = 100;
-                @endphp
-                <tr>
-                  <td class="text-right"><Strong>Total Percent</Strong></td>
-                  <td class="text-right"><strong>{{ number_format($total_user_active_percent,2).'%' }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($total_user_active_passing_percent,2).'%' }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($total_user_active_not_passing_percent,2).'%' }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($total_inactive_percent,2).'%' }}</strong></td>
-                  <td class="text-right"><strong>{{ number_format($total_user_percent,2).'%' }}</strong></td>
-                </tr>
-              </tfoot>
-              @endif
-            </table>
+              </table>
+            </div>
+              {{-- <span class="text-danger"><small>* ยอด video view จาก embed (web, app) </small></span> --}}
           </div>
-            {{-- <span class="text-danger"><small>* ยอด video view จาก embed (web, app) </small></span> --}}
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Basic Tables end -->
+  <!-- Basic Tables end -->
 
-<!-- Simple Pie Chart -->
-<div class="row justify-content-center">
-  <div class="col-md-6 col-sm-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">สถานะผู้เข้าเรียน <div>หลักสูตร {{ $training_title }}</div><div>ณ วันที่ {{ $last_update }}</div></h4>
-      </div>
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <canvas id="simple-pie-chart" height="400"></canvas>
+  <!-- Simple Pie Chart -->
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">สถานะผู้เข้าเรียน <div>หลักสูตร {{ $training_title }}</div><div>ณ วันที่ {{ $last_update }}</div></h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            <div id="simple-pie-chart" class="height-500 echart-container"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Column Chart -->
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
-      </div>
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <canvas id="column-chart" height="400"></canvas>
+  <!-- Column Chart -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            @php
+              $value = $diff * 100;
+            @endphp
+            <div id="basic-bar" class="height-{{$value}} echart-container"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Column Stacked Chart -->
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
-      </div>
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <canvas id="column-stacked" height="400"></canvas>
+  <!-- Column Stacked Chart -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            <div id="stacked-bar" class="height-500 echart-container"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Column Chart inactive -->
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">สถานะผู้ไม่เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
-      </div>
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <canvas id="column-chart-inactive" height="400"></canvas>
+  <!-- Column Stacked Chart -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">สถานะผู้ไม่เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            <div id="stacked-bar-inactive" class="height-500 echart-container"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
 @else
 
 <div class="row justify-content-center">
@@ -239,300 +250,531 @@
 @endif
 @endsection
 
+@section('style')
+  @for($i=1;$i<=$diff;$i++) 
+    @php
+      $value = $i * 100;
+      echo "<style>.height-".$value." { height: ".$value."px; } </style>";
+    @endphp
+  @endfor
+@endsection
+
 @section('script')
   <!-- BEGIN PAGE VENDOR JS-->
   <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/chart.min.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/echarts/echarts.js') }}" type="text/javascript"></script>ฃ
   <!-- END PAGE VENDOR JS-->
   <!-- BEGIN STACK JS-->
   <script src="{{ asset('stack-admin/app-assets/js/core/app-menu.js') }}" type="text/javascript"></script>
   <script src="{{ asset('stack-admin/app-assets/js/core/app.js') }}" type="text/javascript"></script>
   <!-- END STACK JS-->
-
   <script>
-  $(window).on("load", function(){
+    $(window).on("load", function(){
 
-    //Get the context of the Chart canvas element we want to select
-    var ctx = $("#simple-pie-chart");
+// Set paths
+// ------------------------------
 
-    // Chart Options
-    var chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      responsiveAnimationDuration:500,
-    };
+require.config({
+    paths: {
+        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
+    }
+});
 
-    // Chart Data
-    var chartData = {
-      labels: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
-      datasets: [{
-        label: "My First dataset",
-        data: JSON.parse(`{!! json_encode($pie_chart['total']) !!}`),
-        backgroundColor: ['#00A5A8', '#626E82', '#FF7D4D','#FF4558', '#16D39A'],
-      }]
-    };
 
-    var config = {
-      type: 'pie',
+// Configuration
+// ------------------------------
 
-      // Chart Options
-      options : chartOptions,
+require(
+    [
+        'echarts',
+        'echarts/chart/pie',
+        'echarts/chart/funnel'
+    ],
 
-      data : chartData
-    };
 
-    // Create the chart
-    var pieSimpleChart = new Chart(ctx, config);
-  });
+    // Charts setup
+    function (ec) {
+        // Initialize chart
+        // ------------------------------
+        var myChart = ec.init(document.getElementById('simple-pie-chart'));
+
+        // Chart Options
+        // ------------------------------
+        chartOptions = {
+
+            // Add title
+            // title: {
+            //     text: 'Browser popularity',
+            //     subtext: 'Open source information',
+            //     x: 'center'
+            // },
+
+            // Add tooltip
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+
+            // Add legend
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
+            },
+
+            // Add custom colors
+            color: ['#16D39A', '#F98E76'],
+
+            // Display toolbox
+            toolbox: {
+              show: true,
+              orient: 'vertical',
+              feature: {
+                saveAsImage: {
+                  show: true,
+                  title: 'Preview',
+                  name: Date.now(),
+                  lang: ['Save']
+                }
+              }
+            },
+
+            // Enable drag recalculate
+            calculable: true,
+
+            // Add series
+            series: [{
+              show: true,
+                name: 'พนักงาน',
+                type: 'pie',
+                radius: '70%',
+                center: ['50%', '57.5%'],
+                data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
+            }]
+        };
+
+        // Apply options
+        // ------------------------------
+
+        myChart.setOption(chartOptions);
+
+
+        // Resize chart
+        // ------------------------------
+
+        $(function () {
+
+            // Resize chart on menu width change and window resize
+            $(window).on('resize', resize);
+            $(".menu-toggle").on('click', resize);
+
+            // Resize function
+            function resize() {
+                setTimeout(function() {
+
+                    // Resize chart
+                    myChart.resize();
+                }, 200);
+            }
+        });
+    }
+);
+});
   </script>
 
   {{-- คนเข้าเรียน ไม่เข้าเรียน --}}
   <script>
     $(window).on("load", function(){
 
-      //Get the context of the Chart canvas element we want to select
-      var ctx = $("#column-chart");
+    // Set paths
+    // ------------------------------
 
-      // Chart Options
-      var chartOptions = {
-        // Elements options apply to all of the options unless overridden in a dataset
-        // In this case, we are setting the border of each bar to be 2px wide and green
-        elements: {
-          rectangle: {
-            borderWidth: 2,
-            borderColor: 'rgb(0, 255, 0)',
-            borderSkipped: 'bottom'
-          }
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        responsiveAnimationDuration:500,
-        legend: {
-          position: 'top',
-        },
-        scales: {
-          xAxes: [{
-            display: true,
-            gridLines: {
-              color: "#f3f3f3",
-              drawTicks: false,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }],
-          yAxes: [{
-            display: true,
-            gridLines: {
-              color: "#f3f3f3",
-              drawTicks: false,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }]
-        },
-        title: {
-          display: true,
-          text: 'สถานะผู้เข้าเรียน'
-        }
-      };
-
-      // Chart Data
-      var chartData = {
-        labels: JSON.parse(`{!! json_encode($chart['label']) !!}`),
-        datasets: [{
-          label: "เข้าเรียน",
-          data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
-          backgroundColor: "#16D39A",
-          hoverBackgroundColor: "#16D39A",
-          borderColor: "transparent"
-        }, {
-          label: "ยังไม่เข้าเรียน",
-          data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`),
-          backgroundColor: "#F98E76",
-          hoverBackgroundColor: "#F98E76",
-          borderColor: "transparent"
-        }]
-      };
-
-      var config = {
-        // Chart type
-        type: 'bar',
-        // Chart Options
-        options : chartOptions,
-        // Chart Data
-        data : chartData
-      };
-
-      // Create the chart
-      var lineChart = new Chart(ctx, config);
+    require.config({
+      paths: {
+        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
+      }
     });
+
+    // Configuration
+    // ------------------------------
+
+    require(
+      [
+        'echarts',
+        'echarts/chart/bar',
+        'echarts/chart/line'
+      ],
+
+      // Charts setup
+      function (ec) {
+        // Initialize chart
+        // ------------------------------
+        var myChart = ec.init(document.getElementById('basic-bar'));
+
+        // Chart Options
+        // ------------------------------
+        chartOptions = {
+          // Setup grid
+          grid: {
+            x: 70,
+            x2: 40,
+            y: 45,
+            y2: 25
+          },
+
+          // Add tooltip
+          tooltip: {
+            trigger: 'axis'
+          },
+
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Preview',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
+          },
+
+          // Add legend
+          legend: {
+            data: ['เข้าเรียน', 'ไม่เข้าเรียน']
+          },
+
+          // Add custom colors
+          color: ['#16D39A', '#F98E76'],
+
+          // Horizontal axis
+          xAxis: [{
+            type: 'value',
+            boundaryGap: [0, 0.01]
+          }],
+
+          // Vertical axis
+          yAxis: [{
+            type: 'category',
+            data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
+          }],
+
+          // Add series
+          series : [
+            {
+              name: 'เข้าเรียน',
+              type: 'bar',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
+            },
+            {
+              name: 'ไม่เข้าเรียน',
+              type: 'bar',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
+            }
+          ]
+        };
+
+        // Apply options
+        // ------------------------------
+
+        myChart.setOption(chartOptions);
+
+        // Resize chart
+        // ------------------------------
+
+        $(function () {
+          // Resize chart on menu width change and window resize
+          $(window).on('resize', resize);
+          $(".menu-toggle").on('click', resize);
+
+          // Resize function
+          function resize() {
+            setTimeout(function() {
+
+              // Resize chart
+              myChart.resize();
+            }, 200);
+          }
+        });
+      }
+    );
+  });
   </script>
 
   {{-- คนเข้าเรียนผ่าน / ไม่ผ่าน / ไม่เข้าเรียน --}}
   <script>
-    $(window).on("load", function(){
+  $(window).on("load", function(){
 
-    // Get the context of the Chart canvas element we want to select
-    var ctx = $("#column-stacked");
+    // Set paths
+    // ------------------------------
 
-    // Chart Options
-    var chartOptions = {
-      title:{
-        display:false,
-        text:"Chart.js Column Chart - Stacked"
-      },
-      tooltips: {
-        mode: 'label'
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      responsiveAnimationDuration:500,
-      scales: {
-        xAxes: [{
-          stacked: true,
-          display: true,
-          gridLines: {
-            color: "#f3f3f3",
-            drawTicks: false,
-          },
-          scaleLabel: {
-            display: true,
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          display: true,
-          gridLines: {
-            color: "#f3f3f3",
-            drawTicks: false,
-          },
-          scaleLabel: {
-            display: true,
-          }
-        }]
+    require.config({
+      paths: {
+        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
       }
-    };
+    });
 
-    // Chart Data
-    var chartData = {
-      labels: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
-      datasets: [
-        {
-          label: "ยังไม่เข้าเรียน",
-          data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`),
-          backgroundColor: "#F98E76",
-          hoverBackgroundColor: "#F98E76",
-          borderColor: "transparent"
-        },
-        {
-          label: "เข้าเรียน (ไม่ผ่าน)",
-          data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`),
-          backgroundColor: "#FDD835",
-          hoverBackgroundColor: "#FDD835",
-          borderColor: "transparent"
-        },
-        {
-          label: "เข้าเรียน (ผ่าน)",
-          data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`),
-          backgroundColor: "#16D39A",
-          hoverBackgroundColor: "#16D39A",
-          borderColor: "transparent"
-        }, 
-      ]
-    };
 
-    var config = {
-        type: 'bar',
+    // Configuration
+    // ------------------------------
+
+    require(
+      [
+        'echarts',
+        'echarts/chart/bar',
+        'echarts/chart/line'
+      ],
+
+      // Charts setup
+      function (ec) {
+        // Initialize chart
+        // ------------------------------
+        var myChart = ec.init(document.getElementById('stacked-bar'));
 
         // Chart Options
-        options : chartOptions,
+        // ------------------------------
+        chartOptions = {
 
-        data : chartData
-    };
+          // Setup grid
+          grid: {
+            x: 230,
+            x2: 40,
+            y: 45,
+            y2: 25
+          },
 
-    // Create the chart
-    var lineChart = new Chart(ctx, config);
-  })
+          // Add tooltip
+          tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // Axis indicator axis trigger effective
+              type : 'shadow'        // The default is a straight line, optionally: 'line' | 'shadow'
+            }
+          },
+
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Preview',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
+          },
+
+          // Add legend
+          legend: {
+            data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+          },
+
+          // Add custom colors
+          color: ['#F98E76', '#FDD835', '#16D39A'],
+
+          // Horizontal axis
+          xAxis: [{
+            type: 'value',
+          }],
+
+          // Vertical axis
+          yAxis: [{
+            type: 'category',
+            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+          }],
+
+          // Add series
+          series : [
+            {
+              name:'ยังไม่เข้าเรียน',
+              type:'bar',
+              stack: 'Total',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data:JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
+            },
+            {
+              name:'เข้าเรียน (ไม่ผ่าน)',
+              type:'bar',
+              stack: 'Total',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
+            },
+            {
+              name:'เข้าเรียน (ผ่าน)',
+              type:'bar',
+              stack: 'Total',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
+            }
+          ]
+        };
+
+        // Apply options
+        // ------------------------------
+
+        myChart.setOption(chartOptions);
+
+
+        // Resize chart
+        // ------------------------------
+
+        $(function () {
+          // Resize chart on menu width change and window resize
+          $(window).on('resize', resize);
+          $(".menu-toggle").on('click', resize);
+
+          // Resize function
+          function resize() {
+            setTimeout(function() {
+              // Resize chart
+              myChart.resize();
+            }, 200);
+          }
+        });
+      }
+    );
+  });
   </script>
 
   {{-- % คนไม่เข้าเรียน --}}
-  <script>
-    $(window).on("load", function(){
+<script>
+  $(window).on("load", function(){
 
-      //Get the context of the Chart canvas element we want to select
-      var ctx = $("#column-chart-inactive");
+    // Set paths
+    // ------------------------------
 
-      // Chart Options
-      var chartOptions = {
-        // Elements options apply to all of the options unless overridden in a dataset
-        // In this case, we are setting the border of each bar to be 2px wide and green
-        elements: {
-          rectangle: {
-            borderWidth: 2,
-            borderColor: 'rgb(0, 255, 0)',
-            borderSkipped: 'bottom'
-          }
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        responsiveAnimationDuration:500,
-        legend: {
-          position: 'top',
-        },
-        scales: {
-          xAxes: [{
-            display: true,
-            gridLines: {
-              color: "#f3f3f3",
-              drawTicks: false,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }],
-          yAxes: [{
-            display: true,
-            gridLines: {
-              color: "#f3f3f3",
-              drawTicks: false,
-            },
-            scaleLabel: {
-              display: true,
-            }
-          }]
-        },
-        title: {
-          display: true,
-          text: 'สถานะผู้ไม่เข้าเรียน'
-        }
-      };
-
-      // Chart Data
-      var chartData = {
-        labels: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`),
-        datasets: [
-          {
-            label: "% คนไม่เข้าเรียน",
-            data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`),
-            backgroundColor: "#F98E76",
-            hoverBackgroundColor: "#F98E76",
-            borderColor: "transparent"
-          }
-        ]
-      };
-
-      var config = {
-        // Chart type
-        type: 'bar',
-        // Chart Options
-        options : chartOptions,
-        // Chart Data
-        data : chartData
-      };
-
-      // Create the chart
-      var lineChart = new Chart(ctx, config);
+    require.config({
+      paths: {
+        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
+      }
     });
+
+
+    // Configuration
+    // ------------------------------
+
+    require(
+      [
+        'echarts',
+        'echarts/chart/bar',
+        'echarts/chart/line'
+      ],
+
+      // Charts setup
+      function (ec) {
+        // Initialize chart
+        // ------------------------------
+        var myChart = ec.init(document.getElementById('stacked-bar-inactive'));
+
+        // Chart Options
+        // ------------------------------
+        chartOptions = {
+
+          // Setup grid
+          grid: {
+            x: 230,
+            x2: 40,
+            y: 45,
+            y2: 25
+          },
+
+          // Add tooltip
+          tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // Axis indicator axis trigger effective
+              type : 'shadow'        // The default is a straight line, optionally: 'line' | 'shadow'
+            }
+          },
+
+          // Add Toolbook
+          toolbox: {
+            show : true,
+            // orient: 'vertical',
+            x: 'right',
+            // y: 70,
+            feature : {
+              saveAsImage: {
+                show: true,
+                title: 'Preview',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
+          },
+
+          // Add legend
+          legend: {
+            data: ['% คนไม่เข้าเรียน']
+          },
+
+          // Add custom colors
+          color: ['#F98E76'],
+
+          // Horizontal axis
+          xAxis: [{
+            type: 'value',
+          }],
+
+          // Vertical axis
+          yAxis: [{
+            type: 'category',
+            data: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`)
+          }],
+
+          // Add series
+          series : [
+            {
+              name:'% คนไม่เข้าเรียน',
+              type:'bar',
+              stack: 'Total',
+              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`)
+            }
+          ]
+        };
+
+        // Apply options
+        // ------------------------------
+
+        myChart.setOption(chartOptions);
+
+
+        // Resize chart
+        // ------------------------------
+
+        $(function () {
+          // Resize chart on menu width change and window resize
+          $(window).on('resize', resize);
+          $(".menu-toggle").on('click', resize);
+
+          // Resize function
+          function resize() {
+            setTimeout(function() {
+              // Resize chart
+              myChart.resize();
+            }, 200);
+          }
+        });
+      }
+    );
+  });
+  </script>
+  <script>
+   
+   $("#btn-download").click(function () {
+    var canvas = $(".basic-bar").toDataURL("image/jpeg");
+    console.log(canvas)
+    // var dataURL = canvas.toDataURL('image/jpeg');
+    // $("#btn-download").attr("href", dataURL);
+  });
   </script>
 @endsection

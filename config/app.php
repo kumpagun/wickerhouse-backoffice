@@ -212,6 +212,7 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
     'Fideloper\Proxy\TrustedProxyServiceProvider',
+    Barryvdh\DomPDF\ServiceProvider::class,
 
     /* custom */
     App\Providers\CourseClassServiceProvider::class,
@@ -221,8 +222,6 @@ return [
     App\Providers\ActivityLogClassServiceProvider::class,
     App\Providers\MemberClassServiceProvider::class,
     App\Providers\TeacherClassServiceProvider::class,
-
-
   ],
 
   /*
@@ -277,6 +276,7 @@ return [
     'permission' => \Maklad\Permission\Middlewares\PermissionMiddleware::class,
     'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     'Image' => Intervention\Image\Facades\Image::class,
+    'PDF' => Barryvdh\DomPDF\Facade::class,
     
     /* custom */
     'User' => App\Facades\UserClass::class,

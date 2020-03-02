@@ -466,10 +466,12 @@ class TrainingController extends Controller
       });
     }
     if(!empty($company_name)) {
-      $query->where('company',$company_name);
+      $company = Company::find($company_name);
+      $query->where('company',$company->title);
     }
     if(!empty($dept_name)) {
-      $query->where('dept_name',$dept_name);
+      $department = Department::find($dept_name);
+      $query->where('dept_name',$department->title);
     }
     if(count($head_employee_id)>0) {
       $query->whereIn('heads',$head_employee_id);
