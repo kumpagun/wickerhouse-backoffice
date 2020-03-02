@@ -11,6 +11,7 @@ use DB;
 use PDF;
 use CourseClass;
 use FuncClass;
+use Excel;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
@@ -37,6 +38,7 @@ class MemberAccessContentController extends Controller
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
+    $platform = $request->input('platform'); 
     $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->get();
     if(empty($search_group)){
       $query = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->first();
@@ -208,38 +210,28 @@ class MemberAccessContentController extends Controller
       $last_update = '';
       $diff = 5;
     }
-    // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-    // $pdf = PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])->loadView('report.member_access_content_by_ro',[
-    //   'training_title' => $training_title,
-    //   'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
-    //   'query_group' => $query_group,
-    //   'search_group' => $search_group,
-    //   'datas' =>  $new_datas,
-    //   'data_total' =>  $data_total,
-    //   'pie_chart' => $pie_chart,
-    //   'chart' => $chart,
-    //   'chart_active' => $chart_active,
-    //   'chart_inactive' => $chart_inactive
-    // ]);
-    // return $pdf->stream('invoice.pdf');
-
+    
     if($diff<5) {
       $diff=5;
     }
 
-    return view('report.member_access_content_by_ro',[
-      'training_title' => $training_title,
-      'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
-      'query_group' => $query_group,
-      'search_group' => $search_group,
-      'datas' =>  $new_datas,
-      'data_total' =>  $data_total,
-      'pie_chart' => $pie_chart,
-      'chart' => $chart,
-      'chart_active' => $chart_active,
-      'chart_inactive' => $chart_inactive,
-      'diff' => $diff
-    ]);
+    if($platform=='excel') {
+      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas), Carbon::now()->timestamp.'.xlsx');
+    } else {
+      return view('report.member_access_content_by_ro',[
+        'training_title' => $training_title,
+        'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
+        'query_group' => $query_group,
+        'search_group' => $search_group,
+        'datas' =>  $new_datas,
+        'data_total' =>  $data_total,
+        'pie_chart' => $pie_chart,
+        'chart' => $chart,
+        'chart_active' => $chart_active,
+        'chart_inactive' => $chart_inactive,
+        'diff' => $diff
+      ]);
+    }
   }
   // User เข้าเรียน
   public function user_active($training_id){

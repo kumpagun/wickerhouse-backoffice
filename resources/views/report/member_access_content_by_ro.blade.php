@@ -36,12 +36,19 @@
     <div class="col-12">
       <div class="card">
         <div class="card-content collapse show">
-          <div class="card-body">
-            <div class="row align-items-baseline">
-              <div class="col-12">
-                <h4 class="card-title">Member access content</h4>
-              </div>
+          <div class="card-header border-0">
+            <h4 class="card-title">Member access content</h4>
+            <div class="heading-elements">
+              <ul class="list-inline mb-0">
+                <li>
+                  <a href="{{ route('report_member_access_content_by_RO', ['search_group'=>$search_group,'platform'=>'excel']) }}">
+                    <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
+                  </a>
+                </li>
+              </ul>
             </div>
+          </div>
+          <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered">
                 <thead>
