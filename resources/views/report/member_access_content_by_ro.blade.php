@@ -273,7 +273,7 @@
 
   <!-- Simple Pie Chart -->
   <div class="row justify-content-center">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-md-8 col-sm-12">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">สถานะผู้เข้าเรียน <div>หลักสูตร {{ $training_title }}</div><div>ณ วันที่ {{ $last_update }}</div></h4>
@@ -407,59 +407,94 @@ require(
         // ------------------------------
         var myChart = ec.init(document.getElementById('simple-pie-chart'));
 
-        // Chart Options
-        // ------------------------------
         chartOptions = {
 
-            // Add title
-            // title: {
-            //     text: 'Browser popularity',
-            //     subtext: 'Open source information',
-            //     x: 'center'
-            // },
+          // Add tooltip
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
 
-            // Add tooltip
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
+          // Add legend
+          legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
+          },
 
-            // Add legend
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
-            },
+          // Add custom colors
+          color: ['#16D39A', '#F98E76'],
 
-            // Add custom colors
-            color: ['#16D39A', '#F98E76'],
-
-            // Display toolbox
-            toolbox: {
-              show: true,
-              orient: 'vertical',
-              feature: {
-                saveAsImage: {
-                  show: true,
-                  title: 'Preview',
-                  name: Date.now(),
-                  lang: ['Save']
-                }
+          // Display toolbox
+          toolbox: {
+            show: true,
+            orient: 'vertical',
+            feature: {
+              saveAsImage: {
+                show: true,
+                title: 'Preview',
+                name: Date.now(),
+                lang: ['Save']
               }
+            }
+          },
+
+          // Enable drag recalculate
+          calculable: false,
+
+          // Add series
+          series: [
+            // Inner
+            {
+              name: 'พนักงาน',
+              type: 'pie',
+              selectedMode: 'single',
+              radius: [0, '61%'],
+
+              // for funnel
+              x: '15%',
+              y: '7.5%',
+              width: '40%',
+              height: '85%',
+              funnelAlign: 'right',
+              max: 1548,
+
+              itemStyle: {
+                normal: {
+                  label: {
+                    position: 'inner'
+                  },
+                  labelLine: {
+                    show: false
+                  }
+                },
+                emphasis: {
+                  label: {
+                    show: true
+                  }
+                }
+              },
+
+              data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
             },
 
-            // Enable drag recalculate
-            calculable: true,
+            // Outer
+            {
+              name: 'สถานะ',
+              type: 'pie',
+              radius: ['60%', '85%'],
 
-            // Add series
-            series: [{
-              show: true,
-                name: 'พนักงาน',
-                type: 'pie',
-                radius: '70%',
-                center: ['50%', '57.5%'],
-                data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
-            }]
+              // for funnel
+              x: '55%',
+              y: '7.5%',
+              width: '35%',
+              height: '85%',
+              funnelAlign: 'left',
+              max: 1048,
+
+              data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`)
+            }
+          ]
         };
 
         // Apply options
