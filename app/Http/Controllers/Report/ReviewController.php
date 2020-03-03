@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
+use Excel;
 // Models
 use App\Models\Training;
 use App\Models\Review;
@@ -38,8 +39,9 @@ class ReviewController extends Controller
     return view('report.review.review_index',$withData);
   }
 
-  public function review_create($training_id) {
+  public function review_create(Request $request, $training_id) {
     $training_id = new ObjectId($training_id);
+    $platform = $request->input('platform');
     
     $training = Training::find($training_id);
     $course_id = $training->course_id;
@@ -51,11 +53,21 @@ class ReviewController extends Controller
     $query->orderBy('created_at','asc');
     $datas = $query->get();
 
+    $query = Review_answer::query()->where('training_id',$training_id);
+    $query->where('course_id', $course_id);
+    $query->where('status', 1);
+    $query->select('user_id');
+    $query->groupBy('user_id');
+    $data_total = $query->get();
+    $data_total = $data_total->count();
+
     $review_choice = Review::where('status',1)->get();
     $data_choice = [];
+    $data_question = [];
     foreach($review_choice as $data) {
       if($data->type=='choice') {
         $data_choice[$data->_id] = $this->get_choice($data->choice_id);
+        $data_question[$data->_id] = $data->questions;
       }
     }
 
@@ -64,12 +76,17 @@ class ReviewController extends Controller
     foreach($datas as $data) {
       $review_id = (string)$data->review_id;
       if($data->type=='choice') {
-        foreach($data->review_choice_answer as $choice) {
+        foreach($data->review_choice_answer as $index => $choice) {
           if(is_int($choice)) {
-            if(empty($datas_report[$review_id]['choice'][$data_choice[$review_id][$choice]])) {
-              $datas_report[$review_id]['choice'][$data_choice[$review_id][$choice]] = 1;
+            if(empty($datas_report[$review_id]['choice'][$index][$data_choice[$review_id][$choice]])) {
+              $datas_report[$review_id]['choice'][$index][$data_choice[$review_id][$choice]] = 1;
             } else {
-              $datas_report[$review_id]['choice'][$data_choice[$review_id][$choice]]++;
+              $datas_report[$review_id]['choice'][$index][$data_choice[$review_id][$choice]]++;
+            }
+            if(empty($datas_report[$review_id]['choice_total'][$index])) {
+              $datas_report[$review_id]['choice_total'][$index] = 1;
+            } else {
+              $datas_report[$review_id]['choice_total'][$index]++;
             }
           }
         }
@@ -88,16 +105,22 @@ class ReviewController extends Controller
     $review_group = Review_group::where('status',1)->get();
     $reviews = Review::where('status',1)->get();
     
-    $withData = [
-      'training' => $training,
-      'review_group' => $review_group,
-      'reviews' => $reviews,
-      'data_choice' => $data_choice,
-      'datas_report' => $datas_report,
-      'count_report' => $count_report
-    ];
-
-    return view('report.review.review_create',$withData);
+    if($platform=='excel') {
+      return Excel::download(new Export_Review($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total), Carbon::now()->timestamp.'.xlsx');
+    } else {
+      $withData = [
+        'training' => $training,
+        'review_group' => $review_group,
+        'reviews' => $reviews,
+        'data_question' => $data_question,
+        'data_choice' => $data_choice,
+        'datas_report' => $datas_report,
+        'count_report' => $count_report,
+        'data_total' => $data_total
+      ];
+  
+      return view('report.review.review_create',$withData);
+    }
   }
 
   public function review_create_answer_text($review_id) {

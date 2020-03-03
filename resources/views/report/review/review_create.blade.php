@@ -14,6 +14,15 @@
 </div>
 @endsection
 
+@section('content-header-right')
+  <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+    <a href="{{ route('report_review_create', ['training_id'=>$training->_id,'platform'=>'excel']) }}">
+      <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
+    </a>
+  </div>
+@endsection
+
+
 @section('content')
   <div class="row justify-content-center">
     <div class="col-12">
@@ -29,22 +38,36 @@
                   @foreach ($reviews as $review)
                     @if($review->type=='choice')
                       @if($group->_id == $review->review_group_id)
-                      <tr>
-                        <th class="text-center content-table"></th>
-                        @foreach ($data_choice[$review->_id] as $choice)
-                          <th class="text-center content-table">{{ $choice }}</th>
+                        <thead>
+                          <tr>
+                            <th class="text-left">{!! $review->title !!}</th>
+                            @foreach ($data_choice[$review->_id] as $choice)
+                              <th class="text-center content-table">{{ $choice }}</th>
+                              <th class="text-center content-table">%{{ $choice }}</th>
+                            @endforeach
+                          </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($data_question[$review->_id] as $index_question => $value_question)
+                          <tr>
+                            <td class="text-left">{!! $value_question !!}</td>
+                            @foreach ($data_choice[$review->_id] as $index => $value)
+                              @if(!empty($datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]]))
+                                <td class="text-center">{{ $datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]] }}</td>
+                                @php
+                                  $percent = ($datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]]/$datas_report[$review->_id]['choice_total'][$index_question]) * 100;
+                                @endphp
+                                <td class="text-center">
+                                  {{ number_format($percent,2) }} %
+                                </td>
+                              @else
+                                <td class="text-center">0</td>
+                                <td class="text-center">0 %</td>
+                              @endif
+                            @endforeach
+                          </tr>
                         @endforeach
-                      </tr>
-                      <tr>
-                        <th class="text-left">{!! $review->title !!}</th>
-                        @foreach ($data_choice[$review->_id] as $index => $value)
-                          @if(!empty($datas_report[$review->_id]['choice'][$data_choice[$review->_id][$index]]))
-                          <td class="text-center">{{ $datas_report[$review->_id]['choice'][$data_choice[$review->_id][$index]] }}</td>
-                          @else
-                          <td class="text-center">0</td>
-                          @endif
-                        @endforeach
-                      </tr>
+                        </tbody>
                       @endif
                     @else
                       @if($group->_id == $review->review_group_id)

@@ -221,7 +221,7 @@ class MemberAccessContentController extends Controller
     }
 
     if($platform=='excel') {
-      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas), Carbon::now()->timestamp.'.xlsx');
+      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas,$data_total), Carbon::now()->timestamp.'.xlsx');
     } else {
       return view('report.member_access_content_by_ro',[
         'training_title' => $training_title,
