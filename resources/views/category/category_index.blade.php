@@ -12,6 +12,7 @@
     </div>
     </div>
 @endsection
+
 @section('content-header-right')
   <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
     @can('editor')
@@ -21,6 +22,7 @@
     @endcan
   </div>
 @endsection
+
 @section('content')
   @if (session('status'))
   <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">

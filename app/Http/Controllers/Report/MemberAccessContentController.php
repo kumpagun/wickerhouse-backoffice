@@ -131,11 +131,34 @@ class MemberAccessContentController extends Controller
       $pie_chart['label'] = ['เข้าเรียน','ยังไม่เข้าเรียน'];
       $pie_chart['total'] = [$pie_chart_total['active'],$pie_chart_total['inactive']];
       $pie_chart['data'] = [];
+      $pie_chart['outer_data'] = [];
+      $pie_total = $pie_chart_total['active'] + $pie_chart_total['inactive'];
+      if(!empty($pie_chart_total['active'])) {
+        $percent_active = ($pie_chart_total['active']/$pie_total) * 100;
+      } else {
+        $percent_active = 0;
+      }
+      if(!empty($pie_chart_total['inactive'])) {
+        $percent_inactive = ($pie_chart_total['inactive']/$pie_total) * 100;
+      } else {
+        $percent_inactive = 0;
+      }
+      
       array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['active'],
+        'name' => number_format($percent_active,2).'%'
+        // 'name' => 'เข้าเรียน'
+      ]);
+      array_push($pie_chart['data'], [
+        'value' => $pie_chart_total['inactive'],
+        'name' => number_format($percent_inactive,2).'%'
+        // 'name' => 'ยังไม่เข้าเรียน'
+      ]);
+      array_push($pie_chart['outer_data'], [
         'value' => $pie_chart_total['active'],
         'name' => 'เข้าเรียน'
       ]);
-      array_push($pie_chart['data'], [
+      array_push($pie_chart['outer_data'], [
         'value' => $pie_chart_total['inactive'],
         'name' => 'ยังไม่เข้าเรียน'
       ]);
@@ -221,7 +244,7 @@ class MemberAccessContentController extends Controller
     }
 
     if($platform=='excel') {
-      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas), Carbon::now()->timestamp.'.xlsx');
+      return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas,$data_total), Carbon::now()->timestamp.'.xlsx');
     } else {
       return view('report.member_access_content_by_ro',[
         'training_title' => $training_title,

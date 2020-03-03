@@ -31,11 +31,12 @@ class ReportController extends Controller
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
-    $trainings = $query->get();
+    // $query->where('_id',new ObjectId("5e5dc898f437eb6d4e64fe4f"));
+    $trainings = $query->get(); 
     if(!empty($trainings)) {
-      Report_member_access::where('created_at', '<', $date)->where('status', 1)->update(['status' => 0]);
-      Report_member_access::where('created_at', '>=', $date)->where('status',1)->delete();
       foreach($trainings as $row) {
+        Report_member_access::where('created_at', '<', $date)->where('training_id', new ObjectId($row->_id))->where('status', 1)->update(['status' => 0]);
+        Report_member_access::where('created_at', '>=', $date)->where('training_id', new ObjectId($row->_id))->where('status',1)->delete();
         $this->get_data($row);
       }
     }
@@ -174,10 +175,23 @@ class ReportController extends Controller
       ]);
     });
     // Member ที่ login เข้าระบบแล่้ว
-    foreach($members as $member) {
-      foreach($member->employees as $index => $value) {
-        $datas[$member->_id][$index] = $value;
-      }
+    foreach($members as $value) {
+      // foreach($member->employees as $value) {
+        // $datas[$member->_id][$index] = $value;
+        $values_id = (string)$value->employees->_id;
+        $datas[$values_id]['_id'] = $values_id;
+        $datas[$values_id]['employee_id'] = $value->employees->employee_id;
+        $datas[$values_id]['tinitial'] = $value->employees->tinitial;
+        $datas[$values_id]['firstname'] = $value->employees->tf_name;
+        $datas[$values_id]['lastname'] = $value->employees->tl_name;
+        $datas[$values_id]['workplace'] = $value->employees->workplace;
+        $datas[$values_id]['title'] = $value->employees->title_name;
+        $datas[$values_id]['division'] = $value->employees->division_name;
+        $datas[$values_id]['section'] = $value->employees->section_name;
+        $datas[$values_id]['department'] = $value->employees->dept_name;
+        $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
+        $datas[$values_id]['job_family'] = $value->employees->job_family;
+      // }
     }
     // Member ที่ยังไม่ login เข้าระบบ
     foreach($members_jasmine as $value) {
@@ -220,7 +234,6 @@ class ReportController extends Controller
         $datas[(string)$posttest->_id['user_id']]['posttest'] = $posttest->maxTotalAmount;
       }
     }
-
     $this->formatData($training_id, $course_id, $datas);
   }
 

@@ -15,8 +15,8 @@
 
 @section('content-header-right')
   @if(count($query_group)>0)
-  <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">
-    <form action="{{route('report_member_access_content_by_RO')}}" method="POST">
+  <div class="btn-group float-md-right mb-2 w-100" role="group" aria-label="Button group with nested dropdown">
+    <form action="{{route('report_member_access_content_by_RO')}}" class=" w-100" method="POST">
       {{ csrf_field() }}
       <label class="text-left"> Training List</label>
       <select name="search_group" class="form-control select2" onchange="this.form.submit()">
@@ -34,20 +34,13 @@
 @if(!empty($datas))
   <div class="row align-items-stretch">
     <div class="col-12">
+      <div class="text-right">
+        <a href="{{ route('report_member_access_content_by_RO', ['search_group'=>$search_group,'platform'=>'excel']) }}">
+          <button class="btn btn-round btn-secondary my-1"><i class="ft-download mr-1"></i> Export</button>
+        </a>
+      </div>
       <div class="card">
         <div class="card-content collapse show">
-          <div class="card-header border-0">
-            <h4 class="card-title">Member access content</h4>
-            <div class="heading-elements">
-              <ul class="list-inline mb-0">
-                <li>
-                  <a href="{{ route('report_member_access_content_by_RO', ['search_group'=>$search_group,'platform'=>'excel']) }}">
-                    <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered">
@@ -57,7 +50,7 @@
                     <th class="align-middle text-center">เข้าเรียน</th>
                     <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
                     <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
-                    <th class="align-middle text-center">ไม่เข้าเรียน</th>
+                    <th class="align-middle text-center">ยังไม่เข้าเรียน</th>
                     <th class="align-middle text-center">Total</th>
                   </tr>
                 </thead>
@@ -163,9 +156,124 @@
   </div>
   <!-- Basic Tables end -->
 
+  <div class="row align-items-stretch">
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="card-content collapse show">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr class="second-row">
+                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center">ยังไม่เข้าเรียน</th>
+                    <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
+                    <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if(count($datas))
+                    @foreach($datas as $key => $value)
+                    <tr>
+                      <td class="">
+                        {{ $key }}
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_inactive']))
+                          {{ number_format($value['user_inactive']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active_not_passing_score']))
+                          {{ number_format($value['user_active_not_passing_score']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_active_passing_score']))
+                          {{ number_format($value['user_active_passing_score']) }}
+                        @else
+                          0
+                        @endif
+                      </td>
+                    </tr>
+                    @endforeach
+                  @else
+                    <tr>
+                      <td class="text-center" colspan="6">ไม่มีข้อมูล</td>
+                    </tr>
+                  @endif
+                </tbody>
+                @if(count($datas))
+                <tfoot>
+                  <tr>
+                    <td class="text-right"><Strong>Total</Strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_inactive']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active_not_passing_score']) }}</strong></td>
+                    <td class="text-right"><strong>{{ number_format($data_total['user_active_passing_score']) }}</strong></td>
+                  </tr>
+                </tfoot>
+                @endif
+              </table>
+            </div>
+              {{-- <span class="text-danger"><small>* ยอด video view จาก embed (web, app) </small></span> --}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Basic Tables end -->
+
+  <div class="row align-items-stretch">
+    <div class="col-12 col-md-6">
+      <div class="card">
+       
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr class="second-row">
+                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center">ยังไม่เข้าเรียน%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if(count($datas))
+                    @foreach($datas as $key => $value)
+                    <tr>
+                      <td class="">
+                        {{ $key }}
+                      </td>
+                      <td class="text-right">
+                        @if (!empty($value['user_inactive']))
+                          {{ number_format(($value['user_inactive']*100)/$data_total['user_inactive'],2) }}%
+                        @else
+                          {{ number_format(0,2) }}%
+                        @endif
+                      </td>
+                    @endforeach
+                  @else
+                    <tr>
+                      <td class="text-center" colspan="6">ไม่มีข้อมูล</td>
+                    </tr>
+                  @endif
+                </tbody>
+              </table>
+            </div>
+              {{-- <span class="text-danger"><small>* ยอด video view จาก embed (web, app) </small></span> --}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Basic Tables end -->
+
   <!-- Simple Pie Chart -->
   <div class="row justify-content-center">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-md-8 col-sm-12">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">สถานะผู้เข้าเรียน <div>หลักสูตร {{ $training_title }}</div><div>ณ วันที่ {{ $last_update }}</div></h4>
@@ -254,7 +362,8 @@
   @for($i=1;$i<=$diff;$i++) 
     @php
       $value = $i * 100;
-      echo "<style>.height-".$value." { height: ".$value."px; } </style>";
+      $value_height = $i * 50;
+      echo "<style>.height-".$value." { height: ".$value_height."px; } </style>";
     @endphp
   @endfor
 @endsection
@@ -298,59 +407,94 @@ require(
         // ------------------------------
         var myChart = ec.init(document.getElementById('simple-pie-chart'));
 
-        // Chart Options
-        // ------------------------------
         chartOptions = {
 
-            // Add title
-            // title: {
-            //     text: 'Browser popularity',
-            //     subtext: 'Open source information',
-            //     x: 'center'
-            // },
+          // Add tooltip
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
 
-            // Add tooltip
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
+          // Add legend
+          legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
+          },
 
-            // Add legend
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
-            },
+          // Add custom colors
+          color: ['#16D39A', '#F98E76'],
 
-            // Add custom colors
-            color: ['#16D39A', '#F98E76'],
-
-            // Display toolbox
-            toolbox: {
-              show: true,
-              orient: 'vertical',
-              feature: {
-                saveAsImage: {
-                  show: true,
-                  title: 'Preview',
-                  name: Date.now(),
-                  lang: ['Save']
-                }
+          // Display toolbox
+          toolbox: {
+            show: true,
+            orient: 'vertical',
+            feature: {
+              saveAsImage: {
+                show: true,
+                title: 'Preview',
+                name: Date.now(),
+                lang: ['Save']
               }
+            }
+          },
+
+          // Enable drag recalculate
+          calculable: false,
+
+          // Add series
+          series: [
+            // Inner
+            {
+              name: 'พนักงาน',
+              type: 'pie',
+              selectedMode: 'single',
+              radius: [0, '61%'],
+
+              // for funnel
+              x: '15%',
+              y: '7.5%',
+              width: '40%',
+              height: '85%',
+              funnelAlign: 'right',
+              max: 1548,
+
+              itemStyle: {
+                normal: {
+                  label: {
+                    position: 'inner'
+                  },
+                  labelLine: {
+                    show: false
+                  }
+                },
+                emphasis: {
+                  label: {
+                    show: true
+                  }
+                }
+              },
+
+              data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
             },
 
-            // Enable drag recalculate
-            calculable: true,
+            // Outer
+            {
+              name: 'สถานะ',
+              type: 'pie',
+              radius: ['60%', '85%'],
 
-            // Add series
-            series: [{
-              show: true,
-                name: 'พนักงาน',
-                type: 'pie',
-                radius: '70%',
-                center: ['50%', '57.5%'],
-                data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
-            }]
+              // for funnel
+              x: '55%',
+              y: '7.5%',
+              width: '35%',
+              height: '85%',
+              funnelAlign: 'left',
+              max: 1048,
+
+              data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`)
+            }
+          ]
         };
 
         // Apply options
