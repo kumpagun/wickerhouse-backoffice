@@ -274,7 +274,7 @@
   <!-- Simple Pie Chart -->
   <div class="row justify-content-center">
     <div class="col-md-8 col-sm-12">
-      <div class="card">
+      <div class="card" id="pie">
         <div class="card-header">
           <h4 class="card-title">สถานะผู้เข้าเรียน <div>หลักสูตร {{ $training_title }}</div><div>ณ วันที่ {{ $last_update }}</div></h4>
         </div>
@@ -371,554 +371,329 @@
 @section('script')
   <!-- BEGIN PAGE VENDOR JS-->
   <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/chart.min.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/echarts/echarts.js') }}" type="text/javascript"></script>ฃ
+  {{-- <script src="{{ asset('stack-admin/app-assets/vendors/js/charts/echarts/echarts.js') }}" type="text/javascript"></script> --}}
+  <script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
   <!-- END PAGE VENDOR JS-->
   <!-- BEGIN STACK JS-->
   <script src="{{ asset('stack-admin/app-assets/js/core/app-menu.js') }}" type="text/javascript"></script>
   <script src="{{ asset('stack-admin/app-assets/js/core/app.js') }}" type="text/javascript"></script>
   <!-- END STACK JS-->
   <script>
-    $(window).on("load", function(){
+    chart1()
+    chart2()
+    chart3()
+    chart4()
 
-// Set paths
-// ------------------------------
+    function chart1() {
+      var myChart = echarts.init(document.getElementById('simple-pie-chart'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: '#333',
+          textBorderWidth: 2
+        }
+      }
 
-require.config({
-    paths: {
-        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
-    }
-});
-
-
-// Configuration
-// ------------------------------
-
-require(
-    [
-        'echarts',
-        'echarts/chart/pie',
-        'echarts/chart/funnel'
-    ],
-
-
-    // Charts setup
-    function (ec) {
-        // Initialize chart
-        // ------------------------------
-        var myChart = ec.init(document.getElementById('simple-pie-chart'));
-
-        chartOptions = {
-
-          // Add tooltip
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: '#333',
+          textBorderWidth: 1,
+          position: 'insideRight'
+        }
+      }
+      option = {
           tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
+              trigger: 'item',
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
           },
-
-          // Add legend
-          legend: {
-            orient: 'vertical',
-            x: 'left',
-            data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`)
-          },
-
-          // Add custom colors
-          color: ['#16D39A', '#F98E76'],
-
-          // Display toolbox
           toolbox: {
             show: true,
-            orient: 'vertical',
             feature: {
               saveAsImage: {
                 show: true,
-                title: 'Preview',
+                title: 'Download',
                 name: Date.now(),
                 lang: ['Save']
               }
             }
           },
-
-          // Enable drag recalculate
-          calculable: false,
-
-          // Add series
+          legend: {
+              orient: 'vertical',
+              left: 'left',
+              data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
+          },
+          color: ['#16D39A', '#F98E76'],
           series: [
-            // Inner
             {
               name: 'พนักงาน',
               type: 'pie',
-              selectedMode: 'single',
-              radius: [0, '61%'],
-
-              // for funnel
-              x: '15%',
-              y: '7.5%',
-              width: '40%',
-              height: '85%',
-              funnelAlign: 'right',
-              max: 1548,
-
-              itemStyle: {
+              radius: '70%',
+              center: ['50%', '50%'],
+              label: {
                 normal: {
-                  label: {
-                    position: 'inner'
-                  },
-                  labelLine: {
-                    show: false
-                  }
-                },
-                emphasis: {
-                  label: {
-                    show: true
-                  }
+                  formatter: '{d}%',
+                  position: 'inside'
                 }
               },
-
-              data: JSON.parse(`{!! json_encode($pie_chart['data']) !!}`)
-            },
-
-            // Outer
-            {
-              name: 'สถานะ',
-              type: 'pie',
-              radius: ['60%', '85%'],
-
-              // for funnel
-              x: '55%',
-              y: '7.5%',
-              width: '35%',
-              height: '85%',
-              funnelAlign: 'left',
-              max: 1048,
-
-              data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`)
+              data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.2)'
+                }
+              }
             }
           ]
-        };
+      };
 
-        // Apply options
-        // ------------------------------
+      myChart.setOption(option);
+      $(function () {
+        // Resize chart on menu width change and window resize
+        $(window).on('resize', resize);
+        $(".menu-toggle").on('click', resize);
 
-        myChart.setOption(chartOptions);
-
-
-        // Resize chart
-        // ------------------------------
-
-        $(function () {
-
-            // Resize chart on menu width change and window resize
-            $(window).on('resize', resize);
-            $(".menu-toggle").on('click', resize);
-
-            // Resize function
-            function resize() {
-                setTimeout(function() {
-
-                    // Resize chart
-                    myChart.resize();
-                }, 200);
-            }
-        });
+        // Resize function
+        function resize() {
+          setTimeout(function() {
+            // Resize chart
+            myChart.resize();
+          }, 200);
+        }
+      });
     }
-);
-});
-  </script>
 
-  {{-- คนเข้าเรียน ไม่เข้าเรียน --}}
-  <script>
-    $(window).on("load", function(){
-
-    // Set paths
-    // ------------------------------
-
-    require.config({
-      paths: {
-        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
+    function chart2() {
+      var myChart = echarts.init(document.getElementById('basic-bar'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: '#333',
+          textBorderWidth: 2
+        }
       }
-    });
 
-    // Configuration
-    // ------------------------------
-
-    require(
-      [
-        'echarts',
-        'echarts/chart/bar',
-        'echarts/chart/line'
-      ],
-
-      // Charts setup
-      function (ec) {
-        // Initialize chart
-        // ------------------------------
-        var myChart = ec.init(document.getElementById('basic-bar'));
-
-        // Chart Options
-        // ------------------------------
-        chartOptions = {
-          // Setup grid
-          grid: {
-            x: 70,
-            x2: 40,
-            y: 45,
-            y2: 25
-          },
-
-          // Add tooltip
-          tooltip: {
-            trigger: 'axis'
-          },
-
-          // Add Toolbook
-          toolbox: {
-            show : true,
-            // orient: 'vertical',
-            x: 'right',
-            // y: 70,
-            feature : {
-              saveAsImage: {
-                show: true,
-                title: 'Preview',
-                name: Date.now(),
-                lang: ['Save']
-              }
-            }
-          },
-
-          // Add legend
-          legend: {
-            data: ['เข้าเรียน', 'ไม่เข้าเรียน']
-          },
-
-          // Add custom colors
-          color: ['#16D39A', '#F98E76'],
-
-          // Horizontal axis
-          xAxis: [{
-            type: 'value',
-            boundaryGap: [0, 0.01]
-          }],
-
-          // Vertical axis
-          yAxis: [{
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
-          }],
-
-          // Add series
-          series : [
-            {
-              name: 'เข้าเรียน',
-              type: 'bar',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-              data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
-            },
-            {
-              name: 'ไม่เข้าเรียน',
-              type: 'bar',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-              data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
-            }
-          ]
-        };
-
-        // Apply options
-        // ------------------------------
-
-        myChart.setOption(chartOptions);
-
-        // Resize chart
-        // ------------------------------
-
-        $(function () {
-          // Resize chart on menu width change and window resize
-          $(window).on('resize', resize);
-          $(".menu-toggle").on('click', resize);
-
-          // Resize function
-          function resize() {
-            setTimeout(function() {
-
-              // Resize chart
-              myChart.resize();
-            }, 200);
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
           }
-        });
-      }
-    );
-  });
-  </script>
-
-  {{-- คนเข้าเรียนผ่าน / ไม่ผ่าน / ไม่เข้าเรียน --}}
-  <script>
-  $(window).on("load", function(){
-
-    // Set paths
-    // ------------------------------
-
-    require.config({
-      paths: {
-        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
-      }
-    });
-
-
-    // Configuration
-    // ------------------------------
-
-    require(
-      [
-        'echarts',
-        'echarts/chart/bar',
-        'echarts/chart/line'
-      ],
-
-      // Charts setup
-      function (ec) {
-        // Initialize chart
-        // ------------------------------
-        var myChart = ec.init(document.getElementById('stacked-bar'));
-
-        // Chart Options
-        // ------------------------------
-        chartOptions = {
-
-          // Setup grid
-          grid: {
-            x: 230,
-            x2: 40,
-            y: 45,
-            y2: 25
-          },
-
-          // Add tooltip
-          tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // Axis indicator axis trigger effective
-              type : 'shadow'        // The default is a straight line, optionally: 'line' | 'shadow'
+        },
+        legend: {
+          data: ['เข้าเรียน', 'ไม่เข้าเรียน']
+        },
+        // Add custom colors
+        color: ['#16D39A', '#F98E76'],
+        grid: {
+          left: 100
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'value',
+          name: 'Days',
+          axisLabel: {
+            formatter: '{value}'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
+        },
+        series: [
+          {
+            name: 'เข้าเรียน',
+            type: 'bar',
+            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+            data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
           },
+          {
+            name: 'ไม่เข้าเรียน',
+            type: 'bar',
+            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+            data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
+          }
+        ]
+      }
+      myChart.setOption(option);
+      $(function () {
+        // Resize chart on menu width change and window resize
+        $(window).on('resize', resize);
+        $(".menu-toggle").on('click', resize);
 
-          // Add Toolbook
-          toolbox: {
-            show : true,
-            // orient: 'vertical',
-            x: 'right',
-            // y: 70,
-            feature : {
-              saveAsImage: {
-                show: true,
-                title: 'Preview',
-                name: Date.now(),
-                lang: ['Save']
+        // Resize function
+        function resize() {
+          setTimeout(function() {
+            // Resize chart
+            myChart.resize();
+          }, 200);
+        }
+      });
+    }
+
+    function chart3() {
+      var myChart = echarts.init(document.getElementById('stacked-bar'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: '#333',
+          textBorderWidth: 1,
+          position: 'insideRight'
+        }
+      }
+      option = {
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
               }
-            }
           },
-
-          // Add legend
           legend: {
-            data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
           },
-
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
-
-          // Horizontal axis
-          xAxis: [{
-            type: 'value',
-          }],
-
-          // Vertical axis
-          yAxis: [{
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
-          }],
-
-          // Add series
-          series : [
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
+          xAxis: {
+              type: 'value'
+          },
+          yAxis: {
+              type: 'category',
+              data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+          },
+          series: [
             {
-              name:'ยังไม่เข้าเรียน',
-              type:'bar',
-              stack: 'Total',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-              data:JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
+              name: 'ยังไม่เข้าเรียน',
+              type: 'bar',
+              stack: 'total',
+              label: seriesLabel,
+              data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
             },
             {
-              name:'เข้าเรียน (ไม่ผ่าน)',
-              type:'bar',
-              stack: 'Total',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              name: 'เข้าเรียน (ไม่ผ่าน)',
+              type: 'bar',
+              stack: 'total',
+              label: seriesLabel,
               data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
             },
             {
-              name:'เข้าเรียน (ผ่าน)',
-              type:'bar',
-              stack: 'Total',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+              name: 'เข้าเรียน (ผ่าน)',
+              type: 'bar',
+              stack: 'total',
+              label: seriesLabel,
               data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
-            }
+            },
           ]
-        };
+      };
+      myChart.setOption(option);
+      $(function () {
+        // Resize chart on menu width change and window resize
+        $(window).on('resize', resize);
+        $(".menu-toggle").on('click', resize);
 
-        // Apply options
-        // ------------------------------
+        // Resize function
+        function resize() {
+          setTimeout(function() {
+            // Resize chart
+            myChart.resize();
+          }, 200);
+        }
+      });
+    }
 
-        myChart.setOption(chartOptions);
+    function chart4() {
+      var myChart = echarts.init(document.getElementById('stacked-bar-inactive'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: '#333',
+          textBorderWidth: 1
+        }
+      }
 
-
-        // Resize chart
-        // ------------------------------
-
-        $(function () {
-          // Resize chart on menu width change and window resize
-          $(window).on('resize', resize);
-          $(".menu-toggle").on('click', resize);
-
-          // Resize function
-          function resize() {
-            setTimeout(function() {
-              // Resize chart
-              myChart.resize();
-            }, 200);
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
           }
-        });
-      }
-    );
-  });
-  </script>
+        },
+        legend: {
+          data: ['% คนไม่เข้าเรียน']
+        },
+        // Add custom colors
+        color: ['#F98E76'],
+        grid: {
+          left: 230
+        },
 
-  {{-- % คนไม่เข้าเรียน --}}
-<script>
-  $(window).on("load", function(){
-
-    // Set paths
-    // ------------------------------
-
-    require.config({
-      paths: {
-        echarts: '/stack-admin/app-assets/vendors/js/charts/echarts'
-      }
-    });
-
-
-    // Configuration
-    // ------------------------------
-
-    require(
-      [
-        'echarts',
-        'echarts/chart/bar',
-        'echarts/chart/line'
-      ],
-
-      // Charts setup
-      function (ec) {
-        // Initialize chart
-        // ------------------------------
-        var myChart = ec.init(document.getElementById('stacked-bar-inactive'));
-
-        // Chart Options
-        // ------------------------------
-        chartOptions = {
-
-          // Setup grid
-          grid: {
-            x: 230,
-            x2: 40,
-            y: 45,
-            y2: 25
-          },
-
-          // Add tooltip
-          tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // Axis indicator axis trigger effective
-              type : 'shadow'        // The default is a straight line, optionally: 'line' | 'shadow'
+        
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
-          },
-
-          // Add Toolbook
-          toolbox: {
-            show : true,
-            // orient: 'vertical',
-            x: 'right',
-            // y: 70,
-            feature : {
-              saveAsImage: {
-                show: true,
-                title: 'Preview',
-                name: Date.now(),
-                lang: ['Save']
-              }
-            }
-          },
-
-          // Add legend
-          legend: {
-            data: ['% คนไม่เข้าเรียน']
-          },
-
-          // Add custom colors
-          color: ['#F98E76'],
-
-          // Horizontal axis
-          xAxis: [{
-            type: 'value',
-          }],
-
-          // Vertical axis
-          yAxis: [{
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`)
-          }],
-
-          // Add series
-          series : [
-            {
-              name:'% คนไม่เข้าเรียน',
-              type:'bar',
-              stack: 'Total',
-              itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-              data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`)
-            }
-          ]
-        };
-
-        // Apply options
-        // ------------------------------
-
-        myChart.setOption(chartOptions);
-
-
-        // Resize chart
-        // ------------------------------
-
-        $(function () {
-          // Resize chart on menu width change and window resize
-          $(window).on('resize', resize);
-          $(".menu-toggle").on('click', resize);
-
-          // Resize function
-          function resize() {
-            setTimeout(function() {
-              // Resize chart
-              myChart.resize();
-            }, 200);
           }
-        });
+        },
+        xAxis: {
+          type: 'value',
+          name: 'Days',
+          axisLabel: {
+            formatter: '{value}'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          data: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`),
+            label: seriesLabel
+        },
+        series: [
+          {
+            name:'% คนไม่เข้าเรียน',
+            type:'bar',
+            stack: 'Total',
+            // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+            data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`),
+            label: seriesLabel
+          }
+        ]
       }
-    );
-  });
-  </script>
-  <script>
-   
-   $("#btn-download").click(function () {
-    var canvas = $(".basic-bar").toDataURL("image/jpeg");
-    console.log(canvas)
-    // var dataURL = canvas.toDataURL('image/jpeg');
-    // $("#btn-download").attr("href", dataURL);
-  });
+      myChart.setOption(option);
+      $(function () {
+        // Resize chart on menu width change and window resize
+        $(window).on('resize', resize);
+        $(".menu-toggle").on('click', resize);
+
+        // Resize function
+        function resize() {
+          setTimeout(function() {
+            // Resize chart
+            myChart.resize();
+          }, 200);
+        }
+      });
+    }
   </script>
 @endsection

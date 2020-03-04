@@ -38,7 +38,7 @@ class MemberAccessByUserController extends Controller
     $group_name = $datas_group->title;
     $now = Carbon::now()->format('dmY');
     $file = $group_name.'_'.$now.'.xls';
-    $path = env('APP_URL').'storage/excel/exports/'.$group_id_select.'/'.$file;
+    $path = config('app.url').'storage/excel/exports/'.$group_id_select.'/'.$file;
 
     $update_date = '-';
     if(!empty($datas[0])) {
