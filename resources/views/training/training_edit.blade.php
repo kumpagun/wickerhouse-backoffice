@@ -336,7 +336,7 @@
 
   <link href="{{ asset('multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
   {{-- Fontawesome --}}
-  {{-- <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" /> --}}
+  <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" />
   <style>
     .ms-container {
       width: 100%;

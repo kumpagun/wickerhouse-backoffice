@@ -18,14 +18,12 @@ use Carbon\Carbon;
 
 class MemberController extends Controller
 {
-    //
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
 
-    public function index_member(){
-
-        $datas = Member::query()->where('status',1)->get();
-    }
+  public function index_member(){
+    $datas = Member::query()->where('status',1)->get();
+  }
 }

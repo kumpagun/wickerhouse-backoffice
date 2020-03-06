@@ -196,20 +196,26 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:admin|course
   Route::post('/store/{id?}', 'Teacher\TeacherController@teacher_store')->name('teacher_store');
 });
 
-// REPORT
-  Route::match(['get','post'],'/dashboard', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
-  Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
-    Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
-    Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
-    // REVIEW
-    Route::group(['prefix' => 'review'], function () {
-      Route::get('/', 'Report\ReviewController@review_index')->name('report_review_index');
-      Route::get('/create/{training_id}', 'Report\ReviewController@review_create')->name('report_review_create');
-      Route::get('/create_answer/{review_id}', 'Report\ReviewController@review_create_answer_text')->name('report_review_create_answer_text');
+// EMPLOYEE VIP
+Route::group(['prefix' => 'employee', 'middleware' => ['auth', 'role:admin|course']], function () {
+  Route::get('/vip', 'EmployeeVIPController@employee_vip_index')->name('employee_vip_index');
+  Route::get('/vip/create/{id?}', 'EmployeeVIPController@employee_vip_create')->name('employee_vip_create');
+  Route::post('/vip/store/{id?}', 'EmployeeVIPController@employee_vip_store')->name('employee_vip_store');
+  Route::match(['get','post'],'/vip/delete/{id?}', 'EmployeeVIPController@employee_vip_delete')->name('employee_vip_delete');
+});
 
-      
-    });
+// REPORT
+Route::match(['get','post'],'/dashboard', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
+Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
+  Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
+  Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
+  // REVIEW
+  Route::group(['prefix' => 'review'], function () {
+    Route::get('/', 'Report\ReviewController@review_index')->name('report_review_index');
+    Route::get('/create/{training_id}', 'Report\ReviewController@review_create')->name('report_review_create');
+    Route::get('/create_answer/{review_id}', 'Report\ReviewController@review_create_answer_text')->name('report_review_create_answer_text');
   });
+});
 
 // CRONTAB
 Route::group(['prefix' => 'crontab'], function () {

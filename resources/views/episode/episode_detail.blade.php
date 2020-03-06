@@ -25,50 +25,50 @@
       </div>
       <div class="card-content">
         <div class="card-body pt-0">
+          {{-- VIDEO --}}
+          <h4 class="form-section"> Video</h4>
+          @php
+            if(!empty($errors->video->first('files'))) {
+              $style = "-danger";
+              $error = "danger";
+            } else {
+              $style = "-normal";
+              $error = "normal";
+            }
+          @endphp
+          <fieldset class="form-group {{$error}} mb-0">
+            <label class="text{{$style}}" for="basicInputFile">Upload video file. <span class="text-danger">*</span></label>
+            <div class="custom-file">
+              <input id="fileupload" type="file" name="files[]" accept=".mp4,.mov,.avi,.mpg">
+              <label class="custom-file-label" for="fileupload">Choose file</label>
+            </div>
+            <button type="button" class="btn btn-danger btn-min-width mt-1 hidden" id="cancel-btn">Cancel Upload</button>
+            <button type="button" class="btn btn-danger btn-min-width mt-1 @if(empty(old('file_name'))) hidden @endif" id="delete-btn">Delete File</button>
+            <p class="mb-0"><small class="text-muted">ชนิดของไฟล์ที่รองรับ mp4, mov, avi, mpg (แนะนำให้ใช้ mp4 และเข้ารหัสด้วย H.264/ACC)</small></p>
+            @if(!empty($errors->video->first('files')))
+              <label class="text-danger mb-0"><small>{{ "กรุณาอัพโหลดไฟล์วิดีโอ" }}</small></label>
+            @endif
+          </fieldset>
+          <div class="form-group mt-1">
+            <div class="progress">
+              @php
+              $progress_value = 0;
+              $progress_text = '';
+              if (!empty(old('file_name'))) {
+                $progress_value = 100;
+                $progress_text = 'Upload Success';
+              }
+              @endphp
+              <div class="text-xs-center @if(!empty($progress_text)) text-success @endif" id="display-upload">{{ $progress_text }}</div>
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{$progress_value}}" aria-valuemin="{{$progress_value}}" aria-valuemax="100" style="width:{{$progress_value}}%" aria-describedby="example-caption-2"></div>
+            </div>
+          </div>
           <form class="form-horizontal" action="{{ route('episode_store') }}" method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $id }}">
             <input type="hidden" name="course_id" value="{{ $course_id }}">
             <input type="hidden" name="timestamp" value="">
             <input type="hidden" class="form-control" name="file_name" value="{{old('file_name')}}" readonly>
-            {{-- VIDEO --}}
-            <h4 class="form-section"> Video</h4>
-            @php
-              if(!empty($errors->video->first('files'))) {
-                $style = "-danger";
-                $error = "danger";
-              } else {
-                $style = "-normal";
-                $error = "normal";
-              }
-            @endphp
-            <fieldset class="form-group {{$error}} mb-0">
-              <label class="text{{$style}}" for="basicInputFile">Upload video file. <span class="text-danger">*</span></label>
-              <div class="custom-file">
-                <input id="fileupload" type="file" name="files[]" accept=".mp4,.mov,.avi,.mpg">
-                <label class="custom-file-label" for="fileupload">Choose file</label>
-              </div>
-              <button type="button" class="btn btn-danger btn-min-width mt-1 hidden" id="cancel-btn">Cancel Upload</button>
-              <button type="button" class="btn btn-danger btn-min-width mt-1 @if(empty(old('file_name'))) hidden @endif" id="delete-btn">Delete File</button>
-              <p class="mb-0"><small class="text-muted">ชนิดของไฟล์ที่รองรับ mp4, mov, avi, mpg (แนะนำให้ใช้ mp4 และเข้ารหัสด้วย H.264/ACC)</small></p>
-              @if(!empty($errors->video->first('files')))
-                <label class="text-danger mb-0"><small>{{ "กรุณาอัพโหลดไฟล์วิดีโอ" }}</small></label>
-              @endif
-            </fieldset>
-            <div class="form-group mt-1">
-              <div class="progress">
-                @php
-                $progress_value = 0;
-                $progress_text = '';
-                if (!empty(old('file_name'))) {
-                  $progress_value = 100;
-                  $progress_text = 'Upload Success';
-                }
-                @endphp
-                <div class="text-xs-center @if(!empty($progress_text)) text-success @endif" id="display-upload">{{ $progress_text }}</div>
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{$progress_value}}" aria-valuemin="{{$progress_value}}" aria-valuemax="100" style="width:{{$progress_value}}%" aria-describedby="example-caption-2"></div>
-              </div>
-            </div>
             {{-- TITLE --}}
             <fieldset class="form-group floating-label-form-group @if($errors->episode->has('title')) danger @endif">
               <label for="user-name">ชื่อ</label>
