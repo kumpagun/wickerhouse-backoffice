@@ -189,6 +189,7 @@ class ReportController extends Controller
         $datas[$values_id]['division'] = $value->employees->division_name;
         $datas[$values_id]['section'] = $value->employees->section_name;
         $datas[$values_id]['department'] = $value->employees->dept_name;
+        $datas[$values_id]['branch'] = $value->employees->branch_name;
         $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
         $datas[$values_id]['job_family'] = $value->employees->job_family;
       // }
@@ -204,6 +205,7 @@ class ReportController extends Controller
       $datas[$value->_id]['division'] = $value->division_name;
       $datas[$value->_id]['section'] = $value->section_name;
       $datas[$value->_id]['department'] = $value->dept_name;
+      $datas[$value->_id]['branch'] = $value->branch_name;
       $datas[$value->_id]['staff_grade'] = $value->staff_grade;
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
@@ -265,6 +267,7 @@ class ReportController extends Controller
       if(!empty($data['division'])) { $division = $data['division']; } 
       if(!empty($data['section'])) { $section = $data['section']; } 
       if(!empty($data['department'])) { $department = $data['department']; } 
+      if(!empty($data['branch'])) { $branch = $data['branch']; } 
       if(!empty($data['staff_grade'])) { $staff_grade = $data['staff_grade']; } 
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } 
       if(!empty($data['play_course'])) { $play_course = $data['play_course']; } 
@@ -284,6 +287,7 @@ class ReportController extends Controller
           'division' => $division,
           'section' => $section,
           'department' => $department,
+          'branch' => $branch,
           'staff_grade' => $staff_grade,
           'job_family' => $job_family,
           'play_course' => $play_course,
@@ -314,5 +318,19 @@ class ReportController extends Controller
 			$start += $length;
 		}
 		return array('status' => 'success');
+  }
+
+  public function update_branch() {
+    $query = Report_member_access::whereNull('branch');
+    $query->select('employee_id');
+    $query->groupBy('employee_id');
+    $datas = $query->get();
+
+    foreach($datas as $data) {
+      $employee = Employee::where('employee_id',$data->employee_id)->first();
+      if(!empty($employee->branch_name)) {
+        Report_member_access::where('employee_id',$data->employee_id)->update(['branch' => $employee->branch_name]);
+      }
+    }
   }
 }

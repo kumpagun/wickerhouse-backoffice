@@ -36,6 +36,7 @@ class TeacherController extends Controller
       $data->subtitle = '';
       $data->slug = '';
       $data->label = '';
+      $data->email = '';
       $data->profile_image = '';
       $data->description = '';
       $data->history = '';
@@ -54,6 +55,7 @@ class TeacherController extends Controller
     $subtitle = $request->input('subtitle');
     $slug = $request->input('slug');
     $label = $request->input('label');
+    $email = $request->input('email');
     $profile_image = $request->input('profile_image');
     $description = $request->input('description');
     $history = $request->input('history');
@@ -75,6 +77,7 @@ class TeacherController extends Controller
     $teacher->subtitle = $data['subtitle'];
     $teacher->slug = $data['slug'];
     $teacher->label = $data['label'];
+    $teacher->email = $data['email'];
     $teacher->description = $data['description'];
     $teacher->history = $data['history'];
     $teacher->status = 1;

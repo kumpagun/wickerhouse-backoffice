@@ -4,18 +4,15 @@
 .color-2 {
   color: $primary2-color;
 }
-// Sidebar active menu
-.main-menu.menu-light .navigation {
-  li{
-    &:active, &.open {
-      border-left: 4px solid $primary2-color;
+.main-menu.menu-light .navigation li {
+  &.open {
+    border-left: 4px solid $primary2-color;
+  }
+  &.active {
+    border-left: 4px solid $primary2-color;
+    a {
+      color: $primary2-color;
     }
-    &.active {
-      // border-left: 4px solid $primary2-color;
-      a {
-        color: $primary2-color;
-      }
-    } 
   }
 }
 // Link

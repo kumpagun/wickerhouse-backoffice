@@ -194,7 +194,7 @@
       episode_group: list_group
     },
     function(data, status){
-      // swal("Update");
+      // swal.fire("Update");
       console.log(data, status)
     });
   }
@@ -221,7 +221,7 @@
 
   function handleDeleteGroup(episode_group_id) {
     url = "{{ route('episode_group_delete') }}/"+episode_group_id
-    swal({
+    swal.fire({
       title: "คุณต้องการลบใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
@@ -242,7 +242,7 @@
         }
       }
     }).then(isConfirm => {
-      if (isConfirm) {
+      if (isConfirm.value) {
         window.location = url
       } 
     });

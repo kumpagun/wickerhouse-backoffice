@@ -93,7 +93,7 @@
             </fieldset>
             {{-- TITLE --}}
             <fieldset class="form-group floating-label-form-group @if($errors->course->has('title')) danger @endif">
-              <label for="user-name">Title</label>
+              <label for="user-name">ชื่อคอร์ส</label>
               <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="Title" required>
               @if($errors->course->has('title'))
                 <span class="small" role="alert">
@@ -103,9 +103,9 @@
             </fieldset>
             {{-- Requier Course --}}
             <fieldset class="form-group @if($errors->course->has('require_course')) danger @endif">
-              <label for="user-name"> Require Course </label>
+              <label for="user-name">จำเป็นต้องดูคอร์สอื่นก่อน</label>
               <select class="select2 form-control" name="require_course">
-                <option value="">ไม่ Require Course</option>
+                <option value="">ไม่จำเป็นต้องดูคอร์สอื่นก่อน</option>
                 @foreach ($course as $item )
                   <option value={{ $item }} 
                     @if(!empty($data->require_course) && in_array($item, $data->require_course)) selected  @endif
@@ -117,9 +117,9 @@
             </fieldset>
             {{-- Category --}}
             <fieldset class="form-group @if($errors->course->has('category_id')) danger @endif">
-              <label for="user-name">Category *</label>
+              <label for="user-name">ประเภทหลักสูตร *</label>
               <select class="select2 form-control" name="category_id">
-                <option value=""> กรุณาเลือก Category</option>
+                <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
                 @foreach ($category as $item )
                   <option value={{ $item }} 
                     @if(!empty($data->category_id) && ((string)$data->category_id == (string)$item)) selected  @endif
@@ -150,20 +150,19 @@
               @endif
             </fieldset>
             {{-- Teacher --}}
-            <fieldset class="form-group @if($errors->course->has('teacher_id')) danger @endif">
+            <fieldset class="form-group @if($errors->course->has('teachers')) danger @endif">
               <label for="user-name">วิทยากร *</label>
-              <select class="select2 form-control" name="teacher_id">
-                <option value=""> กรุณาเลือกวิทยากร</option>
+              <select class="select2 form-control" name="teachers[]" multiple="multiple">
                 @foreach ($teacher as $item )
                   <option value={{ $item }} 
-                    @if(!empty($data->teacher_id) && ((string)$data->teacher_id == (string)$item)) selected  @endif
+                    @if(!empty($data->teachers) && in_array($item,$data->teachers)) selected  @endif
                   >{{ TeacherClass::get_name_teacher($item) }}</option>
                 @endforeach
               </select>
-              @if($errors->course->has('teacher_id'))
-                  <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->course->first('teacher_id') }}</p>
-                  </span>
+              @if($errors->course->has('teachers'))
+                <span class="small" role="alert">
+                  <p class="mb-0">{{ $errors->course->first('teachers') }}</p>
+                </span>
               @endif
             </fieldset>
             {{-- slug --}}
@@ -204,7 +203,7 @@
                       <input type="text" name="benefits" placeholder="ประโยชน์ต่อผู้เรียน" class="form-control" value="{{ $item }}">
                       <div class="input-group-append">
                         <span class="input-group-btn" id="button-addon2">
-                          <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                          <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                         </span>
                       </div>
                     </div>
@@ -214,7 +213,7 @@
                     <input type="text" name="benefits" placeholder="ประโยชน์ต่อผู้เรียน" class="form-control">
                     <div class="input-group-append">
                       <span class="input-group-btn" id="button-addon2">
-                        <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                        <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                       </span>
                     </div>
                   </div>
@@ -236,7 +235,7 @@
                       <input type="text" name="appropriates" placeholder="เหมาะสมกับผู้เรียน" class="form-control" value="{{ $item }}">
                       <div class="input-group-append">
                         <span class="input-group-btn" id="button-addon2">
-                          <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                          <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                         </span>
                       </div>
                     </div>
@@ -246,7 +245,7 @@
                     <input type="text" name="appropriates" placeholder="เหมาะสมกับผู้เรียน" class="form-control">
                     <div class="input-group-append">
                       <span class="input-group-btn" id="button-addon2">
-                        <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                        <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                       </span>
                     </div>
                   </div>

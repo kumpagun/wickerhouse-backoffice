@@ -113,8 +113,8 @@
         <div class="card-header pb-0">
           <div class="heading-elements">
             <ul class="list-inline mb-0">
-              <li><a href="{{ route('examination_create', ['examination_group_id' => $examination_group->_id, 'id' => $item->_id]) }}"><i class="ft-edit"></i> แก้ไข</a></li>
-              <li><a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')"><i class="ft-x"></i> ลบ</a></a>
+              <li><a href="{{ route('examination_create', ['examination_group_id' => $examination_group->_id, 'id' => $item->_id]) }}"><i class="feather icon-edit"></i> แก้ไข</a></li>
+              <li><a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')"><i class="feather icon-x"></i> ลบ</a></a>
             </ul>
           </div>
         </div>
@@ -202,7 +202,7 @@
   <script>
     function handleDelete(id) {
       url = "{{ route('examination_delete') }}/"+id
-      swal({
+      swal.fire({
         title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
         icon: "warning",
         showCancelButton: true,
@@ -223,7 +223,7 @@
           }
         }
       }).then(isConfirm => {
-        if (isConfirm) {
+        if (isConfirm.value) {
           window.location = url
         } 
       });

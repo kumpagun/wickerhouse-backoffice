@@ -21,7 +21,7 @@
 </div>
 <div class="card">
   <div class="card-content collapse show">
-    <div class="card-body">
+    <div class="card-body card-dashboard">
       <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user')}}" method="POST">
         {{ csrf_field() }}
         <label class="col-4 text-right"> Training List</label>
@@ -44,8 +44,8 @@
         </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+      <div class="o-scroll mt-2">
+        <table class="table table-striped table-bordered zero-configuration">
           <thead>
             <tr class="">
             <th class="text-center align-middle">#</th>
@@ -58,6 +58,7 @@
             <th class="text-center align-middle">DivisionName</th>
             <th class="text-center align-middle">SectionName</th>
             <th class="text-center align-middle">DeptName</th>
+            <th class="text-center align-middle">BranchName</th>
             <th class="text-center align-middle">StaffGrade</th>
             <th class="text-center align-middle">JobFamily</th>
             <th class="text-center align-middle">Status</th>
@@ -70,7 +71,7 @@
             @if(count($datas))
               @foreach($datas as $data)
               <tr>
-                <td class="text-center">{{ (($datas->currentPage() - 1) * $datas->perPage()) + $loop->iteration  }}</td>
+                <td class="text-center">{{ $loop->iteration }}</td>
 
                 @if(!empty($data->employee_id)) 
                   <td class="text-center">{{ $data->employee_id }}</td>
@@ -126,6 +127,12 @@
                   <td class="text-center">-</td>
                 @endif
 
+                @if(!empty($data->branch)) 
+                  <td class="text-center">{{ $data->branch }}</td>
+                @else 
+                  <td class="text-center">-</td>
+                @endif
+
                 @if(!empty($data->staff_grade)) 
                   <td class="text-center">{{ $data->staff_grade }}</td>
                 @else 
@@ -172,9 +179,9 @@
           </tbody>
         </table>
       </div>
-      <div class="text-center">
+      {{-- <div class="text-center">
         {{ $datas->appends([ 'search_group' => $search_group ])->links() }}
-      </div>
+      </div> --}}
       </div>
         {{-- <span class="text-danger"><small>* ยอด video view จาก embed (web, app) </small></span> --}}
     </div>
@@ -206,6 +213,9 @@
 .text-right {
   text-align: right;
 }
+.o-scroll {
+  overflow: scroll;
+}
 </style>
 @endsection
 
@@ -213,14 +223,6 @@
 {{-- Datatable --}}
 <script src="{{asset('stack-admin/app-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{asset('stack-admin/app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript"></script>
-
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/buttons.flash.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/jszip.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/pdfmake.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/vfs_fonts.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/buttons.html5.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/vendors/js/tables/buttons.print.min.js') }}" type="text/javascript"></script>
 <!-- pagination -->
 <script>
   $('.pagination li').addClass('page-item');
@@ -231,19 +233,13 @@
     lengthMenu: [
       [ 25, 50, 100, 200, -1 ],
       [ '25 rows', '50 rows', '100 rows', '200 rows', 'All' ]
-    ],
-    buttons: [
-      { extend: 'csv', text: '<i class="fas fa-file-csv fa-1x"> Export CSV</i>'},
-      { extend: 'excel', text: '<i class="fas fa-file-excel" aria-hidden="true"> Export EXCEL</i>' },
-      'pageLength'
-    ],
+    ]
   });
   t.on( 'order.dt search.dt', function () {
     t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
       cell.innerHTML = i+1;
     } );
   } ).draw();
-  $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
 
   $(window).load(function() {
 		// Animate loader off screen

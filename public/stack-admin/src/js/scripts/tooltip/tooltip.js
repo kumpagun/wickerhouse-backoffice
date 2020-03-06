@@ -4,7 +4,6 @@
 				use CSS3 for animations, and data-attributes for local title storage.
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: Pixinvent
 	Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/

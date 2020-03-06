@@ -4,7 +4,6 @@
     It supports searching, remote data sets, and pagination of results.
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: Pixinvent
     Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -12,16 +11,25 @@
 	'use strict';
 
   // Basic Select2 select
-	$(".select2").select2();
+	$(".select2").select2({
+    // the following code is used to disable x-scrollbar when click in select input and
+    // take 100% width in responsive also
+    dropdownAutoWidth: true,
+    width: '100%'
+  });
 
     // Single Select Placeholder
     $(".select2-placeholder").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Select a state",
       allowClear: true
     });
 
     // Select With Icon
     $(".select2-icons").select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         minimumResultsForSearch: Infinity,
         templateResult: iconFormat,
         templateSelection: iconFormat,
@@ -32,23 +40,29 @@
     function iconFormat(icon) {
         var originalOption = icon.element;
         if (!icon.id) { return icon.text; }
-        var $icon = "<i class='icon-" + $(icon.element).data('icon') + "'></i>" + icon.text;
+        var $icon = "<i class='" + $(icon.element).data('icon') + "'></i>" + icon.text;
 
         return $icon;
     }
 
     // Multiple Select Placeholder
     $(".select2-placeholder-multiple").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Select State",
     });
 
     // Hiding the search box
     $(".hide-search").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       minimumResultsForSearch: Infinity
     });
 
     // Limiting the number of selections
     $(".max-length").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       maximumSelectionLength: 2,
       placeholder: "Select maximum 2 items"
     });
@@ -56,6 +70,8 @@
     // DOM Events
     var $eventSelect = $(".js-example-events");
     $eventSelect.select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "DOM Events"
     });
     $eventSelect.on("select2:open", function (e) {
@@ -76,9 +92,14 @@
     });
 
     // Programmatic access
-    var $select = $(".js-example-programmatic").select2();
+    var $select = $(".js-example-programmatic").select2({
+      dropdownAutoWidth: true,
+      width: '100%'
+    });
     var $selectMulti = $(".js-example-programmatic-multi").select2();
     $selectMulti.select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Programmatic Events"
     });
     $(".js-programmatic-set-val").on("click", function () { $select.val("CA").trigger("change"); });
@@ -102,11 +123,15 @@
     ];
 
     $(".select2-data-array").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       data: data
     });
 
     // Loading remote data
     $(".select2-data-ajax").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Loading remote data",
       ajax: {
         url: "http://api.github.com/search/repositories",
@@ -168,11 +193,15 @@
 
     // Tagging support
     $(".select2-tags").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       tags: true
     });
 
     // Automatic tokenization
     $(".select2-tokenizer").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       tags: true,
       tokenSeparators: [',', ' ']
     });
@@ -188,6 +217,8 @@
 
     $.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
       $(".select2-customize-result").select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         placeholder: "Search by 'a'",
         matcher: oldMatcher(matchStart)
       });
@@ -195,22 +226,30 @@
 
     // Multiple languages
     $(".select2-language").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       language: "es"
     });
 
     // RTL support
     $(".select2-rtl").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "RTL Select",
       dir: "rtl"
     });
 
     // Diacritics support
     $(".select2-diacritics").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Type 'aero'",
     });
 
     // Theme support
     $(".select2-theme").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Classic Theme",
       theme: "classic"
     });
@@ -227,6 +266,8 @@
     }
 
     $(".select2-templating").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       templateResult: formatState,
       templateSelection: formatState
     });
@@ -236,18 +277,24 @@
 
     // Large
     $('.select2-size-lg').select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: 'select-lg'
     });
 
 
     // Small
     $('.select2-size-sm').select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: 'select-sm'
     });
 
 
     // Mini
     $('.select2-size-xs').select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: 'select-xs'
     });
 
@@ -271,6 +318,8 @@
       var className = "bg-"+color + variation + " " + textColor + textVariation + " border-"+color + ' border-darken-2 ';
 
       $(this).select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: className
       });
     });
@@ -294,6 +343,8 @@
       var className = "border-"+color + " " +variation + " " + textColor + textVariation;
 
       $(this).select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: className
       });
     });
@@ -316,6 +367,8 @@
       var className = "bg-"+color + variation + " " + textColor + textVariation + " border-"+color + ' border-darken-2 ';
 
       $(this).select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         dropdownCssClass: className
       });
     });
@@ -338,6 +391,8 @@
       var className = "bg-"+color + variation + " " + textColor + textVariation + " border-"+color + ' border-darken-2 ';
 
       $(this).select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: className,
         dropdownCssClass: className
       });

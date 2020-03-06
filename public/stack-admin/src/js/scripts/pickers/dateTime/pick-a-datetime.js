@@ -3,7 +3,6 @@
     Description: Pick a date/time Picker, Date Range Picker JS
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: Pixinvent
     Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -372,11 +371,11 @@
 	$('.dateranges').daterangepicker({
 		ranges: {
 			'Today': [moment(), moment()],
-			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+			'Yesterday': [moment().startOf(1), moment().startOf(1)],
+			'Last 7 Days': [moment().startOf(6), moment()],
+			'Last 30 Days': [moment().startOf(29), moment()],
 			'This Month': [moment().startOf('month'), moment().endOf('month')],
-			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			'Last Month': [moment().startOf(1).startOf('month'), moment().startOf(1).endOf('month')]
 		}
 	});
 
@@ -384,11 +383,11 @@
 	$('.shawCalRanges').daterangepicker({
 		ranges: {
 			'Today': [moment(), moment()],
-			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+			'Yesterday': [moment().startOf(1), moment().startOf(1)],
+			'Last 7 Days': [moment().startOf(6), moment()],
+			'Last 30 Days': [moment().startOf(29), moment()],
 			'This Month': [moment().startOf('month'), moment().endOf('month')],
-			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			'Last Month': [moment().startOf(1).startOf('month'), moment().startOf(1).endOf('month')]
 		},
 		 alwaysShowCalendars: true,
 	});
@@ -415,11 +414,11 @@
 	$('.localeRange').daterangepicker({
 		ranges: {
 			"Aujourd'hui": [moment(), moment()],
-			'Hier': [moment().subtract('days', 1), moment().subtract('days', 1)],
-			'Les 7 derniers jours': [moment().subtract('days', 6), moment()],
-			'Les 30 derniers jours': [moment().subtract('days', 29), moment()],
+			'Hier': [moment().startOf(1), moment().startOf(1)],
+			'Les 7 derniers jours': [moment().startOf(6), moment()],
+			'Les 30 derniers jours': [moment().startOf(29), moment()],
 			'Ce mois-ci': [moment().startOf('month'), moment().endOf('month')],
-			'le mois dernier': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+			'le mois dernier': [moment().startOf(1).startOf('month'), moment().startOf(1).endOf('month')]
 		},
 		locale: {
 			applyLabel: "Vers l'avant",

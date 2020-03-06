@@ -6,8 +6,11 @@
   color: #f86718;
 }
 
-.main-menu.menu-light .navigation li:active,
 .main-menu.menu-light .navigation li.open {
+  border-left: 4px solid #f86718;
+}
+
+.main-menu.menu-light .navigation li.active {
   border-left: 4px solid #f86718;
 }
 

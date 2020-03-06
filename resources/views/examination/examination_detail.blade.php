@@ -162,28 +162,28 @@
       }
 
       if(!question || !choice_0 || !choice_1 || !choice_2 || !choice_3 || !answer_key) {
-        swal('กรุณากรอกข้อมูลให้ครบ')
+        swal.fire('กรุณากรอกข้อมูลให้ครบ')
         return false
       }
 
       if(quill_question.container.firstChild.innerHTML==="<p><br></p>") {
-        swal('กรุณากรอกข้อมูลให้ครบ') 
+        swal.fire('กรุณากรอกข้อมูลให้ครบ') 
         return false 
       }
       if(quill_choice_0.container.firstChild.innerHTML==="<p><br></p>") { 
-        swal('กรุณากรอกข้อมูลให้ครบ') 
+        swal.fire('กรุณากรอกข้อมูลให้ครบ') 
         return false 
       }
       if(quill_choice_1.container.firstChild.innerHTML==="<p><br></p>") { 
-        swal('กรุณากรอกข้อมูลให้ครบ') 
+        swal.fire('กรุณากรอกข้อมูลให้ครบ') 
         return false 
       }
       if(quill_choice_2.container.firstChild.innerHTML==="<p><br></p>") { 
-        swal('กรุณากรอกข้อมูลให้ครบ') 
+        swal.fire('กรุณากรอกข้อมูลให้ครบ') 
         return false 
       }
       if(quill_choice_3.container.firstChild.innerHTML==="<p><br></p>") { 
-        swal('กรุณากรอกข้อมูลให้ครบ') 
+        swal.fire('กรุณากรอกข้อมูลให้ครบ') 
         return false 
       }
 

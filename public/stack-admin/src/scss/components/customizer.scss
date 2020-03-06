@@ -3,7 +3,6 @@
 	Description: CSS used for demo purpose only. Remove this css from your project.
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: PIXINVENT
 	Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -17,7 +16,7 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     transition: right 0.4s cubic-bezier(0.05, 0.74, 0.2, 0.99);
     backface-visibility: hidden;
     border-left: 1px solid rgba(0, 0, 0, 0.05);
@@ -70,4 +69,11 @@
 		border-color: $primary;
 		color:#FFF;
 	}
+}
+
+.buy-now {
+    position: fixed;
+    bottom: 5%;
+    right: 2%;
+    z-index: 1031;
 }

@@ -3,7 +3,6 @@
 //   Description: loader color system styles
 //   ----------------------------------------------------------------------------------------------
 //   Item Name: Stack - Responsive Admin Theme
-//   Version: 3.0
 //   Author: PIXINVENT
 //   Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -22,8 +21,6 @@
 
 // Color palettes
 @import "palette-variables";
-// Overrides user variable
-@import "../../../../assets/scss/colors/palette-variables";
 
 @each $color_name, $color in $colors {
   @each $color_type, $color_value in $color {

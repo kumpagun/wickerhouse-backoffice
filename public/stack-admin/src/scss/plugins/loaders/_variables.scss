@@ -3,11 +3,10 @@
 @import "../../bootstrap/mixins";
 // Core variables and mixins overrides
 @import "../../core/variables/variables";
-@import "../../core/variables/components-variables";
+@import "../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../assets/scss/variables/variables";
-@import "../../../../assets/scss/variables/components-variables";
+@import "../../core/variables/components-variables";
 
 $primary-color: $gray-600 !default;
 $ball-size: 15px !default;

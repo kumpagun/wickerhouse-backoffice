@@ -20,7 +20,7 @@
 
   @include media-breakpoint-up(sm) {
     .nav-item {
-      display: table-cell;
+      display: table;
       width: 1%;
     }
     .nav-link {

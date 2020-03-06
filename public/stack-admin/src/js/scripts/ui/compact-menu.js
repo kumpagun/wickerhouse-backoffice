@@ -3,7 +3,6 @@
 	Description: Compact menu page level only
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: Pixinvent
 	Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/

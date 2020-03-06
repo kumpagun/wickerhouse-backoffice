@@ -3,7 +3,6 @@
     Description: Chartist line chart with area
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/

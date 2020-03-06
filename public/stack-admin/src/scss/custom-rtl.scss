@@ -3,7 +3,6 @@
 // 	Description: Stack RTL support SCSS file.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -17,6 +16,18 @@
         float: right;
     }
 }
+.menu-collapsed{
+    .main-menu {
+        .navigation > li{
+            &.open{
+                border: none;
+                > a{
+                    border-right: 4px solid #00B5B8;
+                }
+            }
+        }
+    }   
+}
 .dropdown-user.nav-item i{
     float: right;
 }
@@ -28,7 +39,12 @@
         }
     }
 }
-
+body.vertical-layout.vertical-menu .main-menu .navigation > li > a{
+    padding-right: 20px;
+}
+// body.vertical-layout.vertical-menu.menu-collapsed .main-menu .navigation > li.navigation-header{
+//     float: left;
+// }
 
 .mega-dropdown-menu {
     li {
@@ -50,12 +66,6 @@
     position: absolute;
     right: 25%;
 }
-
-// Echart title fix for RTL
-.echart-container {
-    direction: ltr;
-}
-
 .mm-menu{
     left: auto;
 }
@@ -68,7 +78,6 @@
     float:left;
 }
 
-// jquery ui icon position rtl fix TODO:AJ: add rtl support for jQ UI
 .ui-widget-icon-block{
     right: 50%;
 }
@@ -139,4 +148,22 @@ pre[class*="language-"] {
             }
         }
     }
+}
+
+// Email Application
+
+.email-application {
+  .app-content {
+    .list-group {
+      .list-group-item {
+        i {
+          float: right !important;
+        }
+      }
+    }
+  }
+}
+// Perfact scrollbar RTL fix
+body .ps__rail-y{
+    left: 0 !important
 }

@@ -14,6 +14,7 @@ class Course extends Eloquent
     'type',
     'title',
     'teacher_id',
+    'teachers',
     'description',
     'tag',
     'thumbnail',

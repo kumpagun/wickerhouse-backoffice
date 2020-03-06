@@ -1,15 +1,13 @@
 // Core variables and mixins
 @import "../../../bootstrap/functions";
-@import "../../../bootstrap/variables";
 @import "../../../bootstrap/mixins";
 
 // Core variables and mixins overrides
 @import "../../../core/variables/variables";
-@import "../../../core/variables/components-variables";
+@import "../../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../../assets/scss/variables/variables";
-@import "../../../../../assets/scss/variables/components-variables";
+@import "../../../core/variables/components-variables";
 
 .form-group{
   &.issue{
@@ -82,5 +80,16 @@
   }
   .help-block ul{
     padding-left: 1.5rem;
+  }
+}
+
+/*Bootstrap TouchPin*/
+.input-group.bootstrap-touchspin{
+  .input-group-prepend,.input-group-append{
+    .btn.btn-default.bootstrap-touchspin-down,
+    .btn.btn-default.bootstrap-touchspin-up{
+      background-color: $primary;
+      color: $white;
+    }
   }
 }

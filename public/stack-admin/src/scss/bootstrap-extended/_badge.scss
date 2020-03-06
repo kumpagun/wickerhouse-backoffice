@@ -2,6 +2,7 @@
 .badge{
   color: $white;
   font-weight: 400;
+  background-color: $primary;
   &[class*='badge-']{
     [class*='icon-']{
       line-height: 1;
@@ -22,8 +23,8 @@
     .dropdown-toggle::after,
     &.dropdown-toggle::after{
       position: relative;
-      top: -2px;
-      right: 3px;
+      // top: -2px;
+      // right: 3px;
       font-size: 1rem;
     }
     .dropdown-menu{
@@ -86,10 +87,10 @@
 }
 
 //Tag Up
-.badge-up{
-    position: relative;
-    top: -13px;
-    right: 14px;
+.badge-up {
+  position: relative;
+  top: -13px;
+  right: 14px;
 }
 .badge-icon{
   i{

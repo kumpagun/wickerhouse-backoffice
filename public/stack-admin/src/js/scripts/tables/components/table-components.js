@@ -3,7 +3,6 @@
 	Description: Table Components js
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: Pixinvent
 	Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -116,27 +115,47 @@
     // Switchery
     var i = 0;
     if (Array.prototype.forEach) {
-        var elems = Array.prototype.slice.call(document.querySelectorAll('.switchery'));
-
-        elems.forEach(function (html) {
-            var switchery = new Switchery(html);
-        });
-    } else {
-        var elems1 = document.querySelectorAll('.switchery');
-
-        for (i = 0; i < elems1.length; i++) {
-            var switchery = new Switchery(elems1[i]);
+      var elems = $('.switchery');
+      $.each( elems, function( key, value ) {
+        var $size="", $color="",$sizeClass="", $colorCode="";
+        $size = $(this).data('size');
+        var $sizes ={
+          'lg' : "large",
+          'sm' : "small",
+          'xs' : "xsmall"
+        };
+        if($(this).data('size')!== undefined){
+          $sizeClass = "switchery switchery-"+$sizes[$size];
         }
-    }
+        else{
+          $sizeClass = "switchery";
+        }
 
-    var elemSmall = document.querySelectorAll('.switchery-sm');
-    for (i = 0; i < elemSmall.length; i++) {
-        new Switchery(elemSmall[i], {className:"switchery switchery-small"});
-    }
+        $color = $(this).data('color');
+        var $colors ={
+          'primary' : "#967ADC",
+          'success' : "#37BC9B",
+          'danger' : "#DA4453",
+          'warning' : "#F6BB42",
+          'info' : "#3BAFDA"
+        };
+        if($color !== undefined){
+          $colorCode = $colors[$color];
+        }
+        else{
+          $colorCode = "#37BC9B";
+        }
 
-    var danger = document.querySelectorAll('.switchery-danger');
-    for (i = 0; i < danger.length; i++) {
-      new Switchery(danger[i], { color: '#DA4453' });
+        var switchery = new Switchery($(this)[0], { className: $sizeClass, color: $colorCode });
+      });
+    } else {
+      var elems1 = document.querySelectorAll('.switchery');
+
+      for (i = 0; i < elems1.length; i++) {
+        var $size = elems1[i].data('size');
+        var $color = elems1[i].data('color');
+        var switchery = new Switchery(elems1[i], { color: '#37BC9B' });
+      }
     }
     /*  Toggle Ends   */
 
@@ -148,16 +167,23 @@
   'use strict';
 
     // Basic Select2 select
-	$(".select2").select2();
+	$(".select2").select2({
+    dropdownAutoWidth: true,
+    width: '100%'
+  });
 
     // Single Select Placeholder
     $(".select2-placeholder").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Select a state",
       allowClear: true
     });
 
     // Select With Icon
     $(".select2-icons").select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         minimumResultsForSearch: Infinity,
         templateResult: iconFormat,
         templateSelection: iconFormat,
@@ -168,13 +194,15 @@
     function iconFormat(icon) {
         var originalOption = icon.element;
         if (!icon.id) { return icon.text; }
-        var $icon = "<i class='icon-" + $(icon.element).data('icon') + "'></i>" + icon.text;
+        var $icon = "<i class='" + $(icon.element).data('icon') + "'></i>" + icon.text;
 
         return $icon;
     }
 
     // Theme support
     $(".select2-theme").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       placeholder: "Classic Theme",
       theme: "classic"
     });
@@ -191,12 +219,16 @@
     }
 
     $(".select2-templating").select2({
+      dropdownAutoWidth: true,
+      width: '100%',
       templateResult: formatState,
       templateSelection: formatState
     });
 
     // Mini
     $('.select2-size-xs').select2({
+        dropdownAutoWidth: true,
+        width: '100%',
         containerCssClass: 'select-xs'
     });
 
@@ -212,8 +244,8 @@
 	$(".touchspin").TouchSpin({
             buttondown_class: "btn btn-primary",
             buttonup_class: "btn btn-primary",
-            buttondown_txt: '<i class="ft-minus"></i>',
-            buttonup_txt: '<i class="ft-plus"></i>'
+            buttondown_txt: '<i class="feather icon-minus"></i>',
+            buttonup_txt: '<i class="feather icon-plus"></i>'
         });
 
 $("#chart1").sparkline([5,6,7,8,9,10,12,13,15,14,13,12,10,9,8,10,12,14,15,16,17,14,12,11,10,8], {

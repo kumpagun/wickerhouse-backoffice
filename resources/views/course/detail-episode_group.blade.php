@@ -134,7 +134,7 @@
       episode_group: list_group
     },
     function(data, status){
-      swal("Update");
+      swal.fire("Update");
     });
   }
   </script>

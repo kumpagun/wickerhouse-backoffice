@@ -71,7 +71,7 @@
             </div>
             {{-- TITLE --}}
             <fieldset class="form-group floating-label-form-group @if($errors->episode->has('title')) danger @endif">
-              <label for="user-name">Title</label>
+              <label for="user-name">ชื่อ</label>
               <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="Title" required>
               @if($errors->episode->has('title'))
                 <span class="small" role="alert">
@@ -81,9 +81,9 @@
             </fieldset>
             {{-- Requier Episode --}}
             <fieldset class="form-group @if($errors->course->has('require_episode')) danger @endif">
-              <label for="user-name"> Require Episode </label>
+              <label for="user-name"> จำเป็นต้องดู ep อื่นก่อน </label>
               <select class="select2 form-control" name="require_episode">
-                <option value="">ไม่ Require Episode</option>
+                <option value="">ไม่จำเป็นต้องดู ep อื่นก่อน</option>
                 <optgroup label="Course">
                   @foreach ($episode_list as $item )
                     <option value={{ $item->_id }} 

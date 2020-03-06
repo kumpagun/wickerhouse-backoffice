@@ -33,7 +33,7 @@ class MemberAccessByUserController extends Controller
     $datas_group = Training::find($group_id_select);
     $group_id = new ObjectId($datas_group->_id);
     $course_id = new ObjectId($datas_group->course_id);
-    $datas = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id)->paginate(50);
+    $datas = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id)->get();
 
     $group_name = $datas_group->title;
     $now = Carbon::now()->format('dmY');

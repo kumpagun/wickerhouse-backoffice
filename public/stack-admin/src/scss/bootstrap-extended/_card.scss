@@ -49,6 +49,15 @@
 		box-shadow: none;
 	}
 
+	// For uneven border color in card-bootstrap page
+	.card-collapse-border {
+		border-bottom: 1px solid $gray-200;
+	}
+
+	.knob-center-icon {
+        font-family: Simple-Line-Icons !important;
+    }
+
 }
 // If card moved
 .card-moved{
@@ -72,7 +81,7 @@
     .heading-elements-toggle{
 		background-color: inherit;
 	    position: absolute;
-	    top: 14px;
+	    top: 20px;
 	    right: 21px;
 	    &.heading-top-elements{
 	    	// top: 0px;

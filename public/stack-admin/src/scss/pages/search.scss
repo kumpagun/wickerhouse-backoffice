@@ -3,7 +3,6 @@
 // 	Description: Page content search pages page layouts SCSS.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -11,11 +10,10 @@
 // Core variables and mixins overrides
 @import "../bootstrap/functions";
 @import "../core/variables/variables";
-@import "../core/variables/components-variables";
+@import "../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../assets/scss/variables/variables";
-@import "../../../assets/scss/variables/components-variables";
+@import "../core/variables/components-variables";
 
 //Search Navbar
 #search-nav{
@@ -23,8 +21,9 @@
         border-bottom:2px solid #e0e0e0;
     }
     .nav-link{
+        line-height:$nav-link-height;
         &.active{
-            padding-bottom:6px;
+            padding-bottom: 7px;
             border-bottom: 2px solid $primary;
             margin-bottom: -2px;
         }

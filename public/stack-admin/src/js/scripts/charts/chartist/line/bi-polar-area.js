@@ -3,7 +3,6 @@
     Description: Chartist bi-polar line chart with area only
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/

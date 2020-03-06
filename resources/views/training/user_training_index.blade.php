@@ -121,7 +121,7 @@
         training_id: training_id,
         employee_id: employee_id
       }
-      swal({
+      swal.fire({
         title: "คุณต้องการลบ " +employee_name+ " ใช่หรือไม่ ?",
         icon: "warning",
         showCancelButton: true,
@@ -142,11 +142,12 @@
           }
         }
       }).then(isConfirm => {
-        if (isConfirm) {
+        if (isConfirm.value) {
+          console.log(isConfirm)
           $.post(url, postData, function(data, status){
             console.log(data, status)
             $('#'+employee_id).empty()
-            swal('Complete')
+            swal.fire('Complete')
           });
         } else {
 

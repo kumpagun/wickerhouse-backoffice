@@ -4,11 +4,10 @@
 
 // Core variables and mixins overrides
 @import "../../core/variables/variables";
-@import "../../core/variables/components-variables";
+@import "../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../assets/scss/variables/variables";
-@import "../../../../assets/scss/variables/components-variables";
+@import "../../core/variables/components-variables";
 
 /* Toggle */
 input[type="checkbox"].switch,
@@ -35,7 +34,7 @@ input[type="radio"].switch {
 }
 .switch{
 	~.btn-group {
-		a.btn{
+		.btn{
 			-moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
 			-webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
 			box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
@@ -80,6 +79,14 @@ input[type="radio"].switch {
 			.bootstrap-switch-handle-on{
 				padding: 5px 10px;
 			}
+		}
+	}
+}
+
+#card-headings{
+	.custom-control{
+		.custom-control-label::before, .custom-control-label::after{
+			left: -1.5rem;
 		}
 	}
 }

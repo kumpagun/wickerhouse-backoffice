@@ -2,18 +2,17 @@
     File Name: image-cropper.js
     Description: Image Cropper
     --------------------------------------------------------------------------------------
-    Item Name: Robust - Responsive Admin Theme
-    Version: 3.0
+    Item Name: Stack - Responsive Admin Theme
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     /********************************
-    *           Crop Demo           *
-    ********************************/
+     *           Crop Demo           *
+     ********************************/
     var $image = $('.main-demo-image');
     var $download = $('.download');
     var $dataX = $('.main-demo-dataX');
@@ -27,14 +26,14 @@ $(document).ready(function(){
         viewMode: 1,
         aspectRatio: 16 / 9,
         preview: '.img-preview',
-        crop: function(e) {
-            $dataX.val(Math.round(e.x));
-            $dataY.val(Math.round(e.y));
-            $dataHeight.val(Math.round(e.height));
-            $dataWidth.val(Math.round(e.width));
-            $dataRotate.val(e.rotate);
-            $dataScaleX.val(e.scaleX);
-            $dataScaleY.val(e.scaleY);
+        crop: function (e) {
+            $dataX.val(Math.round(e.detail.x));
+            $dataY.val(Math.round(e.detail.y));
+            $dataHeight.val(Math.round(e.detail.height));
+            $dataWidth.val(Math.round(e.detail.width));
+            $dataRotate.val(e.detail.rotate);
+            $dataScaleX.val(e.detail.scaleX);
+            $dataScaleY.val(e.detail.scaleY);
         }
     };
 
@@ -42,78 +41,78 @@ $(document).ready(function(){
     $image.cropper(options);
 
     // Get Data
-    $('.get-data-btn').on('click',function(){
+    $('.get-data-btn').on('click', function () {
         result = $image.cropper("getData");
         $('.get-data').val(JSON.stringify(result));
     });
 
     // Get Image Data
-    $('.get-image-data-btn').on('click',function(){
+    $('.get-image-data-btn').on('click', function () {
         result = $image.cropper("getImageData");
         $('.get-image-data').val(JSON.stringify(result));
     });
 
     // Get Container Data
-    $('.get-container-data-btn').on('click',function(){
+    $('.get-container-data-btn').on('click', function () {
         result = $image.cropper("getContainerData");
         $('.get-container-data').val(JSON.stringify(result));
     });
 
     // Get Canvas Data
-    $('.get-canvas-data-btn').on('click',function(){
+    $('.get-canvas-data-btn').on('click', function () {
         result = $image.cropper("getCanvasData");
         $('.get-canvas-data').val(JSON.stringify(result));
     });
 
     // Get Cropbox Data
-    $('.get-cropbox-data-btn').on('click',function(){
+    $('.get-cropbox-data-btn').on('click', function () {
         result = $image.cropper("getCropBoxData");
         $('.get-cropbox-data').val(JSON.stringify(result));
     });
 
     // Download Cropped Canvas
-    $('.download-cropped-canvas-btn').on('click',function(){
+    $('.download-cropped-canvas-btn').on('click', function () {
 
     });
 
     // Rotate Image -45 Degree
-    $('.rotate-m45-deg').on('click',function(){
+    $('.rotate-m45-deg').on('click', function () {
         $image.cropper('rotate', -45);
     });
 
     // Rotate Image 45 Degree
-    $('.rotate-45-deg').on('click',function(){
+    $('.rotate-45-deg').on('click', function () {
         $image.cropper('rotate', 45);
     });
 
     // Rotate Image 180 Degree
-    $('.rotate-180-deg').on('click',function(){
+    $('.rotate-180-deg').on('click', function () {
         $image.cropper('rotate', 180);
     });
 
     // Flip Horizontal
-    $('.flip-horizontal').on('click',function(){
+    $('.flip-horizontal').on('click', function () {
         var dataOption = $(this).data('option');
         $image.cropper('scaleX', -dataOption);
         $(this).data('option', -dataOption);
     });
 
     // Flip Vertical
-    $('.flip-vertical').on('click',function(){
+    $('.flip-vertical').on('click', function () {
         var dataOption = $(this).data('option');
         $image.cropper('scaleY', -dataOption);
         $(this).data('option', -dataOption);
     });
 
     // Zoom In
-    $('.zoom-in').on('click',function(){
+    $('.zoom-in').on('click', function () {
         $image.cropper('zoom', 0.1);
     });
 
 
     /***********************************
-    *           Basic Cropper          *
-    ***********************************/
+     *           Basic Cropper          *
+     ***********************************/
     $('.basic-cropper').cropper({
         viewMode: 1,
         restore: false,
@@ -122,8 +121,8 @@ $(document).ready(function(){
 
 
     /*********************************
-    *           No Overlay           *
-    *********************************/
+     *           No Overlay           *
+     *********************************/
     $('.no-overlay').cropper({
         viewMode: 1,
         modal: false,
@@ -132,11 +131,11 @@ $(document).ready(function(){
     });
 
     /****************************************
-    *           16:9 Aspect Ratio           *
-    ****************************************/
+     *           16:9 Aspect Ratio           *
+     ****************************************/
     $('.aspect-ratio-16-9').cropper({
         viewMode: 1,
-        aspectRatio: 16/9,
+        aspectRatio: 16 / 9,
         autoCropArea: 0.65,
         restore: false,
         zoomOnWheel: false
@@ -144,19 +143,19 @@ $(document).ready(function(){
 
 
     /***************************************
-    *           4:3 Aspect Ratio           *
-    ***************************************/
+     *           4:3 Aspect Ratio           *
+     ***************************************/
     $('.aspect-ratio-4-3').cropper({
         viewMode: 1,
-        aspectRatio: 4/3,
+        aspectRatio: 4 / 3,
         autoCropArea: 0.65,
         restore: false,
         zoomOnWheel: false
     });
 
     /*************************************
-    *           Fixed Crop Box           *
-    *************************************/
+     *           Fixed Crop Box           *
+     *************************************/
     $('.fixed-crop-box').cropper({
         viewMode: 1,
         dragMode: 'none',
@@ -167,8 +166,8 @@ $(document).ready(function(){
     });
 
     /******************************************
-    *           Fixed Size Crop Box           *
-    ******************************************/
+     *           Fixed Size Crop Box           *
+     ******************************************/
     $('.fixed-size-crop-box').cropper({
         viewMode: 1,
         dragMode: 'none',
@@ -179,8 +178,8 @@ $(document).ready(function(){
     });
 
     /*************************************
-    *           Disable Guides           *
-    *************************************/
+     *           Disable Guides           *
+     *************************************/
     $('.disable-guides').cropper({
         viewMode: 1,
         autoCropArea: 0.65,
@@ -190,8 +189,8 @@ $(document).ready(function(){
     });
 
     /***********************************************
-    *           Disable Center Indicator           *
-    ***********************************************/
+     *           Disable Center Indicator           *
+     ***********************************************/
     $('.disable-center-indicator').cropper({
         viewMode: 1,
         autoCropArea: 0.65,
@@ -201,8 +200,8 @@ $(document).ready(function(){
     });
 
     /****************************************
-    *           Disable Auto Crop           *
-    ****************************************/
+     *           Disable Auto Crop           *
+     ****************************************/
     $('.disable-auto-crop').cropper({
         autoCrop: false,
         viewMode: 1,
@@ -213,8 +212,8 @@ $(document).ready(function(){
 
 
     /*******************************************
-    *           Disable New Crop Box           *
-    *******************************************/
+     *           Disable New Crop Box           *
+     *******************************************/
     $('.disable-new-crop-box').cropper({
         dragMode: 'none',
         viewMode: 1,
@@ -224,8 +223,8 @@ $(document).ready(function(){
     });
 
     /************************************
-    *           Movable Image           *
-    ************************************/
+     *           Movable Image           *
+     ************************************/
     $('.movable-image').cropper({
         viewMode: 1,
         dragMode: 'move',
@@ -238,8 +237,8 @@ $(document).ready(function(){
 
 
     /*************************************
-    *           Zoomable Image           *
-    *************************************/
+     *           Zoomable Image           *
+     *************************************/
     $('.zoomable-image').cropper({
         viewMode: 1,
         dragMode: 'crop',
@@ -252,8 +251,8 @@ $(document).ready(function(){
     });
 
     /****************************************
-    *           Minimum Crop Area           *
-    ****************************************/
+     *           Minimum Crop Area           *
+     ****************************************/
     $('.min-crop-area').cropper({
         minCropBoxWidth: 100,
         minCropBoxHeight: 100,
@@ -265,8 +264,8 @@ $(document).ready(function(){
     });
 
     /*****************************************
-    *           Disable Background           *
-    *****************************************/
+     *           Disable Background           *
+     *****************************************/
     $('.disable-background').cropper({
         background: false,
         viewMode: 1,
@@ -278,8 +277,8 @@ $(document).ready(function(){
 
 
     /***********************************
-    *           Rotate Image           *
-    ***********************************/
+     *           Rotate Image           *
+     ***********************************/
     $('.rotate-image').cropper({
         viewMode: 1,
         autoCropArea: 0.65,
@@ -292,8 +291,8 @@ $(document).ready(function(){
     });
 
     /**********************************
-    *           Scale Image           *
-    **********************************/
+     *           Scale Image           *
+     **********************************/
     $('.scale-image').cropper({
         viewMode: 1,
         autoCropArea: 0.65,

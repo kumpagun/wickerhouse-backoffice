@@ -7,11 +7,10 @@
 
 // Core variables and mixins overrides
 @import "../../core/variables/variables";
-@import "../../core/variables/components-variables";
+@import "../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../assets/scss/variables/variables";
-@import "../../../../assets/scss/variables/components-variables";
+@import "../../core/variables/components-variables";
 
 @import '../../bootstrap/buttons';
 
@@ -36,9 +35,7 @@ th.fc-widget-header, .fc-basic-view td.fc-day-number, .fc-basic-view td.fc-week-
 .btn:focus, .fc button:focus, .btn.focus, .fc button.focus, .btn:active:focus, .fc button:active:focus, .btn:active.focus, .fc button:active.focus, .btn.active:focus, .fc button.active:focus, .btn.active.focus, .fc button.active.focus{
   outline: none;
 }
-.fc-toolbar .fc-state-active, .fc-toolbar .ui-state-active{
-  // @extend .btn-secondary.active
-}
+
 .fc-day-grid-event {
   margin: 0 5px 5px 5px;
   padding: 4px 8px;
@@ -128,4 +125,32 @@ th.fc-widget-header, .fc-basic-view td.fc-day-number, .fc-basic-view td.fc-week-
 .fc-events-container .fc-event{
   padding: 5px;
   margin: 10px 0;
+}
+
+//change color for today's date
+.fc-unthemed .fc-today {
+  color: $black;
+}
+
+.timezone-selector, .full-calender-languages{
+  width: 100%;
+  .custom-select{
+    background: none;
+  }
+}
+
+.fc-button{
+  &:not(:disabled).fc-button-active{
+    background-color: darken($color: $primary, $amount: 10%);
+    border-color: $primary;
+    &:focus{
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+.fc-button-group, .fc-today-button{
+  .fc-button, &.fc-button{
+    border-radius: 4px;
+  }
 }

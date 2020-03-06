@@ -1,15 +1,13 @@
 // Core variables and mixins
 @import "../../../bootstrap/functions";
-@import "../../../bootstrap/variables";
 @import "../../../bootstrap/mixins";
 
 // Core variables and mixins overrides
 @import "../../../core/variables/variables";
-@import "../../../core/variables/components-variables";
+@import "../../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../../assets/scss/variables/variables";
-@import "../../../../../assets/scss/variables/components-variables";
+@import "../../../core/variables/components-variables";
 
 /* Typeahead Starts */
 
@@ -53,3 +51,14 @@
 }
 
 /* MaxLength Ends */
+
+/*
+	For Type Ahead
+*/
+.typeahead .tt-menu{
+	width: 100%;
+	background: #fff;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	padding: 0.75rem 1rem;
+}

@@ -3,7 +3,6 @@
     Description: API Datatable 
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: Pixinvent
     Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -232,31 +231,32 @@ $('.show-child-rows tbody').on('click', 'td.details-control', function () {
 ************************************************/
 
 
-    $('.search-api').DataTable();
-
-    $('input.global_filter_search').on('keyup click', function() {
-        filterGlobal();
-    });
-
-    $('input.column_filter_search').on('keyup click', function() {
-        filterColumn($(this).parents('tr').attr('data-column'));
-    });
-
-
-    function filterGlobal() {
-        $('.search-api').DataTable().search(
-            $('#global_filter').val(),
-            $('#global_regex').prop('checked'),
-            $('#global_smart').prop('checked')
+    function filterGlobal () {
+    $('.search-api').DataTable().search(
+        $('#global_filter').val(),
+        $('#global_regex').prop('checked'),
+        $('#global_smart').prop('checked')
+    ).draw();
+    }
+     
+    function filterColumn ( i ) {
+        $('.search-api').DataTable().column( i ).search(
+            $('#col'+i+'_filter').val(),
+            $('#col'+i+'_regex').prop('checked'),
+            $('#col'+i+'_smart').prop('checked')
         ).draw();
     }
-
-    function filterColumn(i) {
-        $('.search-api').DataTable().column(i).search(
-            $('#col' + i + '_filter').val(),
-            $('#col' + i + '_regex').prop('checked'),
-            $('#col' + i + '_smart').prop('checked')
-        ).draw();
-    }
+     
+    $(document).ready(function() {
+        $('.search-api').DataTable();
+     
+        $('input.global_filter').on( 'keyup click', function () {
+            filterGlobal();
+        } );
+     
+        $('input.column_filter').on( 'keyup click', function () {
+            filterColumn( $(this).parents('tr').attr('data-column') );
+        } );
+    } );
 
 } );
