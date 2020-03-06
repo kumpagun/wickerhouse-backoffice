@@ -3,7 +3,6 @@
   Description: Extended bootstrap progress bar scss.
   ----------------------------------------------------------------------------------------
   Item Name: Stack - Responsive Admin Theme
-  Version: 3.0
   Author: PIXINVENT
   Author URL: http://www.themeforest.net/user/pixinvent
   ----------------------------------------------------------------------------------------
@@ -22,20 +21,5 @@
   margin-bottom: 3rem;
   &:last-child{
     margin-bottom: 1rem;
-  }
-  &.progress-xl{
-    height: $progress-size-xl;
-  }
-  &.progress-lg{
-    height: $progress-size-lg;
-  }
-  &.progress-md{
-    height: $progress-size-md;
-  }
-  &.progress-sm{
-    height: $progress-size-sm;
-  }
-  &.progress-xs{
-    height: $progress-size-xs;
   }
 }

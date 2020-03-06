@@ -96,7 +96,7 @@
                 <div class="form-group">
                   <p>Subtitle <span class="required">*</span></p>
                   <div class="controls">
-                    <input type="text" name="subtitle" class="form-control" value="{{ old('name', $data->subtitle) }}" required>
+                    <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $data->subtitle) }}" required>
                   </div>
                   </p>
                 </div>
@@ -105,7 +105,16 @@
                 <div class="form-group">
                   <p>Label <span class="required">*</span></p>
                   <div class="controls">
-                    <input type="text" name="label" class="form-control" value="{{ old('name', $data->label) }}" required>
+                    <input type="text" name="label" class="form-control" value="{{ old('label', $data->label) }}" required>
+                  </div>
+                  </p>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <p>Email <span class="required">*</span></p>
+                  <div class="controls">
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $data->email) }}" required>
                   </div>
                   </p>
                 </div>
@@ -114,7 +123,7 @@
                 <div class="form-group">
                   <p>Slug <span class="required">*</span></p>
                   <div class="controls">
-                    <input id="input-slug" type="text" name="slug" class="form-control" value="{{ old('name', $data->slug) }}" required>
+                    <input id="input-slug" type="text" name="slug" class="form-control" value="{{ old('slug', $data->slug) }}" required>
                   </div>
                   </p>
                 </div>
@@ -123,7 +132,7 @@
                 <div class="form-group">
                   <p>Description <span class="required">*</span></p>
                   <div class="controls">
-                    <input type="text" name="description" class="form-control" value="{{ old('name', $data->description) }}" required>
+                    <input type="text" name="description" class="form-control" value="{{ old('description', $data->description) }}" required>
                   </div>
                   </p>
                 </div>

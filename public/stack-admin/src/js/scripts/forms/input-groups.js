@@ -3,7 +3,6 @@
 	Description: Input Groups js
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: PIXINVENT
 	Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -16,15 +15,13 @@
 	$(".touchspin").TouchSpin({
 		buttondown_class: "btn btn-primary",
 		buttonup_class: "btn btn-primary",
-		buttondown_txt: '<i class="ft-minus"></i>',
-		buttonup_txt: '<i class="ft-plus"></i>'
+		buttondown_txt: '<i class="feather icon-minus"></i>',
+		buttonup_txt: '<i class="feather icon-plus"></i>'
 	});
 
 	//vertical TouchSpin
 	$(".touchspin-vertical").TouchSpin({
 		verticalbuttons: true,
-		verticalupclass: 'fa fa-angle-up',
-		verticaldownclass: 'fa fa-angle-down',
 		buttondown_class: "btn btn-primary",
 		buttonup_class: "btn btn-primary",
 	});
@@ -35,8 +32,8 @@
 		mousewheel: false,
 		buttondown_class: "btn btn-primary",
 		buttonup_class: "btn btn-primary",
-		buttondown_txt: '<i class="ft-minus"></i>',
-		buttonup_txt: '<i class="ft-plus"></i>'
+		buttondown_txt: '<i class="feather icon-minus"></i>',
+		buttonup_txt: '<i class="feather icon-plus"></i>'
 	});
 
 	// Color Options
@@ -54,8 +51,8 @@
 			mousewheel: false,
 			buttondown_class: down,
 			buttonup_class: up,
-			buttondown_txt: '<i class="ft-minus"></i>',
-			buttonup_txt: '<i class="ft-plus"></i>'
+			buttondown_txt: '<i class="feather icon-minus"></i>',
+			buttonup_txt: '<i class="feather icon-plus"></i>'
 		});
 	});
 

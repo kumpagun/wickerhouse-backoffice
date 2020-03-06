@@ -8,14 +8,11 @@
     width: 100%;
 }
 
-select[multiple='multiple'] {
-    overflow: hidden;
-}
 
 
 /* Input with icon */
 
-//TODO: 2 .has-icon-left need to merge and remove it.
+//.has-icon-left need to merge and remove it.
 .has-icon-left {
     .form-control {
         padding-left: 2.5rem;
@@ -105,17 +102,21 @@ input[type="month"].form-control {
         line-height: 1.677777;
         border-bottom-left-radius: 0.175rem;
         border-top-left-radius: 0.175rem;
+        height: 2rem;
     }
     .input-group-btn > button {
         border-radius: 0.175rem;
     }
-}
-// TODO:AJ: Removed margin
-/* .input-group-btn > button {
-    &.dropdown-toggle::after{
-        margin-top: -1.75rem;
+    > .form-control, 
+    > .custom-select, 
+    > .input-group-prepend > .input-group-text, 
+    > .input-group-append > .input-group-text, 
+    > .input-group-prepend > .btn, 
+    > .input-group-append > .btn{
+        padding: 0.25rem 0.75rem;
+        font-size: .75rem;
     }
-} */
+}
 .input-group-addon{
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;

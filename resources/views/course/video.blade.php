@@ -157,7 +157,7 @@
         $('#preview_thumbnail').attr('src', e.target.result);
       }
       if(input.files[0].size > 1000000){
-        swal({
+        swal.fire({
             title: "Image Thumnail",
             text: "ไฟล์ขนาดเกิน 1 mb",
             type: "warning",

@@ -4,11 +4,10 @@
 
 // Core variables and mixins overrides
 @import "../../core/variables/variables";
-@import "../../core/variables/components-variables";
+@import "../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../assets/scss/variables/variables";
-@import "../../../../assets/scss/variables/components-variables";
+@import "../../core/variables/components-variables";
 
 .dropzone{
 	min-height: 350px;
@@ -27,7 +26,7 @@
 		text-align: center;
 	}
 	.dz-message:before{
-		content: "\e94b";
+		content: "\e864";
 	    font-family: 'feather';
 	    font-size: 80px;
 	    position: absolute;
@@ -55,7 +54,7 @@
     	line-height: 2rem;
 
     	&:before{
-			content: "\e9e6";
+			content: "\e8f6";
 		    font-family: 'feather';
 		    display: inline-block;
 		    line-height: 1;

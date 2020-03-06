@@ -59,7 +59,7 @@
   <script>
   function handleDeleteHomework(id) {
     url = "{{ route('homework_delete') }}/"+id
-    swal({
+    swal.fire({
       title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
@@ -80,7 +80,7 @@
         }
       }
     }).then(isConfirm => {
-      if (isConfirm) {
+      if (isConfirm.value) {
         window.location = url
       } 
     });

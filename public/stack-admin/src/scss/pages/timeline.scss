@@ -3,7 +3,6 @@
 // 	Description: Timeline Page specific SCSS.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -14,11 +13,10 @@
 
 // Core variables and mixins overrides
 @import "../core/variables/variables";
-@import "../core/variables/components-variables";
+@import "../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../assets/scss/variables/variables";
-@import "../../../assets/scss/variables/components-variables";
+@import "../core/variables/components-variables";
 
 // Include horizontal time-line
 @import "../plugins/timeline/timeline-horizontal";
@@ -28,7 +26,8 @@
 	position: relative;
 	display: block;
 	margin: 0;
-	padding: 10px 0;
+	padding-bottom: 30px;
+	padding-left: 0;
 	list-style: none;
 	&:after {
 		content: " ";
@@ -69,7 +68,8 @@
 .timeline-group {
 	display: block;
 	position: relative;
-	margin: 20px 0;
+	margin-bottom: 20px;
+	margin-top: 0;
 	text-align: center;
 	float: none !important;
 	z-index: 1;
@@ -856,3 +856,4 @@
 		}
 	}
 }
+

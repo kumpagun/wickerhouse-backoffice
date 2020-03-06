@@ -88,7 +88,7 @@ class CourseController extends Controller
       $data->type = '';
       $data->benefits = [];
       $data->appropriates = [];
-      $data->teacher_id = '';
+      $data->teachers = '';
       $data->require_course = '';
       $data->thumbnail = '';
       $data->category_id = '';
@@ -159,7 +159,7 @@ class CourseController extends Controller
       $category_id = $request->input('category_id');
       $type = $request->input('type');
       $slug = $request->input('slug');
-      $teacher_id = $request->input('teacher_id');
+      $teachers = $request->input('teachers');
       $tag = $request->input('tag');
       $benefits = $request->input('benefits');
       $appropriates = $request->input('appropriates');
@@ -196,7 +196,7 @@ class CourseController extends Controller
           'category_id' => 'required',
           'type' => 'required',
           'slug' => 'required',
-          'teacher_id' => 'required'
+          'teachers' => 'required'
         ];
       } else {
         $rules = [
@@ -204,7 +204,7 @@ class CourseController extends Controller
           'category_id' => 'required',
           'type' => 'required',
           'slug' => 'required',
-          'teacher_id' => 'required',
+          'teachers' => 'required',
           'thumbnail' => 'required',
           'img_final' => 'required',
           'input_path' => 'required',
@@ -218,6 +218,12 @@ class CourseController extends Controller
       $require_course_array = [];
       if(!empty($require_course)){
         array_push($require_course_array,new ObjectId($require_course));
+      }
+      $teachers_array = [];
+      if(!empty($teachers)) {
+        foreach($teachers as $teacher) {
+          array_push($teachers_array,new ObjectId($teacher));
+        }
       }
       
       if(!empty($id)) {
@@ -243,7 +249,7 @@ class CourseController extends Controller
         'require_course' => $require_course_array,
         'benefits' => $arr_benefits,
         'appropriates' => $arr_appropriates,
-        'teacher_id' => new ObjectId($teacher_id),
+        'teachers' => $teachers_array,
         'category_id'  => new ObjectId($category_id)
       ];
       if(empty($id)) {

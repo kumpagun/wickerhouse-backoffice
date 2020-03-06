@@ -5,7 +5,6 @@
 	item seperation.
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: PIXINVENT
 	Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -17,11 +16,10 @@
 
 // Core variables and mixins overrides
 @import "../../variables/variables";
-@import "../../variables/components-variables";
+@import "../../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../../assets/scss/variables/variables";
-@import "../../../../../assets/scss/variables/components-variables";
+@import "../../variables/components-variables";
 
 // Import first main menu mixin
 @import "../../mixins/main-menu-mixin";
@@ -32,6 +30,25 @@
 // Horizontal Menu
 //=========================
 .horizontal-menu{
+	
+  //navbar-icon-right
+  .navbar-horizontal {
+
+    //dropdown menu animation remove
+    .dropdown{
+      .dropdown-menu{
+        transition: none;
+        margin-top: 1px;
+      }
+    }
+	}
+  .navbar-container .search-input.open{
+    box-shadow: none;
+    border-left: 1px solid #e0e2e8;
+    border-right: 1px solid #e0e2e8;
+    margin-top: -1px;
+  }
+	
 	&.menu-collapsed{
 		#main-menu-navigation{
 			.nav-item{
@@ -61,7 +78,7 @@
 			background: $white;
 		}
 		.active > a{
-			background: whitesmoke;
+			background: $white;
 			font-weight: 500;
 		}		
 	}
@@ -73,11 +90,121 @@
 			}
 		}
 		.active > a{
-			background: whitesmoke;
+			background: $white;
 			font-weight: 500;
 		}
 	}
 }
 
+// margin right for icons of sub-menu of main-menu
+.horizontal-layout {
+  .main-menu .navigation > li {
+    > ul > li > a i {
+      margin-right: 0.5rem;
+    }
+  }
+  .container {
+    padding: 0;
+  }
+}
+
+// responsive vertical menu in small screen
+.horizontal-layout{
+  &.vertical-layout{
+    &.vertical-overlay-menu {
+      .main-menu {
+        .navigation {
+          > li{
+            > a {
+              > span{
+                &.badge{
+                  position: absolute;
+                  top: 11px;
+                  right: 40px;
+                }
+              }
+            }
+          }
+          li{
+            &.nav-item{
+              &.menu-collapsed-open{
+                > a{
+                  background: none;
+                  margin: 0;
+                  border-radius: 0;
+                  ~ ul{
+                    li{
+                      &.menu-collapsed-open{
+                        > a{
+                          ~ ul{
+                            margin-top: 4px;
+                            li{
+                              &.active{
+                                a{
+                                  background: none;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Collapsed menu RTL
+[data-textdirection="rtl"] body.horizontal-layout {
+   &.horizontal-menu.menu-collapsed {
+      .main-menu {
+         .navigation {
+            > li > a {
+               // padding: 12px 22px !important;
+               padding: 14px 16px !important;
+            }
+            > li.navigation-header .feather.icon-minus {
+               padding: 12px 0px;
+            }
+         }
+      }
+   }
+   &.horizontal-menu{
+    .header-navbar.navbar {
+      .dropdown-menu{
+        .dropdown-submenu {
+          > a:after {
+            content : '\f104' !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeout {
+   from {
+      opacity: 1;
+   }
+   to {
+      opacity: 0;
+   }
+}
+
 // Import vertical-overlay-menu.scss for small screen support
 @import "vertical-overlay-menu.scss";
+

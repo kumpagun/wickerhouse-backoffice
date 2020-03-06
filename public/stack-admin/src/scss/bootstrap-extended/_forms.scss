@@ -27,10 +27,10 @@ form{
         }
     }
     .form-section{
-        color: $menu-dark-bg;
+        color: $gray-200;
         line-height: 3rem;
         margin-bottom: 20px;
-        border-bottom: 1px solid $menu-dark-bg;
+        border-bottom: 1px solid $gray-200;
 
         i{
             font-size: 20px;
@@ -172,44 +172,43 @@ form{
 select.form-control {
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
+    -moz-appearance: none; // For firefox
+    -webkit-appearance: none; // for chorme
 }
 
+// For customs-select remove double arrow
+.custom-select{
+    -moz-appearance: none; // For firefox
+    -webkit-appearance: none; // for chorme
+}
 
-/* 
-TODO:M: To check with latest bootstrap version and remove it. 
-Bootstrap Enhance */
-// Custom checkbox
-.custom-control{
-  display: block;
-  &.inline{
-    display: inline;
-  }
-}
-.custom-checkbox input:disabled:checked ~ .custom-control-indicator{
-  opacity: 0.5;
-}
-.custom-checkbox input:disabled ~ .custom-control-indicator{
-  cursor: not-allowed;
-}
-.custom-control-input > input:focus ~ .custom-control-indicator{
-  padding: 0.51rem;
-}
-.custom-control-indicator{
-  width: 1.1rem;
-  height: 1.075rem;
-  line-height: 1.05rem;
-  top: 0.2rem;
-  + .custom-control-description{
-    margin-left: 1rem;
-  }
-}
-.form-control{
-    &:disabled,
-    &[readonly]{
-        background-color: #ECEFF1;
+// For custom switch 
+.custom-switch {  
+    .custom-control-label {
+      &::after {
+        top: add(($font-size-base * $line-height-base - $custom-control-indicator-size) / 1.8, $custom-control-indicator-border-width * 2);
+      }
     }
 }
+
+// Custom checkbox
 .input-group-addon {
     background-color: #ECEFF1;
     border-color: #BABFC7;
-}    
+}
+
+//Custom Checkbox label
+.custom-control-label{
+    &::before,
+    &::after{
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+}
+
+//form-tags-input
+.tagging-js-tags, .tagging-methods{
+    .form-control{
+        height: auto;
+    }
+}

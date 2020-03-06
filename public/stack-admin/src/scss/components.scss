@@ -3,7 +3,6 @@
 // 	Description: Common components file to includ all theme specific custom components.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -18,12 +17,12 @@
 
 // Core variables and mixins overrides
 @import "core/variables/variables";
-@import "core/variables/components-variables";
-@import "core/mixins/transitions";
+@import "bootstrap/variables";
 
 // Overrides user variable
-@import "../../assets/scss/variables/variables";
-@import "../../assets/scss/variables/components-variables";
+@import "core/variables/components-variables";
+
+@import "core/mixins/transitions";
 
 // Perfect Scrollbar
 
@@ -46,13 +45,11 @@
 @import "components/callout";
 @import "components/bootstrap-social";
 @import "components/demo"; // Plugins demo, remove in real project
-// @import "components/customizer"; // Customizer demo, remove in real project
+@import "components/customizer"; // Customizer demo, remove in real project
 
 // Plugins
 // ------------------------------
-@import "plugins/menu/perfect-scrollbar/ps-custom";
 @import "plugins/ui/breakpoints";
-// TODO:A: Set this scss page specific
 @import "plugins/forms/tags/basic-input";
 @import "plugins/forms/select2/select2";
 @import "plugins/tables/datatables";

@@ -4,7 +4,6 @@
 // 				  excluding files that have not been modified.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
@@ -16,11 +15,10 @@
 
 // Load variable overrides
 @import "core/variables/variables";
-@import "core/variables/components-variables";
+@import "bootstrap/variables";
 
 // Overrides user variable
-@import "../../assets/scss/variables/variables";
-@import "../../assets/scss/variables/components-variables";
+@import "core/variables/components-variables";
 
 // // Core CSS
 @import "bootstrap-extended/reboot";
@@ -36,6 +34,7 @@
 @import "bootstrap-extended/dropdown";
 @import "bootstrap-extended/navbar";
 @import "bootstrap-extended/card";
+@import "bootstrap-extended/collapse";
 @import "bootstrap-extended/breadcrumb";
 @import "bootstrap-extended/badge";
 @import "bootstrap-extended/nav";
@@ -43,6 +42,7 @@
 @import "bootstrap-extended/media";
 @import "bootstrap-extended/progress";
 @import "bootstrap-extended/list-group";
+@import "bootstrap-extended/toast";
 
 // // Components w/ JavaScript
 @import "bootstrap-extended/modal";

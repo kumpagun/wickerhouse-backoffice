@@ -58,7 +58,7 @@
           <div class="heading-elements">
             <ul class="list-inline mb-0">
               <li><a href="{{ route('review_create',['type'=>$item->type,'review_group_id'=>$review_group_id,'id'=>$item->_id]) }}"><i class="ft-edit"></i> แก้ไข</a></li>
-              <li><a href="#" onclick="handleDelete('{{$item->_id}}')"><i class="ft-x"></i> ลบ</a></a>
+              <li><a href="#" onclick="handleDelete('{{$item->_id}}')"><i class="feather icon-x"></i> ลบ</a></a>
             </ul>
           </div>
         </div>
@@ -139,7 +139,7 @@
                 <input type="text" name="questions" placeholder="คำถาม" class="form-control">
                 <div class="input-group-append">
                   <span class="input-group-btn" id="button-addon2">
-                    <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                    <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                   </span>
                 </div>
               </div>
@@ -227,7 +227,7 @@
                 <input type="text" name="choices" placeholder="Choice" class="form-control">
                 <div class="input-group-append">
                   <span class="input-group-btn" id="button-addon2">
-                    <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                    <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                   </span>
                 </div>
               </div>
@@ -270,7 +270,7 @@
   <script>
   function handleDelete(review_id) {
     url = "{{ route('review_delete') }}/"+review_id
-    swal({
+    swal.fire({
       title: "คุณต้องการลบใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
@@ -291,7 +291,7 @@
         }
       }
     }).then(isConfirm => {
-      if (isConfirm) {
+      if (isConfirm.value) {
         window.location = url
       } 
     });
@@ -330,11 +330,11 @@
         var title = document.querySelector('input[name=title]');
         title.value = quill.container.firstChild.innerHTML
         if(!title) {
-          swal('กรุณากรอกข้อมูลให้ครบ')
+          swal.fire('กรุณากรอกข้อมูลให้ครบ')
           return false
         }
         if(quill.container.firstChild.innerHTML==="<p><br></p>") {
-          swal('กรุณากรอกข้อมูลให้ครบ') 
+          swal.fire('กรุณากรอกข้อมูลให้ครบ') 
           return false 
         }
         return true;

@@ -237,7 +237,7 @@ Horizontal Timeline
 	a {
 		position: absolute;
 		z-index: 1;
-		top: 50%;
+		top: 40%;
 		bottom: auto;
 		transform: translateY(-50%);
 		height: 34px;
@@ -265,14 +265,20 @@ Horizontal Timeline
 	a.prev {
 		left: 0;
 		transform: translateY(-50%) rotate(180deg);
+		&::after {
+			background-position: 6px 2px;
+		}
 	}
 	a.next {
 		right: 0;
+		&::after {
+			background-position: 6px 2px;
+		}
 	}
 	a.inactive {
 		cursor: not-allowed;
 		&::after {
-			background-position: 0 -16px;
+			background-position: 6px -14px;
 		}
 	}
 }

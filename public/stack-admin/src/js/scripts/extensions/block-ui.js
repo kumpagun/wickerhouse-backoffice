@@ -3,7 +3,6 @@
     Description: Block UI jQuery Plugin Intialization
     --------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -17,7 +16,7 @@ $(document).ready(function(){
     $('.block-element').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#fff',
@@ -37,7 +36,7 @@ $(document).ready(function(){
     $('.block-sidebar').on('click', function() {
         var block_ele = $('.main-menu');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#FFF',
@@ -56,7 +55,7 @@ $(document).ready(function(){
     // Block page
     $('.block-page').on('click', function() {
         $.blockUI({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#FFF',
@@ -80,7 +79,7 @@ $(document).ready(function(){
     $('.block-spinner-only').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#fff',
@@ -139,7 +138,7 @@ $(document).ready(function(){
     $('.block-msg-animation').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-			message: '<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>',
+			message: '<div class="semibold"><span class="feather icon-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>',
             fadeIn: 1000,
             fadeOut: 1000,
 			timeout: 2000, //unblock after 2 seconds
@@ -182,7 +181,7 @@ $(document).ready(function(){
         });
 
         window.setTimeout(function () {
-			message.html('<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>');
+			message.html('<div class="semibold"><span class="feather icon-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>');
         }, 0);
 
         window.setTimeout(function () {
@@ -206,7 +205,7 @@ $(document).ready(function(){
     $('.block-non-centered-msg').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>',
+            message: '<div class="semibold"><span class="feather icon-refresh-cw icon-spin text-left"></span>&nbsp; Loading ...</div>',
             timeout: 2000, //unblock after 2 seconds
             centerX: 0,
             centerY: 0,
@@ -235,7 +234,7 @@ $(document).ready(function(){
     $('.block-light-overlay').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#fff',
@@ -255,7 +254,7 @@ $(document).ready(function(){
     $('.block-opaque-overlay').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#2962FF',
@@ -276,7 +275,7 @@ $(document).ready(function(){
     $('.block-custom-overlay').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#E91E63',
@@ -301,7 +300,7 @@ $(document).ready(function(){
     // onBlock callback
     $('.onblock-callback').on('click', function() {
         $.blockUI({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             fadeIn: 1000,
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
@@ -325,7 +324,7 @@ $(document).ready(function(){
     // onUnblock callback
     $('.onunblock-callback').on('click', function() {
         $.blockUI({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             timeout: 2000, //unblock after 2 seconds
             overlayCSS: {
                 backgroundColor: '#FFF',
@@ -348,7 +347,7 @@ $(document).ready(function(){
     // Overlay callback
     $('.onoverlay-click-callback').on('click', function() {
         $.blockUI({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             overlayCSS: {
                 backgroundColor: '#FFF',
                 opacity: 0.8,
@@ -394,7 +393,7 @@ $(document).ready(function(){
     $('.block-without-overlay').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             showOverlay: false,
             timeout: 2000, //unblock after 2 seconds
             css: {
@@ -413,7 +412,7 @@ $(document).ready(function(){
     $('.overlay-unblock').on('click', function() {
         var block_ele = $(this).closest('.card');
         $(block_ele).block({
-            message: '<div class="ft-refresh-cw icon-spin font-medium-2"></div>',
+            message: '<div class="feather icon-refresh-cw icon-spin font-medium-2"></div>',
             overlayCSS: {
                 backgroundColor: '#fff',
                 opacity: 0.8,

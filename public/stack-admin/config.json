@@ -1,36 +1,26 @@
 {
-  "html"         : "html",
-  "starter_kit"  : "starter-kit",
+  "html": "html",
+  "starter_kit": "starter-kit",
   "documentation": "documentation",
-  "assets"       : "assets",
-  "app_assets"   : "app-assets",
-  "assets_path"       : "../../../assets",
-  "app_assets_path"   : "../../../app-assets",
+  "assets": "assets",
+  "app_assets": "app-assets",
+  "assets_path": "../../../assets",
+  "app_assets_path": "../../../app-assets",
   "destination": {
-    "js"     : "app-assets/js",
-    "css"    : "app-assets/css",
+    "js": "app-assets/js",
+    "css": "app-assets/css",
     "css_rtl": "app-assets/css-rtl"
   },
   "source": {
-    "path"         : "src",
-    "js"           : "src/js",
-    "sass"         : "src/scss",
-    "template"     : "src/template-builder",
+    "path": "src",
+    "js": "src/js",
+    "sass": "src/scss",
+    "template": "src/template-builder",
     "documentation": "src/documentation"
   },
-  "autoprefixerBrowsers": [
-    "Android 2.3",
-    "Android >= 4",
-    "Chrome >= 25",
-    "Firefox >= 15",
-    "Explorer >= 9",
-    "iOS >= 6",
-    "Opera >= 12",
-    "Safari >= 6"
-  ],
   "vertical_menu_template": {
     "dashboardRename": "dashboard-ecommerce.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/horizontal-layout-1-column.pug",
@@ -47,9 +37,28 @@
       "!**/horizontal-nav-styling.pug"
     ]
   },
-  "vertical_menu_template_light":{
+  "vertical_collapsed_menu_template": {
+    "dashboardRename": "dashboard-crm.html",
+    "pugSrc": [
+      "*.pug",
+      "!**/template.pug",
+      "!**/horizontal-layout-1-column.pug",
+      "!**/horizontal-nav-fixed.pug",
+      "!**/horizontal-nav-flipped.pug",
+      "!**/horizontal-nav-submenu-click.pug",
+      "!**/horizontal-nav-submenu-hover.pug",
+      "!**/horizontal-nav-light.pug",
+      "!**/horizontal-nav-dark.pug",
+      "!**/horizontal-nav-right-side-icons.pug",
+      "!**/horizontal-nav-no-dropdown.pug",
+      "!**/horizontal-nav-disabled.pug",
+      "!**/horizontal-nav-tags-pills.pug",
+      "!**/horizontal-nav-styling.pug"
+    ]
+  },
+  "vertical_menu_template_light": {
     "dashboardRename": "dashboard-fitness.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/horizontal-layout-1-column.pug",
@@ -66,9 +75,9 @@
       "!**/horizontal-nav-styling.pug"
     ]
   },
-  "vertical_menu_template_nav_dark":{
+  "vertical_menu_template_nav_dark": {
     "dashboardRename": "dashboard-ecommerce.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/horizontal-layout-1-column.pug",
@@ -85,9 +94,9 @@
       "!**/horizontal-nav-styling.pug"
     ]
   },
-  "vertical_menu_template_semi_dark":{
+  "vertical_menu_template_semi_dark": {
     "dashboardRename": "dashboard-analytics.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/horizontal-layout-1-column.pug",
@@ -104,9 +113,9 @@
       "!**/horizontal-nav-styling.pug"
     ]
   },
-  "vertical_overlay_menu_template":{
+  "vertical_overlay_menu_template": {
     "dashboardRename": "dashboard-analytics.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/layout-2-columns.pug",
@@ -125,8 +134,8 @@
     ]
   },
   "vertical_modern_menu_template": {
-    "dashboardRename": "dashboard-ecommerce.html",
-    "pugSrc":[
+    "dashboardRename": "dashboard-crm.html",
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/horizontal-layout-1-column.pug",
@@ -143,9 +152,9 @@
       "!**/horizontal-nav-styling.pug"
     ]
   },
-  "horizontal_menu_template":{
+  "horizontal_menu_template": {
     "dashboardRename": "dashboard-analytics.html",
-    "pugSrc":[
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/vertical-nav-fixed.pug",
@@ -176,9 +185,9 @@
       "!**/navbar-hide-on-scroll-top.pug"
     ]
   },
-  "horizontal_menu_template_nav":{
-    "dashboardRename": "dashboard-ecommerce.html",
-    "pugSrc":[
+  "horizontal_menu_template_nav": {
+    "dashboardRename": "dashboard-fitness.html",
+    "pugSrc": [
       "*.pug",
       "!**/template.pug",
       "!**/vertical-nav-fixed.pug",
@@ -208,5 +217,5 @@
       "!**/navbar-hide-on-scroll-bottom.pug",
       "!**/navbar-hide-on-scroll-top.pug"
     ]
-  }  
+  }
 }

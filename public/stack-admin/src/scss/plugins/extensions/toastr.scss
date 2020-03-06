@@ -4,11 +4,10 @@
 
 // Core variables and mixins overrides
 @import "../../core/variables/variables";
-@import "../../core/variables/components-variables";
+@import "../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../assets/scss/variables/variables";
-@import "../../../../assets/scss/variables/components-variables";
+@import "../../core/variables/components-variables";
 
 #toast-container > div {
     opacity: 0.9;

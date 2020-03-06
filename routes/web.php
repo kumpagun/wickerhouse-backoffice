@@ -54,6 +54,15 @@ Route::group(['prefix' => 'permissions', 'middleware' => ['auth', 'role:admin']]
   Route::post('/store', 'PermissionsController@store')->name('permissions_store');
 });
 
+// Banner
+Route::group(['prefix' => 'banner', 'middleware' => ['auth', 'role:admin']], function () {
+  Route::get('/', 'BannerController@banner_index')->name('banner_index');
+  Route::get('/create/{id?}', 'BannerController@banner_create')->name('banner_create');
+  Route::post('/store', 'BannerController@banner_store')->name('banner_store');
+  Route::post('/sort', 'BannerController@banner_sort')->name('banner_sort');
+  Route::get('/banner/{id?}', 'BannerController@banner_delete')->name('banner_delete');
+});
+
 // Course
 Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course']], function () {
   Route::match(['get','post'],'/', 'Course\CourseController@course_index')->name('course_index');
@@ -207,5 +216,7 @@ Route::group(['prefix' => 'crontab'], function () {
   Route::group(['prefix' => 'report'], function () {
     Route::get('/access-content-by-user', 'Crontab\ReportController@access_content_by_user')->name('crontab_report_access_content_by_user');
     Route::get('/access-content-excel', 'Report\MemberAccessByUserController@crontab_access_content_excel')->name('crontab_report_crontab_access_content_excel');
+
+    Route::get('/update_branch', 'Crontab\ReportController@update_branch')->name('crontab_report_update_branch');
   });
 });

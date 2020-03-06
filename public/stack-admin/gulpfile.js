@@ -1,112 +1,83 @@
 // Require the modules.
-var gulp             = require('gulp');
-var gutil            = require('gulp-util');
-var gulpSequence     = require('gulp-sequence');
-var gulpRequireTasks = require('gulp-require-tasks');
-var minimist         = require('minimist');
-var config           = require('./config.json');
+var gulp = require("gulp")
+var gutil = require("gulp-util")
+var minimist = require("minimist")
+var config = require("./config.json")
 
-var options          = minimist(process.argv.slice(2));
+var options = minimist(process.argv.slice(2))
 
 // Global Variables
-global.myLayout        = options.Layout;
-global.myLayoutName    = options.LayoutName;
-global.config          = config;
-global.pugSrc         = ['*.pug', '!**/template.pug'];
-global.dashboardRename = '';
-global.rtl             = '';
+global.config = config
 
-if (options.TextDirection !== undefined){
-	global.myTextDirection = options.TextDirection.toLowerCase();
-	if (myTextDirection == 'rtl')
-		rtl = '-rtl';
-}
-else{
-	global.myTextDirection = '';
-}
 
-gutil.log(gutil.colors.green('Starting Gulp!!'));
+gutil.log(gutil.colors.green("Starting Gulp!!"))
 
-// Exclude template specific files
-if (myLayout == 'vertical-menu-template') {
-	dashboardRename = config.vertical_menu_template.dashboardRename;
-	pugSrc         = config.vertical_menu_template.pugSrc;
-} else if (myLayout == 'vertical-menu-template-light') {
-	dashboardRename = config.vertical_menu_template_light.dashboardRename;
-	pugSrc         = config.vertical_menu_template_light.pugSrc;
-} else if (myLayout == 'vertical-menu-template-nav-dark') {
-	dashboardRename = config.vertical_menu_template_nav_dark.dashboardRename;
-	pugSrc         = config.vertical_menu_template_nav_dark.pugSrc;
-} else if (myLayout == 'vertical-menu-template-semi-dark') {
-	dashboardRename = config.vertical_menu_template_semi_dark.dashboardRename;
-	pugSrc         = config.vertical_menu_template_semi_dark.pugSrc;
-} else if (myLayout == 'vertical-overlay-menu-template') {
-	dashboardRename = config.vertical_overlay_menu_template.dashboardRename;
-	pugSrc         = config.vertical_overlay_menu_template.pugSrc;
-} else if (myLayout == 'vertical-modern-menu-template') {
-	dashboardRename = config.vertical_modern_menu_template.dashboardRename;
-	pugSrc         = config.vertical_modern_menu_template.pugSrc;
-} else if (myLayout == 'horizontal-menu-template') {
-	dashboardRename = config.horizontal_menu_template.dashboardRename;
-	pugSrc         = config.horizontal_menu_template.pugSrc;
-} else if (myLayout == 'horizontal-menu-template-nav') {
-	dashboardRename = config.horizontal_menu_template_nav.dashboardRename;
-	pugSrc         = config.horizontal_menu_template_nav.pugSrc;
-}
+const autoPrefixTasks = require("./gulp-tasks/autoprefix")(gulp)
+const cleanTasks = require("./gulp-tasks/clean")(gulp)
+const copyTask = require("./gulp-tasks/copy")(gulp)
+const cssTasks = require("./gulp-tasks/css")(gulp)
+const replaceTasks = require("./gulp-tasks/replace")(gulp)
+const scssTasks = require("./gulp-tasks/scss")(gulp)
+const uglifyTasks = require("./gulp-tasks/uglify")(gulp)
+const notifyTasks = require("./gulp-tasks/notify")(gulp)
 
-// Invoke the module with options.
-gulpRequireTasks({
+// Clean CSS & JS
+gulp.task("dist-clean", cleanTasks.css, cleanTasks.js)
 
-	// Specify path to your tasks directory.
-	path: process.cwd() + '/gulp-tasks' // This is default!
+// Monitor Changes
+gulp.task("monitor", gulp.series(scssTasks.watch))
+// Dist JS
+gulp.task(
+  "dist-js",
+  gulp.series(cleanTasks.js, copyTask.js, uglifyTasks.js, notifyTasks.js)
+)
 
-	// Additionally pass any options to it from the table below.
-	// ...
-	// path	- './gulp-tasks'	Path to directory from which to load your tasks modules
-	// separator -	:	Task name separator, your tasks would be named, e.g. foo:bar:baz for ./tasks/foo/bar/baz.js
-	// arguments -	[]	Additional arguments to pass to your task function
-	// passGulp	- true	Whether to pass Gulp instance as a first argument to your task function
-	// passCallback -	true	Whether to pass task callback function as a last argument to your task function
-	// gulp	- require('gulp')	You could pass your existing Gulp instance if you have one, or it will be required automatically
-
-});
-
-// Clean Task.
-gulp.task('dist-clean', ['clean:css', 'clean:js']);
-
-// HTML Dist Task.
-gulp.task('dist-html', gulpSequence('clean:html','file-write', 'pug:html', 'pug:rename', 'notify:html'));
-
-// Monitor changes for both pug and sass files.
-gulp.task('monitor', gulpSequence('file-write', ['pug:watch', 'sass:watch']));
-
-// JS Distribution Task.
-gulp.task('dist-js', gulpSequence('clean:js', 'copy:js', 'uglify:min', 'notify:js'));
-
-// SASS Compile Task.
-gulp.task('sass-compile', ['sass:main', 'sass:core', 'sass:pages', 'sass:plugins', 'sass:style']);
-
-gulp.task('sass-compile-rtl', ['sass:rtl']);
+// SASS Compile
+gulp.task(
+  "sass-compile",
+  gulp.parallel(
+    scssTasks.main,
+    scssTasks.core,
+    scssTasks.pages,
+    scssTasks.plugins,
+    scssTasks.themes,
+    scssTasks.style
+  )
+)
+// SASS Compile RTL
+gulp.task("sass-compile-rtl", scssTasks.rtl)
 
 // CSS Distribution Task.
-gulp.task('dist-css', gulpSequence('clean:css', 'sass-compile', 'autoprefixer:css', 'csscomb:css', 'cssmin:css', 'notify:css'));
+gulp.task(
+  "dist-css",
+  gulp.series(
+    cleanTasks.css,
+    "sass-compile",
+    autoPrefixTasks.css,
+    cssTasks.css_comb,
+    cssTasks.css_min,
+    gulp.parallel(notifyTasks.css)
+  )
+)
 
 // RTL CSS Distribution Task.
-gulp.task('dist-css-rtl', gulpSequence('clean:css_rtl', 'sass-compile', 'sass-compile-rtl', 'rtlcss', 'autoprefixer:css_rtl', 'csscomb:css_rtl', 'cssmin:css_rtl', 'notify:css'));
+gulp.task(
+  "dist-css-rtl",
+  gulp.series(
+    cleanTasks.css_rtl,
+    "sass-compile",
+    "sass-compile-rtl",
+    cssTasks.css_rtl,
+    autoPrefixTasks.css_rtl,
+    cssTasks.css_rtl_comb,
+    cssTasks.css_rtl_min
+  )
+)
 
-// Full Distribution Task.
-gulp.task('dist', ['dist-css', 'dist-js']);
+// DEFAULT
+gulp.task("dist", gulp.parallel("dist-css", "dist-js"))
 
-// Default Task.
-gulp.task('default', ['dist']);
+gulp.task("default", gulp.parallel("dist-css", "dist-js"))
 
-
-// Starter Kit
-gulp.task('dist-sk-html', gulpSequence('clean:sk_html', 'sk-file-write', 'pug:sk_html', 'notify:html'));
-
-// Documentation
-gulp.task('dist-documentation', gulpSequence('clean:documentation', 'pug:documentation', 'notify:html'));
-
-gulp.task('dist-phpdoc', gulpSequence('phpdoc:clean', 'phpdoc:change_ext', 'phpdoc:replace', 'phpdoc:rename'));
-
-gulp.task('replacement', gulpSequence('replacement:css', 'replacement:js'));
+// Replacement Tasks
+gulp.task("replacement", gulp.series(replaceTasks.css, replaceTasks.js))

@@ -81,7 +81,7 @@
       _token: "{{ csrf_token() }}",
       id: category_id,
     }
-    swal({
+    swal.fire({
       title: "คุณต้องการลบ " +category_name+ " ใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
@@ -102,14 +102,14 @@
         }
       }
     }).then(isConfirm => {
-      if (isConfirm) {
+      if (isConfirm.value) {
         $.get(url, postData, function(data, status){
           if(data.status==400) {
             var message = data.message
             courses = data.course.join()
-            swal(message + courses)
+            swal.fire(message + courses)
           } else {
-            swal('ดำนินการเรียบร้อย')
+            swal.fire('ดำนินการเรียบร้อย')
             .then(
               location.reload()
             )

@@ -3,7 +3,6 @@
     Description: Advanced Datatable 
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -17,7 +16,7 @@ $(document).ready(function() {
     var eventsTable = $('.dom-jQuery-events').DataTable();
 
     $('.dom-jQuery-events tbody').on('click', 'tr', function() {
-        var data = table.row(this).data();
+        var data = eventsTable.row(this).data();
         alert('You clicked on ' + data[0] + '\'s row');
     });
 
@@ -47,7 +46,7 @@ $(document).ready(function() {
 
 
     $('.multiple-control-elements').DataTable({
-        "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>'
+        "dom": '<"top row"<"col-12"if><"col-12"lp><"clear">>rt<"bottom row mt-1"<"col-12"if><"col-12"lp><"clear">>'
     });
 
 
@@ -135,12 +134,12 @@ $(document).ready(function() {
     });
 
     $('.row-grouping tbody').on('click', 'tr.group', function() {
-        var currentOrder = table.order()[0];
+        var currentOrder = groupingTable.order()[0];
         if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-            table.order([2, 'desc']).draw();
+            groupingTable.order([2, 'desc']).draw();
         }
         else {
-            table.order([2, 'asc']).draw();
+            groupingTable.order([2, 'asc']).draw();
         }
     });
 
@@ -205,12 +204,12 @@ $(document).ready(function() {
      **********************************/
 
     $('.file-export').DataTable({
-        dom: 'Bfrtip',
+        dom: '<"d-flex justify-content-between align-items-center"<"btn-group"B>f>rtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-    $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
+    $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn mb-2');
 
 });
 

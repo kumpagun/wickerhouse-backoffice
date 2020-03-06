@@ -3,12 +3,22 @@
 //     Description: Datatables pages custom scss
 //     ----------------------------------------------------------------------------------------------
 //     Item Name: Stack - Responsive Admin Theme
-//     Version: 3.0
 //     Author: PIXINVENT
 //     Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
-table.dataTable{
+
+table.dataTable, .dataTables_wrapper{
   border-spacing: 0px;
+  thead, &.no-footer{
+    th{
+      border-bottom: transparent;
+    }
+  }
+  tfoot{
+    th{
+      border-top: transparent;
+    }
+  }
 }
 .content-wrapper table.dataTable.dtr-inline.collapsed > tbody > tr {
   > {
@@ -27,17 +37,6 @@ table.dataTable{
   }
 }
 
-//datatable small screen scroll x
-@include media-breakpoint-down(md) {
-  .dataTables_wrapper table {
-    display: block;
-    width: 100%;
-    min-height: .01%;
-    overflow-x: auto;
-  }
-}
-
-
 .DTFC_LeftBodyLiner {
   top: -1px !important;
 }
@@ -45,17 +44,51 @@ table.dataTable{
 // Pagination
 
 div.dataTables_wrapper {
-  div.dataTables_filter label{
-    margin-top: 1rem;
-  }
-  div.dataTables_paginate ul.pagination {
-    margin: 10px 0;
-  }
-  //width: 930px;
   width: 100%;
-  margin: 0 auto;
+  // margin: 0 auto;
+  div{
+    &.dataTables_paginate {
+      .paginate_button{
+        margin-left: 0;
+        padding: 0;
+        border: none !important;
+        &:hover{
+          background: none;
+          border: 1px solid transparent;
+        }
+      }
+      ul.pagination {
+        margin: 10px 0;
+        justify-content: flex-end;
+      }
+    }
+    &.dataTables_length select, &.dataTables_filter input {
+      width: auto;
+      display: inline-block;
+    }
+    &.dataTables_length select{
+      background: none;
+      background-image: url('../images/pages/arrow-down.png');
+      background-position: 86% 57%;
+      background-repeat: no-repeat;
+      background-size: 12px 10px;
+    }
+    .dataTables_scroll{
+      .dataTables_scrollBody{
+        >.table{
+          margin: 0;
+        }
+        border-bottom: transparent;
+      }
+    }
+    // show entries and pagination are on top or bottom
+    .top, .bottom{
+      .dataTables_info, .dataTables_filter, .dataTables_length{
+        float: none;
+      }
+    }
+  }
 }
-
 //css for vertical scroll
 
 //css for highlight td
@@ -63,7 +96,7 @@ div.dataTables_wrapper {
 td.highlight {
   font-weight: bold;
   color: $primary;
-  background-color: whitesmoke !important;
+  background-color: $white !important;
 }
 
 tr.group {
@@ -91,6 +124,10 @@ table.dataTable.compact tbody td {
   padding: 4px;
 }
 
+table.dataTable.no-footer {
+  border-bottom-color: $border-color;
+}
+
 // CSS for Row selection (multiple rows)
 
 .table-striped tbody tr {
@@ -102,6 +139,7 @@ table.dataTable.compact tbody td {
 
 table.dataTable tbody > tr > .selected {
   background-color: $primary;
+  color: $white;
 }
 
 // CSS for Class names
@@ -161,4 +199,60 @@ tr.shown td.details-control {
 // Datatables fixed column scroll issue fixed for bootstrap 4
 .DTFC_LeftBodyLiner, .DTFC_RightBodyLiner{
   background: white;
+}
+
+
+div.table-responsive>div.dataTables_wrapper>div.row {
+  margin: 0;
+}
+
+// Datatables pagination
+@media screen and (max-width : 600px){
+  div.dataTables_wrapper {
+    div.dataTables_paginate {
+      ul.pagination{
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media screen and (max-width : 1200px) and (min-width: 768px) {
+  div.dataTables_wrapper {
+    div.row:last-child{
+      justify-content: space-between;
+    }
+    div.dataTables_paginate {
+      float: right;
+      ul.pagination{
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px){
+  div.dataTables_wrapper {
+    div.dataTables_filter#users-contacts_filter{
+      text-align: right;
+    }
+    div.dataTables_info, div.dataTables_paginate{
+      display: block;
+      text-align: center;
+      ul.pagination{
+        justify-content: center !important;
+      }
+    }
+  }
+}
+
+
+//datatable small screen scroll x
+@include media-breakpoint-down(md) {
+  .dataTables_wrapper table {
+    display: block;
+    width: 100%;
+    min-height: .01%;
+    overflow-x: auto;
+  }
 }

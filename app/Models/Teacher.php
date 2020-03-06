@@ -10,6 +10,7 @@ class Teacher extends Eloquent
   protected $fillable = [
     'name',
     'subtitle',
+    'email',
     'slug',
     'label',
     'profile_image',

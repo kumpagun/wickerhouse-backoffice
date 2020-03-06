@@ -7,7 +7,7 @@
         <li class="nav-item">
           <a class="navbar-brand" href="/">
             {{-- <img class="brand-logo" alt="stack admin logo" src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-light.png') }}"> --}}
-            <h2 class="brand-text"><span class="color-1">JAS</span> <span class="color-2">Online</span></h2>
+            <h2 class="brand-text"><span class="color-1">JAS</span> <span class="color-2">Online Learning</span></h2>
           </a>
         </li>
         <li class="nav-item d-md-none">

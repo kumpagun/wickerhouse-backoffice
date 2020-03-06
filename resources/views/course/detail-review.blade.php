@@ -84,7 +84,7 @@
   <script>
   function handleDeleteReviewUrl(review_group_id) {
     url = "{{ route('review_group_delete') }}/"+review_group_id
-    swal({
+    swal.fire({
       title: "คุณต้องการลบ Review URL ใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
@@ -105,7 +105,7 @@
         }
       }
     }).then(isConfirm => {
-      if (isConfirm) {
+      if (isConfirm.value) {
         window.location = url
       } 
     });

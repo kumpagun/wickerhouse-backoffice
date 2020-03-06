@@ -5,7 +5,6 @@
 	item seperation.
 	----------------------------------------------------------------------------------------
 	Item Name: Stack - Responsive Admin Theme
-	Version: 3.0
 	Author: PIXINVENT
 	Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -17,11 +16,10 @@
 
 // Core variables and mixins overrides
 @import "../../variables/variables";
-@import "../../variables/components-variables";
+@import "../../../bootstrap/variables";
 
 // Overrides user variable
-@import "../../../../../assets/scss/variables/variables";
-@import "../../../../../assets/scss/variables/components-variables";
+@import "../../variables/components-variables";
 
 // Import first main menu mixin
 @import "../../mixins/main-menu-mixin";
@@ -39,9 +37,9 @@
             @include menu-navbar-width($overlay-menu-width);
         }
         &.navbar-brand-center{
-        	.navbar-container{
-            	@include main-menu-width(0);
-        	}
+        	// .navbar-container{
+            // 	@include main-menu-width(0);
+        	// }
         	.navbar-header{
             	@include menu-navbar-width(auto);
         	}
@@ -57,7 +55,7 @@
 
 		.navigation{
 			.navigation-header{
-				.ft-minus{
+				.feather.icon-minus{
 					display: none;
 				}
 			}
@@ -119,6 +117,25 @@
 	        }
     	}
     }
+    // For Fixed-footer
+	footer{
+		&.footer {
+			&.fixed-bottom{
+				z-index: 999;
+			}
+		}
+	}
+	//Box-layout
+	&.vertical-overlay-menu {
+	    &.boxed-layout{
+	        &.menu-open {
+	           	.main-menu {
+	                transform: translate3d($overlay-menu-width, 0, 0);
+	                margin-left: 7px;
+	            }
+           	}
+        }
+    }
 }
 @include media-breakpoint-down(md) {
 	.vertical-overlay-menu {
@@ -128,4 +145,49 @@
 	    	}
 		}
 	}	
+}
+
+// Layout Boxed for down to sm screen
+@media screen and (max-width : 575px){
+   // main-menu for Box-layout
+   &.vertical-overlay-menu {
+     &.boxed-layout{
+        &.menu-open {
+           .main-menu {
+              transform: translate3d($menu-expanded-width, 0, 0) !important;
+              margin-left: 0 !important;
+           }
+        }
+     }
+  }
+}
+
+// Collapsed menu RTL
+[data-textdirection="rtl"] body.vertical-layout {
+    &.vertical-overlay-menu.menu-collapsed {
+      .main-menu {
+         .navigation {
+            > li > a {
+               padding: 14px 16px !important;
+            }
+            > li.navigation-header .feather.icon-minus {
+               padding: 12px 0px;
+            }
+         }
+      }
+    }
+    &.vertical-overlay-menu {
+      .main-menu {
+         .navigation {
+            li.has-sub {
+               > a:not(.mm-next):after {
+                    content : '\f104';
+               }
+            }
+         }
+      }
+    }
+    .knob-center-icon {
+        margin-left: -99px;
+    }
 }

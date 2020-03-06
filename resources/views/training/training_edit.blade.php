@@ -231,7 +231,7 @@
                         <input type="number" name="longevity" placeholder="อายุงาน (ปี)" class="form-control">
                         <div class="input-group-append">
                           <span class="input-group-btn" id="button-addon2">
-                            <button class="btn btn-danger" type="button" data-repeater-delete><i class="ft-x"></i></button>
+                            <button class="btn btn-danger" type="button" data-repeater-delete><i class="feather icon-x"></i></button>
                           </span>
                         </div>
                       </div>
@@ -336,7 +336,7 @@
 
   <link href="{{ asset('multiselect/css/multi-select.css') }}" media="screen" rel="stylesheet" type="text/css">
   {{-- Fontawesome --}}
-  <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" />
+  {{-- <link rel="stylesheet" href="{{ asset('fontawesome-5.12.0/css/all.css') }}" /> --}}
   <style>
     .ms-container {
       width: 100%;
@@ -480,12 +480,12 @@
     })
 
     if(longevity.length!=longevity_condition.length) {
-      swal('กรุณาใส่เงื่อนไข "อายุงาน" ให้ถูกต้อง')
+      swal.fire('กรุณาใส่เงื่อนไข "อายุงาน" ให้ถูกต้อง')
       return false
     }
 
     if(!employee_id && !employee_name && !company_name && !dept_name && longevity.length==0) {
-      swal('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
+      swal.fire('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
       $('.div-loading').hide();
       $('.div-employee').hide();
       return false

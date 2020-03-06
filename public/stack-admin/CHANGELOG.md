@@ -1,4 +1,71 @@
 # Stack - Responsive Bootstrap 4 Admin Template
+V.4.0 : [16/01/2020] : Major Update
+- New : Collapsed Menu Layout
+- Added : Mega Menu
+- Added : Extra Components
+	- Swiper
+	- Tour
+    - Treeview
+	- Media Player (Plyr)
+	- Clipboard
+	- Context Menu
+	- IDEL Timer
+	- Numeral.js
+- Added : Kanban Application
+- Added : Apex Charts
+- Added : Leaflet Maps
+- Added : Functionality
+	- Search
+	- Menu internationalization
+	- Invoice Print
+- Added : Pages
+	- Account Setting
+    - Avatar
+	- Users List
+	- Users View
+	- Users Edit
+- Updated : Applications
+	- Chat Features
+	- Email Features
+	- ToDo Features
+- Updated : js/css plugins/libraries
+- Updated : Documentation Updation with migration steps
+- FIXED :
+	- Broken Feather Icons
+	- Auth Pages Responsive, navbar alignment & scroll
+	- horizontal layout submenu gets hidden when open in small screen
+	- main menu sidebar content spacing on hover
+	- IE: Vertical Menu collapsed slideout menu hides under navbar
+- Removed :
+	- Js-Grid
+	- Gmaps
+	- Flot Chart
+	- E-Charts
+    
+V.3.2 : [11/03/2019]
+    - Added : New app ToDo
+    - Added : New app Contact
+    - Added : New Bootstrap components toaster, spinner & custom switch
+    - Updated : Template update & migration steps in documentation
+    - Updated : Bootstrap v4.3.1
+    - Updated : js/css plugins/libraries
+    - Updated : Made chat & email app workable
+    - Updated : Gradient color palette support to all app
+    - Updated : Folder structure, Style & Color Customization and JS usage in documentation
+    - Fixed : Coming soon counter
+    - Fixed : Menu expands & collapsed effect in md and sm screen while loading the app.
+    - Fixed : Fullcalender multi language support.
+    - Removed : Angular Starter-kit.
+V.3.1 : [20/11/2018]
+    - Updated : Bootstrap v4.1.3
+    - Updated : js/css plugins/libraries
+    - Updated : Starter Kit
+    - Updated : Documentation
+    - Removed : Grunt Task Runner
+    - Removed : Pug Template Builder
+    - Fixed : Chart JS IE issue
+    - Fixed : Fullcalendar for Mobile View
+    - Updated Documentation
 V.3.0 : [14/03/2018]
     - Added : Dynamic assets and app-assets path for pug
     - Updated : Updated to Bootstrap 4 stable

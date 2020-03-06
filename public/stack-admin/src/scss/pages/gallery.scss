@@ -3,10 +3,15 @@
 // 	Description: Page content different types of gallery page layouts SCSS.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Stack - Responsive Admin Theme
-// 	Version: 3.0
 // 	Author: PIXINVENT
 // 	Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
+
+// Core variables and mixins overrides
+@import "../bootstrap/functions";
+@import "../core/variables/variables";
+@import "../bootstrap/variables";
+@import "../core/variables/components-variables";
 
 .gallery-thumbnail{
 	max-width: 100%;
@@ -95,7 +100,7 @@
 		}
 		figcaption {
 			padding: 2em;
-			color: #fff;
+			color: $white;
 			text-transform: uppercase;
 			font-size: 1.25em;
 			-webkit-backface-visibility: hidden;
@@ -233,7 +238,7 @@ figure.effect-sadie {
 	}
 	&:hover {
 		h2 {
-			color: #fff;
+			color: $white;
 			transform: translate3d(0,-50%,0) translate3d(0,-40px,0);
 		}
 		figcaption {
@@ -269,7 +274,7 @@ figure.effect-roxy {
 			right: 30px;
 			bottom: 30px;
 			left: 30px;
-			border: 1px solid #fff;
+			border: 1px solid $white;
 			content: '';
 			opacity: 0;
 			transition: opacity 0.35s, transform 0.35s;
@@ -346,8 +351,8 @@ figure.effect-bubba {
 			content: '';
 			opacity: 0;
 			transition: opacity 0.35s, transform 0.35s;
-			border-top: 1px solid #fff;
-			border-bottom: 1px solid #fff;
+			border-top: 1px solid $white;
+			border-bottom: 1px solid $white;
 			transform: scale(0,1);
 		}
 		&::after {
@@ -359,8 +364,8 @@ figure.effect-bubba {
 			content: '';
 			opacity: 0;
 			transition: opacity 0.35s, transform 0.35s;
-			border-right: 1px solid #fff;
-			border-left: 1px solid #fff;
+			border-right: 1px solid $white;
+			border-left: 1px solid $white;
 			transform: scale(1,0);
 		}
 	}
@@ -416,7 +421,7 @@ figure.effect-romeo {
 			left: 50%;
 			width: 80%;
 			height: 1px;
-			background: #fff;
+			background: $white;
 			content: '';
 			transition: opacity 0.35s, transform 0.35s;
 			transform: translate3d(-50%,-50%,0);
@@ -427,7 +432,7 @@ figure.effect-romeo {
 			left: 50%;
 			width: 80%;
 			height: 1px;
-			background: #fff;
+			background: $white;
 			content: '';
 			transition: opacity 0.35s, transform 0.35s;
 			transform: translate3d(-50%,-50%,0);
@@ -471,8 +476,8 @@ figure.effect-layla {
 			right: 30px;
 			bottom: 50px;
 			left: 30px;
-			border-top: 1px solid #fff;
-			border-bottom: 1px solid #fff;
+			border-top: 1px solid $white;
+			border-bottom: 1px solid $white;
 			transform: scale(0,1);
 			-webkit-transform-origin: 0 0;
 			transform-origin: 0 0;
@@ -486,8 +491,8 @@ figure.effect-layla {
 			right: 50px;
 			bottom: 30px;
 			left: 50px;
-			border-right: 1px solid #fff;
-			border-left: 1px solid #fff;
+			border-right: 1px solid $white;
+			border-left: 1px solid $white;
 			transform: scale(1,0);
 			-webkit-transform-origin: 100% 0;
 			transform-origin: 100% 0;
@@ -574,7 +579,7 @@ figure.effect-honey {
 			left: 0;
 			width: 100%;
 			height: 10px;
-			background: #fff;
+			background: $white;
 			content: '';
 			transform: translate3d(0,10px,0);
 			transition: transform 0.35s;
@@ -618,7 +623,7 @@ figure.effect-oscar {
 			right: 30px;
 			bottom: 30px;
 			left: 30px;
-			border: 1px solid #fff;
+			border: 1px solid $white;
 			content: '';
 			opacity: 0;
 			transition: opacity 0.35s, transform 0.35s;
@@ -676,7 +681,7 @@ figure.effect-marley {
 			left: 0;
 			width: 100%;
 			height: 4px;
-			background: #fff;
+			background: $white;
 			content: '';
 			transform: translate3d(0,40px,0);
 			opacity: 0;
@@ -739,7 +744,7 @@ figure.effect-ruby {
 	p {
 		margin: 1em 0 0;
 		padding: 3em;
-		border: 1px solid #fff;
+		border: 1px solid $white;
 		opacity: 0;
 		transition: opacity 0.35s, transform 0.35s;
 		transform: translate3d(0,20px,0) scale(1.1);
@@ -780,7 +785,7 @@ figure.effect-milo {
 	p {
 		padding: 0 10px 0 0;
 		width: 50%;
-		border-right: 1px solid #fff;
+		border-right: 1px solid $white;
 		text-align: right;
 		opacity: 0;
 		transition: opacity 0.35s, transform 0.35s;
@@ -818,7 +823,7 @@ figure.effect-dexter {
 			left: 30px;
 			height: -webkit-calc(50% - 30px);
 			height: calc(50% - 30px);
-			border: 7px solid #fff;
+			border: 7px solid $white;
 			content: '';
 			transition: transform 0.35s;
 			transform: translate3d(0,-100%,0);
@@ -878,7 +883,7 @@ figure.effect-sarah {
 			left: 0;
 			width: 100%;
 			height: 3px;
-			background: #fff;
+			background: $white;
 			content: '';
 			transition: transform 0.35s;
 			transform: translate3d(-100%,0,0);
@@ -900,7 +905,7 @@ figure.effect-zoe {
 		bottom: 0;
 		padding: 1em;
 		height: 3.75em;
-		background: #fff;
+		background: $white;
 		color: #3c4a50;
 		transition: transform 0.35s;
 		transform: translate3d(0,100%,0);
@@ -970,7 +975,7 @@ figure.effect-zoe {
 		position: absolute;
 		bottom: 8em;
 		padding: 2em;
-		color: #fff;
+		color: $white;
 		text-transform: none;
 		font-size: 90%;
 		opacity: 0;
@@ -1026,7 +1031,7 @@ figure.effect-chico {
 			right: 30px;
 			bottom: 30px;
 			left: 30px;
-			border: 1px solid #fff;
+			border: 1px solid $white;
 			content: '';
 			transform: scale(1.1);
 			opacity: 0;

@@ -3,7 +3,6 @@
     Description: Basic Datatable
     ----------------------------------------------------------------------------------------
     Item Name: Stack - Responsive Admin Theme
-    Version: 3.0
     Author: PIXINVENT
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
@@ -52,7 +51,7 @@ $('.complex-headers').DataTable();
 *************************************/
 
 $('.dom-positioning').DataTable( {
-    "dom": '<"top"i>rt<"bottom"flp><"clear">'
+    "dom": '<"top overflow-hidden mb-50"if>rt<"bottom mt-1"lp><"clear">'
 } );
 
 /************************************

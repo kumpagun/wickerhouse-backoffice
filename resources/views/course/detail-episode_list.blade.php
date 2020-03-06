@@ -60,7 +60,7 @@
   <script>
     function handleDeleteEp(id) {
       url = "{{ route('episode_delete') }}/"+id
-      swal({
+      swal.fire({
         title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
         icon: "warning",
         showCancelButton: true,
@@ -81,7 +81,7 @@
           }
         }
       }).then(isConfirm => {
-        if (isConfirm) {
+        if (isConfirm.value) {
           window.location = url
         } 
       });
