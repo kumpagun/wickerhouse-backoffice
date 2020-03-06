@@ -95,7 +95,7 @@ class BannerController extends Controller
       $banner->image_path = $path_for_db;
       $banner->save();
     }
-    ActivityLogClass::log('เพิ่มหรือแก้ไข Course', new ObjectId(Auth::user()->_id), $banner->getTable(), $banner->getAttributes(),Auth::user()->username);
+    ActivityLogClass::log('เพิ่มหรือแก้ไข Banner', new ObjectId(Auth::user()->_id), $banner->getTable(), $banner->getAttributes(),Auth::user()->username);
   }
   public function banner_sort(Request $request) {
     $list = $request->input('list');

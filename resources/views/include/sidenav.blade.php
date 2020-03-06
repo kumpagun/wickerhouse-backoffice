@@ -53,14 +53,14 @@
       <li class="navigation-header">
         <span>รอบการอบรม</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รอบการอบรม"></i>
       </li>
-      {{-- <li class="nav-item">
-        <a href="{{route('company_index')}}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="">บริษัท</span></a>
-      </li> --}}
       <li class="nav-item">
         <a href="{{route('department_index')}}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="">บริษัท / แผนก</span></a>
       </li>
       <li class="nav-item">
         <a href="{{ route('training_index') }}"><i class="feather icon-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">สมาชิกพิเศษ</span></a>
       </li>
       @endhasrole
 
