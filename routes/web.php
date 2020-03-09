@@ -118,6 +118,21 @@ Route::group(['prefix' => 'course', 'middleware' => ['auth', 'role:admin|course'
 
     Route::post('/import-excel', 'Course\ExaminationController@examination_import_excel')->name('examination_import_excel');
   });
+
+  // Quiz
+  Route::group(['prefix' => 'quiz', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::post('/group_store/{id?}', 'Course\QuizController@quiz_group_store')->name('quiz_group_store');
+    Route::get('/group_delete/{id?}', 'Course\QuizController@quiz_group_delete')->name('quiz_group_delete');
+    
+    Route::post('/detail/store', 'Course\QuizController@quiz_detail_store')->name('quiz_detail_store');
+
+    Route::get('/index/{id?}', 'Course\QuizController@quiz_index')->name('quiz_index');
+    Route::get('/create/{quiz_group_id}/{id?}', 'Course\QuizController@quiz_create')->name('quiz_create');
+    Route::post('/store', 'Course\QuizController@quiz_store')->name('quiz_store');
+    Route::get('/delete/{id?}', 'Course\QuizController@quiz_delete')->name('quiz_delete');
+
+    Route::post('/import-excel', 'Course\QuizController@quiz_import_excel')->name('quiz_import_excel');
+  });
 });
 
 // Homework
