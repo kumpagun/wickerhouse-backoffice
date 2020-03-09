@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use  App\Http\Controllers\Course\HomeworkController;
 use  App\Http\Controllers\Course\EpisodeController;
 use  App\Http\Controllers\Course\ExaminationController;
+use  App\Http\Controllers\Course\QuizController;
 use  App\Http\Controllers\Course\DocumentController;
 use  App\Http\Controllers\ReviewController;
 // Model
@@ -104,6 +105,8 @@ class CourseController extends Controller
       $examination_type = '';
       $document = '';
       $review_group = '';
+      $quiz = '';
+      $episode_not_selected = '';
     } else {
       $data = Course::find($id);
       $episode_group_controller = new EpisodeController;
@@ -118,6 +121,9 @@ class CourseController extends Controller
       $document = $document_controller->get_document($id);
       $review_controller = new ReviewController;
       $review_group = $review_controller->get_review_group($id);
+      $quiz_controller = new QuizController;
+      $quiz = $quiz_controller->get_quiz_group($id);
+      $episode_not_selected = $quiz_controller->get_episode_not_selected($id);
       $examination_type = ['pretest & posttest','pretest','posttest'];
       if(!empty($examination)) {
         // ลบ Type ที่มีแล้วออกจาก select list
@@ -147,7 +153,9 @@ class CourseController extends Controller
       'examination' => $examination,
       'examination_type' => $examination_type,
       'document' => $document,
-      'review_group' => $review_group
+      'review_group' => $review_group,
+      'quiz' => $quiz,
+      'episode_not_selected' => $episode_not_selected
     ]; 
     return view('course.course_detail',$withData);
   }

@@ -18,6 +18,8 @@ use App\Models\Homework;
 use App\Models\HomeworkAnswer;
 use App\Models\Question;
 use App\Models\Review_choice;
+use App\Models\Quiz_group;
+use App\Models\Quiz;
 
 class CourseClass
 {   
@@ -95,5 +97,22 @@ class CourseClass
       $data = $query->posttest_passing_point;
     }
     return $data;
+  }
+
+  public function get_episode_name($episode_id) {
+    $data = Episode::find($episode_id);
+    if(!empty($data)) {
+      return $data->title;
+    } else {
+      return '';
+    }
+  }
+  public function get_total_quiz($episode_id) {
+    $quiz_group = Quiz_group::where('episode_id',new ObjectId($episode_id))->where('status',1)->first();
+    $total = 0;
+    if(!empty($quiz_group)) {
+      $total = Quiz::where('quiz_group_id',new ObjectId($quiz_group->_id))->where('status',1)->count();
+    }
+    return $total;
   }
 }

@@ -2,10 +2,10 @@
 
 namespace App\ImportExcels;
 
-use App\Models\Examination;
+use App\Models\Quiz;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class ExaminationImport implements ToModel
+class QuizImport implements ToModel
 {
   /**
   * @param array $row
@@ -14,8 +14,8 @@ class ExaminationImport implements ToModel
   */
   public function model(array $row)
   {   
-    return new Examination([
-      'exam_group_id' => $row[1],
+    return new Quiz([
+      'quiz_group_id' => $row[1],
       'course_id' => $row[2],
       'question' => $row[3],
       'choice' => $row[4],
