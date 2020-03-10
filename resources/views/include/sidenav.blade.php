@@ -60,7 +60,7 @@
         <a href="{{ route('training_index') }}"><i class="feather icon-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">สมาชิกพิเศษ</span></a>
+        <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> สมาชิก VIP</span></a>
       </li>
       @endhasrole
 

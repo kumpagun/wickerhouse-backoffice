@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('สมาชิกพิเศษ'); @endphp
+@php $title = strtoupper(' สมาชิก VIP'); @endphp
 
 @section('content-header-left')
     <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -72,7 +72,7 @@
                   </tr>
                 @endforeach
               @else
-                <tr><td colspan="99">ไม่มีข้อมูลสมาชิกพิเศษ</td></tr>
+                <tr><td colspan="99">ไม่มีข้อมูล สมาชิก VIP</td></tr>
               @endif
             </tbody>
           </table>

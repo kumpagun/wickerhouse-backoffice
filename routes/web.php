@@ -55,7 +55,7 @@ Route::group(['prefix' => 'permissions', 'middleware' => ['auth', 'role:admin']]
 });
 
 // Banner
-Route::group(['prefix' => 'banner', 'middleware' => ['auth', 'role:admin']], function () {
+Route::group(['prefix' => 'banner', 'middleware' => ['auth', 'role:admin|banner']], function () {
   Route::get('/', 'BannerController@banner_index')->name('banner_index');
   Route::get('/create/{id?}', 'BannerController@banner_create')->name('banner_create');
   Route::post('/store', 'BannerController@banner_store')->name('banner_store');
