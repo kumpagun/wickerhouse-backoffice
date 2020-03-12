@@ -29,6 +29,9 @@ class Episode extends Eloquent
     'playlists',
     'screenshots', // [String]
     'status',
-    'require_episode'
+    'require_episode',
+    'have_quiz',
+    'total_quiz',
+    'passing_point'
   ];
 }

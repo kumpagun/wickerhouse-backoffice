@@ -76,7 +76,7 @@ class ReviewController extends Controller
   }
   public function review_group_delete($review_group_id){
     $review_group = Review_group::find($review_group_id);
-    $review_group->status = 0;
+    $review_group->status = 2;
     $review_group->save();
     ActivityLogClass::log('ลบ review group', new ObjectId(Auth::user()->_id), $review_group->getTable(), $review_group->getAttributes(),Auth::user()->username);
     return redirect()->route('course_create', ['id' => $review_group->course_id, '#review']);
@@ -184,7 +184,7 @@ class ReviewController extends Controller
   }
   public function review_delete($review_id){
     $review = Review::find($review_id);
-    $review->status = 0;
+    $review->status = 2;
     $review->save();
     ActivityLogClass::log('ลบ review', new ObjectId(Auth::user()->_id), $review->getTable(), $review->getAttributes(),Auth::user()->username);
     return redirect()->route('course_create', ['id' => $review->course_id, '#review']);

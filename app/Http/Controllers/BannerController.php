@@ -118,7 +118,7 @@ class BannerController extends Controller
   }
   public function banner_delete($banner_id){
     $banner = Banner::find($banner_id);
-    $banner->status = 0;
+    $banner->status = 2;
     $banner->save();
     ActivityLogClass::log('ลบ banner', new ObjectId(Auth::user()->_id), $banner->getTable(), $banner->getAttributes(),Auth::user()->username);
     return redirect()->route('banner_index')->with('status',200);

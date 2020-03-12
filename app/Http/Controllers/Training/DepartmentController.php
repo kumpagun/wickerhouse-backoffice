@@ -117,7 +117,7 @@ class DepartmentController extends Controller
     }
     public function delete_department($id=''){
         $delete = Department::find($id);
-        $delete->status = 0;
+        $delete->status = 2;
         $delete->save();
         ActivityLogClass::log('ลบข้อมูล Department', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
         return redirect()->route('department_index');

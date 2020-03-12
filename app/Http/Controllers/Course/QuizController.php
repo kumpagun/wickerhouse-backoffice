@@ -70,16 +70,10 @@ class QuizController extends Controller
   public function quiz_group_store(Request $request){
     $course_id = $request->input('course_id');
     $episode_id = $request->input('episode_id');
-    $require_all_correct = $request->input('require_all_correct');
 
     $quiz = new Quiz_group();
     $quiz->course_id = new ObjectId($course_id);
     $quiz->episode_id = new ObjectId($episode_id);
-    if(!empty($require_all_correct)) {
-      $quiz->require_all_correct = true;
-    } else {
-      $quiz->require_all_correct = false;
-    }
     $quiz->status = 1;
     $quiz->save();
 
@@ -91,8 +85,11 @@ class QuizController extends Controller
   }
   public function quiz_group_delete($id){
     $quiz_group = Quiz_group::find($id);
-    $quiz_group->status = 0;
+    $quiz_group->status = 2;
     $quiz_group->save();
+
+    Quiz::where('quiz_group_id',new ObjectId($id))->update(['status' => 0]);
+    Episode::where('_id',new ObjectId($quiz_group->episode_id))->update(['passing_point' => null]);
 
     $this->update_course($quiz_group->course_id,$quiz_group->episode_id);
 
@@ -104,10 +101,12 @@ class QuizController extends Controller
     $quiz_group = Quiz_group::where('_id',new ObjectId($id))->first();
     $quiz = Quiz::where('quiz_group_id',new ObjectId($id))->where('status',1)->get();
     $course = Course::find($quiz_group->course_id);
+    $episode = Episode::find($quiz_group->episode_id);
     $datas = [
       'quiz_group' => $quiz_group,
       'quiz' => $quiz,
-      'course' => $course
+      'course' => $course,
+      'episode' => $episode
     ];
 
     return view('quiz.quiz_index',$datas);
@@ -140,8 +139,16 @@ class QuizController extends Controller
   }
 
   public function quiz_detail_store(Request $request){
-    // ต้องถูกหมดทุกข้อ
-    // เลือก EP ใหม่
+    $quiz_group_id = $request->input('quiz_group_id');
+    $passing_point = $request->input('passing_point');
+    $quiz_group = Quiz_group::find($quiz_group_id);
+    $episode = Episode::find($quiz_group->episode_id);
+    $episode->passing_point = $passing_point;
+    $episode->save();
+
+    ActivityLogClass::log('แก้ไข episode ', new ObjectId(Auth::user()->_id), $episode->getTable(), $episode->getAttributes(),Auth::user()->username);
+    
+    return redirect()->route('quiz_index', ['id' => $quiz_group_id])->with('status',200);
   }
 
   public function quiz_store(Request $request){
@@ -206,7 +213,7 @@ class QuizController extends Controller
 
   public function quiz_delete($id){
     $quiz = Quiz::find($id);
-    $quiz->status = 0;
+    $quiz->status = 2;
     $quiz->save();
 
     $quiz_group = Quiz_group::find($quiz->quiz_group_id);

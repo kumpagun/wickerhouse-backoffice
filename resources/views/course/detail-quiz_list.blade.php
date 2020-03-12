@@ -24,7 +24,6 @@
         <table class="table table-bordered">
           <tr class="bg-blue-grey bg-lighten-5">
             <th class="text-center">Episode</th>
-            <th class="text-center">ต้องถูกทุกข้อ</th>
             <th class="text-center">Total</th>
             <th class="text-center">Action</th>
           </tr>
@@ -33,11 +32,6 @@
               <td class="align-baseline text-left">
                 <a href="{{ route('quiz_index',['id' => $item->_id]) }}">{{ CourseClass::get_episode_name($item->episode_id) }}</a>
               </td>
-              @if($item->require_all_correct)
-              <td class="align-baseline text-center">ใช่</td>
-              @else 
-              <td class="align-baseline text-center">ไม่ใช่</td>
-              @endif
               <td class="align-baseline text-center">{{ CourseClass::get_total_quiz($item->episode_id) }}</td>
               <td class="align-baseline text-center">
                 @can('editor')
@@ -84,14 +78,6 @@
                 <option value="{{ $item->_id }}">{{ $item->title }}</option>
               @endforeach
             </select>
-          </fieldset>
-        </div>
-        <div class="col-11 pb-2">
-          <fieldset>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" name="require_all_correct" id="require_all_correct">
-              <label class="custom-control-label" for="require_all_correct">ต้องตอบถูกทุกข้อ</label>
-            </div>
           </fieldset>
         </div>
       </div>

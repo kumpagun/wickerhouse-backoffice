@@ -55,7 +55,7 @@ Route::group(['prefix' => 'permissions', 'middleware' => ['auth', 'role:admin']]
 });
 
 // Banner
-Route::group(['prefix' => 'banner', 'middleware' => ['auth', 'role:admin']], function () {
+Route::group(['prefix' => 'banner', 'middleware' => ['auth', 'role:admin|banner']], function () {
   Route::get('/', 'BannerController@banner_index')->name('banner_index');
   Route::get('/create/{id?}', 'BannerController@banner_create')->name('banner_create');
   Route::post('/store', 'BannerController@banner_store')->name('banner_store');
@@ -169,8 +169,22 @@ Route::group(['prefix' => 'training', 'middleware' => ['auth', 'role:admin|cours
 
   Route::match(['get','post'],'/employee-filter', 'Training\TrainingController@training_employee_filter')->name('training_employee_filter');
   Route::post('/import_employees', 'Training\TrainingController@training_import_employees')->name('training_import_employees');
-  
-  
+});
+
+// Giftcode
+Route::group(['prefix' => 'giftcode', 'middleware' => ['auth', 'role:admin|giftcode']], function () {
+  Route::group(['prefix' => 'group'], function () {
+    Route::match(['get','post'],'/', 'GiftcodeController@giftcode_group_index')->name('giftcode_group_index');
+    Route::get('/create/{giftcode_group_id?}', 'GiftcodeController@giftcode_group_create')->name('giftcode_group_create');
+    Route::post('/store', 'GiftcodeController@giftcode_group_store')->name('giftcode_group_store');
+    Route::match(['get','post'],'/delete/{id?}', 'GiftcodeController@giftcode_group_delete')->name('giftcode_group_delete');
+  });
+  Route::group(['prefix' => 'reward'], function () {
+    Route::get('/{giftcode_group_id}', 'GiftcodeController@giftcode_reward_index')->name('giftcode_reward_index');
+    Route::get('/create/{giftcode_id?}', 'GiftcodeController@giftcode_reward_create')->name('giftcode_reward_create');
+    Route::post('/store', 'GiftcodeController@giftcode_reward_store')->name('giftcode_reward_store');
+    Route::match(['get','post'],'/delete/{id?}', 'GiftcodeController@giftcode_reward_delete')->name('giftcode_reward_delete');
+  });
 });
 
 // Assessment

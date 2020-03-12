@@ -15,6 +15,45 @@
 @endsection
 
 @section('content')
+<div class="row align-items-center justify-content-center">
+  <div class="col-12 col-md-10 col-xl-8">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">{{ $title }} Detail</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body overflow-hidden">
+          <form id="form" class="form" action="{{ route('quiz_detail_store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="quiz_group_id" value="{{ $quiz_group->_id }}" >
+            <div class="form-body">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    {{-- passing_point --}}
+                    <fieldset class="form-group floating-label-form-group @if($errors->episode->has('passing_point')) danger @endif">
+                      <label for="user-name">คะแนนผ่านเกณฑ์</label>
+                      <input type="number" name="passing_point" class="form-control" value="{{ old('passing_point', $episode->passing_point) }}" placeholder="passing_point">
+                      @if($errors->episode->has('passing_point'))
+                        <span class="small" role="alert">
+                          <p class="mb-0">{{ $errors->episode->first('passing_point') }}</p>
+                        </span>
+                      @endif
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="col-12 mt-2 text-right">
+                  <button id="btnSubmit" class="btn btn-primary btn-block" type="submit">บันทึก</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row align-items-center justify-content-center mb-2">
   <div class="col-12 col-md-10 col-xl-8 text-center">
     <a href="{{ route('quiz_create',['quiz_group_id' => $quiz_group->_id]) }}">

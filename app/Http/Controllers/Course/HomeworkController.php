@@ -110,7 +110,7 @@ class HomeworkController extends Controller
 
   public function homework_delete($id){
     $homework = Homework::find($id);
-    $homework->status = 0;
+    $homework->status = 2;
     $homework->save();
 
     $this->update_course($homework->course_id);

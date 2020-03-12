@@ -53,5 +53,12 @@ class RoleTableSeeder extends Seeder
       $role->description  = 'Description Question'; // optional
       $role->status       = 1;
       $role->save();
+
+      $role = new Role();
+      $role->name         = 'banner';
+      $role->display_name = 'Banner'; // optional
+      $role->description  = 'Description Banner'; // optional
+      $role->status       = 1;
+      $role->save();
     }
 }

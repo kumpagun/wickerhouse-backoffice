@@ -82,7 +82,7 @@ class EmployeeVIPController extends Controller
     $employee_id = $request->input('employee_id');
     $check = Employee_vip::where('employee_id',$employee_id)->first(); 
     $employee = Employee_vip::find($check->_id);
-    $employee->status = 0;
+    $employee->status = 2;
     $employee->save();
     ActivityLogClass::log('ลบ Employee VIP', new ObjectId(Auth::user()->_id), $employee->getTable(), $employee->getAttributes(),Auth::user()->username);
 

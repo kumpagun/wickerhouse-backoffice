@@ -155,7 +155,7 @@ class EpisodeController extends Controller
     $clear_ep = Episode::where('episode_group_id',new ObjectId($episode_group_id))->unset('episode_group_id');
 
     $episode_group = Episode_group::find($episode_group_id);
-    $episode_group->status = 0;
+    $episode_group->status = 2;
     $episode_group->save();
 
     ActivityLogClass::log('ลบ episode_group', new ObjectId(Auth::user()->_id), $episode_group->getTable(), $episode_group->getAttributes(),Auth::user()->username);
@@ -226,7 +226,7 @@ class EpisodeController extends Controller
   public function episode_delete($id) 
   {
     $episode = Episode::find($id);
-    $episode->status = 0;
+    $episode->status = 2;
     $episode->save();
 
     ActivityLogClass::log('ลบ episode', new ObjectId(Auth::user()->_id), $episode->getTable(), $episode->getAttributes(),Auth::user()->username);
