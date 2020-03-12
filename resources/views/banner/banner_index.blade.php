@@ -52,15 +52,21 @@
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
                 @foreach ($datas as $item)
-                  <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 pb-0 mb-1">
-                    <div class="li-custom">
-                      <span><i class="ft-menu mr-1 d-none"></i> <strong>&nbsp;</strong></span>
-                      <div class="action">
-                        <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
-                      </div>
-                    </div>
-                    <ul class="list-group-inner">
-                      <li class="list-group-item"><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></li>
+                  <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 py-0 mb-1">
+                    <ul class="list-group-inner mt-0">
+                      <li class="list-group-item p-0">
+                        <div class="card">
+                          <div class="card-header pb-0">
+                            <div class="heading-elements custom-color">
+                              <ul class="list-inline mb-0">
+                                <li><a href="#{{$item->_id}}" onclick="handleDeleteGroup('{{$item->_id}}')"><i class="feather icon-x"></i> ลบ</a></a>
+                              </ul>
+                            </div>
+                            {{-- <div><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></div> --}}
+                            <img src="https://bo-dev.jasonlinelearning.com/storage/images/banner/5e670eaf241cd5349d0b4f30/1583812271.png" alt="">
+                          </div>
+                        </div>
+                      </li>
                     </ul>
                   </li>
                 @endforeach
@@ -101,6 +107,17 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .action {
+    padding: 10px 5px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .custom-color {
+    background-color: rgba(255, 255, 255, 0.8) !important;
   }
   </style>
 @endsection
