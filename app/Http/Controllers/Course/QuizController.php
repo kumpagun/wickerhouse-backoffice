@@ -56,7 +56,6 @@ class QuizController extends Controller
     $episode = Episode::find($episode_id);
     $episode->have_quiz = false;
     $episode->total_quiz = 0;
-    $episode->passing_point = null;
     $episode->save();
     
     $quiz_group = Quiz_group::where('course_id', new ObjectId($course_id))->where('episode_id',new ObjectId($episode_id))->where('status',1)->get(); 
@@ -86,10 +85,11 @@ class QuizController extends Controller
   }
   public function quiz_group_delete($id){
     $quiz_group = Quiz_group::find($id);
-    $quiz_group->status = 0;
+    $quiz_group->status = 2;
     $quiz_group->save();
 
     Quiz::where('quiz_group_id',new ObjectId($id))->update(['status' => 0]);
+    Episode::where('_id',new ObjectId($quiz_group->episode_id))->update(['passing_point' => null]);
 
     $this->update_course($quiz_group->course_id,$quiz_group->episode_id);
 
@@ -213,7 +213,7 @@ class QuizController extends Controller
 
   public function quiz_delete($id){
     $quiz = Quiz::find($id);
-    $quiz->status = 0;
+    $quiz->status = 2;
     $quiz->save();
 
     $quiz_group = Quiz_group::find($quiz->quiz_group_id);

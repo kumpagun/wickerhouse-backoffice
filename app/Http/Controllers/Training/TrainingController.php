@@ -236,7 +236,7 @@ class TrainingController extends Controller
     }
     public function training_delete($id=''){
       $delete = Training::find($id);
-      $delete->status = 0;
+      $delete->status = 2;
       $delete->save();
       ActivityLogClass::log('ลบข้อมูล Training', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
       return redirect()->route('training_index');

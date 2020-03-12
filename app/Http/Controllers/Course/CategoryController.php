@@ -102,7 +102,7 @@ class CategoryController extends Controller
         ]); 
       }
       $delete = Category::find($id);
-      $delete->status = 0;
+      $delete->status = 2;
       $delete->save();
       ActivityLogClass::log('ลบข้อมูล Category', new ObjectId(Auth::user()->_id), $delete->getTable(), $delete->getAttributes(),Auth::user()->username);
       return response()->json([

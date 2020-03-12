@@ -96,7 +96,7 @@ class ExaminationController extends Controller
   }
   public function examination_group_delete($id){
     $examination = Examination_group::find($id);
-    $examination->status = 0;
+    $examination->status = 2;
     $examination->save();
 
     $this->update_course($examination->course_id);
@@ -265,7 +265,7 @@ class ExaminationController extends Controller
 
   public function examination_delete($id){
     $examination = Examination::find($id);
-    $examination->status = 0;
+    $examination->status = 2;
     $examination->save();
 
     $this->update_course($examination->course_id);

@@ -85,7 +85,7 @@ class CompanyController extends Controller
     }
     public function company_delete($id=''){
         $delete = Company::find($id);
-        $delete->status = 0;
+        $delete->status = 2;
         $delete->save();
         ActivityLogClass::log('ลบข้อมูล Company', new ObjectId($current_user->_id), $store->getTable(), $store->getAttributes(),$current_user->username);
         return redirect()->route('company_index');

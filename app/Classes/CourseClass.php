@@ -115,4 +115,12 @@ class CourseClass
     }
     return $total;
   }
+  public function get_training_name($training_id) {
+    $training = Training::find($training_id);
+    $title = '';
+    if(!empty($training)) {
+      $title = $training->title;
+    }
+    return $title;
+  }
 }

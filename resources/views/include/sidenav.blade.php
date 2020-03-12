@@ -62,6 +62,9 @@
       <li class="nav-item">
         <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> สมาชิก VIP</span></a>
       </li>
+      <li class="nav-item">
+        <a href="{{ route('giftcode_group_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> Giftcode</span></a>
+      </li>
       @endhasrole
 
       @hasrole('admin|report')
