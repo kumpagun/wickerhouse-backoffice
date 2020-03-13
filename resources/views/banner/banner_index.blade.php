@@ -24,7 +24,6 @@
 @endsection
 
 @section('content')
-  
   <div class="row align-items-center justify-content-center mb-2">
     <div class="col-12 col-md-10 col-xl-8">
       @if (session('status'))
@@ -54,17 +53,10 @@
                 @foreach ($datas as $item)
                   <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 py-0 mb-1">
                     <ul class="list-group-inner mt-0">
-                      <li class="list-group-item p-0">
-                        <div class="card">
-                          <div class="card-header pb-0">
-                            <div class="heading-elements custom-color">
-                              <ul class="list-inline mb-0">
-                                <li><a href="#{{$item->_id}}" onclick="handleDeleteGroup('{{$item->_id}}')"><i class="feather icon-x"></i> ลบ</a></a>
-                              </ul>
-                            </div>
-                            {{-- <div><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></div> --}}
-                            <img src="https://bo-dev.jasonlinelearning.com/storage/images/banner/5e670eaf241cd5349d0b4f30/1583812271.png" alt="">
-                          </div>
+                      <li class="list-group-item">
+                        <div><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></div>
+                        <div class="action">
+                          <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
                         </div>
                       </li>
                     </ul>
@@ -115,9 +107,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-  .custom-color {
-    background-color: rgba(255, 255, 255, 0.8) !important;
   }
   </style>
 @endsection
