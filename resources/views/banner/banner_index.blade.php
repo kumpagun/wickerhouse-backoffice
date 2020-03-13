@@ -24,7 +24,6 @@
 @endsection
 
 @section('content')
-  
   <div class="row align-items-center justify-content-center mb-2">
     <div class="col-12 col-md-10 col-xl-8">
       @if (session('status'))
@@ -52,15 +51,14 @@
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
                 @foreach ($datas as $item)
-                  <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 pb-0 mb-1">
-                    <div class="li-custom">
-                      <span><i class="ft-menu mr-1 d-none"></i> <strong>&nbsp;</strong></span>
-                      <div class="action">
-                        <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
-                      </div>
-                    </div>
-                    <ul class="list-group-inner">
-                      <li class="list-group-item"><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></li>
+                  <li id="{{ $item->_id }}" class="list-group-item bg-blue-grey bg-lighten-5 py-0 mb-1">
+                    <ul class="list-group-inner mt-0">
+                      <li class="list-group-item">
+                        <div><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></div>
+                        <div class="action">
+                          <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
+                        </div>
+                      </li>
                     </ul>
                   </li>
                 @endforeach
@@ -101,6 +99,14 @@
     border-radius: 0;
     border-left: 0;
     border-right: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .action {
+    padding: 10px 5px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   </style>
 @endsection
