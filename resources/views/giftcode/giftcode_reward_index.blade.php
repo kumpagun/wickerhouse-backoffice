@@ -46,6 +46,7 @@
             <th class="text-center">ของรางวัล</th>
             <th class="text-center">รหัส</th>
             <th class="text-center">สถานะ</th>
+            <th class="text-center">ผู้ได้รับรางวัล</th>
             <th class="text-center">Action</th>
           </tr>
           @if(!empty($datas) && count($datas)>0)
@@ -54,8 +55,8 @@
                 <td class="align-baseline text-center">{{ $loop->iteration }}</td>
                 <td class="align-baseline">{{ $item->title }}</td>
                 <td class="align-baseline text-center">{{ $item->code }}</td>
-                
-                <td class="align-baseline text-center">@if($item->active) ถูกใช้งานแล้ว @else ยังไม่ถูกใช้งาน @endif</td>
+                <td class="align-baseline text-center">@if($item->active) <span class="text-success">ถูกใช้งานแล้ว</span> @else ยังไม่ถูกใช้งาน @endif</td>
+                <td class="align-baseline text-center">{{ Member::getUserFromGiftcode($item->_id) }}</td>
                 <td class="align-baseline text-center">
                   @can('editor')
                     <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
@@ -140,7 +141,7 @@
   function handleDelete(id) {
     url = "{{ route('giftcode_reward_delete') }}/"+id
     swal.fire({
-      title: "คุณต้องการลบคำถามใช่หรือไม่ ?",
+      title: "คุณต้องการลบรางวัลใช่หรือไม่ ?",
       icon: "warning",
       showCancelButton: true,
       buttons: {

@@ -109,4 +109,5 @@ class UserClass
     $request_datas = User::whereIn('role_ids',$roles)->count();
     return $request_datas;
   }
+
 }

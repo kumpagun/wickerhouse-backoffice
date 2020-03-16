@@ -184,6 +184,7 @@ Route::group(['prefix' => 'giftcode', 'middleware' => ['auth', 'role:admin|giftc
     Route::get('/create/{giftcode_id?}', 'GiftcodeController@giftcode_reward_create')->name('giftcode_reward_create');
     Route::post('/store', 'GiftcodeController@giftcode_reward_store')->name('giftcode_reward_store');
     Route::match(['get','post'],'/delete/{id?}', 'GiftcodeController@giftcode_reward_delete')->name('giftcode_reward_delete');
+    // Route::match(['get','post'],'/recieve/{id?}', 'GiftcodeController@giftcode_reward_recieve')->name('giftcode_reward_recieve');
   });
 });
 

@@ -8,6 +8,8 @@ use App\User;
 use Maklad\Permission\Models\Role;
 use App\Models\Member_jasmine;
 use App\Models\Employee;
+use App\Models\Giftcode_usage;
+
 class MemberClass
 {
     public function get_name_member_jasmine($employee_id){
@@ -119,4 +121,15 @@ class MemberClass
         $request_datas = User::whereIn('role_ids',$roles)->count();
         return $request_datas;
     }
+
+
+  public function getUserFromGiftcode($giftcode_id) {
+    $giftcode_usage = Giftcode_usage::where('giftcode_id',new ObjectId($giftcode_id))->first();
+
+    if(!empty($giftcode_usage)) {
+      return $this->get_name_member_jasmine_by_id($giftcode_usage->user_id);
+    } else {
+      return '-';
+    }
+  }
 }
