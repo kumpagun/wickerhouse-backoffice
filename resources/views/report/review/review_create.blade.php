@@ -42,8 +42,8 @@
                           <tr>
                             <th class="text-left">{!! $review->title !!}</th>
                             @foreach ($data_choice[$review->_id] as $choice)
-                              <th class="text-center content-table">{{ $choice }}</th>
-                              <th class="text-center content-table">%{{ $choice }}</th>
+                              <th class="text-center content-table td-width">{{ $choice }}</th>
+                              <th class="text-center content-table td-width">%{{ $choice }}</th>
                             @endforeach
                           </tr>
                         </thead>
@@ -53,16 +53,16 @@
                             <td class="text-left">{!! $value_question !!}</td>
                             @foreach ($data_choice[$review->_id] as $index => $value)
                               @if(!empty($datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]]))
-                                <td class="text-center">{{ $datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]] }}</td>
+                                <td class="text-center td-width">{{ $datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]] }}</td>
                                 @php
                                   $percent = ($datas_report[$review->_id]['choice'][$index_question][$data_choice[$review->_id][$index]]/$datas_report[$review->_id]['choice_total'][$index_question]) * 100;
                                 @endphp
-                                <td class="text-center">
+                                <td class="text-center td-width">
                                   {{ number_format($percent,2) }} %
                                 </td>
                               @else
-                                <td class="text-center">0</td>
-                                <td class="text-center">0 %</td>
+                                <td class="text-center td-width">0</td>
+                                <td class="text-center td-width">0 %</td>
                               @endif
                             @endforeach
                           </tr>
@@ -105,6 +105,9 @@
     }
     .content-table{
       width: 40%;
+    }
+    .td-width {
+      width: 10%;
     }
     p {
       margin-bottom: 0;
