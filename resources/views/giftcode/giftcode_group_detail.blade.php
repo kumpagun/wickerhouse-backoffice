@@ -39,7 +39,7 @@
               <label for="user-name"> รายละเอียด </label>
               <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ $data->description }}</textarea>
             </fieldset>
-            <fieldset class="form-group">
+            {{-- <fieldset class="form-group">
               <label for="user-name">วันที่เริ่มใช้งาน <span class="text-danger">*</span></label>
               <div class='input-group date published_at'  id='datetimepicker'>
                 <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}" @endif required/> 
@@ -60,7 +60,7 @@
                   </span>
                 </div>
               </div>
-            </fieldset>
+            </fieldset> --}}
             @can('editor')
             <button type="submit" class="btn btn-primary btn-block">บันทึก</button>
             @else
