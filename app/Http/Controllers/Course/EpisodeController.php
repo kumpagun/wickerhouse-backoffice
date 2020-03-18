@@ -71,6 +71,8 @@ class EpisodeController extends Controller
     $course_id = $request->input('course_id');
     $episode_group = $request->input('episode_group');
 
+    $clear_ep_group = Episode_group::where('course_id',new ObjectId($course_id))->unset('position');
+
     $count = 0;
     foreach($episode_group as $row) {
       if(!empty($row)) {
@@ -132,7 +134,10 @@ class EpisodeController extends Controller
     $episodes = $request->input('episode');
     $course_id = $request->input('course_id');
     
+    $clear_position = Episode::where('episode_group_id',new ObjectId($episode_group_id))->unset('position');
     $clear_ep = Episode::where('episode_group_id',new ObjectId($episode_group_id))->unset('episode_group_id');
+
+    // dd($episodes);
 
     if(!empty($episodes)) {
       $count = 0;
@@ -142,6 +147,19 @@ class EpisodeController extends Controller
         $episode->position = $count;
         $episode->save();
         $count++;
+      }
+
+      // Sort all
+      $sort_group = Episode_group::where('course_id', new ObjectId($course_id))->where('status',1)->get();
+      $position = 0;
+      foreach($sort_group as $row) {
+        $sort_ep = Episode::where('episode_group_id', new ObjectId($row->_id))->where('status',1)->orderBy('position','asc')->get();
+        foreach($sort_ep as $ep) {
+          $episode = Episode::find($ep->_id);
+          $episode->position = $position;
+          $episode->save();
+          $position++;
+        }
       }
     }
 
