@@ -26,12 +26,19 @@
 @section('content')
 <div class="row">
   <div class="col-12">
-    @if (session('status'))
+    @if (session('status')==200)
     <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
       <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+    </div>
+    @elseif (session('status')==400)
+    <div class="alert bg-danger alert-icon-left alert-dismissible mb-2" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <strong>Fail</strong> Giftcode นี้มีคนได้รับรางวัลแล้ว
     </div>
     @endif
     <div class="card">
@@ -104,6 +111,17 @@
         <fieldset class="form-group">
           <label for="user-name"> รายละเอียด </label>
           <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="user-name">วันที่เริ่มใช้งาน <span class="text-danger">*</span></label>
+          <div class='input-group date published_at'  id='datetimepicker'>
+            <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}" @endif required/> 
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <span class="fa fa-calendar"></span>
+              </span>
+            </div>
+          </div>
         </fieldset>
       </div>
       <div class="modal-footer">

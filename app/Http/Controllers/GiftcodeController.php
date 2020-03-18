@@ -30,9 +30,9 @@ class GiftcodeController extends Controller
   public function giftcode_group_index() {
     $datas = Giftcode_group::where('status',1)->get();
     $training_arr = [];
-    foreach($datas as $data) {
-      array_push($training_arr, new ObjectId($data->training_id));
-    }
+    // foreach($datas as $data) {
+    //   array_push($training_arr, new ObjectId($data->training_id));
+    // }
     $training = Training::where('status',1)->whereNotIn('_id',$training_arr)->get();
     $withData = [
       'training' => $training,
@@ -66,14 +66,14 @@ class GiftcodeController extends Controller
     $id = $request->input('id');
     $training_id = $request->input('training_id');
     $description = $request->input('description');
-    // $published_at = $request->input('published_at');
+    $published_at = $request->input('published_at');
     // $expired_at = $request->input('expired_at');
     $training = Training::where('_id', new ObjectId($training_id))->where('status',1)->first(); 
     $course_id = $training->course_id;
 
     // Date
-    // $start = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $published_at,'Asia/Bangkok')->startOfDay()->setTimezone('UTC')->timestamp * 1000);
-    // $published_at = $start;
+    $start = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $published_at,'Asia/Bangkok')->startOfDay()->setTimezone('UTC')->timestamp * 1000);
+    $published_at = $start;
     // $end = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $expired_at,'Asia/Bangkok')->endOfDay()->setTimezone('UTC')->timestamp * 1000);
     // $expired_at = $end;
 
@@ -85,7 +85,7 @@ class GiftcodeController extends Controller
     $giftcode_group->training_id = new ObjectId($training_id);
     $giftcode_group->course_id = new ObjectId($course_id);
     $giftcode_group->description = $description;
-    // $giftcode_group->published_at = $published_at;
+    $giftcode_group->published_at = $published_at;
     // $giftcode_group->expired_at = $expired_at;
     $giftcode_group->status = 1;
     $giftcode_group->save();
@@ -95,12 +95,21 @@ class GiftcodeController extends Controller
     return redirect()->route('giftcode_group_index')->with('status',200);
   }
   public function giftcode_group_delete($id){
-    $giftcode_group = Giftcode_group::find($id);
-    $giftcode_group->status = 2;
-    $giftcode_group->save();
 
-    ActivityLogClass::log('ลบ giftcode_group', new ObjectId(Auth::user()->_id), $giftcode_group->getTable(), $giftcode_group->getAttributes(),Auth::user()->username);
-    return redirect()->route('giftcode_group_index')->with('status',200);
+    $giftcode = Giftcode::where('group_id', new ObjectId($id))->where('active',1)->get();
+
+    if(count($giftcode)==0) {
+      $giftcode_group = Giftcode_group::find($id);
+      $giftcode_group->status = 2;
+      $giftcode_group->save();
+
+      $giftcode_update = Giftcode::where('group_id',new ObjectId($giftcode_group->_id))->update(['status' => 2]);
+  
+      ActivityLogClass::log('ลบ giftcode_group', new ObjectId(Auth::user()->_id), $giftcode_group->getTable(), $giftcode_group->getAttributes(),Auth::user()->username);
+      return redirect()->route('giftcode_group_index')->with('status',200);
+    } else {
+      return redirect()->route('giftcode_group_index')->with('status',400);
+    }    
   }
 
   public function giftcode_reward_index($giftcode_group_id) {

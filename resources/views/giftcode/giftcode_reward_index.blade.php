@@ -59,9 +59,11 @@
                 <td class="align-baseline text-center">{{ Member::getUserFromGiftcode($item->_id) }}</td>
                 <td class="align-baseline text-center">
                   @can('editor')
-                    <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
-                      <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
-                    </a>
+                    @if(!$item->active)
+                      <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
+                        <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                      </a>
+                    @endif
                   @else
                     <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
                   @endcan
@@ -91,11 +93,11 @@
       <input type="hidden" name="giftcode_group_id" value="{{ $giftcode_group_id }}">
       <div class="modal-body">
         <fieldset class="form-group">
-          <label for="user-name"> ชื่อรางวัล </label>
+          <label for="user-name"> ชื่อรางวัล <span class="text-danger">*</span></label>
           <input class="form-control" name="title" id="title" type="text" required>
         </fieldset>
         <fieldset class="form-group">
-          <label for="user-name"> จำนวน </label>
+          <label for="user-name"> จำนวน <span class="text-danger">*</span></label>
           <input class="form-control" name="total" id="total" type="number" required>
         </fieldset>
         
