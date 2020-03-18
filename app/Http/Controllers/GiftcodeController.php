@@ -47,6 +47,7 @@ class GiftcodeController extends Controller
       $data->_id = '';
       $data->training_id = '';
       $data->course_id = '';
+      $data->description = '';
       $data->total = '';
       $data->published_at = '';
       $data->expired_at = '';
@@ -65,17 +66,16 @@ class GiftcodeController extends Controller
     $id = $request->input('id');
     $training_id = $request->input('training_id');
     $description = $request->input('description');
-    $published_at = $request->input('published_at');
-    $expired_at = $request->input('expired_at');
-    $training_id = $request->input('training_id');
+    // $published_at = $request->input('published_at');
+    // $expired_at = $request->input('expired_at');
     $training = Training::where('_id', new ObjectId($training_id))->where('status',1)->first(); 
     $course_id = $training->course_id;
 
     // Date
-    $start = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $published_at,'Asia/Bangkok')->startOfDay()->setTimezone('UTC')->timestamp * 1000);
-    $published_at = $start;
-    $end = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $expired_at,'Asia/Bangkok')->endOfDay()->setTimezone('UTC')->timestamp * 1000);
-    $expired_at = $end;
+    // $start = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $published_at,'Asia/Bangkok')->startOfDay()->setTimezone('UTC')->timestamp * 1000);
+    // $published_at = $start;
+    // $end = new UTCDateTime(Carbon::createFromFormat('d-m-Y', $expired_at,'Asia/Bangkok')->endOfDay()->setTimezone('UTC')->timestamp * 1000);
+    // $expired_at = $end;
 
     if(!empty($id)) {
       $giftcode_group = Giftcode_group::find($id);
@@ -85,14 +85,14 @@ class GiftcodeController extends Controller
     $giftcode_group->training_id = new ObjectId($training_id);
     $giftcode_group->course_id = new ObjectId($course_id);
     $giftcode_group->description = $description;
-    $giftcode_group->published_at = $published_at;
-    $giftcode_group->expired_at = $expired_at;
+    // $giftcode_group->published_at = $published_at;
+    // $giftcode_group->expired_at = $expired_at;
     $giftcode_group->status = 1;
     $giftcode_group->save();
 
     ActivityLogClass::log('เพิ่มหรือแก้ไข Giftcode_group', new ObjectId(Auth::user()->_id), $giftcode_group->getTable(), $giftcode_group->getAttributes(),Auth::user()->username);
   
-    return redirect()->route('giftcode_group_create', ['giftcode_group_id' => $giftcode_group->_id])->with('status',200);
+    return redirect()->route('giftcode_group_index')->with('status',200);
   }
   public function giftcode_group_delete($id){
     $giftcode_group = Giftcode_group::find($id);

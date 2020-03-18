@@ -10,6 +10,7 @@ class Giftcode_group extends Eloquent
   protected $fillable = [
     'training_id',
     'course_id',
+    'description',
     'total',
     'published_at',
     'expired_at',

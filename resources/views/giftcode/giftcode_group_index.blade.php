@@ -47,27 +47,33 @@
             <th class="text-center">ของรางวัล</th>
             <th class="text-center">Status</th>
           </tr>
-          @foreach ($datas as $item)
-            <tr>
-              <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-              <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ CourseClass::get_training_name($item->training_id) }}</a></td>
-              <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $item->description }}</a></td>
-              <td width="170" class="align-baseline text-center">
-                <a href="{{ route('giftcode_reward_index', ['giftcode_group_id' => $item->_id]) }}">
-                  <button class="btn btn-secondary"><i class="ft-close"></i> ดูของรางวัล</button>
-                </a>
-              </td>
-              <td class="align-baseline text-center">
-                @can('editor')
-                  <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
-                    <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+          @if(!empty($datas) && count($datas) > 0)
+            @foreach ($datas as $item)
+              <tr>
+                <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
+                <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ CourseClass::get_training_name($item->training_id) }}</a></td>
+                <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $item->description }}</a></td>
+                <td width="170" class="align-baseline text-center">
+                  <a href="{{ route('giftcode_reward_index', ['giftcode_group_id' => $item->_id]) }}">
+                    <button class="btn btn-secondary"><i class="ft-close"></i> ดูของรางวัล</button>
                   </a>
-                @else
-                  <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
-                @endcan
-              </td>
+                </td>
+                <td class="align-baseline text-center">
+                  @can('editor')
+                    <a href="#{{$item->_id}}" onclick="handleDelete('{{$item->_id}}')">
+                      <button class="btn btn-danger"><i class="ft-close"></i> ลบ</button>
+                    </a>
+                  @else
+                    <a><button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'><i class="ft-close"></i> ลบ</button></a>
+                  @endcan
+                </td>
+              </tr>
+            @endforeach
+          @else 
+            <tr>
+              <td colspan="99" class="text-center">ไม่มีข้อมูล</td>
             </tr>
-          @endforeach
+          @endif
         </table>
       </div>
     </div>
@@ -89,6 +95,7 @@
         <fieldset class="form-group">
           <label for="user-name"> รอบการอบรม <span class="text-danger">*</span> </label>
           <select class="select2 form-control" name="training_id" required>
+            <option value="">กรุณาเลือกรอบการอบรม</option>
             @foreach ($training as $item)
               <option value="{{ $item->_id }}">{{ $item->title }}</option>
             @endforeach
@@ -97,28 +104,6 @@
         <fieldset class="form-group">
           <label for="user-name"> รายละเอียด </label>
           <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
-        </fieldset>
-        <fieldset class="form-group">
-          <label for="user-name">วันที่เริ่มใช้งาน <span class="text-danger">*</span></label>
-          <div class='input-group date published_at'  id='datetimepicker'>
-            <input type='text' class="form-control" name="published_at" @if(!empty($data->published_at)) value="{{old('published_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->published_at))}}" @else  value="{{old('published_at')}}" @endif required/> 
-            <div class="input-group-append">
-              <span class="input-group-text">
-                <span class="fa fa-calendar"></span>
-              </span>
-            </div>
-          </div>
-        </fieldset>
-        <fieldset class="form-group">
-          <label for="user-name">วันที่สิ้นสุดการใช้งาน <span class="text-danger">*</span></label>
-          <div class='input-group date expired_at'  id='datetimepicker'>
-            <input type='text' class="form-control" name="expired_at" @if(!empty($data->expired_at)) value="{{old('expired_at',FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($data->expired_at))}}" @else  value="{{old('expired_at')}}" @endif required/> 
-            <div class="input-group-append">
-              <span class="input-group-text">
-                <span class="fa fa-calendar"></span>
-              </span>
-            </div>
-          </div>
         </fieldset>
       </div>
       <div class="modal-footer">
