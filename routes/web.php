@@ -247,6 +247,14 @@ Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
   });
 });
 
+// EMPLOYEE VIP
+Route::group(['prefix' => 'certificate', 'middleware' => ['auth', 'role:admin|course']], function () {
+  Route::get('/', 'CertificateController@certificate_index')->name('certificate_index');
+  Route::get('/create/{id?}', 'CertificateController@certificate_create')->name('certificate_create');
+  Route::post('/store/{id?}', 'CertificateController@certificate_store')->name('certificate_store');
+  Route::match(['get','post'],'/delete/{id?}', 'CertificateController@certificate_delete')->name('certificate_delete');
+});
+
 // CRONTAB
 Route::group(['prefix' => 'crontab'], function () {
   Route::group(['prefix' => 'report'], function () {

@@ -9,12 +9,13 @@ use IIlluminate\Http\UploadedFile;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use Illuminate\Support\Facades\Validator;
 // Controller
-use  App\Http\Controllers\Course\HomeworkController;
-use  App\Http\Controllers\Course\EpisodeController;
-use  App\Http\Controllers\Course\ExaminationController;
-use  App\Http\Controllers\Course\QuizController;
-use  App\Http\Controllers\Course\DocumentController;
-use  App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Course\HomeworkController;
+use App\Http\Controllers\Course\EpisodeController;
+use App\Http\Controllers\Course\ExaminationController;
+use App\Http\Controllers\Course\QuizController;
+use App\Http\Controllers\Course\DocumentController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CertificateController;
 // Model
 use App\Models\Course;
 use App\Models\Category;
@@ -93,6 +94,7 @@ class CourseController extends Controller
       $data->require_course = '';
       $data->thumbnail = '';
       $data->category_id = '';
+      $data->certificate_id = '';
       $data->tag = [];
       $data->thumbnail = '';
       $data->test_status = 0;
@@ -107,6 +109,7 @@ class CourseController extends Controller
       $review_group = '';
       $quiz = '';
       $episode_not_selected = '';
+      $certificate = '';
     } else {
       $data = Course::find($id);
       $episode_group_controller = new EpisodeController;
@@ -124,6 +127,8 @@ class CourseController extends Controller
       $quiz_controller = new QuizController;
       $quiz = $quiz_controller->get_quiz_group($id);
       $episode_not_selected = $quiz_controller->get_episode_not_selected($id);
+      $certificate_controller = new CertificateController;
+      $certificate = $certificate_controller->get_certificate($id);
       $examination_type = ['pretest & posttest','pretest','posttest'];
       if(!empty($examination)) {
         // ลบ Type ที่มีแล้วออกจาก select list
@@ -155,7 +160,8 @@ class CourseController extends Controller
       'document' => $document,
       'review_group' => $review_group,
       'quiz' => $quiz,
-      'episode_not_selected' => $episode_not_selected
+      'episode_not_selected' => $episode_not_selected,
+      'certificate' => $certificate
     ]; 
     return view('course.course_detail',$withData);
   }
@@ -165,6 +171,7 @@ class CourseController extends Controller
       $title = $request->input('title');
       $require_course = $request->input('require_course');
       $category_id = $request->input('category_id');
+      $certificate_id = $request->input('certificate_id');
       $type = $request->input('type');
       $slug = $request->input('slug');
       $teachers = $request->input('teachers');
@@ -246,20 +253,42 @@ class CourseController extends Controller
         $code     =  $get_cate->code.'-'.$str_format;
         FuncClass::update_seq_cate($category_id);
       }
-      $datas = [
-        'title' => $title,
-        'description' => $description,
-        'code' => $code,
-        'slug' => strtolower($slug),
-        'type' => $type,
-        'tag'  => $tag,
-        'coming_soon'  => 0,
-        'require_course' => $require_course_array,
-        'benefits' => $arr_benefits,
-        'appropriates' => $arr_appropriates,
-        'teachers' => $teachers_array,
-        'category_id'  => new ObjectId($category_id)
-      ];
+      if(!empty($certificate_id)) {
+        $datas = [
+          'title' => $title,
+          'description' => $description,
+          'code' => $code,
+          'slug' => strtolower($slug),
+          'type' => $type,
+          'tag'  => $tag,
+          'coming_soon'  => 0,
+          'require_course' => $require_course_array,
+          'benefits' => $arr_benefits,
+          'appropriates' => $arr_appropriates,
+          'teachers' => $teachers_array,
+          'category_id'  => new ObjectId($category_id),
+          'have_certificate' => true,
+          'certificate_id' => new ObjectId($certificate_id)
+        ];
+      } else {
+        $datas = [
+          'title' => $title,
+          'description' => $description,
+          'code' => $code,
+          'slug' => strtolower($slug),
+          'type' => $type,
+          'tag'  => $tag,
+          'coming_soon'  => 0,
+          'require_course' => $require_course_array,
+          'benefits' => $arr_benefits,
+          'appropriates' => $arr_appropriates,
+          'teachers' => $teachers_array,
+          'category_id'  => new ObjectId($category_id),
+          'have_certificate' => false,
+          'certificate_id' => ''
+        ];
+      }
+      
       if(empty($id)) {
         $datas['status'] = 2;
       } else {

@@ -16,6 +16,8 @@ class Course extends Eloquent
     'teacher_id',
     'teachers',
     'description',
+    'have_certificate',
+    'certificate_id',
     'tag',
     'thumbnail',
     'coming_soon',
