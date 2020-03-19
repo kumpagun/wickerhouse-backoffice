@@ -93,7 +93,7 @@
             </fieldset>
             {{-- TITLE --}}
             <fieldset class="form-group floating-label-form-group @if($errors->course->has('title')) danger @endif">
-              <label for="user-name">ชื่อคอร์ส</label>
+              <label for="user-name">ชื่อคอร์ส <span class="text-danger">*</span></label>
               <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}" placeholder="Title" required>
               @if($errors->course->has('title'))
                 <span class="small" role="alert">
@@ -117,7 +117,7 @@
             </fieldset>
             {{-- Category --}}
             <fieldset class="form-group @if($errors->course->has('category_id')) danger @endif">
-              <label for="user-name">ประเภทหลักสูตร *</label>
+              <label for="user-name">ประเภทหลักสูตร <span class="text-danger">*</span></label>
               <select class="select2 form-control" name="category_id">
                 <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
                 @foreach ($category as $item )
@@ -134,7 +134,7 @@
             </fieldset>
             {{-- Type --}}
             <fieldset class="form-group @if($errors->course->has('type')) danger @endif">
-              <label for="user-name">Type *</label>
+              <label for="user-name">Type <span class="text-danger">*</span></label>
               <select class="select2 form-control" name="type">
                 <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
                   @foreach ($type as $key => $value )
@@ -151,7 +151,7 @@
             </fieldset>
             {{-- Teacher --}}
             <fieldset class="form-group @if($errors->course->has('teachers')) danger @endif">
-              <label for="user-name">วิทยากร *</label>
+              <label for="user-name">วิทยากร <span class="text-danger">*</span></label>
               <select class="select2 form-control" name="teachers[]" multiple="multiple">
                 @foreach ($teacher as $item )
                   <option value={{ $item }} 
@@ -167,7 +167,7 @@
             </fieldset>
             {{-- slug --}}
             <fieldset class="form-group floating-label-form-group @if($errors->course->has('slug')) danger @endif">
-              <label for="user-name">Slug *</label>
+              <label for="user-name">Slug <span class="text-danger">*</span></label>
               <input type="text" name="slug" class="form-control" value="{{ old('slug', $data->slug) }}" placeholder="Slug" required>
               @if($errors->course->has('slug'))
                 <span class="small" role="alert">
@@ -257,6 +257,16 @@
                 </button>
               </div>
             </div>
+            <fieldset class="form-group @if($errors->course->has('certificate_id')) danger @endif">
+              <label for="user-name">Certificate</label>
+              <select class="select2 form-control" name="certificate_id">
+                <option value="">ไม่มี Certificate</option>
+                @foreach ($certificate as $item )
+                  <option value={{ $item->_id }} 
+                    @if($data->certificate_id==$item->_id) selected  @endif>{{ $item->title }}</option>
+                @endforeach
+              </select>
+            </fieldset>
             @if(!empty($data->_id))
             <div class="mb-2 skin skin-square">
               <label for="user-name">สถานะคอร์สเรียน</label>
