@@ -124,7 +124,7 @@ class MemberClass
 
 
   public function getUserFromGiftcode($giftcode_id) {
-    $giftcode_usage = Giftcode_usage::where('giftcode_id',new ObjectId($giftcode_id))->first();
+    $giftcode_usage = Giftcode_usage::where('giftcode_id',new ObjectId($giftcode_id))->where('status',1)->first();
 
     if(!empty($giftcode_usage)) {
       return $this->get_name_member_jasmine_by_id($giftcode_usage->user_id);
