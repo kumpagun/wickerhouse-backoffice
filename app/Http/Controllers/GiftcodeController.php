@@ -15,10 +15,12 @@ use FuncClass;
 use File;
 use Image;
 use URL;
+use Excel;
 // Model
 use App\Models\Course;
 use App\Models\Training;
 use App\Models\Giftcode_group;
+use App\Models\Giftcode_usage;
 use App\Models\Giftcode;
 
 class GiftcodeController extends Controller
@@ -41,7 +43,8 @@ class GiftcodeController extends Controller
     return view('giftcode.giftcode_group_index',$withData);
   }
   public function giftcode_group_create($giftcode_group_id='') {
-    $training = Training::where('status',1)->first();
+    $giftcode_group = Giftcode_group::find($giftcode_group_id);
+    $training = Training::where('_id',new ObjectId($giftcode_group->training_id))->where('status',1)->first();
     if(empty($giftcode_group_id)) {
       $data = new \stdClass();
       $data->_id = '';
@@ -167,5 +170,45 @@ class GiftcodeController extends Controller
 
     ActivityLogClass::log('ลบ giftcode', new ObjectId(Auth::user()->_id), $giftcode->getTable(), $giftcode->getAttributes(),Auth::user()->username);
     return redirect()->route('giftcode_reward_index', ['giftcode_group_id' => $giftcode->group_id])->with('status',200);
+  }
+
+  public function giftcode_usage(Request $request) {
+    $training_id = $request->input('training_id');
+    $export = $request->input('export');
+    if(empty($training_id)) {
+      $training_id = Training::where('status',1)->first();
+      $training_id = $training_id->_id;
+    }
+    $training = Training::where('status',1)->get();
+    $datas = Giftcode_usage::raw(function ($collection) use ($training_id) {
+      return $collection->aggregate([
+        [
+          '$lookup' => [
+            'from' =>  "employees",
+            'localField' =>  "employee_id",
+            'foreignField' =>  "employee_id",
+            'as' =>  "employees"
+          ]
+        ],
+        [
+          '$match' => [
+            'status' => 1,
+            'training_id' => new ObjectId($training_id)
+          ]
+        ],
+        [
+          '$unwind' => '$employees'
+        ]
+      ]);
+    });
+    $withData = [
+      'training_id' => $training_id,
+      'training' => $training,
+      'datas' => $datas
+    ];
+    if($export=='excel') {
+      return Excel::download(new Giftcode_Export($datas), Carbon::now()->timestamp.'.xlsx');
+    }
+    return view('giftcode.giftcode_usage', $withData);
   }
 }

@@ -132,4 +132,9 @@ class MemberClass
       return '-';
     }
   }
+  
+  public function getUserEmailFromEmployeeId($employee_id) {
+    $data = Member::where('employee_id', $employee_id)->first();
+    return $data->email;
+  }
 }
