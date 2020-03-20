@@ -62,8 +62,22 @@
       <li class="nav-item">
         <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> สมาชิก VIP</span></a>
       </li>
+      @hasrole('admin|certificate')
       <li class="nav-item">
-        <a href="{{ route('giftcode_group_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> Giftcode</span></a>
+        <a href="{{ route('certificate_index') }}"><i class="feather icon-thumbs-up"></i><span class="menu-title" data-i18n=""> Certificate</span></a>
+      </li>
+      @endhasrole
+      @endhasrole
+
+      @hasrole('admin|giftcode')
+      <li class="navigation-header">
+        <span>ของรางวัล</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="ของรางวัล"></i>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('giftcode_group_index') }}"><i class="feather icon-star"></i><span class="menu-title" data-i18n=""> กิจกรรมแจกของรางวัล</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('giftcode_usage') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> รายงานผู้โชคดีที่ได้รับรางวัล</span></a>
       </li>
       @endhasrole
 

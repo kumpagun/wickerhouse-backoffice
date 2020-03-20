@@ -25,9 +25,9 @@
       </div>
       <div class="card-content">
         <div class="card-body pt-0">
-          <form class="form-horizontal" action="" method="POST">
+          {{-- VIDEO --}}
+          <form class="form-horizontal" action="{{ route('episode_store') }}" method="POST">
             @csrf
-            {{-- VIDEO --}}
             <h4 class="form-section"> Video</h4>
             @php
               if(!empty($errors->video->first('files'))) {
@@ -65,8 +65,6 @@
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{$progress_value}}" aria-valuemin="{{$progress_value}}" aria-valuemax="100" style="width:{{$progress_value}}%" aria-describedby="example-caption-2"></div>
               </div>
             </div>
-          </form>
-          <form class="form-horizontal" action="{{ route('episode_store') }}" method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $id }}">
             <input type="hidden" name="course_id" value="{{ $course_id }}">

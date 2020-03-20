@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('giftcode'); @endphp
+@php $title = strtoupper('กิจกรรมแจกของรางวัล'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -16,9 +16,9 @@
 @section('content-header-right')
 <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
   @can('editor')
-  <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modalGiftcode">Add {{ $title }}</a>
+  <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modalGiftcode">เพิ่ม {{ $title }}</a>
   @else
-  <button  type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>Add {{ $title }}</button>
+  <button  type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>เพิ่ม {{ $title }}</button>
   @endcan
 </div>
 @endsection
@@ -51,6 +51,7 @@
             <th class="text-center">#</th>
             <th class="text-center">รอบการอบรม</th>
             <th class="text-center">รายละเอียด</th>
+            <th class="text-center">วันที่เริ่มใช้งาน</th>
             <th class="text-center">ของรางวัล</th>
             <th class="text-center">Status</th>
           </tr>
@@ -58,8 +59,9 @@
             @foreach ($datas as $item)
               <tr>
                 <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-                <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ CourseClass::get_training_name($item->training_id) }}</a></td>
-                <td class="align-baseline"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $item->description }}</a></td>
+                <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ CourseClass::get_training_name($item->training_id) }}</a></td>
+                <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ $item->description }}</a></td>
+                <td class="align-baseline text-center"><a href="{{ route('giftcode_group_create', ['id' => $item->id]) }}">{{ FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($item->published_at) }}</a></td>
                 <td width="170" class="align-baseline text-center">
                   <a href="{{ route('giftcode_reward_index', ['giftcode_group_id' => $item->_id]) }}">
                     <button class="btn btn-secondary"><i class="ft-close"></i> ดูของรางวัล</button>
@@ -91,7 +93,7 @@
   <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel1">Add {{ $title }}</h4>
+      <h4 class="modal-title" id="myModalLabel1">เพิ่ม {{ $title }}</h4>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
