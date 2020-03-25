@@ -2,7 +2,7 @@
   <thead>
     <tr class="">
     <th class="text-center align-middle">#</th>
-    <th class="text-center align-middle">Giftcode</th>
+    <th class="text-center align-middle">Datetime</th>
     <th class="text-center align-middle">EmployeeId</th>
     <th class="text-center align-middle">Tinitial</th>
     <th class="text-center align-middle">TFName</th>
@@ -22,7 +22,7 @@
       <tr>
         <td class="text-center">{{ $loop->iteration }}</td>
 
-        <td class="text-center">{{ $data->code }}</td>
+        <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($data->created_at) }}</td>
         @if(!empty($data->employees->employee_id)) 
           <td class="text-center">{{ $data->employees->employee_id }}</td>
         @else 
