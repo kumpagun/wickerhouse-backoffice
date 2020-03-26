@@ -14,9 +14,9 @@
 </div>
 <div class="col-12">
   <div class="form-group">
-    <p>ขนาดตัวอักษร (ขนาดตัวอักษรที่แนะนำ 3.5) <span class="text-danger">*</span></p>
+    <p>ขนาดตัวอักษร (ขนาดตัวอักษรที่แนะนำ 2.5) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="number" step="0.1" name="font_size" class="form-control" value="{{ old('font_size', $data->font_size) }}" required>
+      <input type="number" step="0.1" name="font_size" class="form-control" value="@if(empty($data->font_size)) 2.5 @else {{ $data->font_size }} @endif" required>
     </div>
     </p>
   </div>
@@ -25,7 +25,7 @@
   <div class="form-group">
     <p>ส่วนสูงของชื่อ (ส่วนสูงของชื่อที่แนะนำ 50) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="text" name="font_position" class="form-control" value="{{ old('font_position', $data->font_position) }}" required>
+      <input type="text" name="font_position" class="form-control" value="@if(empty($data->font_size)) 50 @else {{ $data->font_position }} @endif" required>
     </div>
     </p>
   </div>

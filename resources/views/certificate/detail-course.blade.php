@@ -16,7 +16,7 @@
   <div class="form-group">
     <p>ขนาดตัวอักษร (ขนาดตัวอักษรที่แนะนำ 1) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="number" step="0.1" name="course_size" class="form-control" value="{{ old('course_size', $data->course_size) }}" required>
+      <input type="number" step="0.1" name="course_size" class="form-control" value="@if(empty($data->course_size)) 1 @else {{ $data->course_size }} @endif" required>
     </div>
     </p>
   </div>
@@ -25,7 +25,7 @@
   <div class="form-group">
     <p>ส่วนสูงของชื่อ (ส่วนสูงของชื่อที่แนะนำ 65) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="text" name="course_position" class="form-control" value="{{ old('course_position', $data->course_position) }}" required>
+      <input type="text" name="course_position" class="form-control" value="@if(empty($data->course_position)) 65 @else {{ $data->course_position }} @endif" required>
     </div>
     </p>
   </div>
