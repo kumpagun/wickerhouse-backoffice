@@ -261,10 +261,12 @@
               <label for="user-name">Certificate</label>
               <select class="select2 form-control" name="certificate_id">
                 <option value="">ไม่มี Certificate</option>
-                @foreach ($certificate as $item )
-                  <option value={{ $item->_id }} 
-                    @if($data->certificate_id==$item->_id) selected  @endif>{{ $item->title }}</option>
-                @endforeach
+                @if(!empty($certificate))
+                  @foreach ($certificate as $item )
+                    <option value={{ $item->_id }} 
+                      @if($data->certificate_id==$item->_id) selected  @endif>{{ $item->title }}</option>
+                  @endforeach
+                @endif
               </select>
             </fieldset>
             @if(!empty($data->_id))
