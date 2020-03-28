@@ -27,6 +27,9 @@ class MemberAccessContentController extends Controller
 
   public function get_employee_id_from_head() {
     $employee_id = Auth::user()->username;
+    $arr_employee_id = [];
+    array_push($arr_employee_id, $employee_id);
+
     $employees = Employee::whereIn('heads', $employee_id)->get();
 
     $data_back = [];
