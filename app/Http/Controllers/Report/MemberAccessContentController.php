@@ -12,6 +12,7 @@ use PDF;
 use CourseClass;
 use FuncClass;
 use Excel;
+use Auth;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
