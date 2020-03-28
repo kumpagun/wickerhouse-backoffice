@@ -29,8 +29,7 @@ class MemberAccessContentController extends Controller
     $employee_id = Auth::user()->username;
     $arr_employee_id = [];
     array_push($arr_employee_id, $employee_id);
-
-    $employees = Employee::whereIn('heads', $employee_id)->get();
+    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
 
     $data_back = [];
     if(!empty($employees)) {
@@ -38,6 +37,7 @@ class MemberAccessContentController extends Controller
         array_push($data_back, $employee->employee_id);
       }
     } 
+
     return $data_back;
   }
 
@@ -237,6 +237,7 @@ class MemberAccessContentController extends Controller
       $data_total = [];
       $pie_chart['label'] = [];
       $pie_chart['total'] = [];
+      $pie_chart['outer_data'] = [];
       $chart['label'] = [];
       $chart['active'] = [];
       $chart['inactive'] = [];
