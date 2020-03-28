@@ -15,30 +15,38 @@ use Excel;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
+use App\Models\Employee;
 
 class MemberAccessContentController extends Controller
 {
   public function __construct()
   {
     $this->middleware('auth');
-    // $this->deptname = [
-    //   'ภาคตะวันออก (RO1)',
-    //   'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
-    //   'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
-    //   'ภาคเหนือตอนล่าง (RO4)',
-    //   'ภาคเหนือตอนบน (RO5)',
-    //   'ภาคตะวันตก (RO6)',
-    //   'ภาคใต้ตอนบน (RO7)',
-    //   'ภาคใต้ตอนล่าง (RO8)',
-    //   'ภาคกลาง (RO9)',
-    //   'กรุงเทพฯและปริมณฑล (RO10)'
-    // ];
+  }
+
+  public function get_employee_id_from_head() {
+    $employee_id = Auth::user()->username;
+    $employees = Employee::whereIn('heads', $employee_id)->get();
+
+    $data_back = [];
+    if(!empty($employees)) {
+      foreach($employees as $employee) {
+        array_push($data_back, $employee->employee_id);
+      }
+    } 
+    return $data_back;
   }
 
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
     $platform = $request->input('platform'); 
+
+    $employee_id = [];
+    if(Auth::user()->type=='jasmine') {
+      $employee_id = $this->get_employee_id_from_head();
+    }
+
     $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->get();
     if(empty($search_group)){
       $query = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->first();
@@ -58,10 +66,10 @@ class MemberAccessContentController extends Controller
     }
     if(!empty($training_id_select)) {
       $training_id = new ObjectId($training_id_select);
-      $datas_inactive = $this->user_inactive($training_id);
-      $datas_active = $this->user_active($training_id);
-      $datas_active_passing_score = $this->user_active_passing_score($training_id,$passing_score);
-      $datas_active_not_passing_score = $this->user_active_not_passing_score($training_id,$passing_score);
+      $datas_inactive = $this->user_inactive($training_id, $employee_id);
+      $datas_active = $this->user_active($training_id, $employee_id);
+      $datas_active_passing_score = $this->user_active_passing_score($training_id,$passing_score, $employee_id);
+      $datas_active_not_passing_score = $this->user_active_not_passing_score($training_id,$passing_score, $employee_id);
       $total_user_inactive = 0;
       $total_user_active = 0;
       $total_user_active_passing_score = 0;
@@ -121,7 +129,7 @@ class MemberAccessContentController extends Controller
       ];
 
       // PIE CHART เข้าเรียน / ไม่เข้าเรียน 
-      $datas_chart = $this->get_data_chart($training_id);  //dd($datas_chart);
+      $datas_chart = $this->get_data_chart($training_id, $employee_id);  //dd($datas_chart);
       $pie_chart_total['active'] = 0;
       $pie_chart_total['inactive'] = 0;
       foreach($new_datas as $index => $values) {
@@ -262,14 +270,25 @@ class MemberAccessContentController extends Controller
     }
   }
   // User เข้าเรียน
-  public function user_active($training_id){
-    $query = Report_member_access::raw(function ($collection) use ($training_id) {
+  public function user_active($training_id, $employee_id){
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne' => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne' => 0],
+        'training_id' => $training_id
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
-        [ '$match' => [
-            'status'  => 1,
-            'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id
-          ]
+        [ 
+          '$match' => $match
         ],
         [
           '$group' =>[
@@ -287,15 +306,27 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User เข้าเรียน และสอบผ่าน
-  public function user_active_passing_score($training_id,$passing_score){ 
-    $query = Report_member_access::raw(function ($collection) use ($training_id,$passing_score) {
+  public function user_active_passing_score($training_id,$passing_score, $employee_id){ 
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne'  => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'posttest' => [ '$gte' => $passing_score ]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne'  => 0],
+        'training_id' => $training_id,
+        'posttest' => [ '$gte' => $passing_score ]
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
-        [ '$match' => [
-            'status'  => 1,
-            'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id,
-            'posttest' => [ '$gte' => $passing_score ]
-          ]
+        [ 
+          '$match' => $match
         ],
         [
           '$group' =>[
@@ -313,18 +344,32 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User เข้าเรียน และไม่สอบผ่าน
-  public function user_active_not_passing_score($training_id,$passing_score){
-    $query = Report_member_access::raw(function ($collection) use ($training_id,$passing_score) {
+  public function user_active_not_passing_score($training_id,$passing_score, $employee_id){
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'status'  => 1,
+        'play_course'  => ['$ne'  => 0],
+        'training_id'  => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        '$or' => [
+          ['posttest' => [ '$lt' => $passing_score ]], 
+          ['posttest' => [ '$eq' => null ]]
+        ] 
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'play_course'  => ['$ne'  => 0],
+        'training_id'  => $training_id,
+        '$or' => [
+          ['posttest' => [ '$lt' => $passing_score ]], 
+          ['posttest' => [ '$eq' => null ]]
+        ] 
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
-        [ '$match' => [
-            'status'  => 1,
-            'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id,
-            '$or' => [
-              ['posttest' => [ '$lt' => $passing_score ]], 
-              ['posttest' => [ '$eq' => null ]]
-            ] 
-          ]
+        [ '$match' => $match
         ],
         [
           '$group' =>[
@@ -342,15 +387,25 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User ไม่เข้าเรียน
-  public function user_inactive($training_id){
-    $query = Report_member_access::raw(function ($collection) use ($training_id) {
+  public function user_inactive($training_id, $employee_id){
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$eq'  => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$eq'  => 0],
+        'training_id' => $training_id
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [ 
-          '$match' => [
-            'status'  => 1,
-            'play_course'  => ['$eq'  => 0],
-            'training_id'  => $training_id
-          ]
+          '$match' => $match
         ],
         [
           '$group' => [
@@ -369,14 +424,14 @@ class MemberAccessContentController extends Controller
     return $query;
   }
 
-  public function get_data_chart($training_id) 
+  public function get_data_chart($training_id, $employee_id) 
   {
     $group_online = Training::find($training_id); 
     $published_at = $group_online->published_at;
     $expired_at = $group_online->expired_at;
 
-    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at);
-    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at); 
+    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id);
+    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id); 
     
     $datas = [];
     foreach($user_active as $row) {
@@ -390,17 +445,31 @@ class MemberAccessContentController extends Controller
     return $datas;
   }
   // User เข้าเรียน
-  public function get_data_chart_user_active($training_id,$published_at,$expired_at){
-    $query = Report_member_access::raw(function ($collection) use ($training_id,$published_at,$expired_at) {
+  public function get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id){
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'play_course' => ['$ne'  => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ]
+      ];
+    } else {
+      $match = [
+        'play_course'  => ['$ne'  => 0],
+        'training_id'  => $training_id,
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ]
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
-        [ '$match' => [
-            'play_course'  => ['$ne'  => 0],
-            'training_id'  => $training_id,
-            'created_at' => [
-              '$gte' => $published_at,
-              '$lte' => $expired_at,
-            ],
-          ]
+        [ 
+          '$match' => $match
         ],
         [
           '$group' =>[
@@ -418,18 +487,31 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User ไม่เข้าเรียน
-  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at){
-    $query = Report_member_access::raw(function ($collection) use ($training_id,$published_at,$expired_at) {
+  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id){
+    if(Auth::user()->type=='jasmine') {
+      $match = [
+        'play_course' => ['$ne'  => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ]
+      ];
+    } else {
+      $match = [
+        'play_course'  => ['$ne'  => 0],
+        'training_id'  => $training_id,
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ]
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [ 
-          '$match' => [
-            'play_course'  => ['$eq'  => 0],
-            'training_id'  => $training_id,
-            'created_at' => [
-              '$gte' => $published_at,
-              '$lte' => $expired_at,
-            ],
-          ]
+          '$match' => $match
         ],
         [
           '$group' => [
