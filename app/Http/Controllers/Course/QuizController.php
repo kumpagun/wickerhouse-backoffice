@@ -48,7 +48,7 @@ class QuizController extends Controller
       array_push($ep_selected, new ObjectId($row->episode_id));
     }
  
-    $data = Episode::where('course_id',new ObjectId($course_id))->whereNotIn('_id',$ep_selected)->get();
+    $data = Episode::where('course_id',new ObjectId($course_id))->whereNotIn('_id',$ep_selected)->where('status',1)->where('transcode_status','done')->get();
 
     return $data;
   }

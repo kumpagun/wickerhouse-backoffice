@@ -104,7 +104,7 @@ class TrainingController extends Controller
       }
       return  $result;
     }
-    public function get_department_by_company($company_id = ''){
+    public function get_department_by_company($company_id = '') {
       $result = [];
       if(!empty($company_id)){
         $datas = Department::query()->where('company_id',new ObjectId($company_id))->where('status',1)->get();
