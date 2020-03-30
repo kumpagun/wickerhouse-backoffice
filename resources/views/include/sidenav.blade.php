@@ -6,9 +6,11 @@
       <li class="nav-item">
         <a href="{{ route('report_member_access_content_by_RO') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
       </li>
+      @hasrole('admin|banner')
       <li class="nav-item">
         <a href="{{ route('banner_index') }}"><i class="feather icon-square"></i><span class="menu-title" data-i18n="">แบนเนอร์</span></a>
       </li>
+      @endhasrole
 
       @hasrole('admin|course')
       <li class="navigation-header">
