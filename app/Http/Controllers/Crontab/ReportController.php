@@ -14,7 +14,7 @@ use App\Models\Employee;
 use App\Models\Report_member_access;
 use App\Models\Training;
 use App\Models\TrainingUser;
-use App\Models\Examination_answer;
+use App\Models\Examination_user;
 use App\Models\User_play_course_log;
 use App\Models\User_play_course_end;
 
@@ -28,6 +28,7 @@ class ReportController extends Controller
 
     $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
     $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
+    // $query = Training::where('status',1)->where('_id',new ObjectId('5e748d1604e5244b4a0d6de7'));
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
@@ -51,7 +52,7 @@ class ReportController extends Controller
     ];
 
     // ผู้เรียนทั้งหมด
-    $members_jas = TrainingUser::where('training_id', $training_id)->where('status',1)->get();
+    $members_jas = TrainingUser::where('training_id', $training_id)->where('status',1)->get(); 
     $members_jas_employee_id = [];
     foreach($members_jas as $row) {
       array_push($members_jas_employee_id, $row->employee_id);
@@ -62,6 +63,7 @@ class ReportController extends Controller
     foreach($training_user as $row) {
       array_push($arr_employee_id, $row->employee_id);
     }
+    
     // Members login
     $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test) {
       return $collection->aggregate([
@@ -84,6 +86,7 @@ class ReportController extends Controller
         ]
       ]);
     });
+
     // user_id members
     $memberId_jas = [];
     $jas_in_members_table = [];
@@ -94,15 +97,14 @@ class ReportController extends Controller
     // Member not login
     $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
     // Pretest
-    $pretests = Examination_answer::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('answertype','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
     // Posttest
-    $posttests = Examination_answer::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
+    $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
-            'answertype' => 'posttest',
+            'type' => 'posttest',
             'user_id' => [ '$in' => $memberId_jas ],
-            'user_id' => ['$nin' => $user_test],
             'course_id' => $course_id,
             'training_id' => $training_id
           ]
@@ -120,13 +122,13 @@ class ReportController extends Controller
         ]
       ]);
     });
+    
     // Play course
     $play_courses = User_play_course_log::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'user_id' => ['$nin' => $user_test],
             'course_id' => $course_id,
             'training_id' => $training_id
           ]
@@ -147,13 +149,13 @@ class ReportController extends Controller
         ]
       ]);
     });
+
     // Play course end
     $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'user_id'       => ['$nin' => $user_test],
             'course_id' => $course_id,
             'training_id' => $training_id
           ]
@@ -178,7 +180,7 @@ class ReportController extends Controller
     foreach($members as $value) {
       // foreach($member->employees as $value) {
         // $datas[$member->_id][$index] = $value;
-        $values_id = (string)$value->employees->_id;
+        $values_id = (string)$value->_id;
         $datas[$values_id]['_id'] = $values_id;
         $datas[$values_id]['employee_id'] = $value->employees->employee_id;
         $datas[$values_id]['tinitial'] = $value->employees->tinitial;
