@@ -44,7 +44,8 @@ class Course extends Eloquent
     'require_course',
     'benefits',
     'appropriates',
-    'review_url'
+    'review_url',
+    'training_only' //Boolean
   ];
   protected $date = ['published_at'];
 }

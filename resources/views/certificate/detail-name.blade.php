@@ -7,7 +7,7 @@
   <div class="form-group">
     <p>รหัสสีตัวอักษร (เช่น 000000) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="text" name="font_color" class="form-control" maxlength="6" minlength="6" value="@if(empty($data->font_color)) 000000 @else {{ $data->font_color }} @endif" required>
+      <input type="text" name="font_color" class="form-control jscolor" maxlength="6" minlength="6" value="@if(empty($data->font_color)){{000000}}@else{{$data->font_color}}@endif" required>
     </div>
     </p>
   </div>
@@ -16,7 +16,7 @@
   <div class="form-group">
     <p>ขนาดตัวอักษร (ขนาดตัวอักษรที่แนะนำ 2.5) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="number" step="0.1" name="font_size" class="form-control" value=@if(empty($data->font_size)) 2.5 @else {{ $data->font_size }} @endif required>
+      <input type="number" step="0.1" name="font_size" class="form-control" value=@if(empty($data->font_size)){{2.5}}@else{{$data->font_size}}@endif required>
     </div>
     </p>
   </div>
@@ -25,7 +25,7 @@
   <div class="form-group">
     <p>ส่วนสูงของชื่อ (ส่วนสูงของชื่อที่แนะนำ 50) <span class="text-danger">*</span></p>
     <div class="controls">
-      <input type="text" name="font_position" class="form-control" value="@if(empty($data->font_position)) 50 @else {{ $data->font_position }} @endif" required>
+      <input type="text" name="font_position" class="form-control" value="@if(empty($data->font_position)){{50}}@else{{$data->font_position}}@endif" required>
     </div>
     </p>
   </div>

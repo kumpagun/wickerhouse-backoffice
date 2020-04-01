@@ -19,6 +19,8 @@ use File;
 use User;
 use Auth;
 use ActivityLogClass;
+use CourseClass;
+
 // Model
 use App\Models\Category;
 use App\Models\Member;
@@ -30,6 +32,7 @@ use App\Models\Department;
 use App\Models\Course;
 use App\Models\MyTraining;
 use App\Models\Employee;
+use App\Models\Report_member_access;
 
 class TrainingController extends Controller
 {
@@ -441,6 +444,7 @@ class TrainingController extends Controller
   }
 
   public function training_employee_filter(Request $request) {
+    $training_id = $request->input('training_id');
     $employee_id = $request->input('employee_id');
     $employee_name = $request->input('employee_name');
     $company_name = $request->input('company_name');
@@ -452,6 +456,27 @@ class TrainingController extends Controller
     $head_employee_id = [];
     if(Auth()->user()->type=='jasmine') {
       array_push($head_employee_id, Auth()->user()->user_info->employee_id);
+    }
+
+    // คนที่เคยอบรมแล้ว
+    $training_user = TrainingUser::where('training_id',new ObjectId($training_id))->where('status',1)->get();
+    $arr_training_employee_id = [];
+    if(!empty($training_user)) {
+      foreach($training_user as $row) {
+        array_push($arr_training_employee_id,$row->employee_id);
+      }
+    }
+
+    // คนที่ผ่านคอร์สที่ Require
+    $training = Training::find($training_id);
+    $require_course = CourseClass::get_require_course_by_id($training->course_id);
+    $arr_pass_require_course = [];
+    if(!empty($require_course)) {
+      $passing_score = CourseClass::get_course_passing_score($training->course_id); 
+      $user_pass_require_course = Report_member_access::where('course_id',new ObjectId($training->course_id))->where('status',1)->where('posttest','>=',$passing_score)->get();
+      foreach($user_pass_require_course as $row) {
+        array_push($arr_pass_require_course,$row->employee_id);
+      }
     }
 
     $query = Employee::query();
@@ -472,6 +497,12 @@ class TrainingController extends Controller
     if(!empty($dept_name)) {
       $department = Department::find($dept_name);
       $query->where('dept_name',$department->title);
+    }
+    if(!empty($arr_pass_require_course)) {
+      $query->whereIn('employee_id',$arr_pass_require_course);
+    }
+    if(!empty($arr_training_employee_id)) {
+      $query->whereNotIn('employee_id',$arr_training_employee_id);
     }
     if(count($head_employee_id)>0) {
       $query->whereIn('heads',$head_employee_id);

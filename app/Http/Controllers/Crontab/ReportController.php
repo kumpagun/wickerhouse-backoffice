@@ -260,22 +260,22 @@ class ReportController extends Controller
       $play_course_end = 0;
       $pretest = NULL;
       $posttest = NULL;
-      if(!empty($data['employee_id'])) { $employee_id = $data['employee_id']; } 
-      if(!empty($data['tinitial'])) { $tinitial = $data['tinitial']; } 
-      if(!empty($data['firstname'])) { $firstname = $data['firstname']; } 
-      if(!empty($data['lastname'])) { $lastname = $data['lastname']; } 
-      if(!empty($data['title'])) { $title = $data['title']; } 
-      if(!empty($data['workplace'])) { $workplace = $data['workplace']; } 
-      if(!empty($data['division'])) { $division = $data['division']; } 
-      if(!empty($data['section'])) { $section = $data['section']; } 
-      if(!empty($data['department'])) { $department = $data['department']; } 
-      if(!empty($data['branch'])) { $branch = $data['branch']; } 
-      if(!empty($data['staff_grade'])) { $staff_grade = $data['staff_grade']; } 
-      if(!empty($data['job_family'])) { $job_family = $data['job_family']; } 
-      if(!empty($data['play_course'])) { $play_course = $data['play_course']; } 
-      if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } 
-      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } 
-      if(!empty($data['posttest'])) { $posttest = $data['posttest']; }
+      if(!empty($data['employee_id'])) { $employee_id = $data['employee_id']; } else { $employee_id = ''; }
+      if(!empty($data['tinitial'])) { $tinitial = $data['tinitial']; } else { $tinitial = ''; } 
+      if(!empty($data['firstname'])) { $firstname = $data['firstname']; } else { $firstname = ''; } 
+      if(!empty($data['lastname'])) { $lastname = $data['lastname']; } else { $lastname = ''; } 
+      if(!empty($data['title'])) { $title = $data['title']; } else { $title = ''; } 
+      if(!empty($data['workplace'])) { $workplace = $data['workplace']; } else { $workplace = ''; } 
+      if(!empty($data['division'])) { $division = $data['division']; } else { $division = ''; } 
+      if(!empty($data['section'])) { $section = $data['section']; } else { $section = ''; } 
+      if(!empty($data['department'])) { $department = $data['department']; } else { $department = ''; } 
+      if(!empty($data['branch'])) { $branch = $data['branch']; } else  { $branch = ''; } 
+      if(!empty($data['staff_grade'])) { $staff_grade = $data['staff_grade']; } else { $staff_grade = ''; } 
+      if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
+      if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = ''; } 
+      if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = ''; } 
+      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = ''; }
+      if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = ''; }
       if(!empty($employee_id)) {
         $dataArray[] = [
           'training_id' => $training_id,
