@@ -88,7 +88,7 @@ class QuizController extends Controller
     $quiz_group->status = 2;
     $quiz_group->save();
 
-    Quiz::where('quiz_group_id',new ObjectId($id))->update(['status' => 0]);
+    Quiz::where('quiz_group_id',new ObjectId($id))->update(['status' => 2]);
     Episode::where('_id',new ObjectId($quiz_group->episode_id))->update(['passing_point' => null]);
 
     $this->update_course($quiz_group->course_id,$quiz_group->episode_id);

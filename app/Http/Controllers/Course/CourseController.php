@@ -99,6 +99,7 @@ class CourseController extends Controller
       $data->thumbnail = '';
       $data->test_status = 0;
       $data->status = 1;
+      $data->training_only = false;
       $episode_group = '';
       $episode = '';
       $episode_list = '';
@@ -184,6 +185,7 @@ class CourseController extends Controller
       $img_final = $request->input('img_final');
       $input_path = $request->input('input_path');
       $status = $request->input('status');
+      $training_only = $request->input('training_only');
       $imgWidth = 1200;
       $imgHeight = 675;
 
@@ -253,6 +255,12 @@ class CourseController extends Controller
         $code     =  $get_cate->code.'-'.$str_format;
         FuncClass::update_seq_cate($category_id);
       }
+      if(!empty($training_only)) {
+        $training_only = true;
+      } else {
+        $training_only = false;
+      }
+
       if(!empty($certificate_id)) {
         $datas = [
           'title' => $title,
@@ -268,7 +276,8 @@ class CourseController extends Controller
           'teachers' => $teachers_array,
           'category_id'  => new ObjectId($category_id),
           'have_certificate' => true,
-          'certificate_id' => new ObjectId($certificate_id)
+          'certificate_id' => new ObjectId($certificate_id),
+          'training_only' => $training_only
         ];
       } else {
         $datas = [
@@ -285,7 +294,8 @@ class CourseController extends Controller
           'teachers' => $teachers_array,
           'category_id'  => new ObjectId($category_id),
           'have_certificate' => false,
-          'certificate_id' => ''
+          'certificate_id' => '',
+          'training_only' => $training_only
         ];
       }
       

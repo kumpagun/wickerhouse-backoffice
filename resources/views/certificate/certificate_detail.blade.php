@@ -172,6 +172,7 @@
 
 @section('script')
   <script src="{{ asset('stack-admin/app-assets/vendors/js/extensions/cropper.min.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('js/jscolor.js') }}" type="text/javascript"></script>
 
   {{-- IMAGE CROP --}}
   <script>

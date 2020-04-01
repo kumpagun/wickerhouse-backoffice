@@ -251,7 +251,7 @@
           </div>
           <form class="form-group" action="{{ route('training_import_employees') }}" method="POST">
             @csrf
-            <input type="hidden" name="training_id" value="{{ $data->id }}">
+            <input id="training_id" type="hidden" name="training_id" value="{{ $data->id }}">
             <div class="row mb-2">
               <div class="col-12 text-center div-loading">
                 <i class="fas fa-spinner fa-spin fa-2x"></i>
@@ -455,6 +455,7 @@
     $('.div-loading').show();
     $('.div-employee').hide();
     var type = "{{ Auth()->user()->type }}";
+    var training_id = $('#training_id').val()
     var employee_id = $('#employee_id').val()
     var employee_name = $('#employee_name').val()
     var company_name = $('#company_name').val()
@@ -464,6 +465,7 @@
     var longevity = []
     var longevity_condition = []
     var count = 0
+    
     jQuery('input[name*="longevity"]').each(function(e)
     {
       var result = parseInt($(this).val())
@@ -493,6 +495,7 @@
     $("[name='employees[]']").empty()
     $.get(url, 
     {
+      training_id: training_id,
       employee_id: employee_id,
       employee_name: employee_name,
       company_name: company_name,

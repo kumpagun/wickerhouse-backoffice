@@ -45,7 +45,7 @@
       </div>
 
       <div class="o-scroll mt-2">
-        <table class="table table-striped table-bordered zero-configuration">
+        <table id="table" class="table table-striped table-bordered zero-configuration">
           <thead>
             <tr class="">
             <th class="text-center align-middle">#</th>
@@ -173,7 +173,7 @@
               @endforeach
             @else
               <tr>
-                <td colspan="9" class="text-center">ไม่มีข้อมูล</td>
+                <td colspan=99 class="text-center">ไม่มีข้อมูล</td>
               </tr>
             @endif
           </tbody>
@@ -216,13 +216,16 @@
 .o-scroll {
   overflow: scroll;
 }
+thead input {
+  width: 100%;
+}
 </style>
 @endsection
 
 @section('script')
 {{-- Datatable --}}
 <script src="{{asset('stack-admin/app-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
-<script src="{{asset('stack-admin/app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript"></script>
+{{-- <script src="{{asset('stack-admin/app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript"></script> --}}
 <!-- pagination -->
 <script>
   $('.pagination li').addClass('page-item');
@@ -241,9 +244,31 @@
     } );
   } ).draw();
 
-  $(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
-	});
+  $(document).ready(function() {
+    // Setup - add a text input to each footer cell
+    $('#table thead tr').clone(true).appendTo( '#table thead' );
+    $('#table thead tr:eq(1) th').each( function (i) {
+      if(i!=0) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+      } else {
+        $(this).html('')
+      }
+    } );
+ 
+    var table = $('#table').DataTable( {
+        // orderCellsTop: true,
+        fixedHeader: true
+    } );
+  } );
 </script>
 @endsection

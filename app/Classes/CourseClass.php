@@ -123,4 +123,22 @@ class CourseClass
     }
     return $title;
   }
+
+  public function get_require_course_by_training_id($training_id) {
+    $training = Training::find($training_id);
+    if(!empty($training)) {
+      $course = Course::find($training->course_id);
+      if(!empty($course)) {
+        return $course->require_course;
+      }
+    }
+    return [];
+  }
+  public function get_require_course_by_id($course_id) {
+    $course = Course::find($course_id);
+    if(!empty($course)) {
+      return $course->require_course;
+    }
+    return [];
+  }
 }

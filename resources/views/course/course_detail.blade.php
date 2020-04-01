@@ -103,9 +103,9 @@
             </fieldset>
             {{-- Requier Course --}}
             <fieldset class="form-group @if($errors->course->has('require_course')) danger @endif">
-              <label for="user-name">จำเป็นต้องดูคอร์สอื่นก่อน</label>
+              <label for="user-name">จำเป็นต้องผ่านคอร์สอื่นก่อน</label>
               <select class="select2 form-control" name="require_course">
-                <option value="">ไม่จำเป็นต้องดูคอร์สอื่นก่อน</option>
+                <option value="">ไม่จำเป็นต้องผ่านคอร์สอื่นก่อน</option>
                 @foreach ($course as $item )
                   <option value={{ $item }} 
                     @if(!empty($data->require_course) && in_array($item, $data->require_course)) selected  @endif
@@ -135,13 +135,13 @@
             {{-- Type --}}
             <fieldset class="form-group @if($errors->course->has('type')) danger @endif">
               <label for="user-name">Type <span class="text-danger">*</span></label>
-              <select class="select2 form-control" name="type">
+              <select id="course_type" class="select2 form-control" name="type">
                 <option value=""> กรุณาเลือกประเภทหลักสูตร</option>
-                  @foreach ($type as $key => $value )
-                    <option value={{ $key }} 
-                      @if(!empty($data->type) && ((string)$data->type == (string)$key)) selected  @endif
-                    >{{ $value }}</option>
-                  @endforeach
+                @foreach ($type as $key => $value )
+                  <option value={{ $key }} 
+                    @if(!empty($data->type) && ((string)$data->type == (string)$key)) selected  @endif
+                  >{{ $value }}</option>
+                @endforeach
               </select>
               @if($errors->course->has('type'))
                   <span class="small" role="alert">
@@ -149,6 +149,12 @@
                   </span>
               @endif
             </fieldset>
+            <div id="training_only" class="mb-2 skin skin-square">
+              <fieldset>
+                <input type="checkbox" name="training_only" id="training_only-checkbox" value=true @if($data->training_only==true) checked @endif >
+                <label for="input-checkbox-active">หลักสูตรสำหรับผู้เข้าอบรมเท่านั้น</label>
+              </fieldset>
+            </div>
             {{-- Teacher --}}
             <fieldset class="form-group @if($errors->course->has('teachers')) danger @endif">
               <label for="user-name">วิทยากร <span class="text-danger">*</span></label>
@@ -511,5 +517,21 @@
       }
     }
   });
+  $(document).ready(function(){
+    handleCourseType()
+    $('#course_type').change(function(){
+      handleCourseType()
+    })
+  })
+  function handleCourseType() {
+    var course_type =  $('#course_type').val()
+    if(course_type=='standard') {
+      $('#training_only').show()
+    } else {
+      // $('#training_only').hide()
+      $("#training_only > fieldset > .icheckbox_square-red").removeClass('checked');
+      $("#training_only-checkbox").prop("checked", false);
+    }
+  }
   </script>
 @endsection

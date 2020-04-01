@@ -73,7 +73,7 @@
         <div class="col-11 pt-2">
           <fieldset class="form-group @if($errors->course->has('require_course')) danger @endif">
             <label for="user-name"> แบบทดสอบท้าย EP </label>
-            <select class="select2 form-control" name="episode_id">
+            <select class="select2 form-control" name="episode_id" required>
               @foreach ($episode_not_selected as $item)
                 <option value="{{ $item->_id }}">{{ $item->title }}</option>
               @endforeach
