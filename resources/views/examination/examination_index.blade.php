@@ -72,15 +72,14 @@
                     </fieldset>
                   </div>
                 </div>
-                <div class="col-12">
-                  {{-- display answer --}}
+                {{-- <div class="col-12">
                   <fieldset>
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" class="custom-control-input" name="posttest_display_answer" id="posttest_display_answer" @if($course->posttest_display_answer) checked @endif>
                       <label class="custom-control-label" for="posttest_display_answer">แสดงเฉลยเมื่อทำแบบทดสอบหลังเรียนเสร็จ</label>
                     </div>
                   </fieldset>
-                </div>
+                </div> --}}
                 <div class="col-12 mt-2 text-right">
                   <button id="btnSubmit" class="btn btn-primary btn-block" type="submit">Save</button>
                 </div>

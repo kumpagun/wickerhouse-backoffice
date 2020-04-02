@@ -23,9 +23,9 @@
         <ul class="nav navbar-nav float-right">
           <li class="dropdown dropdown-user nav-item">
             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-              <span class="avatar avatar-online">
-                <img src="{{ asset('stack-admin/app-assets/images/portrait/small/avatar-s-1.png') }}" alt="avatar"><i></i></span>
-              <span class="user-name">{{ Auth::user()->name }}</span>
+              {{-- <span class="avatar avatar-online">
+              <img src="{{ asset('stack-admin/app-assets/images/portrait/small/avatar-s-1.png') }}" alt="avatar"><i></i></span> --}}
+              <span class="user-name mb-0">{{ Auth::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
               {{-- <a class="dropdown-item" href="user-profile.html"><i class="ft-user"></i> Edit Profile</a>
