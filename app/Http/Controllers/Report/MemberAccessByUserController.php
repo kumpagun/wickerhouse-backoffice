@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Report;
 use Mem;
 use Response;
 use DB;
+use Auth;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -15,13 +16,36 @@ use Maatwebsite\Excel\Facades\Excel;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
+use App\Models\Employee;
 
 class MemberAccessByUserController extends Controller
 {
+  public function get_employee_id_from_head() {
+    $employee_id = Auth::user()->username;
+    $arr_employee_id = [];
+    array_push($arr_employee_id, $employee_id);
+    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
+
+    $data_back = [];
+    if(!empty($employees)) {
+      foreach($employees as $employee) {
+        array_push($data_back, $employee->employee_id);
+      }
+    } 
+
+    return $data_back;
+  }
+
   public function access_content_by_user (Request $request)
   {
     $search_input = $request->input('search_input');
     $search_group = $request->input('search_group');
+    $platform = $request->input('platform');
+
+    $employee_id = [];
+    if(Auth::user()->type=='jasmine') {
+      $employee_id = $this->get_employee_id_from_head();
+    }
 
     $query_group = Training::query()->where('status',1)->get();
     if(empty($search_group)){
@@ -33,12 +57,20 @@ class MemberAccessByUserController extends Controller
     $datas_group = Training::find($group_id_select);
     $group_id = new ObjectId($datas_group->_id);
     $course_id = new ObjectId($datas_group->course_id);
-    $datas = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id)->get();
+    $query = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
+    if(Auth::user()->type=='jasmine') {
+      $query->whereIn('employee_id',$employee_id);
+    }    
+    $datas = $query->get();
 
     $group_name = $datas_group->title;
     $now = Carbon::now()->format('dmY');
     $file = $group_name.'_'.$now.'.xls';
     $path = config('app.url').'storage/excel/exports/'.$group_id_select.'/'.$file;
+
+    if($platform=='excel') {
+      return Excel::download(new Export_Report_member_access_by_user($datas), Carbon::now()->timestamp.'.xlsx');
+    }
 
     $update_date = '-';
     if(!empty($datas[0])) {

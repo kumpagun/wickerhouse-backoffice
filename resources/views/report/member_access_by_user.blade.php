@@ -22,6 +22,14 @@
 <div class="card">
   <div class="card-content collapse show">
     <div class="card-body card-dashboard">
+      @if(Auth::user()->type=='jasmine')
+      <div class="row">
+        <div class="col-12">Name <span class="text-primary">{{ Auth::user()->user_info['thai_fullname'] }}</span></div>
+        <div class="col-12">DivisionName <span class="text-primary">{{ Auth::user()->user_info['division'] }}</span></div>
+        <div class="col-12">SectionName <span class="text-primary">{{ Auth::user()->user_info['section'] }}</span></div>
+        <div class="col-12">DeptName <span class="text-primary">{{ Auth::user()->user_info['department'] }}</span></div>
+      </div>
+      @endif
       <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user')}}" method="POST">
         {{ csrf_field() }}
         <label class="col-4 text-right"> Training List</label>
@@ -38,7 +46,10 @@
 
       <div class="row text-right">
         <div class="col-12">
-          <a href="{{ $path }}" class="btn btn-social width-200 mb-1 btn-outline-github text-center">
+          {{-- <a href="{{ $path }}" class="btn btn-social width-200 mb-1 btn-outline-github text-center">
+            <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
+          </a> --}}
+          <a href="{{ route('report_access_content_by_user', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a>
         </div>
