@@ -82,7 +82,7 @@
               <span>Login with Jasmine</span>
             </h6>
             <a href="{{ route('jasmine_signin') }}">
-              <button type="submit" class="btn btn-primary2 btn-block"><i class="ft-unlock"></i> Login Jasmin</button>
+              <button type="submit" class="btn btn-primary2 btn-block"><i class="ft-unlock"></i> Login Jasmine</button>
             </a>
           </div>
           {{-- <div class="card-body">
