@@ -272,10 +272,10 @@ class ReportController extends Controller
       if(!empty($data['branch'])) { $branch = $data['branch']; } else  { $branch = ''; } 
       if(!empty($data['staff_grade'])) { $staff_grade = $data['staff_grade']; } else { $staff_grade = ''; } 
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
-      if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = ''; } 
-      if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = ''; } 
-      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = ''; }
-      if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = ''; }
+      if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = 0; } 
+      if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = 0; } 
+      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
+      if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
       if(!empty($employee_id)) {
         $dataArray[] = [
           'training_id' => $training_id,

@@ -203,6 +203,7 @@ class MemberAccessContentController extends Controller
         array_push($chart_active['pass'], $values['user_active_passing_score']);
         array_push($chart_active['not_pass'], $values['user_active_not_passing_score']);
       }
+      // dd($chart_active);
       // CHART % คนไม่เข้าเรียน
       $chart_inactive['label'] = [];
       $chart_inactive['total'] = [];
@@ -311,7 +312,7 @@ class MemberAccessContentController extends Controller
     return $query;
   }
   // User เข้าเรียน และสอบผ่าน
-  public function user_active_passing_score($training_id,$passing_score, $employee_id){ 
+  public function user_active_passing_score($training_id,$passing_score, $employee_id) { 
     if(Auth::user()->type=='jasmine') {
       $match = [
         'status'  => 1,
@@ -358,7 +359,8 @@ class MemberAccessContentController extends Controller
         'employee_id' => ['$in' => $employee_id],
         '$or' => [
           ['posttest' => [ '$lt' => $passing_score ]], 
-          ['posttest' => [ '$eq' => null ]]
+          ['posttest' => [ '$eq' => null ]], 
+          ['posttest' => [ '$eq' => '' ]]
         ] 
       ];
     } else {
@@ -368,7 +370,8 @@ class MemberAccessContentController extends Controller
         'training_id'  => $training_id,
         '$or' => [
           ['posttest' => [ '$lt' => $passing_score ]], 
-          ['posttest' => [ '$eq' => null ]]
+          ['posttest' => [ '$eq' => null ]], 
+          ['posttest' => [ '$eq' => '' ]]
         ] 
       ];
     }
@@ -396,15 +399,22 @@ class MemberAccessContentController extends Controller
     if(Auth::user()->type=='jasmine') {
       $match = [
         'status'  => 1,
-        'play_course' => ['$eq'  => 0],
         'training_id' => $training_id,
-        'employee_id' => ['$in' => $employee_id]
+        'employee_id' => ['$in' => $employee_id],
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] 
       ];
     } else {
       $match = [
         'status'  => 1,
         'play_course' => ['$eq'  => 0],
-        'training_id' => $training_id
+        'training_id' => $training_id,
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] 
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
