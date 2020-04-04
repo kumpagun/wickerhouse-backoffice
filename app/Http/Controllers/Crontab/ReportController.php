@@ -10,6 +10,7 @@ use MongoDB\BSON\ObjectId as ObjectId;
 use DB;
 // Model
 use App\Models\Member;
+use App\Models\Member_jasmine;
 use App\Models\Employee;
 use App\Models\Report_member_access;
 use App\Models\Training;
@@ -28,7 +29,7 @@ class ReportController extends Controller
 
     $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
     $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
-    // $query = Training::where('status',1)->where('_id',new ObjectId('5e748d1604e5244b4a0d6de7'));
+    // $query = Training::where('status',1)->where('_id',new ObjectId('5e85f50e042105442c52a970'));
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
@@ -52,12 +53,6 @@ class ReportController extends Controller
     ];
 
     // ผู้เรียนทั้งหมด
-    $members_jas = TrainingUser::where('training_id', $training_id)->where('status',1)->get(); 
-    $members_jas_employee_id = [];
-    foreach($members_jas as $row) {
-      array_push($members_jas_employee_id, $row->employee_id);
-    }
-
     $training_user = TrainingUser::where('status',1)->where('training_id', $training_id)->get();
     $arr_employee_id = [];
     foreach($training_user as $row) {
@@ -95,7 +90,16 @@ class ReportController extends Controller
       array_push($jas_in_members_table, $row['employee_id']);
     }
     // Member not login
-    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get();
+    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+
+    // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
+    $arr_members_jasmine = [];
+    foreach($members_jasmine as $row) {
+      array_push($arr_members_jasmine, $row->employee_id);
+    }
+    $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
+
     // Pretest
     $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
     // Posttest
@@ -176,25 +180,22 @@ class ReportController extends Controller
         ]
       ]);
     });
-    // Member ที่ login เข้าระบบแล่้ว
+    // Member ที่ login เข้าระบบแล่้ว 
     foreach($members as $value) {
-      // foreach($member->employees as $value) {
-        // $datas[$member->_id][$index] = $value;
-        $values_id = (string)$value->_id;
-        $datas[$values_id]['_id'] = $values_id;
-        $datas[$values_id]['employee_id'] = $value->employees->employee_id;
-        $datas[$values_id]['tinitial'] = $value->employees->tinitial;
-        $datas[$values_id]['firstname'] = $value->employees->tf_name;
-        $datas[$values_id]['lastname'] = $value->employees->tl_name;
-        $datas[$values_id]['workplace'] = $value->employees->workplace;
-        $datas[$values_id]['title'] = $value->employees->title_name;
-        $datas[$values_id]['division'] = $value->employees->division_name;
-        $datas[$values_id]['section'] = $value->employees->section_name;
-        $datas[$values_id]['department'] = $value->employees->dept_name;
-        $datas[$values_id]['branch'] = $value->employees->branch_name;
-        $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
-        $datas[$values_id]['job_family'] = $value->employees->job_family;
-      // }
+      $values_id = (string)$value->_id;
+      $datas[$values_id]['_id'] = $values_id;
+      $datas[$values_id]['employee_id'] = $value->employees->employee_id;
+      $datas[$values_id]['tinitial'] = $value->employees->tinitial;
+      $datas[$values_id]['firstname'] = $value->employees->tf_name;
+      $datas[$values_id]['lastname'] = $value->employees->tl_name;
+      $datas[$values_id]['workplace'] = $value->employees->workplace;
+      $datas[$values_id]['title'] = $value->employees->title_name;
+      $datas[$values_id]['division'] = $value->employees->division_name;
+      $datas[$values_id]['section'] = $value->employees->section_name;
+      $datas[$values_id]['department'] = $value->employees->dept_name;
+      $datas[$values_id]['branch'] = $value->employees->branch_name;
+      $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
+      $datas[$values_id]['job_family'] = $value->employees->job_family;
     }
     // Member ที่ยังไม่ login เข้าระบบ
     foreach($members_jasmine as $value) {
@@ -211,6 +212,22 @@ class ReportController extends Controller
       $datas[$value->_id]['staff_grade'] = $value->staff_grade;
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
+    // Member ที่ยังไม่ login เข้าระบบ จากการ IMPORT EXCEL
+    foreach($member_import_excel as $value) {
+      $datas[$value->_id]['employee_id'] = $value->employee_id;
+      $datas[$value->_id]['tinitial'] = $value->tinitial;
+      $datas[$value->_id]['firstname'] = $value->firstname;
+      $datas[$value->_id]['lastname'] = $value->lastname;
+      $datas[$value->_id]['workplace'] = $value->workplace;
+      $datas[$value->_id]['title'] = $value->title;
+      $datas[$value->_id]['division'] = $value->division;
+      $datas[$value->_id]['section'] = $value->section;
+      $datas[$value->_id]['department'] = $value->department;
+      $datas[$value->_id]['branch'] = $value->branch;
+      $datas[$value->_id]['staff_grade'] = $value->staff_grade;
+      $datas[$value->_id]['job_family'] = $value->job_family;
+    }
+    
     // Play course
     foreach($play_courses as $play_course) {
       if(!empty($datas[(string)$play_course->_id['user_id']])) {
@@ -302,6 +319,7 @@ class ReportController extends Controller
         ];
       }
     }
+    // dd($dataArray);
     $this->insertDataArray($dataArray);
   }
 

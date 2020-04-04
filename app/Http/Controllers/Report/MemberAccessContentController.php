@@ -445,7 +445,7 @@ class MemberAccessContentController extends Controller
     $published_at = $group_online->published_at;
     $expired_at = $group_online->expired_at;
 
-    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id);
+    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id); 
     $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id); 
     
     $datas = [];
@@ -505,7 +505,7 @@ class MemberAccessContentController extends Controller
   public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id){
     if(Auth::user()->type=='jasmine') {
       $match = [
-        'play_course' => ['$ne'  => 0],
+        'play_course' => ['$eq'  => 0],
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
         'created_at' => [
@@ -515,7 +515,7 @@ class MemberAccessContentController extends Controller
       ];
     } else {
       $match = [
-        'play_course'  => ['$ne'  => 0],
+        'play_course'  => ['$eq'  => 0],
         'training_id'  => $training_id,
         'created_at' => [
           '$gte' => $published_at,
