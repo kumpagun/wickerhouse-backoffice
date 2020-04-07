@@ -43,7 +43,7 @@ class MemberAccessByUserController extends Controller
     $platform = $request->input('platform');
 
     $employee_id = [];
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $employee_id = $this->get_employee_id_from_head();
     }
 
@@ -58,7 +58,7 @@ class MemberAccessByUserController extends Controller
     $group_id = new ObjectId($datas_group->_id);
     $course_id = new ObjectId($datas_group->course_id);
     $query = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $query->whereIn('employee_id',$employee_id);
     }    
     $datas = $query->get();

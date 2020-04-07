@@ -6,7 +6,7 @@
       <li class="nav-item">
         <a href="{{ route('report_member_access_content_by_RO') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
       </li>
-      @if(Auth::user()->type=='jasmine')
+      @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
       <li class="nav-item">
         <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
       </li>
@@ -92,11 +92,9 @@
       <li class="navigation-header">
         <span>รายงาน</span><i class="feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
       </li>
-      @if(Auth::user()->type!='jasmine')
       <li class="nav-item">
         <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
       </li>
-      @endif
       <li class="nav-item">
         <a href="{{ route('report_review_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
       </li>
@@ -109,12 +107,12 @@
       <li class="nav-item">
         <a href="{{ route('users_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">List user</span></a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a href="{{ route('roles_index') }}"><i class="feather icon-unlock"></i><span class="menu-title" data-i18n="">Roles</span></a>
       </li>
       <li class="nav-item">
         <a href="{{ route('permissions_index') }}"><i class="feather icon-sliders"></i><span class="menu-title" data-i18n="">Permissions</span></a>
-      </li>
+      </li> --}}
       @endhasrole
 
     </ul>

@@ -102,8 +102,8 @@ class ReviewController extends Controller
       }
     }
    
-    $review_group = Review_group::where('status',1)->get();
-    $reviews = Review::where('status',1)->get();
+    $review_group = Review_group::where('status',1)->where('course_id', $course_id)->get();
+    $reviews = Review::where('status',1)->where('course_id', $course_id)->get();
     
     if($platform=='excel') {
       return Excel::download(new Export_Review($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total), Carbon::now()->timestamp.'.xlsx');

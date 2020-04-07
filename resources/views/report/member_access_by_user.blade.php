@@ -22,7 +22,7 @@
 <div class="card">
   <div class="card-content collapse show">
     <div class="card-body card-dashboard">
-      @if(Auth::user()->type=='jasmine')
+      @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
       <div class="row">
         <div class="col-12">Name <span class="text-primary">{{ Auth::user()->user_info['thai_fullname'] }}</span></div>
         <div class="col-12">DivisionName <span class="text-primary">{{ Auth::user()->user_info['division'] }}</span></div>

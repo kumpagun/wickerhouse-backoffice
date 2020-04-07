@@ -1,6 +1,6 @@
 <table>
   <thead>
-    @if(Auth::user()->type=='jasmine')
+    @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
     <tr>
       <th colspan=17>Name <span class="text-primary">{{ Auth::user()->user_info['thai_fullname'] }}</span></th>
     </tr>
