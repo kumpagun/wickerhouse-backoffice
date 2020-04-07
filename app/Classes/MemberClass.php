@@ -137,4 +137,20 @@ class MemberClass
     $data = Member::where('employee_id', $employee_id)->first();
     return $data->email;
   }
+
+  public function get_employee_id_from_head() {
+    $employee_id = Auth::user()->username;
+    $arr_employee_id = [];
+    array_push($arr_employee_id, $employee_id);
+    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
+
+    $data_back = [];
+    if(!empty($employees)) {
+      foreach($employees as $employee) {
+        array_push($data_back, $employee->employee_id);
+      }
+    } 
+
+    return $data_back;
+  }
 }

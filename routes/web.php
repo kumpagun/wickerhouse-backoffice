@@ -237,6 +237,7 @@ Route::group(['prefix' => 'employee', 'middleware' => ['auth', 'role:admin|cours
 
 // REPORT
 Route::match(['get','post'],'/dashboard', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
+Route::match(['get','post'],'/dashboard/overview', 'Report\ReportOverviewController@index')->name('report_dashboard_overview');
 Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
   Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
   Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
