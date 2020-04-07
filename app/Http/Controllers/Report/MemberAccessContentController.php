@@ -45,9 +45,8 @@ class MemberAccessContentController extends Controller
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
     $platform = $request->input('platform'); 
-
     $employee_id = [];
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $employee_id = $this->get_employee_id_from_head();
     }
 
@@ -277,7 +276,7 @@ class MemberAccessContentController extends Controller
   }
   // User เข้าเรียน
   public function user_active($training_id, $employee_id){
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne' => 0],
@@ -313,7 +312,7 @@ class MemberAccessContentController extends Controller
   }
   // User เข้าเรียน และสอบผ่าน
   public function user_active_passing_score($training_id,$passing_score, $employee_id) { 
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne'  => 0],
@@ -351,7 +350,7 @@ class MemberAccessContentController extends Controller
   }
   // User เข้าเรียน และไม่สอบผ่าน
   public function user_active_not_passing_score($training_id,$passing_score, $employee_id){
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'play_course'  => ['$ne'  => 0],
@@ -396,7 +395,7 @@ class MemberAccessContentController extends Controller
   }
   // User ไม่เข้าเรียน
   public function user_inactive($training_id, $employee_id){
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'training_id' => $training_id,
@@ -461,7 +460,7 @@ class MemberAccessContentController extends Controller
   }
   // User เข้าเรียน
   public function get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id){
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'play_course' => ['$ne'  => 0],
         'training_id' => $training_id,
@@ -503,7 +502,7 @@ class MemberAccessContentController extends Controller
   }
   // User ไม่เข้าเรียน
   public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id){
-    if(Auth::user()->type=='jasmine') {
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'play_course' => ['$eq'  => 0],
         'training_id' => $training_id,
