@@ -194,6 +194,7 @@ class ReportController extends Controller
       $datas[$values_id]['section'] = $value->employees->section_name;
       $datas[$values_id]['department'] = $value->employees->dept_name;
       $datas[$values_id]['branch'] = $value->employees->branch_name;
+      $datas[$values_id]['region'] = $value->employees->region;
       $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
       $datas[$values_id]['job_family'] = $value->employees->job_family;
     }
@@ -209,6 +210,7 @@ class ReportController extends Controller
       $datas[$value->_id]['section'] = $value->section_name;
       $datas[$value->_id]['department'] = $value->dept_name;
       $datas[$value->_id]['branch'] = $value->branch_name;
+      $datas[$value->_id]['region'] = $value->region;
       $datas[$value->_id]['staff_grade'] = $value->staff_grade;
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
@@ -224,6 +226,7 @@ class ReportController extends Controller
       $datas[$value->_id]['section'] = $value->section;
       $datas[$value->_id]['department'] = $value->department;
       $datas[$value->_id]['branch'] = $value->branch;
+      $datas[$value->_id]['region'] = $value->region;
       $datas[$value->_id]['staff_grade'] = $value->staff_grade;
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
@@ -271,6 +274,8 @@ class ReportController extends Controller
       $division = '';
       $section = '';
       $department = '';
+      $branch = '';
+      $region = '';
       $staff_grade = '';
       $job_family = '';
       $play_course = 0;
@@ -287,6 +292,7 @@ class ReportController extends Controller
       if(!empty($data['section'])) { $section = $data['section']; } else { $section = ''; } 
       if(!empty($data['department'])) { $department = $data['department']; } else { $department = ''; } 
       if(!empty($data['branch'])) { $branch = $data['branch']; } else  { $branch = ''; } 
+      if(!empty($data['region'])) { $region = $data['region']; } else  { $region = ''; } 
       if(!empty($data['staff_grade'])) { $staff_grade = $data['staff_grade']; } else { $staff_grade = ''; } 
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
       if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = 0; } 
@@ -307,6 +313,7 @@ class ReportController extends Controller
           'section' => $section,
           'department' => $department,
           'branch' => $branch,
+          'region' => $region,
           'staff_grade' => $staff_grade,
           'job_family' => $job_family,
           'play_course' => $play_course,
@@ -341,15 +348,15 @@ class ReportController extends Controller
   }
 
   public function update_branch() {
-    $query = Report_member_access::whereNull('branch');
+    $query = Report_member_access::whereNull('region');
     $query->select('employee_id');
-    $query->groupBy('employee_id');
+    $query->groupBy('employee_id')->limit(10000);
     $datas = $query->get();
 
     foreach($datas as $data) {
-      $employee = Employee::where('employee_id',$data->employee_id)->first();
-      if(!empty($employee->branch_name)) {
-        Report_member_access::where('employee_id',$data->employee_id)->update(['branch' => $employee->branch_name]);
+      $employee = Employee::where('employee_id',$data->employee_id)->first(); dd($employee);
+      if(!empty($employee->region)) {
+        Report_member_access::where('employee_id',$data->employee_id)->update(['region' => $employee->region]);
       }
     }
   }

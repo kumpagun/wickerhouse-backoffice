@@ -20,6 +20,7 @@ class Report_member_access extends Eloquent
     'section',
     'department',
     'branch',
+    'region',
     'staff_grade',
     'job_family',
     'play_course',

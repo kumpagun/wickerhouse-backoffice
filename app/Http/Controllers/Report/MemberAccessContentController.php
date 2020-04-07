@@ -13,6 +13,7 @@ use CourseClass;
 use FuncClass;
 use Excel;
 use Auth;
+use Member;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
@@ -25,29 +26,13 @@ class MemberAccessContentController extends Controller
     $this->middleware('auth');
   }
 
-  public function get_employee_id_from_head() {
-    $employee_id = Auth::user()->username;
-    $arr_employee_id = [];
-    array_push($arr_employee_id, $employee_id);
-    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
-
-    $data_back = [];
-    if(!empty($employees)) {
-      foreach($employees as $employee) {
-        array_push($data_back, $employee->employee_id);
-      }
-    } 
-
-    return $data_back;
-  }
-
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
     $search_group = $request->input('search_group'); 
     $platform = $request->input('platform'); 
     $employee_id = [];
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
-      $employee_id = $this->get_employee_id_from_head();
+      $employee_id = Member::get_employee_id_from_head();
     }
 
     $query_group = Training::query()->where('status',1)->where('total_employee','>',0)->orderBy('created_at','desc')->get();
