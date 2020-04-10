@@ -26,9 +26,22 @@ class ReportCourseController extends Controller
     $this->middleware('auth');
   }
 
+  public function get_department_from_training_id(Request $request) {
+    $training_id = new ObjectId($request->input('training_id'));
+    $departments = Report_member_access::where('training_id',$training_id)->select('department')->groupBy('department')->orderBy('department','asc')->get();
+    $arr_department = [];
+    foreach($departments as $department) {
+      array_push($arr_department,$department->department);
+    }
+    return $arr_department;
+  }
+
   // ยอดคนเข้าดู ep 
   public function index(Request $request){
     $search_group = $request->input('search_group'); 
+    $search_department = $request->input('search_department');
+
+    
     $platform = $request->input('platform'); 
     $employee_id = [];
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
@@ -44,6 +57,19 @@ class ReportCourseController extends Controller
     if(!empty($query)) {
       $training_id_select = (string)$query->_id;
     }
+
+    // แผนก
+    $departments = Report_member_access::where('training_id',new ObjectId($training_id_select))->select('department')->groupBy('department')->orderBy('department','asc')->get();
+    $arr_department = [];
+    foreach($departments as $department) {
+      if($department!='') {
+        array_push($arr_department,$department->department);
+      }
+    }
+    if(empty($search_department)) {
+      $search_department = $arr_department;
+    }
+
     $training_title = '';
     $ep = '';
     $passing_score = '';
@@ -54,10 +80,10 @@ class ReportCourseController extends Controller
     }
     if(!empty($training_id_select)) {
       $training_id = new ObjectId($training_id_select);
-      $datas_inactive = $this->user_inactive($training_id, $employee_id);
-      $datas_active = $this->user_active($training_id, $employee_id);
-      $datas_active_passing_score = $this->user_active_passing_score($training_id,$passing_score, $employee_id);
-      $datas_active_not_passing_score = $this->user_active_not_passing_score($training_id,$passing_score, $employee_id);
+      $datas_inactive = $this->user_inactive($training_id, $employee_id, $search_department);
+      $datas_active = $this->user_active($training_id, $employee_id, $search_department);
+      $datas_active_passing_score = $this->user_active_passing_score($training_id,$passing_score, $employee_id, $search_department);
+      $datas_active_not_passing_score = $this->user_active_not_passing_score($training_id,$passing_score, $employee_id, $search_department);
       $total_user_inactive = 0;
       $total_user_active = 0;
       $total_user_active_passing_score = 0;
@@ -117,7 +143,7 @@ class ReportCourseController extends Controller
       ];
 
       // PIE CHART เข้าเรียน / ไม่เข้าเรียน 
-      $datas_chart = $this->get_data_chart($training_id, $employee_id);  //dd($datas_chart);
+      $datas_chart = $this->get_data_chart($training_id, $passing_score, $employee_id, $search_department);  //dd($datas_chart);
       $pie_chart_total['active'] = 0;
       $pie_chart_total['inactive'] = 0;
       foreach($new_datas as $index => $values) {
@@ -161,19 +187,24 @@ class ReportCourseController extends Controller
       // CHART เข้าเรียน / ไม่เข้าเรียน
       $chart['label'] = [];
       $chart['active'] = [];
+      $chart['pass'] = [];
       $chart['inactive'] = []; 
       foreach($datas_chart as $index => $values) {
         $value_active = 0;
+        $value_pass = 0;
         $value_inactive = 0;
         array_push($chart['label'], $index);
         if(!empty($values['active'])) {
           $value_active = $values['active'];
         }
+        if(!empty($values['pass'])) {
+          $value_pass = $values['pass'];
+        }
         if(!empty($values['inactive'])) {
           $value_inactive = $values['inactive'];
         }
         array_push($chart['active'], $value_active);
-        
+        array_push($chart['pass'], $value_pass);
         array_push($chart['inactive'], $value_inactive);
       }
       // CHART เข้าเรียน / ผ่าน / ไม่ผ่าน
@@ -201,6 +232,7 @@ class ReportCourseController extends Controller
         array_push($chart_inactive['label'], $index);
         array_push($chart_inactive['total'], $result);
       }
+      $data_by_ro = $this->get_data_by_ro($training_id, $passing_score, $employee_id, $search_department);
 
       // GET LAST UPDATE
       $first_update = Report_member_access::where('training_id',$training_id)->orderBy('created_at','asc')->first(); 
@@ -231,6 +263,10 @@ class ReportCourseController extends Controller
       $chart_active['not_pass'] = [];
       $chart_inactive['label'] = [];
       $chart_inactive['total'] = [];
+      $data_by_ro['label'] = [];
+      $data_by_ro['inactive'] = [];
+      $data_by_ro['active'] = [];
+      $data_by_ro['success'] = [];
       $first_update = '';
       $last_update = '';
       $diff = 5;
@@ -243,35 +279,40 @@ class ReportCourseController extends Controller
     if($platform=='excel') {
       return Excel::download(new Export_Report_member_access_by_RO($training_title,$datas,$data_total), Carbon::now()->timestamp.'.xlsx');
     } else {
-      return view('report.member_access_content_by_ro',[
+      return view('report.dashboard_course',[
         'training_title' => $training_title,
         'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
         'query_group' => $query_group,
         'search_group' => $search_group,
+        'arr_department' => $arr_department,
+        'search_department' => $search_department,
         'datas' =>  $new_datas,
         'data_total' =>  $data_total,
         'pie_chart' => $pie_chart,
         'chart' => $chart,
         'chart_active' => $chart_active,
         'chart_inactive' => $chart_inactive,
+        'data_by_ro' => $data_by_ro,
         'diff' => $diff
       ]);
     }
   }
   // User เข้าเรียน
-  public function user_active($training_id, $employee_id){
+  public function user_active($training_id, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne' => 0],
         'training_id' => $training_id,
-        'employee_id' => ['$in' => $employee_id]
+        'employee_id' => ['$in' => $employee_id],
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne' => 0],
-        'training_id' => $training_id
+        'training_id' => $training_id,
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -295,21 +336,23 @@ class ReportCourseController extends Controller
     return $query;
   }
   // User เข้าเรียน และสอบผ่าน
-  public function user_active_passing_score($training_id,$passing_score, $employee_id) { 
+  public function user_active_passing_score($training_id,$passing_score, $employee_id, $search_department) { 
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne'  => 0],
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
-        'posttest' => [ '$gte' => $passing_score ]
+        'posttest' => [ '$gte' => $passing_score ],
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne'  => 0],
         'training_id' => $training_id,
-        'posttest' => [ '$gte' => $passing_score ]
+        'posttest' => [ '$gte' => $passing_score ],
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -333,7 +376,7 @@ class ReportCourseController extends Controller
     return $query;
   }
   // User เข้าเรียน และไม่สอบผ่าน
-  public function user_active_not_passing_score($training_id,$passing_score, $employee_id){
+  public function user_active_not_passing_score($training_id,$passing_score, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
@@ -344,7 +387,8 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] 
+        ] ,
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -355,7 +399,8 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] 
+        ] ,
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -378,7 +423,7 @@ class ReportCourseController extends Controller
     return $query;
   }
   // User ไม่เข้าเรียน
-  public function user_inactive($training_id, $employee_id){
+  public function user_inactive($training_id, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'status'  => 1,
@@ -387,7 +432,8 @@ class ReportCourseController extends Controller
         '$or' => [
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
-        ] 
+        ] ,
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -397,7 +443,8 @@ class ReportCourseController extends Controller
         '$or' => [
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
-        ] 
+        ] ,
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -422,19 +469,24 @@ class ReportCourseController extends Controller
     return $query;
   }
 
-  public function get_data_chart($training_id, $employee_id) 
+  public function get_data_chart($training_id, $passing_score, $employee_id, $search_department) 
   {
     $group_online = Training::find($training_id); 
     $published_at = $group_online->published_at;
     $expired_at = $group_online->expired_at;
 
-    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id); 
-    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id); 
+    $user_active = $this->get_data_chart_user_active($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department); 
+    $user_active_pass = $this->get_data_chart_user_active_pass($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department); 
+    $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department); 
     
     $datas = [];
     foreach($user_active as $row) {
       $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['active'] = $row->total;
+    }
+    foreach($user_active_pass as $row) {
+      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
+      $datas[$date]['pass'] = $row->total;
     }
     foreach($user_inactive as $row) {
       $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
@@ -442,8 +494,8 @@ class ReportCourseController extends Controller
     }
     return $datas;
   }
-  // User เข้าเรียน
-  public function get_data_chart_user_active($training_id,$published_at,$expired_at, $employee_id){
+  // User เข้าเรียน ไม่ผ่าน
+  public function get_data_chart_user_active($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'play_course' => ['$ne'  => 0],
@@ -452,7 +504,13 @@ class ReportCourseController extends Controller
         'created_at' => [
           '$gte' => $published_at,
           '$lte' => $expired_at,
-        ]
+        ],
+        '$or' => [
+          ['posttest' => [ '$lt' => $passing_score ]], 
+          ['posttest' => [ '$eq' => null ]], 
+          ['posttest' => [ '$eq' => '' ]]
+        ] ,
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -461,7 +519,59 @@ class ReportCourseController extends Controller
         'created_at' => [
           '$gte' => $published_at,
           '$lte' => $expired_at,
+        ],
+        '$or' => [
+          ['posttest' => [ '$lt' => $passing_score ]], 
+          ['posttest' => [ '$eq' => null ]], 
+          ['posttest' => [ '$eq' => '' ]]
+        ] ,
+        'department' => ['$in' => $search_department]
+      ];
+    }
+    $query = Report_member_access::raw(function ($collection) use ($match) {
+      return $collection->aggregate([
+        [ 
+          '$match' => $match
+        ],
+        [
+          '$group' =>[
+            '_id' => [ 'created_at' => '$created_at'],
+            'total' => [ '$sum' => 1 ]
+          ]
+        ],
+        [
+          '$sort' => [
+            '_id.created_at' => 1
+          ]
         ]
+      ]);
+    });
+    return $query;
+  }
+  // User เข้าเรียน ผ่าน
+  public function get_data_chart_user_active_pass($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department){
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match = [
+        'play_course' => ['$ne'  => 0],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ],
+        'posttest' => [ '$gte' => $passing_score ],
+        'department' => ['$in' => $search_department]
+      ];
+    } else {
+      $match = [
+        'play_course'  => ['$ne'  => 0],
+        'training_id'  => $training_id,
+        'created_at' => [
+          '$gte' => $published_at,
+          '$lte' => $expired_at,
+        ],
+        'posttest' => [ '$gte' => $passing_score ],
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -485,7 +595,7 @@ class ReportCourseController extends Controller
     return $query;
   }
   // User ไม่เข้าเรียน
-  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id){
+  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'play_course' => ['$eq'  => 0],
@@ -494,7 +604,8 @@ class ReportCourseController extends Controller
         'created_at' => [
           '$gte' => $published_at,
           '$lte' => $expired_at,
-        ]
+        ],
+        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -503,7 +614,8 @@ class ReportCourseController extends Controller
         'created_at' => [
           '$gte' => $published_at,
           '$lte' => $expired_at,
-        ]
+        ],
+        'department' => ['$in' => $search_department]
       ];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
@@ -525,5 +637,162 @@ class ReportCourseController extends Controller
       ]);
     });
     return $query;
+  }
+
+  public function get_data_by_ro($training_id, $passing_score, $employee_id, $search_department){
+    $data_back['label'] = [];
+    $data_back['inactive'] = [];
+    $data_back['active'] = [];
+    $data_back['success'] = [];
+    $datas = [];
+    // User ไม่เข้าเรียน
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match = [
+        'status'  => 1,
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] ,
+        'department' => ['$in' => $search_department]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'training_id' => $training_id,
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] ,
+        'department' => ['$in' => $search_department]
+      ];
+    }
+    $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
+      return $collection->aggregate([
+        [ 
+          '$match' => $match
+        ],
+        [
+          '$group' => [
+            '_id' => [ 'region'  => '$region'],
+            'total' => [ '$sum' => 1 ]
+          ]
+        ],
+        [
+          '$sort' => [
+            'region' => 1
+            // 'total' => -1
+          ]
+        ]
+      ]);
+    });
+
+    foreach($report_member_access as $row) {
+      $datas[$row->_id['region']]['inactive'] = $row->total;
+    }
+
+    // User เข้าเรียนไม่ผ่าน
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match = [
+        'status'  => 1,
+        'posttest' => [ '$lt' => $passing_score ],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'department' => ['$in' => $search_department]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'posttest' => [ '$lt' => $passing_score ],
+        'training_id' => $training_id,
+        'department' => ['$in' => $search_department]
+      ];
+    }
+    $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
+      return $collection->aggregate([
+        [ 
+          '$match' => $match
+        ],
+        [
+          '$group' => [
+            '_id' => [ 'region'  => '$region'],
+            'total' => [ '$sum' => 1 ]
+          ]
+        ],
+        [
+          '$sort' => [
+            'region' => 1
+          ]
+        ]
+      ]);
+    });
+
+    foreach($report_member_access as $row) {
+      $datas[$row->_id['region']]['active'] = $row->total;
+    }
+
+    // User เข้าเรียนผ่าน
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne'  => 0],
+        'posttest' => [ '$gte' => $passing_score ],
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        'department' => ['$in' => $search_department]
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'play_course' => ['$ne'  => 0],
+        'posttest' => [ '$gte' => $passing_score ],
+        'training_id' => $training_id,
+        'department' => ['$in' => $search_department]
+      ];
+    }
+    $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
+      return $collection->aggregate([
+        [ 
+          '$match' => $match
+        ],
+        [
+          '$group' => [
+            '_id' => [ 'region'  => '$region'],
+            'total' => [ '$sum' => 1 ]
+          ]
+        ],
+        [
+          '$sort' => [
+            'region' => 1
+          ]
+        ]
+      ]);
+    });
+
+    foreach($report_member_access as $row) {
+      $datas[$row->_id['region']]['success'] = $row->total;
+    }
+
+    foreach($datas as $region => $total) {
+      array_push($data_back['label'], $region);
+      if(!empty($total['inactive'])) {
+        array_push($data_back['inactive'], $total['inactive']);
+      } else {
+        array_push($data_back['inactive'], 0);
+      }
+      if(!empty($total['active'])) {
+        array_push($data_back['active'], $total['active']);
+      } else {
+        array_push($data_back['active'], 0);
+      }
+      if(!empty($total['success'])) {
+        array_push($data_back['success'], $total['success']);
+      } else {
+        array_push($data_back['success'], 0);
+      }
+    }
+
+    return $data_back;
   }
 }
