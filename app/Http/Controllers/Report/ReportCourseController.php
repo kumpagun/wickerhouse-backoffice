@@ -19,7 +19,7 @@ use App\Models\Report_member_access;
 use App\Models\Training;
 use App\Models\Employee;
 
-class MemberAccessContentController extends Controller
+class ReportCourseController extends Controller
 {
   public function __construct()
   {
@@ -27,7 +27,7 @@ class MemberAccessContentController extends Controller
   }
 
   // ยอดคนเข้าดู ep 
-  public function member_access_content_by_RO(Request $request){
+  public function index(Request $request){
     $search_group = $request->input('search_group'); 
     $platform = $request->input('platform'); 
     $employee_id = [];

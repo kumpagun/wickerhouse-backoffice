@@ -153,4 +153,13 @@ class MemberClass
 
     return $data_back;
   }
+
+  public function get_name_from_employee_id($employee_id) {
+    $member = Employee::where('employee_id', $employee_id)->first();
+    if(!empty($member)) {
+      return $member->tf_name.' '.$member->tl_name;
+    } else {
+      return '';
+    }
+  }
 }

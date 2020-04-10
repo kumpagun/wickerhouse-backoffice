@@ -72,6 +72,17 @@ class TrainingController extends Controller
         foreach($data_member as $row) {
           array_push($arr_employee_id, $row->employee_id);
         }
+        
+        $employee = Employee::where('status',1);
+        $employee->where(function ($q) use ($search) {
+          $q->orWhere('tf_name','like',"%$search%");
+          $q->orWhere('tl_name','like',"%$search%");
+          $q->orWhere('employee_id','like',"%$search%");
+        });
+        $data_member = $employee->get();
+        foreach($data_member as $row) {
+          array_push($arr_employee_id, $row->employee_id);
+        }
       }
       
       $query = TrainingUser::query()->where('status',1);

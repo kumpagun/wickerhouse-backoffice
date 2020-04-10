@@ -213,6 +213,7 @@ return [
     App\Providers\RouteServiceProvider::class,
     'Fideloper\Proxy\TrustedProxyServiceProvider',
     Barryvdh\DomPDF\ServiceProvider::class,
+    Jenssegers\Agent\AgentServiceProvider::class,
 
     /* custom */
     App\Providers\CourseClassServiceProvider::class,
@@ -277,7 +278,8 @@ return [
     'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     'Image' => Intervention\Image\Facades\Image::class,
     'PDF' => Barryvdh\DomPDF\Facade::class,
-    
+    'Agent' => Jenssegers\Agent\Facades\Agent::class,
+
     /* custom */
     'User' => App\Facades\UserClass::class,
     'Member' => App\Facades\MemberClass::class,

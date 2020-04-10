@@ -571,6 +571,17 @@
               bottom: '3%',
               containLabel: true
           },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {
+                show: true,
+                title: 'Download',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
+          },
           xAxis: {
               type: 'value'
           },
