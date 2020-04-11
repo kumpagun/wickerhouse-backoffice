@@ -50,7 +50,6 @@
 
 @section('content')
 <!-- Basic Tables start -->
-@if(!empty($datas))
   <!-- Simple Pie Chart -->
   <div class="row justify-content-center">
     <div class="col-md-8 col-sm-12">
@@ -76,10 +75,7 @@
         </div>
         <div class="card-content collapse show">
           <div class="card-body">
-            @php
-              $value = $diff * 60;
-            @endphp
-            <div id="basic-bar" class="height-{{$value}} echart-container"></div>
+            <div id="basic-bar" class="height-500 echart-container"></div>
           </div>
         </div>
       </div>
@@ -134,34 +130,6 @@
     </div>
   </div>
 
-@else
-
-<div class="row justify-content-center">
-  <div class="col-12 col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-content collapse show">
-        <div class="card-body">
-          <div class="row align-items-baseline">
-            <div class="col-12">
-              <h4 class="card-title text-center my-1">ไม่มีข้อมูล</h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-@endif
-@endsection
-
-@section('style')
-  @for($i=1;$i<=$diff;$i++) 
-    @php
-      $value = $i * 60;
-      $value_height = $i * 50;
-      echo "<style>.height-".$value." { height: ".$value_height."px; } </style>";
-    @endphp
-  @endfor
 @endsection
 
 @section('script')
@@ -278,6 +246,9 @@
         // Resize chart on menu width change and window resize
         $(window).on('resize', resize);
         $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
 
         // Resize function
         function resize() {
@@ -326,18 +297,23 @@
               }
             }
           },
+
           xAxis: {
-            type: 'value',
             name: 'Days',
+            type: 'category',
+            data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
+            axisLabel: {
+              formatter: '{value}',
+              rotate: 25
+            }
+          },
+          yAxis: {
+            type: 'value',
             axisLabel: {
               formatter: '{value}'
             }
-         },
-          yAxis: {
-            type: 'category',
-            inverse: true,
-            data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
           },
+
           series: [
             {
               name: 'ยังไม่เข้าเรียน',
@@ -367,6 +343,9 @@
         // Resize chart on menu width change and window resize
         $(window).on('resize', resize);
         $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
 
         // Resize function
         function resize() {
@@ -455,6 +434,9 @@
         // Resize chart on menu width change and window resize
         $(window).on('resize', resize);
         $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
 
         // Resize function
         function resize() {
@@ -536,6 +518,9 @@
         // Resize chart on menu width change and window resize
         $(window).on('resize', resize);
         $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
 
         // Resize function
         function resize() {
@@ -624,6 +609,9 @@
         // Resize chart on menu width change and window resize
         $(window).on('resize', resize);
         $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
 
         // Resize function
         function resize() {

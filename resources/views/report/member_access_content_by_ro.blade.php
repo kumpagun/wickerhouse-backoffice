@@ -520,12 +520,6 @@
             data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
           },
           {
-            name: 'เข้าเรียน',
-            type: 'bar',
-            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-            data: JSON.parse(`{!! json_encode($chart['pass']) !!}`),
-          },
-          {
             name: 'ไม่เข้าเรียน',
             type: 'bar',
             itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},

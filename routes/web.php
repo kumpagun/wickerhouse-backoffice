@@ -239,7 +239,9 @@ Route::group(['prefix' => 'employee', 'middleware' => ['auth', 'role:admin|cours
 Route::match(['get','post'],'/dashboard-first', 'Report\MemberAccessContentController@member_access_content_by_RO')->name('report_member_access_content_by_RO');
 Route::match(['get','post'],'/dashboard-overview', 'Report\ReportOverviewController@index')->name('report_dashboard_overview');
 Route::match(['get','post'],'/dashboard-course', 'Report\ReportCourseController@index')->name('report_dashboard_course');
+Route::match(['get','post'],'/dashboard-regioncourse', 'Report\ReportCourse2Controller@index')->name('report_dashboard_course2');
 Route::match(['get','post'],'/dashboard-course-filter', 'Report\ReportCourseController@get_department_from_training_id')->name('get_department_from_training_id');
+Route::match(['get','post'],'/dashboard-course2-filter', 'Report\ReportCourse2Controller@get_region_from_training_id')->name('get_region_from_training_id');
 
 
 Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {

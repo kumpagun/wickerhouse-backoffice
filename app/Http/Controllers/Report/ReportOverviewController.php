@@ -54,7 +54,7 @@ class ReportOverviewController extends Controller
 
     // $date_start  = new UTCDateTime(Carbon::now()->startOfDay());
     // $date_end  = new UTCDateTime(Carbon::now()->endOfDay());
-
+    $employee_id = [];
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $employee_id = Member::get_employee_id_from_head();
     }
@@ -62,37 +62,37 @@ class ReportOverviewController extends Controller
     $arr_course = $this->get_course_in_period($date_start,$date_end);
 
     // ประเภทหลักสูตรทั้งหมด
-    $get_course_type = $this->get_course_type($arr_course,$date_start,$date_end);
+    $get_course_type = $this->get_course_type($arr_course,$date_start,$date_end,$employee_id);
 
     // จำนวนพนักงานทั้งหมด เข้าเรียนแล้ว, ยังไม่เข้าเรียน, เรียนสำเร็จ
     $all_employee = Employee::where('status',1)->where('created_at','<=',$date_end)->count();
-    $get_employee_stat = $this->get_employee_stat($arr_course,$date_start,$date_end);
+    $get_employee_stat = $this->get_employee_stat($arr_course,$date_start,$date_end,$employee_id);
 
     // Course category
-    $get_course_category = $this->get_course_category($arr_course,$date_start,$date_end); 
+    $get_course_category = $this->get_course_category($arr_course,$date_start,$date_end,$employee_id); 
 
     // ชื่อคอร์ส แยกตามรอบการอบรม เข้าเรียนแล้ว, ยังไม่เข้าเรียน, เรียนสำเร็จ 
-    $get_course_stat = $this->get_course_stat($arr_course,$date_start,$date_end);
+    $get_course_stat = $this->get_course_stat($arr_course,$date_start,$date_end,$employee_id);
 
     // จำนวนผู้เข้าเรียนของบริษัทนั้นๆ
-    $get_company_stat = $this->get_company_stat($arr_course,$date_start,$date_end);
+    $get_company_stat = $this->get_company_stat($arr_course,$date_start,$date_end,$employee_id);
 
     // จำนวนผู้เข้าเรียน แต่ละแผนก ของบริษัท 3BB
-    $get_company_3bb_stat = $this->get_company_3bb_stat($arr_course,$date_start,$date_end);
+    $get_company_3bb_stat = $this->get_company_3bb_stat($arr_course,$date_start,$date_end,$employee_id);
 
     // Device
-    $get_device = $this->get_device($arr_course,$date_start,$date_end);
+    $get_device = $this->get_device($arr_course,$date_start,$date_end,$employee_id);
 
     // หลักสูตรที่ได้รับความนิยม (หลักสูตรทั่วไป)
-    $get_top5_course_general = $this->get_top5_course_general($arr_course,$date_start,$date_end);
+    $get_top5_course_general = $this->get_top5_course_general($arr_course,$date_start,$date_end,$employee_id);
     // พนักงานเข้าเรียนมากที่สุด
-    $get_top5_employee = $this->get_top5_employee($arr_course,$date_start,$date_end);
+    $get_top5_employee = $this->get_top5_employee($arr_course,$date_start,$date_end,$employee_id);
     // แผนกที่พนักงานเข้าเรียนมากที่สุด
-    $get_top5_department = $this->get_top5_department($arr_course,$date_start,$date_end);
+    $get_top5_department = $this->get_top5_department($arr_course,$date_start,$date_end,$employee_id);
     // Job family ที่พนักงานเข้าเรียนมากที่สุด
-    $get_top5_job_family = $this->get_top5_job_family($arr_course,$date_start,$date_end);
+    $get_top5_job_family = $this->get_top5_job_family($arr_course,$date_start,$date_end,$employee_id);
     // ผู้เรียนที่สำเร็จหลักสูตรมากที่สุด
-    $get_top5_playend_all_ep = $this->get_top5_playend_all_ep($arr_course,$date_start,$date_end);
+    $get_top5_playend_all_ep = $this->get_top5_playend_all_ep($arr_course,$date_start,$date_end,$employee_id);
 
 
     $withData = [
@@ -168,10 +168,14 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_employee_stat($arr_course='',$date_start='',$date_end='') {
+  public function get_employee_stat($arr_course='',$date_start='',$date_end='',$employee_id) {
     $total_course = count($arr_course);
     // พนักงานทั้งหมด
-    $employee = Employee::where('status',1)->where('created_at','<=',$date_end)->count();
+    $query = Employee::where('status',1)->where('created_at','<=',$date_end);
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $query->whereIn('employee_id',$employee_id);
+    }
+    $employee = $query->count();
     // พนักงานที่เข้าเรียน
     $employee_active = 0;
     $match = [
@@ -180,6 +184,9 @@ class ReportOverviewController extends Controller
       'course_id' => [ '$in' => $arr_course ],
       'play_course' => [ '$ne' => 0 ]
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -206,6 +213,9 @@ class ReportOverviewController extends Controller
       'course_id' => [ '$in' => $arr_course ],
       'play_course_end_all_ep' => true
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -267,7 +277,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_course_stat($arr_course='',$date_start='',$date_end='') {
+  public function get_course_stat($arr_course='',$date_start='',$date_end='',$employee_id) {
     $employee = Employee::where('status',1)->count();
     $datas = [];
     // เข้าเรียนกี่คน 
@@ -276,6 +286,9 @@ class ReportOverviewController extends Controller
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $arr_course ]
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -312,6 +325,9 @@ class ReportOverviewController extends Controller
         'course_id' => new ObjectId($course),
         'play_course_end_all_ep' => true
       ];
+      if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+        $match['employee_id'] = [ '$in' => $employee_id ]; 
+      }
       $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
         return $collection->aggregate([
           [
@@ -393,7 +409,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_course_category($arr_course='',$date_start='',$date_end='') {
+  public function get_course_category($arr_course='',$date_start='',$date_end='',$employee_id) {
     $courses = Course::whereIn('_id',$arr_course)->get();
     $data_back = [];
     $data_back['standard'] = [];
@@ -407,7 +423,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_company_stat($arr_course='',$date_start='',$date_end='') {
+  public function get_company_stat($arr_course='',$date_start='',$date_end='',$employee_id) {
     // พนักงานที่เข้าเรียน
     $employee_active = 0;
     $match = [
@@ -416,6 +432,9 @@ class ReportOverviewController extends Controller
       'play_course' => [ '$gt' => 0 ],
       'company' => [ '$ne' => null ]
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -463,7 +482,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_company_3bb_stat($arr_course='',$date_start='',$date_end='') {
+  public function get_company_3bb_stat($arr_course='',$date_start='',$date_end='',$employee_id) {
     // พนักงานที่เข้าเรียน
     $employee_active = 0;
     $match = [
@@ -472,6 +491,9 @@ class ReportOverviewController extends Controller
       'play_course' => [ '$gt' => 0 ],
       'company' => 'TTT BB'
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -519,7 +541,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_device($arr_course='',$date_start='',$date_end='') {
+  public function get_device($arr_course='',$date_start='',$date_end='',$employee_id) {
     $user_play_course_end = User_play_course_end::where('status',1)
       ->where('created_at','>=',$date_start)
       ->where('created_at','<=',$date_end)
@@ -559,7 +581,7 @@ class ReportOverviewController extends Controller
     return $data_back;
   }
 
-  public function get_top5_course_general($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_course_general($arr_course='',$date_start='',$date_end='',$employee_id) {
     $courses = Course::whereIn('_id',$arr_course)
     ->where('type','general')
     ->get();
@@ -574,6 +596,9 @@ class ReportOverviewController extends Controller
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $course_id ],
     ];
+    // if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+    //   $match['employee_id'] = [ '$in' => $employee_id ]; 
+    // }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -607,12 +632,15 @@ class ReportOverviewController extends Controller
     }
     return $data_back;
   }
-  public function get_top5_employee($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_employee($arr_course='',$date_start='',$date_end='',$employee_id) {
     $match = [
       'created_at' => [ '$gte' => $date_start ],
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $arr_course ],
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -646,12 +674,15 @@ class ReportOverviewController extends Controller
     }
     return $data_back;
   }
-  public function get_top5_department($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_department($arr_course='',$date_start='',$date_end='',$employee_id) {
     $match = [
       'created_at' => [ '$gte' => $date_start ],
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $arr_course ],
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -693,12 +724,15 @@ class ReportOverviewController extends Controller
     }
     return $data_back;
   }
-  public function get_top5_job_family($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_job_family($arr_course='',$date_start='',$date_end='',$employee_id) {
     $match = [
       'created_at' => [ '$gte' => $date_start ],
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $arr_course ],
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -740,13 +774,16 @@ class ReportOverviewController extends Controller
     }
     return $data_back;
   }
-  public function get_top5_playend_all_ep($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_playend_all_ep($arr_course='',$date_start='',$date_end='',$employee_id) {
     $match = [
       'created_at' => [ '$gte' => $date_start ],
       'created_at' => [ '$lte' => $date_end ],
       'course_id' => [ '$in' => $arr_course ],
       'play_course_end_all_ep' => true
     ];
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match['employee_id'] = [ '$in' => $employee_id ]; 
+    }
     $member_access_by_course = Report_member_access_by_course::raw(function ($collection) use ($match) {
       return $collection->aggregate([
         [
@@ -788,7 +825,7 @@ class ReportOverviewController extends Controller
     }
     return $data_back;
   }
-  public function get_top5_teacher($arr_course='',$date_start='',$date_end='') {
+  public function get_top5_teacher($arr_course='',$date_start='',$date_end='',$employee_id) {
 
   }
 }

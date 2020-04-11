@@ -28,7 +28,7 @@ class ReportCourseController extends Controller
 
   public function get_department_from_training_id(Request $request) {
     $training_id = new ObjectId($request->input('training_id'));
-    $departments = Report_member_access::where('training_id',$training_id)->select('department')->groupBy('department')->orderBy('department','asc')->get();
+    $departments = Report_member_access::where('training_id',$training_id)->whereNotNull('department')->where('department','<>','')->select('department')->groupBy('department')->orderBy('department','asc')->get();
     $arr_department = [];
     foreach($departments as $department) {
       array_push($arr_department,$department->department);
@@ -41,7 +41,17 @@ class ReportCourseController extends Controller
     $search_group = $request->input('search_group'); 
     $search_department = $request->input('search_department');
 
-    
+    if(!empty($search_department)) {
+      $search_department = array_filter($search_department);
+      $result = [];
+      foreach($search_department as $row) {
+        array_push($result,$row);
+      }
+      $search_department = $result;
+    } else {
+      $search_department = [];
+    }
+
     $platform = $request->input('platform'); 
     $employee_id = [];
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
@@ -59,15 +69,12 @@ class ReportCourseController extends Controller
     }
 
     // แผนก
-    $departments = Report_member_access::where('training_id',new ObjectId($training_id_select))->select('department')->groupBy('department')->orderBy('department','asc')->get();
+    $departments = Report_member_access::where('training_id',new ObjectId($training_id_select))->whereNotNull('department')->where('department','<>','')->select('department')->groupBy('department')->orderBy('department','asc')->get();
     $arr_department = [];
     foreach($departments as $department) {
       if($department!='') {
         array_push($arr_department,$department->department);
       }
-    }
-    if(empty($search_department)) {
-      $search_department = $arr_department;
     }
 
     $training_title = '';
@@ -305,15 +312,16 @@ class ReportCourseController extends Controller
         'play_course' => ['$ne' => 0],
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
         'status'  => 1,
         'play_course' => ['$ne' => 0],
         'training_id' => $training_id,
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -344,7 +352,6 @@ class ReportCourseController extends Controller
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
         'posttest' => [ '$gte' => $passing_score ],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -352,8 +359,10 @@ class ReportCourseController extends Controller
         'play_course' => ['$ne'  => 0],
         'training_id' => $training_id,
         'posttest' => [ '$gte' => $passing_score ],
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -387,8 +396,7 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
     } else {
       $match = [
@@ -399,9 +407,11 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -432,8 +442,7 @@ class ReportCourseController extends Controller
         '$or' => [
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
     } else {
       $match = [
@@ -443,9 +452,11 @@ class ReportCourseController extends Controller
         '$or' => [
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -509,8 +520,7 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
     } else {
       $match = [
@@ -524,9 +534,11 @@ class ReportCourseController extends Controller
           ['posttest' => [ '$lt' => $passing_score ]], 
           ['posttest' => [ '$eq' => null ]], 
           ['posttest' => [ '$eq' => '' ]]
-        ] ,
-        'department' => ['$in' => $search_department]
+        ] 
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -560,7 +572,6 @@ class ReportCourseController extends Controller
           '$lte' => $expired_at,
         ],
         'posttest' => [ '$gte' => $passing_score ],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -571,8 +582,10 @@ class ReportCourseController extends Controller
           '$lte' => $expired_at,
         ],
         'posttest' => [ '$gte' => $passing_score ],
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -605,7 +618,6 @@ class ReportCourseController extends Controller
           '$gte' => $published_at,
           '$lte' => $expired_at,
         ],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -615,8 +627,10 @@ class ReportCourseController extends Controller
           '$gte' => $published_at,
           '$lte' => $expired_at,
         ],
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $query = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -655,7 +669,6 @@ class ReportCourseController extends Controller
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
         ] ,
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -665,8 +678,10 @@ class ReportCourseController extends Controller
           ['play_course' => ['$eq'  => 0]], 
           ['play_course' => ['$eq'  => '']]
         ] ,
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -699,15 +714,16 @@ class ReportCourseController extends Controller
         'posttest' => [ '$lt' => $passing_score ],
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
         'status'  => 1,
         'posttest' => [ '$lt' => $passing_score ],
         'training_id' => $training_id,
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([
@@ -740,7 +756,6 @@ class ReportCourseController extends Controller
         'posttest' => [ '$gte' => $passing_score ],
         'training_id' => $training_id,
         'employee_id' => ['$in' => $employee_id],
-        'department' => ['$in' => $search_department]
       ];
     } else {
       $match = [
@@ -748,8 +763,10 @@ class ReportCourseController extends Controller
         'play_course' => ['$ne'  => 0],
         'posttest' => [ '$gte' => $passing_score ],
         'training_id' => $training_id,
-        'department' => ['$in' => $search_department]
       ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
     }
     $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
       return $collection->aggregate([

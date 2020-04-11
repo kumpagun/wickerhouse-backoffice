@@ -12,6 +12,9 @@
       <li class="nav-item">
         <a href="{{ route('report_dashboard_course') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard Course</span></a>
       </li>
+      <li class="nav-item">
+        <a href="{{ route('report_dashboard_course2') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard Course 2</span></a>
+      </li>
       @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
       <li class="nav-item">
         <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>

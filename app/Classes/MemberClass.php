@@ -9,6 +9,7 @@ use Maklad\Permission\Models\Role;
 use App\Models\Member_jasmine;
 use App\Models\Employee;
 use App\Models\Giftcode_usage;
+use Auth;
 
 class MemberClass
 {
