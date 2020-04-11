@@ -9,6 +9,7 @@ use Maklad\Permission\Models\Role;
 use App\Models\Member_jasmine;
 use App\Models\Employee;
 use App\Models\Giftcode_usage;
+use Auth;
 
 class MemberClass
 {
@@ -152,5 +153,14 @@ class MemberClass
     } 
 
     return $data_back;
+  }
+
+  public function get_name_from_employee_id($employee_id) {
+    $member = Employee::where('employee_id', $employee_id)->first();
+    if(!empty($member)) {
+      return $member->tf_name.' '.$member->tl_name;
+    } else {
+      return '';
+    }
   }
 }

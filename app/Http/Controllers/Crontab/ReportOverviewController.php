@@ -12,17 +12,20 @@ use DB;
 use App\Models\Member;
 use App\Models\Member_jasmine;
 use App\Models\Employee;
+use App\Models\Report_overview;
 use App\Models\Report_member_access;
+use App\Models\Report_member_access_by_course;
+use App\Models\Course;
 use App\Models\Training;
 use App\Models\TrainingUser;
 use App\Models\Examination_user;
 use App\Models\User_play_course_log;
 use App\Models\User_play_course_end;
 
-class ReportController extends Controller
+class ReportOverviewController extends Controller
 {
   // CRONTAB 192.168.30.16
-  public function access_content_by_user (Request $request)
+  public function index (Request $request)
   {
     $date_now = Carbon::now();
     $date = new UTCDateTime($date_now->startOfDay());
@@ -30,15 +33,12 @@ class ReportController extends Controller
     $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
     $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
     // $query = Training::where('status',1)->where('_id',new ObjectId('5e85f50e042105442c52a970'));
-    $query = Training::where('status',1);
-    $query->where('published_at','<=',$date_start);
-    $query->where('expired_at','>=',$date_end);
-    // $query->where('_id',new ObjectId("5e5dc898f437eb6d4e64fe4f"));
-    $trainings = $query->get(); 
-    if(!empty($trainings)) {
-      foreach($trainings as $row) {
-        Report_member_access::where('created_at', '<', $date)->where('training_id', new ObjectId($row->_id))->where('status', 1)->update(['status' => 0]);
-        Report_member_access::where('created_at', '>=', $date)->where('training_id', new ObjectId($row->_id))->where('status',1)->delete();
+    $query = Course::where('status',1);
+    $courses = $query->get(); 
+    if(!empty($courses)) {
+      foreach($courses as $row) {
+        // Report_overview::where('created_at', '<', $date)->where('training_id', new ObjectId($row->_id))->where('status', 1)->update(['status' => 0]);
+        Report_member_access_by_course::where('created_at', '>=', $date)->where('course_id', new ObjectId($row->_id))->where('status',1)->delete();
         $this->get_data($row);
       }
     }
@@ -46,21 +46,14 @@ class ReportController extends Controller
 
   public function get_data($input_datas) {
     $datas = [];
-    $training_id = new ObjectId($input_datas->_id);
-    $course_id = new ObjectId($input_datas->course_id);
+    $course_id = new ObjectId($input_datas->_id);
+    $total_episode = $input_datas->total_episode;
     $user_test = [
       new ObjectId("5de5e565bc48d45e27e5f349")
     ];
-
-    // ผู้เรียนทั้งหมด
-    $training_user = TrainingUser::where('status',1)->where('training_id', $training_id)->get();
-    $arr_employee_id = [];
-    foreach($training_user as $row) {
-      array_push($arr_employee_id, $row->employee_id);
-    }
     
     // Members login
-    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test) {
+    $members = Member::raw(function ($collection) {
       return $collection->aggregate([
         [
           '$lookup' => [
@@ -72,8 +65,7 @@ class ReportController extends Controller
         ],
         [
           '$match' => [
-            'active' => 1,
-            'employee_id' => [ '$in' => $arr_employee_id ],
+            'active' => 1
           ]
         ],
         [
@@ -89,28 +81,98 @@ class ReportController extends Controller
       array_push($memberId_jas, new ObjectId($row->_id));
       array_push($jas_in_members_table, $row['employee_id']);
     }
-    // Member not login
-    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
 
-    // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
-    $arr_members_jasmine = [];
-    foreach($members_jasmine as $row) {
-      array_push($arr_members_jasmine, $row->employee_id);
-    }
-    $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
-    // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
+    // Play course
+    $play_courses = User_play_course_log::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
+      return $collection->aggregate([
+        [
+          '$match' => [
+            'user_id' => [ '$in' => $memberId_jas ],
+            'course_id' => $course_id
+          ]
+        ], 
+        [
+          '$group' => [
+            '_id' => [
+              "user_id" => '$user_id'
+            ],
+            'ep' => ['$addToSet' => '$episode_id'] 
+          ]
+        ],  
+        [
+          '$project' => [
+            '_id' => 1,
+            'complete_ep' => [
+              '$size' => '$ep'
+            ]
+          ]
+        ]
+      ]);
+    });
+
+    // Play course end
+    $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
+      return $collection->aggregate([
+        [
+          '$match' => [
+            'user_id' => [ '$in' => $memberId_jas ],
+            'course_id' => $course_id
+          ]
+        ], [
+          '$group' => [
+            '_id' => [
+              "user_id" => '$user_id'
+            ],
+            'ep' => ['$addToSet' => '$episode_id'] 
+          ]
+        ],  [
+          '$project' => [
+            '_id' => 1,
+            'complete_ep' => [
+              '$size' => '$ep'
+            ]
+          ]
+        ]
+      ]);
+    });
+
+    // Play course end all ep
+    $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
+      return $collection->aggregate([
+        [
+          '$match' => [
+            'user_id' => [ '$in' => $memberId_jas ],
+            'course_id' => $course_id
+          ]
+        ], [
+          '$group' => [
+            '_id' => [
+              "user_id" => '$user_id'
+            ],
+            'ep' => ['$addToSet' => '$episode_id'] 
+          ]
+        ],  [
+          '$project' => [
+            '_id' => 1,
+            'complete_ep' => [
+              '$size' => '$ep'
+            ]
+          ]
+        ]
+      ]);
+    });
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    
     // Posttest
-    $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
+    $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
       return $collection->aggregate([
         [
           '$match' => [
             'type' => 'posttest',
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id,
-            'training_id' => $training_id
+            'course_id' => $course_id
           ]
         ],
         [
@@ -127,59 +189,6 @@ class ReportController extends Controller
       ]);
     });
     
-    // Play course
-    $play_courses = User_play_course_log::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
-      return $collection->aggregate([
-        [
-          '$match' => [
-            'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id,
-            'training_id' => $training_id
-          ]
-        ], [
-          '$group' => [
-            '_id' => [
-              "user_id" => '$user_id'
-            ],
-            'ep' => ['$addToSet' => '$episode_id'] 
-          ]
-        ],  [
-          '$project' => [
-            '_id' => 1,
-            'complete_ep' => [
-              '$size' => '$ep'
-            ]
-          ]
-        ]
-      ]);
-    });
-
-    // Play course end
-    $play_courses_ends = User_play_course_end::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
-      return $collection->aggregate([
-        [
-          '$match' => [
-            'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id,
-            'training_id' => $training_id
-          ]
-        ], [
-          '$group' => [
-            '_id' => [
-              "user_id" => '$user_id'
-            ],
-            'ep' => ['$addToSet' => '$episode_id'] 
-          ]
-        ],  [
-          '$project' => [
-            '_id' => 1,
-            'complete_ep' => [
-              '$size' => '$ep'
-            ]
-          ]
-        ]
-      ]);
-    });
     // Member ที่ login เข้าระบบแล่้ว 
     foreach($members as $value) {
       $values_id = (string)$value->_id;
@@ -199,40 +208,6 @@ class ReportController extends Controller
       $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
       $datas[$values_id]['job_family'] = $value->employees->job_family;
     }
-    // Member ที่ยังไม่ login เข้าระบบ
-    foreach($members_jasmine as $value) {
-      $datas[$value->_id]['employee_id'] = $value->employee_id;
-      $datas[$value->_id]['tinitial'] = $value->tinitial;
-      $datas[$value->_id]['firstname'] = $value->tf_name;
-      $datas[$value->_id]['lastname'] = $value->tl_name;
-      $datas[$value->_id]['workplace'] = $value->workplace;
-      $datas[$value->_id]['title'] = $value->title_name;
-      $datas[$value->_id]['company'] = $value->company;
-      $datas[$value->_id]['division'] = $value->division_name;
-      $datas[$value->_id]['section'] = $value->section_name;
-      $datas[$value->_id]['department'] = $value->dept_name;
-      $datas[$value->_id]['branch'] = $value->branch_name;
-      $datas[$value->_id]['region'] = $value->region;
-      $datas[$value->_id]['staff_grade'] = $value->staff_grade;
-      $datas[$value->_id]['job_family'] = $value->job_family;
-    }
-    // Member ที่ยังไม่ login เข้าระบบ จากการ IMPORT EXCEL
-    foreach($member_import_excel as $value) {
-      $datas[$value->_id]['employee_id'] = $value->employee_id;
-      $datas[$value->_id]['tinitial'] = $value->tinitial;
-      $datas[$value->_id]['firstname'] = $value->firstname;
-      $datas[$value->_id]['lastname'] = $value->lastname;
-      $datas[$value->_id]['workplace'] = $value->workplace;
-      $datas[$value->_id]['title'] = $value->title;
-      $datas[$value->_id]['company'] = $value->company;
-      $datas[$value->_id]['division'] = $value->division;
-      $datas[$value->_id]['section'] = $value->section;
-      $datas[$value->_id]['department'] = $value->department;
-      $datas[$value->_id]['branch'] = $value->branch;
-      $datas[$value->_id]['region'] = $value->region;
-      $datas[$value->_id]['staff_grade'] = $value->staff_grade;
-      $datas[$value->_id]['job_family'] = $value->job_family;
-    }
     
     // Play course
     foreach($play_courses as $play_course) {
@@ -245,6 +220,9 @@ class ReportController extends Controller
     foreach($play_courses_ends as $play_courses_end) {
       if(!empty($datas[(string)$play_courses_end->_id['user_id']])) {
         $datas[(string)$play_courses_end->_id['user_id']]['play_course_end'] = $play_courses_end->complete_ep;
+        if($play_courses_end->complete_ep>=$total_episode) {
+          $datas[(string)$play_courses_end->_id['user_id']]['play_course_end_all_ep'] = true;
+        }
       }
     }
 
@@ -261,10 +239,10 @@ class ReportController extends Controller
         $datas[(string)$posttest->_id['user_id']]['posttest'] = $posttest->maxTotalAmount;
       }
     }
-    $this->formatData($training_id, $course_id, $datas);
+    $this->formatData($course_id, $datas);
   }
 
-  public function formatData($training_id, $course_id, $datas) {
+  public function formatData($course_id, $datas) {
     $dataArray = [];
     $now = new UTCDateTime(Carbon::now()->timestamp * 1000);
     foreach ($datas as $data) {
@@ -284,6 +262,7 @@ class ReportController extends Controller
       $job_family = '';
       $play_course = 0;
       $play_course_end = 0;
+      $play_course_end_all_ep = false;
       $pretest = NULL;
       $posttest = NULL;
       if(!empty($data['employee_id'])) { $employee_id = $data['employee_id']; } else { $employee_id = ''; }
@@ -302,11 +281,11 @@ class ReportController extends Controller
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
       if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = 0; } 
       if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = 0; } 
+      if(!empty($data['play_course_end_all_ep'])) { $play_course_end_all_ep = $data['play_course_end_all_ep']; } else { $play_course_end_all_ep = false; } 
       if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
       if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
-      if(!empty($employee_id)) {
+      if(!empty($employee_id) && !empty($play_course)) {
         $dataArray[] = [
-          'training_id' => $training_id,
           'course_id' => $course_id,
           'employee_id' => $employee_id,
           'tinitial' => $tinitial,
@@ -324,46 +303,83 @@ class ReportController extends Controller
           'job_family' => $job_family,
           'play_course' => $play_course,
           'play_course_end' => $play_course_end,
+          'play_course_end_all_ep' => $play_course_end_all_ep,
           'pretest' => $pretest,
           'posttest' => $posttest,
           'status' => 1,
+          'created_day' => Carbon::now()->day,
+          'created_month' => Carbon::now()->month,
+          'created_year' => Carbon::now()->year,
           'created_at' => $now,
           'updated_at' => $now
         ];
       }
     }
     // dd($dataArray);
-    $this->insertDataArray($dataArray);
+    $this->insertDataArray('report_member_accesses_by_courses',$dataArray);
   }
 
-  public function insertDataArray($data) {
-		// ini_set("memory_limit","10M");
-		ini_set('memory_limit', '-1');
-		ini_set('max_execution_time', 1800);
-		$start = 0;
-		$length = 100;
+  public function insertDataArray($table,$data) {
+    // ini_set("memory_limit","10M");
+    ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 1800);
+    $start = 0;
+    $length = 100;
 
-		$limit = count($data);
-		while ($start < $limit) {
-			$data_slice = array_slice ( $data, $start, $length );
-			// dd($data_slice);
-			DB::table('report_member_accesses')->insert($data_slice);
-			$start += $length;
-		}
-		return array('status' => 'success');
-  }
-
-  public function update_branch() {
-    $query = Report_member_access::whereNull('region');
-    $query->select('employee_id');
-    $query->groupBy('employee_id')->limit(10000);
-    $datas = $query->get();
-
-    foreach($datas as $data) {
-      $employee = Employee::where('employee_id',$data->employee_id)->first(); dd($employee);
-      if(!empty($employee->region)) {
-        Report_member_access::where('employee_id',$data->employee_id)->update(['region' => $employee->region]);
-      }
+    $limit = count($data);
+    while ($start < $limit) {
+      $data_slice = array_slice ( $data, $start, $length );
+      // dd($data_slice);
+      DB::table($table)->insert($data_slice);
+      $start += $length;
     }
+    return array('status' => 'success');
+  }
+
+  public function member_access_content()
+  {
+    $smart_mesh = new ObjectId('5e44f6a5c8cf374d585b4985');
+    $giga = new ObjectId('5e534dc44b0bd00b8e1a3707');
+    // $report_member_access = Report_member_access::where('course_id',$smart_mesh)->get();
+    // $total_episode = 7;
+    $report_member_access = Report_member_access::where('course_id',$giga)->offset(110000)->limit(10000)->get();
+    $total_episode = 3;
+    $dataArray = [];
+    foreach($report_member_access as $row) {
+      $play_course_end_all_ep = false;
+      if($row->play_course_end>=$total_episode) {
+        $play_course_end_all_ep = true;
+      }
+      $dataArray[] = [
+        'course_id' => $row->course_id,
+        'employee_id' => $row->employee_id,
+        'tinitial' => $row->tinitial,
+        'firstname' => $row->firstname,
+        'lastname' => $row->lastname,
+        'workplace' => $row->workplace,
+        'title' => $row->title,
+        'company' => $row->company,
+        'division' => $row->division,
+        'section' => $row->section,
+        'department' => $row->department,
+        'branch' => $row->branch,
+        'region' => $row->region,
+        'staff_grade' => $row->staff_grade,
+        'job_family' => $row->job_family,
+        'play_course' => $row->play_course,
+        'play_course_end' => $row->play_course_end,
+        'play_course_end_all_ep' => $play_course_end_all_ep,
+        'pretest' => $row->pretest,
+        'posttest' => $row->posttest,
+        'status' => 1,
+        'created_day' => $row->created_at->day,
+        'created_month' => $row->created_at->month,
+        'created_year' => $row->created_at->year,
+        'created_at' => new UTCDateTime($row->created_at->timestamp * 1000),
+        'updated_at' => new UTCDateTime($row->created_at->timestamp * 1000)
+      ];
+    } 
+    
+    // $this->insertDataArray('report_member_accesses_by_courses',$dataArray);
   }
 }

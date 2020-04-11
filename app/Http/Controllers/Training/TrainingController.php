@@ -72,6 +72,17 @@ class TrainingController extends Controller
         foreach($data_member as $row) {
           array_push($arr_employee_id, $row->employee_id);
         }
+        
+        $employee = Employee::where('status',1);
+        $employee->where(function ($q) use ($search) {
+          $q->orWhere('tf_name','like',"%$search%");
+          $q->orWhere('tl_name','like',"%$search%");
+          $q->orWhere('employee_id','like',"%$search%");
+        });
+        $data_member = $employee->get();
+        foreach($data_member as $row) {
+          array_push($arr_employee_id, $row->employee_id);
+        }
       }
       
       $query = TrainingUser::query()->where('status',1);
@@ -161,6 +172,55 @@ class TrainingController extends Controller
       $query->orderBy('company');
       $company_name = $query->get();
 
+      $query = Employee::query();
+      $query->select('job_family');
+      $query->whereNotNull('job_family');
+      $query->groupBy('job_family');
+      $query->orderBy('job_family');
+      $job_family = $query->get();
+
+      $query = Employee::query();
+      $query->select('branch_name');
+      $query->whereNotNull('branch_name');
+      $query->groupBy('branch_name');
+      $query->orderBy('branch_name');
+      $branch_name = $query->get();
+
+      $query = Employee::query();
+      $query->select('region');
+      $query->whereNotNull('region');
+      $query->groupBy('region');
+      $query->orderBy('region');
+      $region = $query->get();
+
+      $query = Employee::query();
+      $query->select('division_name');
+      $query->whereNotNull('division_name');
+      $query->groupBy('division_name');
+      $query->orderBy('division_name');
+      $division_name = $query->get();
+
+      $query = Employee::query();
+      $query->select('section_name');
+      $query->whereNotNull('section_name');
+      $query->groupBy('section_name');
+      $query->orderBy('section_name');
+      $section_name = $query->get();
+
+      $query = Employee::query();
+      $query->select('staff_grade');
+      $query->whereNotNull('staff_grade');
+      $query->groupBy('staff_grade');
+      $query->orderBy('staff_grade');
+      $staff_grade = $query->get();
+
+      $query = Employee::query();
+      $query->select('title_name');
+      $query->whereNotNull('title_name');
+      $query->groupBy('title_name');
+      $query->orderBy('title_name');
+      $title_name = $query->get();
+
       if(empty($id)) {
         $data = new \stdClass();
         $data->id = '';
@@ -179,7 +239,14 @@ class TrainingController extends Controller
         'company' => $company,
         'course' => $course,
         'dept_name' => $dept_name,
-        'company_name' => $company_name
+        'company_name' => $company_name,
+        'job_family' => $job_family,
+        'branch_name' => $branch_name,
+        'region' => $region,
+        'division_name' => $division_name,
+        'section_name' => $section_name,
+        'staff_grade' => $staff_grade,
+        'title_name' => $title_name,
       ]; 
       return view('training.training_edit',$withData);
     }
@@ -449,10 +516,17 @@ class TrainingController extends Controller
     $employee_name = $request->input('employee_name');
     $company_name = $request->input('company_name');
     $dept_name = $request->input('dept_name');
+    $job_family = $request->input('job_family');
+    $branch_name = $request->input('branch_name');
+    $region = $request->input('region');
+    $division_name = $request->input('division_name');
+    $section_name = $request->input('section_name');
+    $staff_grade = $request->input('staff_grade');
+    $title_name = $request->input('title_name');
     $in_dept = $request->input('in_dept');
     $longevity = $request->input('longevity');
     $longevity_condition = $request->input('longevity_condition');
-
+    
     $head_employee_id = [];
     if(Auth()->user()->type=='jasmine') {
       array_push($head_employee_id, Auth()->user()->user_info->employee_id);
@@ -497,6 +571,27 @@ class TrainingController extends Controller
     if(!empty($dept_name)) {
       $department = Department::find($dept_name);
       $query->where('dept_name',$department->title);
+    }
+    if(!empty($job_family)) {
+      $query->where('job_family',$job_family);
+    }
+    if(!empty($branch_name)) {
+      $query->where('branch_name',$branch_name);
+    }
+    if(!empty($region)) {
+      $query->where('region',$region);
+    }
+    if(!empty($division_name)) {
+      $query->where('division_name',$division_name);
+    }
+    if(!empty($section_name)) {
+      $query->where('section_name',$section_name);
+    }
+    if(!empty($staff_grade)) {
+      $query->where('staff_grade',$staff_grade);
+    }
+    if(!empty($title_name)) {
+      $query->where('title_name',$title_name);
     }
     if(!empty($arr_pass_require_course)) {
       $query->whereIn('employee_id',$arr_pass_require_course);

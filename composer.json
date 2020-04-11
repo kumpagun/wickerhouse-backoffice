@@ -14,11 +14,13 @@
         "guzzlehttp/guzzle": "^6.5",
         "hashids/hashids": "^3.0",
         "intervention/image": "^2.5",
+        "jenssegers/agent": "^2.6",
         "jenssegers/mongodb": "^3.6",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^3.2.0",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "mobiledetect/mobiledetectlib": "^2.8",
         "mostafamaklad/laravel-permission-mongodb": "^1.10"
     },
     "require-dev": {

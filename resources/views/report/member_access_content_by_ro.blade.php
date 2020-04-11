@@ -18,7 +18,7 @@
   <div class="btn-group float-md-right mb-2 w-100" role="group" aria-label="Button group with nested dropdown">
     <form action="{{route('report_member_access_content_by_RO')}}" class=" w-100" method="POST">
       {{ csrf_field() }}
-      <label class="text-left"> Training List</label>
+      <label class="text-left"> รอบอบรม</label>
       <select name="search_group" class="form-control select2" onchange="this.form.submit()">
         @foreach($query_group as $key)
           <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
@@ -570,6 +570,17 @@
               right: '4%',
               bottom: '3%',
               containLabel: true
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {
+                show: true,
+                title: 'Download',
+                name: Date.now(),
+                lang: ['Save']
+              }
+            }
           },
           xAxis: {
               type: 'value'

@@ -211,6 +211,90 @@
                 </div>
               </fieldset>
             </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Job Family</label>
+                <select class="select2 form-control" id="job_family" name="job_family">
+                  <option value="">กรุณาเลือก Job Family</option>
+                  @foreach ($job_family as $item )
+                  <option value="{{ $item->job_family }}"> {{ $item->job_family }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Group</label>
+                <select class="select2 form-control" id="branch_name" name="branch_name">
+                  <option value="">กรุณาเลือก Group</option>
+                  @foreach ($branch_name as $item )
+                  <option value="{{ $item->branch_name }}"> {{ $item->branch_name }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Region</label>
+                <select class="select2 form-control" id="region" name="region">
+                  <option value="">กรุณาเลือก Region</option>
+                  @foreach ($region as $item )
+                  <option value="{{ $item->region }}"> {{ $item->region }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Division</label>
+                <select class="select2 form-control" id="division_name" name="division_name">
+                  <option value="">กรุณาเลือก Division</option>
+                  @foreach ($division_name as $item )
+                  <option value="{{ $item->division_name }}"> {{ $item->division_name }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Section</label>
+                <select class="select2 form-control" id="section_name" name="section_name">
+                  <option value="">กรุณาเลือก Section</option>
+                  @foreach ($section_name as $item )
+                  <option value="{{ $item->section_name }}"> {{ $item->section_name }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Staff Grade</label>
+                <select class="select2 form-control" id="staff_grade" name="staff_grade">
+                  <option value="">กรุณาเลือก Staff Grade</option>
+                  @foreach ($staff_grade as $item )
+                  <option value={{ $item->staff_grade }}> {{ $item->staff_grade }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
+            <div class="col-12 col-sm-6">
+              <fieldset class="form-group">
+                <label for="user-name">Title</label>
+                <select class="select2 form-control" id="title_name" name="title_name">
+                  <option value="">กรุณาเลือก Title</option>
+                  @foreach ($title_name as $item )
+                  <option value="{{ $item->title_name }}"> {{ $item->title_name }}
+                  </option>
+                @endforeach
+                </select>
+              </fieldset>
+            </div>
             <div class="col-12">
               <div class="form-group mb-2 longevity-repeater">
                 <label for="user-name">อายุงาน</label>
@@ -460,6 +544,13 @@
     var employee_name = $('#employee_name').val()
     var company_name = $('#company_name').val()
     var dept_name = $('#dept_name').val()
+    var job_family = $('#job_family').val()
+    var branch_name = $('#branch_name').val()
+    var region = $('#region').val()
+    var division_name = $('#division_name').val()
+    var section_name = $('#section_name').val()
+    var staff_grade = $('#staff_grade').val()
+    var title_name = $('#title_name').val()
     var in_dept = $('#in_dept').val()
     var url = "{{ route('training_employee_filter') }}"
     var longevity = []
@@ -486,7 +577,7 @@
       return false
     }
 
-    if(!employee_id && !employee_name && !company_name && !dept_name && longevity.length==0) {
+    if(!employee_id && !employee_name && !company_name && !dept_name && !job_family && !branch_name && !region && !division_name && !section_name && !staff_grade && !title_name && longevity.length==0) {
       swal.fire('กรุณากรอกอย่างน้อย 1 เงื่อนไข')
       $('.div-loading').hide();
       $('.div-employee').hide();
@@ -500,6 +591,13 @@
       employee_name: employee_name,
       company_name: company_name,
       dept_name: dept_name,
+      job_family: job_family,
+      branch_name: branch_name,
+      region: region,
+      division_name: division_name,
+      section_name: section_name,
+      staff_grade: staff_grade,
+      title_name: title_name,
       in_dept: in_dept,
       longevity: longevity,
       longevity_condition: longevity_condition
