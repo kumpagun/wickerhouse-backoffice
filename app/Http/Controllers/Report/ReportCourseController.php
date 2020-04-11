@@ -608,7 +608,7 @@ class ReportCourseController extends Controller
     return $query;
   }
   // User ไม่เข้าเรียน
-  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id, $search_department){
+  public function get_data_chart_user_inactive($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department){
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $match = [
         'play_course' => ['$eq'  => 0],
