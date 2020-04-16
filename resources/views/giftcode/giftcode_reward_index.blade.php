@@ -103,7 +103,7 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปืด</button>
+        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
         <button type="submit" class="btn btn-outline-primary">บันทึก</button>
       </div>
     </form>
