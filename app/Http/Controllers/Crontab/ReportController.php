@@ -33,7 +33,7 @@ class ReportController extends Controller
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
-    // $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
+    $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
     $trainings = $query->get(); 
     if(!empty($trainings)) {
       foreach($trainings as $row) {
@@ -101,7 +101,7 @@ class ReportController extends Controller
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('user_id', new ObjectId('5e8b276257b2e814054eeced'))->where('type','pretest')->groupBy('user_id','point')->get();
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
@@ -302,8 +302,8 @@ class ReportController extends Controller
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
       if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = 0; } 
       if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = 0; } 
-      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
-      if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
+      if(isset($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
+      if(isset($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
       if(!empty($employee_id)) {
         $dataArray[] = [
           'training_id' => $training_id,
@@ -332,7 +332,6 @@ class ReportController extends Controller
         ];
       }
     }
-    // dd($dataArray);
     $this->insertDataArray($dataArray);
   }
 
