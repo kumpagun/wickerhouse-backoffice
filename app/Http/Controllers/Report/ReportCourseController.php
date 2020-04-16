@@ -491,6 +491,10 @@ class ReportCourseController extends Controller
     $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $passing_score, $employee_id, $search_department); 
     
     $datas = [];
+    foreach($user_inactive as $row) {
+      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
+      $datas[$date]['inactive'] = $row->total;
+    }
     foreach($user_active as $row) {
       $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['active'] = $row->total;
@@ -498,10 +502,6 @@ class ReportCourseController extends Controller
     foreach($user_active_pass as $row) {
       $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['pass'] = $row->total;
-    }
-    foreach($user_inactive as $row) {
-      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
-      $datas[$date]['inactive'] = $row->total;
     }
     return $datas;
   }

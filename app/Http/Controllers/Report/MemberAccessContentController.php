@@ -432,13 +432,13 @@ class MemberAccessContentController extends Controller
     $user_inactive = $this->get_data_chart_user_inactive($training_id,$published_at,$expired_at, $employee_id); 
     
     $datas = [];
-    foreach($user_active as $row) {
-      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
-      $datas[$date]['active'] = $row->total;
-    }
     foreach($user_inactive as $row) {
       $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
       $datas[$date]['inactive'] = $row->total;
+    }
+    foreach($user_active as $row) {
+      $date = FuncClass::utc_to_carbon_format_date_no_format($row->_id->created_at)->format('Y-m-d');
+      $datas[$date]['active'] = $row->total;
     }
     return $datas;
   }
