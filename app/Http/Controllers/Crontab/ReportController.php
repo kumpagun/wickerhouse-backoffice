@@ -33,7 +33,7 @@ class ReportController extends Controller
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
-    // $query->where('_id',new ObjectId("5e5dc898f437eb6d4e64fe4f"));
+    // $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
     $trainings = $query->get(); 
     if(!empty($trainings)) {
       foreach($trainings as $row) {
@@ -101,7 +101,7 @@ class ReportController extends Controller
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('user_id', new ObjectId('5e8b276257b2e814054eeced'))->where('type','pretest')->groupBy('user_id','point')->get();
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
@@ -185,19 +185,19 @@ class ReportController extends Controller
       $values_id = (string)$value->_id;
       $datas[$values_id]['_id'] = $values_id;
       $datas[$values_id]['employee_id'] = $value->employees->employee_id;
-      $datas[$values_id]['tinitial'] = $value->employees->tinitial;
-      $datas[$values_id]['firstname'] = $value->employees->tf_name;
-      $datas[$values_id]['lastname'] = $value->employees->tl_name;
-      $datas[$values_id]['workplace'] = $value->employees->workplace;
-      $datas[$values_id]['title'] = $value->employees->title_name;
-      $datas[$values_id]['company'] = $value->employees->company;
-      $datas[$values_id]['division'] = $value->employees->division_name;
-      $datas[$values_id]['section'] = $value->employees->section_name;
-      $datas[$values_id]['department'] = $value->employees->dept_name;
-      $datas[$values_id]['branch'] = $value->employees->branch_name;
-      $datas[$values_id]['region'] = $value->employees->region;
-      $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
-      $datas[$values_id]['job_family'] = $value->employees->job_family;
+      if(!empty($value->employees->tinitial)) { $datas[$values_id]['tinitial'] = $value->employees->tinitial; } else { $datas[$values_id]['tinitial'] = ''; }
+      if(!empty($value->employees->tf_name)) { $datas[$values_id]['firstname'] = $value->employees->tf_name; } else { $datas[$values_id]['firstname'] = ''; }
+      if(!empty($value->employees->tl_name)) { $datas[$values_id]['lastname'] = $value->employees->tl_name; } else { $datas[$values_id]['lastname'] = ''; }
+      if(!empty($value->employees->workplace)) { $datas[$values_id]['workplace'] = $value->employees->workplace; } else { $datas[$values_id]['workplace'] = ''; }
+      if(!empty($value->employees->title_name)) { $datas[$values_id]['title'] = $value->employees->title_name; } else { $datas[$values_id]['title'] = ''; }
+      if(!empty($value->employees->company)) { $datas[$values_id]['company'] = $value->employees->company; } else { $datas[$values_id]['company'] = ''; }
+      if(!empty($value->employees->division_name)) { $datas[$values_id]['division'] = $value->employees->division_name; } else { $datas[$values_id]['division'] = ''; }
+      if(!empty($value->employees->section_name)) { $datas[$values_id]['section'] = $value->employees->section_name; } else { $datas[$values_id]['section'] = ''; }
+      if(!empty($value->employees->dept_name)) { $datas[$values_id]['department'] = $value->employees->dept_name; } else { $datas[$values_id]['department'] = ''; }
+      if(!empty($value->employees->branch_name)) { $datas[$values_id]['branch'] = $value->employees->branch_name; } else { $datas[$values_id]['branch'] = ''; }
+      if(!empty($value->employees->region)) { $datas[$values_id]['region'] = $value->employees->region; } else { $datas[$values_id]['region'] = ''; }
+      if(!empty($value->employees->staff_grade)) { $datas[$values_id]['staff_grade'] = $value->employees->staff_grade; } else { $datas[$values_id]['staff_grade'] = ''; }
+      if(!empty($value->employees->job_family)) { $datas[$values_id]['job_family'] = $value->employees->job_family; } else { $datas[$values_id]['job_family'] = ''; }
     }
     // Member ที่ยังไม่ login เข้าระบบ
     foreach($members_jasmine as $value) {
@@ -302,8 +302,8 @@ class ReportController extends Controller
       if(!empty($data['job_family'])) { $job_family = $data['job_family']; } else { $job_family = ''; } 
       if(!empty($data['play_course'])) { $play_course = $data['play_course']; } else { $play_course = 0; } 
       if(!empty($data['play_course_end'])) { $play_course_end = $data['play_course_end']; } else { $play_course_end = 0; } 
-      if(!empty($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
-      if(!empty($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
+      if(isset($data['pretest'])) { $pretest = $data['pretest']; } else { $pretest = NULL; }
+      if(isset($data['posttest'])) { $posttest = $data['posttest']; } else { $posttest = NULL; }
       if(!empty($employee_id)) {
         $dataArray[] = [
           'training_id' => $training_id,
@@ -332,7 +332,6 @@ class ReportController extends Controller
         ];
       }
     }
-    // dd($dataArray);
     $this->insertDataArray($dataArray);
   }
 
