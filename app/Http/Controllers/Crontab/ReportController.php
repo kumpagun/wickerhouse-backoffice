@@ -33,7 +33,7 @@ class ReportController extends Controller
     $query = Training::where('status',1);
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
-    $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
+    // $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
     $trainings = $query->get(); 
     if(!empty($trainings)) {
       foreach($trainings as $row) {
