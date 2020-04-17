@@ -81,7 +81,7 @@ deploy_production:
     name: production
     url: https://bo.jasonlinelearning.com
   only:
-    - master
+    - production
   tags:
     - laravel
   variables:
