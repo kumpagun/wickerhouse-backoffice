@@ -276,3 +276,8 @@ Route::group(['prefix' => 'crontab'], function () {
     Route::get('/update_branch', 'Crontab\ReportController@update_branch')->name('crontab_report_update_branch');
   });
 });
+
+// EMAIL
+Route::group(['prefix' => 'email'], function () {
+  Route::get('/test', 'EmailController@test')->name('email_test');
+});
