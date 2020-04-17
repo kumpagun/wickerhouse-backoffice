@@ -101,7 +101,7 @@ class ReportController extends Controller
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('user_id', new ObjectId('5e8b276257b2e814054eeced'))->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
