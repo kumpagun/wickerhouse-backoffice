@@ -69,7 +69,6 @@ class ReviewController extends Controller
     $query = Review_answer::where('training_id',$training_id);
     $query->where('course_id', $course_id);
     $query->where('status', 1);
-    $query->orderBy('created_at','asc');
     $datas = $query->chunk(1000, function($rows) use ($data_choice, &$datas_report, &$count_report) {
       foreach($rows as $data) {
         $review_id = (string)$data->review_id;
