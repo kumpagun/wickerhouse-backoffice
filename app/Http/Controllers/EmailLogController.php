@@ -31,26 +31,7 @@ class EmailLogController extends Controller
 
   public function index(Request $request) {
     $filter_type = $request->input('filter_type');
-    $filter_date = $request->input('filter_date');
-
     $type = ['new_training','alert_training_not_complete'];
-
-    if(!empty($filter_date)) {
-      $filter_date = explode('-', $filter_date);
-      $str_date_start = str_replace(' ', '', $filter_date[0]);
-      $str_date_end = str_replace(' ', '', $filter_date[1]);
-      $calendar_date_start = Carbon::parse($str_date_start)->format('Y-m-d');
-      $calendar_date_end = Carbon::parse($str_date_end)->format('Y-m-d');
-      
-      $date_start  = new UTCDateTime(Carbon::parse($str_date_start)->startOfDay());
-      $date_end  = new UTCDateTime(Carbon::parse($str_date_end)->endOfDay());
-    } else {
-      $calendar_date_start = Carbon::now()->subDays(6)->format('Y-m-d');
-      $calendar_date_end = Carbon::now()->format('Y-m-d');
-
-      $date_start  = new UTCDateTime(now()->subDays(6)->startOfDay());
-      $date_end  = new UTCDateTime(now()->endOfDay());
-    }
 
     $query = Mail_log::where('status',1);
     if(!empty($filter_type)) {
@@ -58,14 +39,12 @@ class EmailLogController extends Controller
     } else {
       $query->whereIn('type',$type);
     }
-    $query->where('created_at','>=',$date_start);
-    $query->where('created_at','<=',$date_end);
-    $mail_log = $query->get();
+    $query->orderBy('created_at','desc');
+    $mail_log = $query->paginate(25);
 
     $withInput = [
+      'type' => $type,
       'filter_type' => $filter_type,
-      'calendar_date_start' => $calendar_date_start,
-      'calendar_date_end' => $calendar_date_end,
       'mail_log' => $mail_log
     ];
 

@@ -287,6 +287,6 @@ Route::group(['prefix' => 'email'], function () {
 
 // Homework
 Route::group(['prefix' => 'email_log', 'middleware' => ['auth', 'role:admin|course|training|report']], function () {
-  Route::get('/', 'EmailLogController@index')->name('email_log_index');
+  Route::any('/', 'EmailLogController@index')->name('email_log_index');
   Route::get('/detail/{mail_log_id}', 'EmailLogController@detail')->name('email_log_detail');
 });

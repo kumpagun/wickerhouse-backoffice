@@ -163,15 +163,33 @@
 @endsection
 
 @section('style')
-  <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/tables/datatable/datatables.min.css')}}">  
+  <link rel="stylesheet" type="text/css" href="{{asset('stack-admin/app-assets/vendors/css/tables/datatable/datatables.min.css')}}"> 
   <style>
-    .no-table{
-      width: 10%;
+    .no-js #loader { display: none;  }
+    .js #loader { display: block; position: absolute; left: 100px; top: 0; }
+    .se-pre-con {
+      position: fixed;
+      /* opacity: .8; */
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: url("{{ asset('Images/static/preload.gif') }}") center no-repeat #fff;
     }
-    .content-table{
-      width: 40%;
+    .text-center {
+      text-align: center;
     }
-  </style>
+    .text-right {
+      text-align: right;
+    }
+    .o-scroll {
+      overflow: scroll;
+    }
+    thead input {
+      width: 100%;
+    }
+    </style>
 @endsection
 
 @section('script')
