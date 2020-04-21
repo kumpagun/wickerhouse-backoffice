@@ -602,6 +602,7 @@ class TrainingController extends Controller
     if(count($head_employee_id)>0) {
       $query->whereIn('heads',$head_employee_id);
     }
+
     if(!empty($longevity)) {
       foreach($longevity as $index => $row) {
         if(!empty($longevity_condition[$index]) && !empty($longevity[$index])) {

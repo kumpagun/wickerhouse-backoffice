@@ -147,6 +147,9 @@ Route::group(['prefix' => 'question', 'middleware' => ['auth', 'role:admin|quest
   Route::get('/', 'Course\QuestionController@question_index')->name('question_index');
   Route::get('/answer/{question_id}/{type?}', 'Course\QuestionController@question_answer_index')->name('question_answer_index');
   Route::post('/answer_store', 'Course\QuestionController@question_answer_store')->name('question_answer_store');
+  Route::any('/send_email', 'Course\QuestionController@question_send_email')->name('question_send_email');
+
+  
 });
 
 // Category
@@ -280,4 +283,10 @@ Route::group(['prefix' => 'crontab'], function () {
 // EMAIL
 Route::group(['prefix' => 'email'], function () {
   Route::get('/test', 'EmailController@test')->name('email_test');
+});
+
+// Homework
+Route::group(['prefix' => 'email_log', 'middleware' => ['auth', 'role:admin|course|training|report']], function () {
+  Route::get('/', 'EmailLogController@index')->name('email_log_index');
+  Route::get('/detail/{mail_log_id}', 'EmailLogController@detail')->name('email_log_detail');
 });
