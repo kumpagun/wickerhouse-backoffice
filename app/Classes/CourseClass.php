@@ -13,13 +13,14 @@ use App\Models\Category;
 use App\Models\Examination_group;
 use App\Models\Examination;
 use App\Models\Episode;
-use App\Models\Training;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
 use App\Models\Question;
 use App\Models\Review_choice;
 use App\Models\Quiz_group;
 use App\Models\Quiz;
+use App\Models\Teacher;
+use App\Models\Training;
 
 class CourseClass
 {   
@@ -140,5 +141,15 @@ class CourseClass
       return $course->require_course;
     }
     return [];
+  }
+
+  public function get_teacher_from_course($course_id) {
+    $course = Course::find($course_id);
+    if(!empty($course)) {
+      $teacher = Teacher::whereIn('_id',$course->teachers)->get();
+      return $teacher;
+    } else {
+      return null;
+    }
   }
 }

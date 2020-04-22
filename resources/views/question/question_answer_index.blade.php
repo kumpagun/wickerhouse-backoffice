@@ -20,7 +20,7 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
-      <strong>Success</strong> บันทึกเรียบร้อยแล้ว
+      <strong>Success</strong> ดำเนินการเรียบร้อยแล้ว
     </div>
   @endif
   <div class="row justify-content-center">
@@ -53,8 +53,10 @@
             <tr>
               <th class="text-center table-no">#</th>
               <th class="text-center">คำถาม</th>
-              <th class="text-center">วันที่ตอบ</th>
+              <th class="text-center">วันที่ถาม</th>
               <th class="text-center">ผล</th>
+              <th class="text-center">อีเมล์วิทยากร</th>
+              <th class="text-center">ส่งอีเมล์หาวิทยากร</th>
             </tr>
             @if(count($datas)>0)
             @foreach ($datas as $item)
@@ -65,9 +67,15 @@
                 </td>
                 <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->created_at) }}</td>
                 @if(!empty($item->answer))
-                <td class="text-center text-success">ตอบแล้ว</td>
+                  <td class="text-center text-success">ตอบแล้ว</td>
                 @else
-                <td class="text-center text-warning">ยังไม่ได้ตอบ</td>
+                  <td class="text-center text-warning">ยังไม่ได้ตอบ</td>
+                @endif
+                <td class="text-center">{{ $item->sent_mail }}</td>
+                @if(empty($item->sent_at)) 
+                  <td class="text-center"><button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#email-{{$item->_id}}">ส่งอีเมล์</button></td>
+                @else
+                  <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->sent_at) }}</td>
                 @endif
               </tr>
             @endforeach
@@ -116,6 +124,54 @@
             <div class="modal-footer">
               <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
               <button type="submit" class="btn btn-outline-primary">ตอบคำถาม</button>
+            </div>
+            @endif
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade text-left" id="email-{{$item->_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel1">ส่งอีเมล์หาวิทยากร</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <form class="form-horizontal" action="{{ route('question_send_email') }}" method="POST">
+            @csrf
+            <input type="hidden" name="question_id" value="{{ $item->_id }}" />
+            <div class="modal-body">
+              <div class="row mb-2">
+                <div class="col-12"><strong>คำถาม</strong></div>
+                <div class="col-12 word-break">{!! $item->question !!}</div>
+              </div>
+              <div class="row skin skin-square mb-2">
+                <div class="col-12 mb-1"><strong>รายชื่อวิทยากร</strong></div>
+                <div class="col-12 mb-2">
+                  @foreach (CourseClass::get_teacher_from_course($item->course_id) as $teacher)
+                    <fieldset>
+                      <input type="radio" name="teacher_id" value="{{ $teacher->_id }}" @if(empty($teacher->email)) disabled @endif required>
+                      <label for="input-radio-active">
+                        {{ $teacher->name }}
+                        @if(!empty($teacher->email))
+                          <span>({{ $teacher->email }})</span>
+                        @else
+                          <span class="text-danger">ไม่มีอีเมล์</span>
+                        @endif
+                      </label>
+                    </fieldset> 
+                  @endforeach
+                </div>
+              </div>
+              
+            </div>
+            @if(empty($item->answer))
+            <div class="modal-footer">
+              <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
+              <button type="submit" class="btn btn-outline-primary">ส่งอีเมล์</button>
             </div>
             @endif
           </form>

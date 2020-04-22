@@ -33,6 +33,7 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/core/colors/palette-gradient.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/fonts/simple-line-icons/style.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/css/pages/timeline.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/selects/select2.min.css') }}">
   <!-- END: Page CSS-->
 
   <!-- BEGIN: Custom CSS-->
@@ -42,7 +43,6 @@
   @yield('style')
   @stack('style')
   <!-- END Custom CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('stack-admin/app-assets/vendors/css/forms/selects/select2.min.css') }}">
   
   <!-- Include Quill stylesheet -->
   <link rel="stylesheet" type="text/css" href="{{asset('css/quill.snow.css')}}">
