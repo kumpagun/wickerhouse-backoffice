@@ -100,16 +100,19 @@ class QuestionController extends Controller
     $email_subject = 'Jas Online Learning: คุณมีคำถามจากคอร์สเรียน '.$course->title;
    
     if(!empty($member)) {
-      // array_push($email_replys, 'sorachai.b@mono.co.th');
-      array_push($email_replys, $member->email);
+      array_push($email_replys, 'sorachai.b@mono.co.th');
+      // array_push($email_replys, $member->email);
     }
    
-    $email_body = "<strong>เรียนครู ".$teacher->name."</strong><br/><br/>";
+    $email_body = "<strong>เรียนคุณ ".$teacher->name."</strong><br/><br/>";
     $email_body .= "<p>คุณมีคำถามจาก Jas Online Learning รายละเอียดดังนี้</p>";
     $email_body .= "<p><strong>วันที่</strong>: ".FuncClass::utc_to_carbon_format_time_zone_bkk($question->created_at)."</p>";
-    $email_body .= "<p><strong>คอร์ส</strong>: ".$course->title."</p>";
+    $email_body .= "<p><strong>หลักสูตร</strong>: ".$course->title."</p>";
     $email_body .= "<p><strong>ผู้ถาม</strong>: ".$member->fullname."</p>";
-    $email_body .= "<p><strong>คำถาม</strong>: ".$question->question."</p>";
+    $email_body .= "<p><strong>คำถาม</strong>: ".$question->question."</p><br/><br/>";
+    $email_body .= "<p>กรุณาตอบกลับทาง Link นี้: <a href='".URL::previous()."'>".URL::previous()."</a></p>";
+
+    
 
     $client = new Client();
     try {
