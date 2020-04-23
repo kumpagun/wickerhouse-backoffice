@@ -100,8 +100,8 @@ class QuestionController extends Controller
     $email_subject = 'Jas Online Learning: คุณมีคำถามจากคอร์สเรียน '.$course->title;
    
     if(!empty($member)) {
-      array_push($email_replys, 'sorachai.b@mono.co.th');
-      // array_push($email_replys, $member->email);
+      // array_push($email_replys, 'sorachai.b@mono.co.th');
+      array_push($email_replys, $member->email);
     }
    
     $email_body = "<strong>เรียนคุณ ".$teacher->name."</strong><br/><br/>";
