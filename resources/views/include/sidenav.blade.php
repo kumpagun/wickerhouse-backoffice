@@ -108,7 +108,7 @@
         <a href="{{ route('report_review_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('email_log_index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="">ประวัติการส่งอีเมล์</span></a>
+        <a href="{{ route('email_log_index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="">ประวัติการส่งอีเมล</span></a>
       </li>
       @endhasrole
 
