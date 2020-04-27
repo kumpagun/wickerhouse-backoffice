@@ -7,7 +7,7 @@
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('email_log_index') }}">ประวัติการส่งอีเมล์</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('email_log_index') }}">ประวัติการส่งอีเมล</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>

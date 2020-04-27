@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('ประวัติการส่งอีเมล์'); @endphp
+@php $title = strtoupper('ประวัติการส่งอีเมล'); @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
@@ -17,7 +17,7 @@
 <div class="btn-group float-md-right w-100" role="group" aria-label="Button group with nested dropdown">
   <form class="w-100" method="POST">
     {{ csrf_field() }}
-    <label class="text-left">ประเภทอีเมล์</label>
+    <label class="text-left">ประเภทอีเมล</label>
     <select name="filter_type" class="form-control select2" onchange="this.form.submit()">
       <option value="">ทั้งหมด</option>
       @foreach($type as $key)
@@ -58,7 +58,7 @@
             <tr>
               <th class="text-center no-table">#</th>
               <th class="text-center content-table">รอบการอบรม</th>
-              <th class="text-center">ประเภทอีเมล์</th>
+              <th class="text-center">ประเภทอีเมล</th>
               <th class="text-center">วันที่</th>
               <th class="text-center">จำนวนที่ส่ง</th>
             </tr>

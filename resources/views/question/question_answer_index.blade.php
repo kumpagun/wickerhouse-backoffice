@@ -55,8 +55,8 @@
               <th class="text-center">คำถาม</th>
               <th class="text-center">วันที่ถาม</th>
               <th class="text-center">ผล</th>
-              <th class="text-center">อีเมล์วิทยากร</th>
-              <th class="text-center">ส่งอีเมล์หาวิทยากร</th>
+              <th class="text-center">อีเมลวิทยากร</th>
+              <th class="text-center">ส่งอีเมลหาวิทยากร</th>
             </tr>
             @if(count($datas)>0)
             @foreach ($datas as $item)
@@ -73,7 +73,7 @@
                 @endif
                 <td class="text-center">{{ $item->sent_mail }}</td>
                 @if(empty($item->sent_at)) 
-                  <td class="text-center"><button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#email-{{$item->_id}}">ส่งอีเมล์</button></td>
+                  <td class="text-center"><button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#email-{{$item->_id}}">ส่งอีเมล</button></td>
                 @else
                   <td class="text-center">{{ FuncClass::utc_to_carbon_format_time_zone_bkk($item->sent_at) }}</td>
                 @endif
@@ -135,7 +135,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel1">ส่งอีเมล์หาวิทยากร</h4>
+            <h4 class="modal-title" id="myModalLabel1">ส่งอีเมลหาวิทยากร</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -159,7 +159,7 @@
                         @if(!empty($teacher->email))
                           <span>({{ $teacher->email }})</span>
                         @else
-                          <span class="text-danger">ไม่มีอีเมล์</span>
+                          <span class="text-danger">ไม่มีอีเมล</span>
                         @endif
                       </label>
                     </fieldset> 
@@ -171,7 +171,7 @@
             @if(empty($item->answer))
             <div class="modal-footer">
               <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">ปิด</button>
-              <button type="submit" class="btn btn-outline-primary">ส่งอีเมล์</button>
+              <button type="submit" class="btn btn-outline-primary">ส่งอีเมล</button>
             </div>
             @endif
           </form>
