@@ -654,6 +654,7 @@ class TrainingController extends Controller
         }
       }
     }
+    $this->update_training_total_employee($training_id);
 
     return redirect()->back()->with('success','success');
   }
