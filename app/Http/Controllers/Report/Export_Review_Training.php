@@ -7,9 +7,9 @@ use Maatwebsite\Excel\Concerns\FromView;
 class Export_Review implements FromView
 {
 
-  public function __construct($course,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total)
+  public function __construct($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total)
   {
-    $this->course = $course;
+    $this->training = $training;
     $this->review_group = $review_group;
     $this->reviews = $reviews;
     $this->data_question = $data_question;
@@ -22,7 +22,7 @@ class Export_Review implements FromView
   public function view(): View
   {
     return view('excel.review', [
-      'course' => $this->course,
+      'training' => $this->training,
       'review_group' => $this->review_group,
       'reviews' => $this->reviews,
       'data_question' => $this->data_question,

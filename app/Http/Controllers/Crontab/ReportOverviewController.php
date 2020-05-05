@@ -194,19 +194,19 @@ class ReportOverviewController extends Controller
       $values_id = (string)$value->_id;
       $datas[$values_id]['_id'] = $values_id;
       $datas[$values_id]['employee_id'] = $value->employees->employee_id;
-      $datas[$values_id]['tinitial'] = $value->employees->tinitial;
-      $datas[$values_id]['firstname'] = $value->employees->tf_name;
-      $datas[$values_id]['lastname'] = $value->employees->tl_name;
-      $datas[$values_id]['workplace'] = $value->employees->workplace;
-      $datas[$values_id]['title'] = $value->employees->title_name;
-      $datas[$values_id]['company'] = $value->employees->company;
-      $datas[$values_id]['division'] = $value->employees->division_name;
-      $datas[$values_id]['section'] = $value->employees->section_name;
-      $datas[$values_id]['department'] = $value->employees->dept_name;
-      $datas[$values_id]['branch'] = $value->employees->branch_name;
-      $datas[$values_id]['region'] = $value->employees->region;
-      $datas[$values_id]['staff_grade'] = $value->employees->staff_grade;
-      $datas[$values_id]['job_family'] = $value->employees->job_family;
+      if(!empty($value->employees->tinitial)) { $datas[$values_id]['tinitial'] = $value->employees->tinitial; } else { $datas[$values_id]['tinitial'] = ''; }
+      if(!empty($value->employees->tf_name)) { $datas[$values_id]['firstname'] = $value->employees->tf_name; } else { $datas[$values_id]['firstname'] = ''; }
+      if(!empty($value->employees->tl_name)) { $datas[$values_id]['lastname'] = $value->employees->tl_name; } else { $datas[$values_id]['lastname'] = ''; }
+      if(!empty($value->employees->workplace)) { $datas[$values_id]['workplace'] = $value->employees->workplace; } else { $datas[$values_id]['workplace'] = ''; }
+      if(!empty($value->employees->title_name)) { $datas[$values_id]['title'] = $value->employees->title_name; } else { $datas[$values_id]['title'] = ''; }
+      if(!empty($value->employees->company)) { $datas[$values_id]['company'] = $value->employees->company; } else { $datas[$values_id]['company'] = ''; }
+      if(!empty($value->employees->division_name)) { $datas[$values_id]['division'] = $value->employees->division_name; } else { $datas[$values_id]['division'] = ''; }
+      if(!empty($value->employees->section_name)) { $datas[$values_id]['section'] = $value->employees->section_name; } else { $datas[$values_id]['section'] = ''; }
+      if(!empty($value->employees->dept_name)) { $datas[$values_id]['department'] = $value->employees->dept_name; } else { $datas[$values_id]['department'] = ''; }
+      if(!empty($value->employees->branch_name)) { $datas[$values_id]['branch'] = $value->employees->branch_name; } else { $datas[$values_id]['branch'] = ''; }
+      if(!empty($value->employees->region)) { $datas[$values_id]['region'] = $value->employees->region; } else { $datas[$values_id]['region'] = ''; }
+      if(!empty($value->employees->staff_grade)) { $datas[$values_id]['staff_grade'] = $value->employees->staff_grade; } else { $datas[$values_id]['staff_grade'] = ''; }
+      if(!empty($value->employees->job_family)) { $datas[$values_id]['job_family'] = $value->employees->job_family; } else { $datas[$values_id]['job_family'] = ''; }
     }
     
     // Play course

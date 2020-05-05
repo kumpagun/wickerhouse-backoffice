@@ -32,14 +32,32 @@
       @endif
       <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user')}}" method="POST">
         {{ csrf_field() }}
-        <label class="col-4 text-right"> Training List</label>
-        <div class="col-8">
-          <div class="form-group">
-            <select name="search_group" class="form-control select2" onchange="this.form.submit()">
-              @foreach($query_group as $key)
-                <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
-              @endforeach
-            </select>
+        <div class="col-6">
+          <div class="row align-items-baseline">
+            <label class="col-12 col-md-4 text-left text-md-right"> Status</label>
+            <div class="col-12 col-md-8">
+              <div class="form-group">
+                <select name="filter_status" class="form-control select2" onchange="this.form.submit()">
+                  <option value="" @if(empty($filter_status)) selected @endif>ทั้งหมด</option>
+                  <option value="active" @if('active' == $filter_status) selected @endif>เข้าเรียน</option>
+                  <option value="inactive" @if('inactive' == $filter_status) selected @endif>ยังไม่เข้าเรียน</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="row align-items-baseline">
+            <label class="col-12 col-md-4 text-left text-md-right"> Training List</label>
+            <div class="col-12 col-md-8">
+              <div class="form-group">
+                <select name="search_group" class="form-control select2" onchange="this.form.submit()">
+                  @foreach($query_group as $key)
+                    <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </form>

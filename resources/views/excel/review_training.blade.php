@@ -8,7 +8,7 @@
   <table class="table table-hover table-sm">
     <thead>
       <tr>
-        <th colspan="99"><b>หลักสูตร{{ $course->title }}</b></th>
+        <th colspan="99"><b>หลักสูตร{{ $training->title }}</b></th>
       </tr>
       <tr>
         <th colspan="99"><b> ผู้ประเมิินจำนวน {{ $data_total }} คน</b></th>

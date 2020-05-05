@@ -29,8 +29,8 @@
             @if (!empty($datas) && count($datas) > 0)
               @foreach ($datas as $item)
                 <tr>
-                  <td class="text-center"><a href="{{ route('report_review_create', ['course_id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
-                  <td class="text-left"><a href="{{ route('report_review_create', ['course_id' => $item->id]) }}">{{ $item->title }}</a></td>
+                  <td class="text-center"><a href="{{ route('report_review_training_create', ['training_id' => $item->id]) }}">{{ $loop->iteration }}</a></td>
+                  <td class="text-left"><a href="{{ route('report_review_training_create', ['training_id' => $item->id]) }}">{{ $item->title }}</a></td>
                 </tr>
               @endforeach
             @else

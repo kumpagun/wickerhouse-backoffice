@@ -251,9 +251,14 @@ Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
   Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
   Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
   // REVIEW
-  Route::group(['prefix' => 'review'], function () {
+  Route::group(['prefix' => 'review-training'], function () {
+    Route::get('/', 'Report\ReviewTrainingController@review_index')->name('report_review_training_index');
+    Route::get('/create/{training_id}', 'Report\ReviewTrainingController@review_create')->name('report_review_training_create');
+    Route::get('/create_answer/{review_id}', 'Report\ReviewTrainingController@review_create_answer_text')->name('report_review_training_create_answer_text');
+  });
+  Route::group(['prefix' => 'review-normal'], function () {
     Route::get('/', 'Report\ReviewController@review_index')->name('report_review_index');
-    Route::get('/create/{training_id}', 'Report\ReviewController@review_create')->name('report_review_create');
+    Route::get('/create/{course_id}', 'Report\ReviewController@review_create')->name('report_review_create');
     Route::get('/create_answer/{review_id}', 'Report\ReviewController@review_create_answer_text')->name('report_review_create_answer_text');
   });
 });

@@ -40,6 +40,7 @@ class MemberAccessByUserController extends Controller
   {
     $search_input = $request->input('search_input');
     $search_group = $request->input('search_group');
+    $filter_status = $request->input('filter_status');
     $platform = $request->input('platform');
 
     $employee_id = [];
@@ -60,7 +61,12 @@ class MemberAccessByUserController extends Controller
     $query = Report_member_access::query()->where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
       $query->whereIn('employee_id',$employee_id);
-    }    
+    }  
+    if($filter_status=='active') {
+      $query->where('play_course','>',0);
+    } else if($filter_status=='inactive') {
+      $query->where('play_course',0);
+    }
     $datas = $query->get();
 
     $group_name = $datas_group->title;
@@ -79,6 +85,7 @@ class MemberAccessByUserController extends Controller
 
     return view('report.member_access_by_user', [
       'datas' => $datas,
+      'filter_status' => $filter_status,
       'query_group' => $query_group,
       'search_group' => $search_group,
       'update_date' => $update_date,
