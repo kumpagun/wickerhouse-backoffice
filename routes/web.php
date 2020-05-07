@@ -248,8 +248,8 @@ Route::match(['get','post'],'/dashboard-course2-filter', 'Report\ReportCourse2Co
 
 
 Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
-  Route::match(['get','post'],'/access-content-by-user', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
-  Route::get('/excel-users', 'Report\MemberAccessByUserController@access_content_by_user_excel')->name('report_access_content_by_user_excel');
+  Route::match(['get','post'],'/access-content-by-user-training', 'Report\MemberAccessByUserTrainingController@access_content_by_user')->name('report_access_content_by_user_training');
+  Route::match(['get','post'],'/access-content-by-user-normal', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
   // REVIEW
   Route::group(['prefix' => 'review-training'], function () {
     Route::get('/', 'Report\ReviewTrainingController@review_index')->name('report_review_training_index');
@@ -275,7 +275,7 @@ Route::group(['prefix' => 'certificate', 'middleware' => ['auth', 'role:admin|co
 Route::group(['prefix' => 'crontab'], function () {
   Route::group(['prefix' => 'report'], function () {
     Route::get('/access-content-by-user', 'Crontab\ReportController@access_content_by_user')->name('crontab_report_access_content_by_user');
-    Route::get('/access-content-excel', 'Report\MemberAccessByUserController@crontab_access_content_excel')->name('crontab_report_crontab_access_content_excel');
+    Route::get('/access-content-excel', 'Report\MemberAccessByUserTrainingController@crontab_access_content_excel')->name('crontab_report_crontab_access_content_excel');
 
     Route::get('/overview', 'Crontab\ReportOverviewController@index')->name('crontab_report_overview');
     Route::get('/overview/update', 'Crontab\ReportOverviewController@member_access_content');

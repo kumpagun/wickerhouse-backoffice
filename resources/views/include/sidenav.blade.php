@@ -102,7 +102,7 @@
         <span>รายงานรอบการอบรม</span><i class="feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
+        <a href="{{ route('report_access_content_by_user_training') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
       </li>
       <li class="nav-item">
         <a href="{{ route('report_review_training_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
@@ -114,9 +114,9 @@
       <li class="navigation-header">
         <span>รายงานหลักสูตรทั่วไป</span><i class="feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
       </li>
-      {{-- <li class="nav-item">
+      <li class="nav-item">
         <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
-      </li> --}}
+      </li>
       <li class="nav-item">
         <a href="{{ route('report_review_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
       </li>

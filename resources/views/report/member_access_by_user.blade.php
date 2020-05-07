@@ -48,7 +48,7 @@
         </div>
         <div class="col-6">
           <div class="row align-items-baseline">
-            <label class="col-12 col-md-4 text-left text-md-right"> Training List</label>
+            <label class="col-12 col-md-4 text-left text-md-right"> หลักสูตร</label>
             <div class="col-12 col-md-8">
               <div class="form-group">
                 <select name="search_group" class="form-control select2" onchange="this.form.submit()">
