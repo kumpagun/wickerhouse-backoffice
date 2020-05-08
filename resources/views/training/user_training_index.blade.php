@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('รายชื่อผู้เข้าอบรมทั้งหมด'); @endphp
+@php $title = "รายชื่อผู้เข้าอบรม: $training->title"; @endphp
 
 @section('content-header-right')
   <div class="btn-group float-md-right mb-2" role="group" aria-label="Button group with nested dropdown">

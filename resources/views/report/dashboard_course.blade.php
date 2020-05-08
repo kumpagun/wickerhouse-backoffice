@@ -285,6 +285,7 @@
           grid: {
               left: '100',
               right: '100',
+              containLabel: true
           },
           toolbox: {
             show: true,
@@ -382,6 +383,7 @@
           grid: {
               left: '100',
               right: '100',
+              containLabel: true
           },
           toolbox: {
             show: true,
@@ -472,7 +474,8 @@
         // Add custom colors
         color: ['#F98E76'],
         grid: {
-          left: 100
+          left: 100,
+          containLabel: true
         },
 
         
@@ -555,8 +558,9 @@
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
           grid: {
-              left: '100',
-              right: '100',
+            left: '100',
+            right: '100',
+            containLabel: true
           },
           toolbox: {
             show: true,

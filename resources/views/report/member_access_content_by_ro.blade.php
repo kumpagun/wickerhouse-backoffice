@@ -487,7 +487,8 @@
         // Add custom colors
         color: ['#16D39A', '#F98E76'],
         grid: {
-          left: 100
+          left: 100,
+          containLabel: true
         },
         toolbox: {
           show: true,
@@ -652,7 +653,8 @@
         // Add custom colors
         color: ['#F98E76'],
         grid: {
-          left: 230
+          left: 230,
+          containLabel: true
         },
 
         
