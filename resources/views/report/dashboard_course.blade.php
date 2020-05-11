@@ -189,45 +189,48 @@
         }
       }
       option = {
-          tooltip: {
-              trigger: 'item',
-              formatter: '{a} <br/>{b} : {c} ({d}%)'
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
+            }
+          }
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          textStyle: {
+            fontSize: 16
           },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
+          data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
+        },
+        color: ['#16D39A', '#F98E76'],
+        series: [
+          {
+            name: 'พนักงาน',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '50%'],
+            label: seriesLabel,
+            minAngle: 30,
+            data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.2)'
               }
             }
-          },
-          legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
-          },
-          color: ['#16D39A', '#F98E76'],
-          series: [
-            {
-              name: 'พนักงาน',
-              type: 'pie',
-              radius: '70%',
-              center: ['50%', '50%'],
-              label: seriesLabel,
-              minAngle: 30,
-              data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.2)'
-                }
-              }
-            }
-          ]
+          }
+        ]
       };
 
       myChart.setOption(option);
@@ -261,79 +264,82 @@
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)'],
+          textStyle: {
+            fontSize: 16
           },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
-          },
-          // Add custom colors
-          color: ['#F98E76', '#FDD835', '#16D39A'],
-          grid: {
-              left: '100',
-              right: '100',
-              containLabel: true
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        },
+        // Add custom colors
+        color: ['#F98E76', '#FDD835', '#16D39A'],
+        grid: {
+          left: '100',
+          right: '100',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
-          },
+          }
+        },
 
-          xAxis: {
-            name: 'Days',
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
-            axisLabel: {
-              formatter: '{value}',
-              rotate: 25
-            }
+        xAxis: {
+          name: 'Days',
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
+          axisLabel: {
+            formatter: '{value}',
+            rotate: 20
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value}'
           },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: '{value}'
-            },
-            max: function (value) {
-              return value.max + 500;
-            }
-          },
+          max: function (value) {
+            return value.max * 1.2;
+          }
+        },
 
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ยังไม่ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart['active']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart['pass']) !!}`)
-            },
-          ]
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
+          },
+          {
+            name: 'เข้าเรียน (ยังไม่ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart['active']) !!}`)
+          },
+          {
+            name: 'เข้าเรียน (ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart['pass']) !!}`)
+          },
+        ]
       };
       myChart.setOption(option);
       $(function () {
@@ -366,73 +372,76 @@
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)'],
+          textStyle: {
+            fontSize: 16
           },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
-          },
-          // Add custom colors
-          color: ['#F98E76', '#FDD835', '#16D39A'],
-          grid: {
-              left: '100',
-              right: '100',
-              containLabel: true
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        },
+        // Add custom colors
+        color: ['#F98E76', '#FDD835', '#16D39A'],
+        grid: {
+          left: '100',
+          right: '100',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+          axisLabel: {
+            formatter: '{value}',
+            rotate: 20
+          }
+        },
+        yAxis: {
+          type: 'value',
+          max: function (value) {
+            return value.max * 1.2;
+          }
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
           },
-          xAxis: {
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
-            axisLabel: {
-              formatter: '{value}',
-              rotate: 25
-            }
+          {
+            name: 'เข้าเรียน (ยังไม่ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
           },
-          yAxis: {
-            type: 'value',
-            max: function (value) {
-              return value.max + 500;
-            }
+          {
+            name: 'เข้าเรียน (ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
           },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ยังไม่ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {
@@ -474,7 +483,10 @@
           }
         },
         legend: {
-          data: ['คนไม่เข้าเรียน (%)']
+          data: ['คนไม่เข้าเรียน (%)'],
+          textStyle: {
+            fontSize: 16
+          },
         },
         // Add custom colors
         color: ['#F98E76'],
@@ -500,7 +512,7 @@
           data: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -552,70 +564,76 @@
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)'],
+          textStyle: {
+            fontSize: 16
           },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
-          },
-          // Add custom colors
-          color: ['#F98E76', '#FDD835', '#16D39A'],
-          grid: {
-            left: '100',
-            right: '100',
-            containLabel: true
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        },
+        // Add custom colors
+        color: ['#F98E76', '#FDD835', '#16D39A'],
+        grid: {
+          left: '100',
+          right: '100',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($data_by_ro['label']) !!}`),
+          axisLabel: {
+            formatter: '{value}',
+            rotate: 20
+          }
+        },
+        yAxis: {
+          type: 'value',
+          max: function (value) {
+            return value.max * 1.2;
+          }
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($data_by_ro['inactive']) !!}`)
           },
-          xAxis: {
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($data_by_ro['label']) !!}`),
-            axisLabel: {
-              formatter: '{value}',
-              rotate: 25
-            }
+          {
+            name: 'เข้าเรียน (ยังไม่ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($data_by_ro['active']) !!}`)
           },
-          yAxis: {
-              type: 'value'
+          {
+            name: 'เข้าเรียน (ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($data_by_ro['success']) !!}`)
           },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($data_by_ro['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ยังไม่ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($data_by_ro['active']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 30,
-              data: JSON.parse(`{!! json_encode($data_by_ro['success']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {

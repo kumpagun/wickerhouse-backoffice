@@ -410,6 +410,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           orient: 'vertical',
           left: 'left',
           data: JSON.parse(`{!! json_encode($course_type['label']) !!}`),
@@ -479,6 +482,9 @@
             }
           },
           legend: {
+            textStyle: {
+            fontSize: 16
+          },
               orient: 'vertical',
               left: 'left',
               data: JSON.parse(`{!! json_encode($employee_stat['label']) !!}`),
@@ -543,6 +549,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
         },
         // Add custom colors
@@ -640,6 +649,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
         },
         // Add custom colors
@@ -755,7 +767,7 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($company_stat['label']) !!}`),
           axisLabel: {
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -827,7 +839,7 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($company_3bb_stat['label']) !!}`),
           axisLabel: {
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -877,6 +889,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['หลักสูตรที่ได้รับความนิยม']
         },
         // Add custom colors
@@ -884,8 +899,6 @@
         grid: {
           left: 100
         },
-
-        
         toolbox: {
           show: true,
           feature: {
@@ -903,7 +916,7 @@
           nameLocation: 'middle',
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -960,6 +973,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['พนักงานเข้าเรียนมากที่สุด']
         },
         // Add custom colors
@@ -985,7 +1001,7 @@
           data: JSON.parse(`{!! json_encode($top5_employee['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -1042,6 +1058,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['แผนกที่พนักงานเข้าเรียนมากที่สุด']
         },
         // Add custom colors
@@ -1067,7 +1086,7 @@
           data: JSON.parse(`{!! json_encode($top5_department['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -1124,6 +1143,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['Job family ที่พนักงานเข้าเรียนมากที่สุด']
         },
         // Add custom colors
@@ -1149,7 +1171,7 @@
           data: JSON.parse(`{!! json_encode($top5_job_family['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
@@ -1206,6 +1228,9 @@
           }
         },
         legend: {
+          textStyle: {
+            fontSize: 16
+          },
           data: ['ผู้เรียนที่สำเร็จหลักสูตรมากที่สุด']
         },
         // Add custom colors
@@ -1231,7 +1256,7 @@
           data: JSON.parse(`{!! json_encode($top5_playend_all_ep['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {

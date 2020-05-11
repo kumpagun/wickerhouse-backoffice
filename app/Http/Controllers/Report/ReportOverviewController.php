@@ -854,7 +854,7 @@ class ReportOverviewController extends Controller
         ],
         [
           '$sort' => [
-            'count' => -1
+            'total_course' => -1
           ]
         ]
       ]);

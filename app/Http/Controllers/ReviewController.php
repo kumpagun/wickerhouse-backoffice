@@ -29,6 +29,24 @@ class ReviewController extends Controller
   {
     $this->middleware('auth');
   }
+  public function update_course($course_id) {
+    $course = Course::find($course_id);
+    $course->have_review = false;
+    $course->total_review = 0;
+    $course->save();
+    
+    $review_group = Review_group::where('course_id', new ObjectId($course_id))->where('status',1)->get(); 
+    $total = 0;
+    foreach($review_group as $row) {
+      $total += Review::where('review_group_id', new ObjectId($row->_id))->where('status',1)->count();
+    }
+    if($total > 0) {
+      $course->have_review = true;
+      $course->total_review = $total;
+    }
+    $course->save();
+    return true;
+  }
   public function get_review_group($course_id)
   {
     $data = Review_group::where('course_id',new ObjectId($course_id))->where('status',1)->get();
@@ -70,6 +88,8 @@ class ReviewController extends Controller
     $course->status = intval($status);
     $course->save();
 
+    $this->update_course($course_id);
+
     ActivityLogClass::log('แก้ไข review', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
   
     return redirect()->route('review_index', ['id' => $course->_id]);
@@ -78,6 +98,9 @@ class ReviewController extends Controller
     $review_group = Review_group::find($review_group_id);
     $review_group->status = 2;
     $review_group->save();
+
+    $this->update_course($review_group->course_id);
+
     ActivityLogClass::log('ลบ review group', new ObjectId(Auth::user()->_id), $review_group->getTable(), $review_group->getAttributes(),Auth::user()->username);
     return redirect()->route('course_create', ['id' => $review_group->course_id, '#review']);
   }
@@ -147,6 +170,8 @@ class ReviewController extends Controller
     $course->status = intval($status);
     $course->save();
 
+    $this->update_course($course_id);
+
     ActivityLogClass::log('เพิ่ม review_choice', new ObjectId(Auth::user()->_id), $course->getTable(), $course->getAttributes(),Auth::user()->username);
   
     return redirect()->route('review_index',['review_group_id'=>$review_group_id])->with('status',200);
@@ -186,6 +211,9 @@ class ReviewController extends Controller
     $review = Review::find($review_id);
     $review->status = 2;
     $review->save();
+
+    $this->update_course($review->course_id);
+
     ActivityLogClass::log('ลบ review', new ObjectId(Auth::user()->_id), $review->getTable(), $review->getAttributes(),Auth::user()->username);
     return redirect()->route('course_create', ['id' => $review->course_id, '#review']);
   }

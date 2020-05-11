@@ -59,7 +59,7 @@
                     @foreach($datas as $key => $value)
                     <tr>
                       <td class="">
-                        {{ $key }}
+                        @if(!empty($key)) {{ $key }} @else อื่นๆ @endif
                       </td>
                       <td class="text-right">
                         @if (!empty($value['user_active']))
@@ -176,7 +176,7 @@
                     @foreach($datas as $key => $value)
                     <tr>
                       <td class="">
-                        {{ $key }}
+                        @if(!empty($key)) {{ $key }} @else อื่นๆ @endif
                       </td>
                       <td class="text-right">
                         @if (!empty($value['user_inactive']))
@@ -245,7 +245,7 @@
                     @foreach($datas as $key => $value)
                     <tr>
                       <td class="">
-                        {{ $key }}
+                        @if(!empty($key)) {{ $key }} @else อื่นๆ @endif
                       </td>
                       <td class="text-right">
                         @if (!empty($value['user_inactive']))
@@ -413,9 +413,12 @@
             }
           },
           legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
+            orient: 'vertical',
+            left: 'left',
+            textStyle: {
+              fontSize: 16
+            },
+            data: JSON.parse(`{!! json_encode($pie_chart['label']) !!}`),
           },
           color: ['#16D39A', '#F98E76'],
           series: [
@@ -425,6 +428,7 @@
               radius: '70%',
               center: ['50%', '50%'],
               label: seriesLabel,
+              minAngle: 30,
               data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
               emphasis: {
                 itemStyle: {
@@ -457,11 +461,13 @@
       var myChart = echarts.init(document.getElementById('basic-bar'));
       var seriesLabel = {
         normal: {
-          show: true,
-          fontSize: 14,
-          color: '#000',
-          textBorderColor: '#333',
-          textBorderWidth: 2
+          label : {
+            fontSize: 14,
+            show: true,
+            color: '#000',
+            textBorderColor: '#333',
+            textBorderWidth: 1
+          }
         }
       }
 
@@ -473,7 +479,10 @@
           }
         },
         legend: {
-          data: ['เข้าเรียน', 'ไม่เข้าเรียน']
+          data: ['เข้าเรียน', 'ไม่เข้าเรียน'],
+          textStyle: {
+            fontSize: 16
+          },
         },
         // Add custom colors
         color: ['#16D39A', '#F98E76'],
@@ -508,14 +517,14 @@
           {
             name: 'เข้าเรียน',
             type: 'bar',
-            itemStyle : { normal: {label : {show: true,color: '#000',textBorderColor: '#333',textBorderWidth: 1,position: 'insideRight'}}},
+            itemStyle : seriesLabel,
             barMinHeight: 50,
             data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
           },
           {
             name: 'ไม่เข้าเรียน',
             type: 'bar',
-            itemStyle : { normal: {label : {show: true,color: '#000',textBorderColor: '#333',textBorderWidth: 1, position: 'insideRight'}}},
+            itemStyle : seriesLabel,
             barMinHeight: 50,
             data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
           }
@@ -549,67 +558,73 @@
         }
       }
       option = {
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)'],
+          textStyle: {
+            fontSize: 16
+          },
+        },
+        // Add custom colors
+        color: ['#F98E76', '#FDD835', '#16D39A'],
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'value',
+          max: function (value) {
+            return value.max * 1.2;
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
           },
-          legend: {
-            data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+          {
+            name: 'เข้าเรียน (ยังไม่ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
           },
-          // Add custom colors
-          color: ['#F98E76', '#FDD835', '#16D39A'],
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
+          {
+            name: 'เข้าเรียน (ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
           },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
-            }
-          },
-          xAxis: {
-            type: 'value'
-          },
-          yAxis: {
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
-          },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 50,
-              data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ยังไม่ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 50,
-              data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              barMinHeight: 50,
-              data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {
@@ -647,7 +662,10 @@
           }
         },
         legend: {
-          data: ['% คนไม่เข้าเรียน']
+          data: ['% คนไม่เข้าเรียน'],
+          textStyle: {
+            fontSize: 16
+          },
         },
         // Add custom colors
         color: ['#F98E76'],
