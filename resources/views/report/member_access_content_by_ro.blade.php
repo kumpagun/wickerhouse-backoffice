@@ -49,7 +49,7 @@
                     <th class="align-middle text-center">DeptName</th>
                     <th class="align-middle text-center">เข้าเรียน</th>
                     <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
-                    <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
+                    <th class="align-middle text-center">เข้าเรียน(ยังไม่ผ่าน)</th>
                     <th class="align-middle text-center">ยังไม่เข้าเรียน</th>
                     <th class="align-middle text-center">Total</th>
                   </tr>
@@ -167,7 +167,7 @@
                   <tr class="second-row">
                     <th class="align-middle text-center">DeptName</th>
                     <th class="align-middle text-center">ยังไม่เข้าเรียน</th>
-                    <th class="align-middle text-center">เข้าเรียน(ไม่ผ่าน)</th>
+                    <th class="align-middle text-center">เข้าเรียน(ยังไม่ผ่าน)</th>
                     <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
                   </tr>
                 </thead>
@@ -388,18 +388,12 @@
       var myChart = echarts.init(document.getElementById('simple-pie-chart'));
       var seriesLabel = {
         normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
           textBorderWidth: 1,
-          position: 'insideRight'
+          formatter: '{d}%',
+          position: 'inside'
         }
       }
       option = {
@@ -430,12 +424,7 @@
               type: 'pie',
               radius: '70%',
               center: ['50%', '50%'],
-              label: {
-                normal: {
-                  formatter: '{d}%',
-                  position: 'inside'
-                }
-              },
+              label: seriesLabel,
               data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
               emphasis: {
                 itemStyle: {
@@ -469,6 +458,8 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
           textBorderWidth: 2
         }
@@ -517,13 +508,15 @@
           {
             name: 'เข้าเรียน',
             type: 'bar',
-            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+            itemStyle : { normal: {label : {show: true,color: '#000',textBorderColor: '#333',textBorderWidth: 1,position: 'insideRight'}}},
+            barMinHeight: 50,
             data: JSON.parse(`{!! json_encode($chart['active']) !!}`),
           },
           {
             name: 'ไม่เข้าเรียน',
             type: 'bar',
-            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+            itemStyle : { normal: {label : {show: true,color: '#000',textBorderColor: '#333',textBorderWidth: 1, position: 'insideRight'}}},
+            barMinHeight: 50,
             data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
           }
         ]
@@ -549,28 +542,29 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          textBorderWidth: 1
         }
       }
       option = {
           tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
           },
           legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+            data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
           },
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
           grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
           },
           toolbox: {
             show: true,
@@ -584,11 +578,11 @@
             }
           },
           xAxis: {
-              type: 'value'
+            type: 'value'
           },
           yAxis: {
-              type: 'category',
-              data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+            type: 'category',
+            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
           },
           series: [
             {
@@ -596,13 +590,15 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 50,
               data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
             },
             {
-              name: 'เข้าเรียน (ไม่ผ่าน)',
+              name: 'เข้าเรียน (ยังไม่ผ่าน)',
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 50,
               data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
             },
             {
@@ -610,6 +606,7 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 50,
               data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
             },
           ]
@@ -635,6 +632,8 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
           textBorderWidth: 1
         }
@@ -689,6 +688,7 @@
             stack: 'Total',
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`),
+            barMinHeight: 50,
             label: seriesLabel
           }
         ]

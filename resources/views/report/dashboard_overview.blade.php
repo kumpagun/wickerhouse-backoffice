@@ -53,7 +53,7 @@
     <div class="col-lg-6 col-sm-12">
       <div class="card" id="pie">
         <div class="card-header">
-          <h4 class="card-title text-center">จำนวนพนักงานทั้งสิ้น {{ $all_employee }} คน</h4>
+          <h4 class="card-title text-center">จำนวนพนักงานทั้งสิ้น {{ number_format($all_employee) }} คน</h4>
         </div>
         <div class="card-content collapse show">
           <div class="card-body">
@@ -386,18 +386,11 @@
       var myChart = echarts.init(document.getElementById('chart-1'));
       var seriesLabel = {
         normal: {
-          show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          formatter: '{b} {c} หลักสูตร',
+          position: 'inside'
         }
       }
       option = {
@@ -428,12 +421,8 @@
             type: 'pie',
             radius: '70%',
             center: ['50%', '50%'],
-            label: {
-              normal: {
-                formatter: '{b} {c} หลักสูตร',
-                position: 'inside'
-              }
-            },
+            label: seriesLabel,
+            minAngle: 30,
             data: JSON.parse(`{!! json_encode($course_type['total']) !!}`),
             emphasis: {
               itemStyle: {
@@ -466,18 +455,11 @@
       var myChart = echarts.init(document.getElementById('chart-2'));
       var seriesLabel = {
         normal: {
-          show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          formatter: '{d}%',
+          position: 'inside'
         }
       }
       option = {
@@ -508,12 +490,8 @@
               type: 'pie',
               radius: '70%',
               center: ['50%', '50%'],
-              label: {
-                normal: {
-                  formatter: '{d}%',
-                  position: 'inside'
-                }
-              },
+              label: seriesLabel,
+              minAngle: 30,
               data: JSON.parse(`{!! json_encode($employee_stat['total']) !!}`),
               emphasis: {
                 itemStyle: {
@@ -552,7 +530,7 @@
           },
           color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
+          fontSize: 14,
           position: 'inside'
         }
       }
@@ -649,7 +627,7 @@
           },
           color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
+          fontSize: 14,
           position: 'inside'
         }
       }
@@ -738,6 +716,15 @@
 
     function chart5() {
       var myChart = echarts.init(document.getElementById('chart-5'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          color: '#000',
+          textBorderColor: '#333',
+          fontSize: 14,
+          formatter: '{c}%'
+        }
+      }
       option = {
         tooltip: {
           trigger: 'axis',
@@ -779,7 +766,8 @@
         },
         series: [{
           data: JSON.parse(`{!! json_encode($company_stat['total']) !!}`),
-          type: 'line'
+          type: 'line',
+          // label: seriesLabel
         }]
       };
       myChart.setOption(option);
@@ -800,6 +788,15 @@
 
     function chart6() {
       var myChart = echarts.init(document.getElementById('chart-6'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          color: '#000',
+          textBorderColor: '#333',
+          fontSize: 14,
+          formatter: '{c}%'
+        }
+      }
       option = {
         tooltip: {
           trigger: 'axis',
@@ -841,7 +838,8 @@
         },
         series: [{
           data: JSON.parse(`{!! json_encode($company_3bb_stat['total']) !!}`),
-          type: 'line'
+          type: 'line',
+          // label: seriesLabel
         }]
       };
       myChart.setOption(option);
@@ -865,8 +863,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -901,6 +900,7 @@
         xAxis: {
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_course_general['label']) !!}`),
+          nameLocation: 'middle',
           axisLabel: {
             formatter: '{value}',
             rotate: 25
@@ -918,6 +918,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_course_general['total']) !!}`),
             label: seriesLabel
@@ -945,8 +946,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -998,6 +1000,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_employee['total']) !!}`),
             label: seriesLabel
@@ -1025,8 +1028,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1078,6 +1082,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_department['total']) !!}`),
             label: seriesLabel
@@ -1105,8 +1110,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1158,6 +1164,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_job_family['total']) !!}`),
             label: seriesLabel
@@ -1185,8 +1192,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1238,6 +1246,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_playend_all_ep['total']) !!}`),
             label: seriesLabel

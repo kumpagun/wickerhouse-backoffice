@@ -245,7 +245,7 @@ class MemberAccessContentController extends Controller
     } else {
       return view('report.member_access_content_by_ro',[
         'training_title' => $training_title,
-        'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
+        'last_update' => FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($last_update,'d/m/Y H:i:s'),
         'query_group' => $query_group,
         'search_group' => $search_group,
         'datas' =>  $new_datas,

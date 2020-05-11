@@ -30,6 +30,7 @@ class ReportOverviewController extends Controller
   {
     $this->middleware('auth');
     $this->region_full = [
+      'บริหารส่วนกลาง',
       'ภาคตะวันออก (RO1)',
       'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
       'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
@@ -42,6 +43,7 @@ class ReportOverviewController extends Controller
       'กรุงเทพฯและปริมณฑล (RO10)'
     ];
     $this->region_short = [
+      'บริหารส่วนกลาง',
       'RO1',
       'RO2',
       'RO3',
@@ -557,8 +559,14 @@ class ReportOverviewController extends Controller
     $data_back['result'] = [];
     $data_back['total'] = [];
     $total_all = 0;
+
     foreach($member_access_by_course as $row) {
-     
+      $index_region = array_search($row->_id['region'], $this->region_full);
+      if(!$index_region) {
+        array_push($data_back['label'],$this->region_short[0]);
+        array_push($data_back['result'],$row->total_user);
+        $total_all += $row->total_user;
+      }
     }
 
     foreach($this->region_full as $region) {
@@ -664,7 +672,7 @@ class ReportOverviewController extends Controller
     $loop = 1;
     foreach($member_access_by_course as $row) {
       if($loop <= 5) {
-        array_push($data_back['label'], CourseClass::get_name_course($row->_id['course_id']));
+        array_push($data_back['label'], mb_substr(CourseClass::get_name_course($row->_id['course_id']), 0, 20, 'UTF-8'));
         array_push($data_back['total'], $row->count);
       }
       $loop++;

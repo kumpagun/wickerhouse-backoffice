@@ -308,14 +308,12 @@
     @include('course.detail-episode_group')
     {{-- Document --}}
     @include('course.detail-document')
-    @if($data->type=='standard')
-      {{-- Examination --}}
-      @include('course.detail-examination_list')
-      {{-- Quiz --}}
-      @include('course.detail-quiz_list')
-      {{-- Homework --}}
-      @include('course.detail-homework_list')
-    @endif
+    {{-- Examination --}}
+    @include('course.detail-examination_list')
+    {{-- Quiz --}}
+    @include('course.detail-quiz_list')
+    {{-- Homework --}}
+    @include('course.detail-homework_list')
     {{-- Review --}}
     @include('course.detail-review')
   @endif
