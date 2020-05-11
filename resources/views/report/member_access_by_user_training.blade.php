@@ -30,11 +30,25 @@
         <div class="col-12">DeptName <span class="text-primary">{{ Auth::user()->user_info['department'] }}</span></div>
       </div>
       @endif
-      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user')}}" method="POST">
+      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user_training')}}" method="POST">
         {{ csrf_field() }}
         <div class="col-6">
           <div class="row align-items-baseline">
-            <label class="col-12 col-md-4 text-left text-md-right"> หลักสูตร</label>
+            <label class="col-12 col-md-4 text-left text-md-right"> Status</label>
+            <div class="col-12 col-md-8">
+              <div class="form-group">
+                <select name="filter_status" class="form-control select2" onchange="this.form.submit()">
+                  <option value="" @if(empty($filter_status)) selected @endif>ทั้งหมด</option>
+                  <option value="active" @if('active' == $filter_status) selected @endif>เข้าเรียน</option>
+                  <option value="inactive" @if('inactive' == $filter_status) selected @endif>ยังไม่เข้าเรียน</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="row align-items-baseline">
+            <label class="col-12 col-md-4 text-left text-md-right"> Training List</label>
             <div class="col-12 col-md-8">
               <div class="form-group">
                 <select name="search_group" class="form-control select2" onchange="this.form.submit()">
@@ -53,7 +67,7 @@
           {{-- <a href="{{ $path }}" class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a> --}}
-          <a href="{{ route('report_access_content_by_user', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
+          <a href="{{ route('report_access_content_by_user_training', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a>
         </div>
@@ -77,6 +91,7 @@
             <th class="text-center align-middle">Region</th>
             <th class="text-center align-middle">StaffGrade</th>
             <th class="text-center align-middle">JobFamily</th>
+            <th class="text-center align-middle">Status</th>
             <th class="text-center align-middle">Pretest</th>
             <th class="text-center align-middle">Posttest</th>
             <th class="text-center align-middle">Course Complete</th>
@@ -164,6 +179,12 @@
                   <td class="text-center">{{ $data->job_family }}</td>
                 @else 
                   <td class="text-center">-</td>
+                @endif
+
+                @if(!empty($data->play_course)) 
+                  <td class="text-left text-success">เข้าเรียนแล้ว</td>
+                @else 
+                  <td class="text-left text-danger">ยังไม่เข้าเรียน</td>
                 @endif
 
                 @if(isset($data->pretest)) 

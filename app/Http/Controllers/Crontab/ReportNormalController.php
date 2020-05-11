@@ -14,7 +14,7 @@ use App\Models\Member_jasmine;
 use App\Models\Employee;
 use App\Models\Report_overview;
 use App\Models\Report_member_access;
-use App\Models\Report_member_access_by_course;
+use App\Models\Report_member_access_except_training;
 use App\Models\Course;
 use App\Models\Training;
 use App\Models\TrainingUser;
@@ -22,7 +22,7 @@ use App\Models\Examination_user;
 use App\Models\User_play_course_log;
 use App\Models\User_play_course_end;
 
-class ReportOverviewController extends Controller
+class ReportNormalController extends Controller
 {
   // CRONTAB 192.168.30.16
   public function index (Request $request)
@@ -37,8 +37,7 @@ class ReportOverviewController extends Controller
     $courses = $query->get(); 
     if(!empty($courses)) {
       foreach($courses as $row) {
-        // Report_overview::where('created_at', '<', $date)->where('training_id', new ObjectId($row->_id))->where('status', 1)->update(['status' => 0]);
-        Report_member_access_by_course::where('created_at', '>=', $date)->where('course_id', new ObjectId($row->_id))->where('status',1)->delete();
+        Report_member_access_except_training::where('course_id', new ObjectId($row->_id))->where('status',1)->delete();
         $this->get_data($row);
       }
     }
@@ -88,7 +87,8 @@ class ReportOverviewController extends Controller
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'training_id' => [ '$eq' => null ]
           ]
         ], 
         [
@@ -116,7 +116,8 @@ class ReportOverviewController extends Controller
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'training_id' => [ '$eq' => null ]
           ]
         ], [
           '$group' => [
@@ -142,7 +143,8 @@ class ReportOverviewController extends Controller
         [
           '$match' => [
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'training_id' => [ '$eq' => null ]
           ]
         ], [
           '$group' => [
@@ -163,7 +165,7 @@ class ReportOverviewController extends Controller
     });
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->whereNull('training_id')->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
     
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
@@ -172,7 +174,8 @@ class ReportOverviewController extends Controller
           '$match' => [
             'type' => 'posttest',
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'training_id' => [ '$eq' => null ]
           ]
         ],
         [
@@ -316,7 +319,7 @@ class ReportOverviewController extends Controller
       }
     }
     // dd($dataArray);
-    $this->insertDataArray('report_member_accesses_by_courses',$dataArray);
+    $this->insertDataArray('report_member_access_except_trainings',$dataArray);
   }
 
   public function insertDataArray($table,$data) {
@@ -380,6 +383,6 @@ class ReportOverviewController extends Controller
       ];
     } 
     
-    // $this->insertDataArray('report_member_accesses_by_courses',$dataArray);
+    // $this->insertDataArray('report_member_access_except_trainings',$dataArray);
   }
 }

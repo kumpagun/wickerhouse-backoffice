@@ -109,79 +109,84 @@
     }
   </script>
   <script>
-    chart3()
+    chart1()
 
-    function chart3() {
+    function chart1() {
       var myChart = echarts.init(document.getElementById('stacked-bar'));
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
           position: 'inside'
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
-          },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
-          },
-          // Add custom colors
-          color: ['#F98E76', '#FDD835', '#a5a5a5'],
-          grid: {
-              left: '100',
-              right: '100',
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+        },
+        // Add custom colors
+        color: ['#F98E76', '#FDD835', '#a5a5a5'],
+        grid: {
+          left: '100',
+          right: '100',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
+          axisLabel: {
+            formatter: '{value}',
+            rotate: 25
+          }
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
           },
-          xAxis: {
-            type: 'category',
-            data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
-            axisLabel: {
-              formatter: '{value}',
-              rotate: 25
-            }
+          {
+            name: 'เข้าเรียน (ยังไม่ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
           },
-          yAxis: {
-              type: 'value'
+          {
+            name: 'เข้าเรียน (ผ่าน)',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 30,
+            data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
           },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ไม่ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
-            },
-            {
-              name: 'เข้าเรียน (ผ่าน)',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {

@@ -26,7 +26,7 @@
             <th class="text-center">หัวข้อแบบประเมิน</th>
             <th class="text-center">Action</th>
           </tr>
-            @if(!empty($review_group))
+            @if(!empty($review_group) && count($review_group)>0)
               @foreach ($review_group as $item)
                 <tr>
                   <td class="align-baseline text-left"><a href="{{ route('review_index', ['review_group_id' => $item->_id]) }}">{{ $item->title }}</a></td>

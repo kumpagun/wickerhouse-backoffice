@@ -53,7 +53,7 @@
     <div class="col-lg-6 col-sm-12">
       <div class="card" id="pie">
         <div class="card-header">
-          <h4 class="card-title text-center">จำนวนพนักงานทั้งสิ้น {{ $all_employee }} คน</h4>
+          <h4 class="card-title text-center">จำนวนพนักงานทั้งสิ้น {{ number_format($all_employee) }} คน</h4>
         </div>
         <div class="card-content collapse show">
           <div class="card-body">
@@ -65,7 +65,7 @@
   </div>
 
   <div class="row row-eq-heigt">
-    <div class="col-lg-4 col-sm-12 mb-2">
+    <div class="col-lg-6 col-sm-12 mb-2">
 
       <div class="card h-100">
         <div class="card-header">
@@ -88,28 +88,7 @@
       </div>
 
     </div>
-    <div class="col-lg-8 col-sm-12 mb-2">
-
-      <div class="card  h-100">
-        <div class="card-header">
-          <h4 class="card-title">หลักสูตรมาตรฐาน</h4>
-        </div>
-        <div class="card-content collapse show">
-          <div class="card-body">
-            @php
-              $total_course = count($course_standard_stat['label']);   
-              $size = $total_course * 55; 
-            @endphp
-            <div id="chart-3" class="echart-container" style="height: {{$size}}px;"></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="row row-eq-heigt">
-    <div class="col-lg-4 col-sm-12 mb-2">
+    <div class="col-lg-6 col-sm-12 mb-2">
 
       <div class="card h-100">
         <div class="card-header">
@@ -132,7 +111,32 @@
       </div>
 
     </div>
-    <div class="col-lg-8 col-sm-12 mb-2">
+    
+  </div>
+
+  <div class="row row-eq-heigt">
+    <div class="col-12 mb-2">
+
+      <div class="card h-100">
+        <div class="card-header">
+          <h4 class="card-title">หลักสูตรมาตรฐาน</h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            @php
+              $total_course = count($course_standard_stat['label']);   
+              $size = $total_course * 55; 
+              if($size < 150) {
+                $size = 150;
+              }
+            @endphp
+            <div id="chart-3" class="echart-container" style="height: {{$size}}px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 mb-2">
 
       <div class="card h-100">
         <div class="card-header">
@@ -143,6 +147,9 @@
             @php
             $total_course = count($course_general_stat['label']);   
             $size = $total_course * 55; 
+            if($size < 150) {
+              $size = 150;
+            }
           @endphp
           <div id="chart-4" class="echart-container" style="height: {{$size}}px;"></div>
           </div>
@@ -350,6 +357,10 @@
       $('#datepicker').daterangepicker({
         startDate: start,
         endDate: end,
+        locale: {
+          format: 'DD/MM/YYYY'
+        },
+        // format: 'DD/MMM/YYYY'
       }, cb);
       cb(start, end);
     });
@@ -365,68 +376,63 @@
     chart10()
     chart11()
 
+    function number_format(data) {
+      var value = data.value
+      var result = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return result
+    }
+
     function chart1() {
       var myChart = echarts.init(document.getElementById('chart-1'));
       var seriesLabel = {
         normal: {
-          show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          formatter: '{b} {c} หลักสูตร',
+          position: 'inside'
         }
       }
       option = {
-          tooltip: {
-              trigger: 'item',
-              formatter: '{a} <br/>{b} : {c} ({d}%)'
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
+            }
+          }
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: JSON.parse(`{!! json_encode($course_type['label']) !!}`),
+        },
+        color: ['#ff66ff', '#00b0f0'],
+        series: [
+          {
+            name: 'พนักงาน',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '50%'],
+            label: seriesLabel,
+            minAngle: 30,
+            data: JSON.parse(`{!! json_encode($course_type['total']) !!}`),
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.2)'
               }
             }
-          },
-          legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: JSON.parse(`{!! json_encode($course_type['label']) !!}`),
-          },
-          color: ['#ff66ff', '#00b0f0'],
-          series: [
-            {
-              name: 'พนักงาน',
-              type: 'pie',
-              radius: '70%',
-              center: ['50%', '50%'],
-              label: {
-                normal: {
-                  formatter: '{b} {c} หลักสูตร',
-                  position: 'inside'
-                }
-              },
-              data: JSON.parse(`{!! json_encode($course_type['total']) !!}`),
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.2)'
-                }
-              }
-            }
-          ]
+          }
+        ]
       };
 
       myChart.setOption(option);
@@ -449,18 +455,11 @@
       var myChart = echarts.init(document.getElementById('chart-2'));
       var seriesLabel = {
         normal: {
-          show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          formatter: '{d}%',
+          position: 'inside'
         }
       }
       option = {
@@ -491,12 +490,8 @@
               type: 'pie',
               radius: '70%',
               center: ['50%', '50%'],
-              label: {
-                normal: {
-                  formatter: '{d}%',
-                  position: 'inside'
-                }
-              },
+              label: seriesLabel,
+              minAngle: 30,
               data: JSON.parse(`{!! json_encode($employee_stat['total']) !!}`),
               emphasis: {
                 itemStyle: {
@@ -530,72 +525,81 @@
       var seriesLabel = {
         normal: {
           show: true,
-          formatter: '{c}%',
+          formatter: function(data) { 
+            return number_format(data)
+          },
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          position: 'inside'
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              formatter: '{a}: {c}%',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
-          },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
-          },
-          // Add custom colors
-          color: ['#5b9bd5', '#ed7d31', '#a5a5a5'],
-          grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        tooltip: {
+          trigger: 'axis',
+          formatter: '{a}: {c}',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
+        },
+        // Add custom colors
+        color: ['#5b9bd5', '#ed7d31', '#a5a5a5'],
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'value',
+          max: function (value) {
+            return value.max + 1000;
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($course_standard_stat['label']) !!}`),
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_standard_stat['inactive']) !!}`)
           },
-          xAxis: {
-              type: 'value'
+          {
+            name: 'เข้าเรียนแล้ว',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_standard_stat['active']) !!}`)
           },
-          yAxis: {
-              type: 'category',
-              data: JSON.parse(`{!! json_encode($course_standard_stat['label']) !!}`),
+          {
+            name: 'เรียนสำเร็จ',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_standard_stat['success']) !!}`)
           },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_standard_stat['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียนแล้ว',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_standard_stat['active']) !!}`)
-            },
-            {
-              name: 'เรียนสำเร็จ',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_standard_stat['success']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {
@@ -618,72 +622,81 @@
       var seriesLabel = {
         normal: {
           show: true,
-          formatter: '{c}%',
+          formatter: function(data) { 
+            return number_format(data)
+          },
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          fontSize: 14,
+          position: 'inside'
         }
       }
       option = {
-          tooltip: {
-              trigger: 'axis',
-              formatter: '{a}: {c}%',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-              }
-          },
-          legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
-          },
-          // Add custom colors
-          color: ['#5b9bd5', '#ed7d31', '#a5a5a5'],
-          grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: {
-                show: true,
-                title: 'Download',
-                name: Date.now(),
-                lang: ['Save']
-              }
+        tooltip: {
+          trigger: 'axis',
+          formatter: '{a}: {c}',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียนแล้ว', 'เรียนสำเร็จ']
+        },
+        // Add custom colors
+        color: ['#5b9bd5', '#ed7d31', '#a5a5a5'],
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
             }
+          }
+        },
+        xAxis: {
+          type: 'value',
+          max: function (value) {
+            return value.max + 2000;
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($course_general_stat['label']) !!}`),
+        },
+        series: [
+          {
+            name: 'ยังไม่เข้าเรียน',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_general_stat['inactive']) !!}`)
           },
-          xAxis: {
-              type: 'value'
+          {
+            name: 'เข้าเรียนแล้ว',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_general_stat['active']) !!}`)
           },
-          yAxis: {
-              type: 'category',
-              data: JSON.parse(`{!! json_encode($course_general_stat['label']) !!}`),
+          {
+            name: 'เรียนสำเร็จ',
+            type: 'bar',
+            stack: 'total',
+            label: seriesLabel,
+            barMinHeight: 50,
+            data: JSON.parse(`{!! json_encode($course_general_stat['success']) !!}`)
           },
-          series: [
-            {
-              name: 'ยังไม่เข้าเรียน',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_general_stat['inactive']) !!}`)
-            },
-            {
-              name: 'เข้าเรียนแล้ว',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_general_stat['active']) !!}`)
-            },
-            {
-              name: 'เรียนสำเร็จ',
-              type: 'bar',
-              stack: 'total',
-              label: seriesLabel,
-              data: JSON.parse(`{!! json_encode($course_general_stat['success']) !!}`)
-            },
-          ]
+        ]
       };
       myChart.setOption(option);
       $(function () {
@@ -703,6 +716,15 @@
 
     function chart5() {
       var myChart = echarts.init(document.getElementById('chart-5'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          color: '#000',
+          textBorderColor: '#333',
+          fontSize: 14,
+          formatter: '{c}%'
+        }
+      }
       option = {
         tooltip: {
           trigger: 'axis',
@@ -713,7 +735,10 @@
         },
         color: ['#ed7d31'],
         grid: {
-          left: 100
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
         toolbox: {
           show: true,
@@ -741,7 +766,8 @@
         },
         series: [{
           data: JSON.parse(`{!! json_encode($company_stat['total']) !!}`),
-          type: 'line'
+          type: 'line',
+          // label: seriesLabel
         }]
       };
       myChart.setOption(option);
@@ -762,6 +788,15 @@
 
     function chart6() {
       var myChart = echarts.init(document.getElementById('chart-6'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          color: '#000',
+          textBorderColor: '#333',
+          fontSize: 14,
+          formatter: '{c}%'
+        }
+      }
       option = {
         tooltip: {
           trigger: 'axis',
@@ -772,7 +807,10 @@
         },
         color: ['#ed7d31'],
         grid: {
-          left: 100
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
         toolbox: {
           show: true,
@@ -800,7 +838,8 @@
         },
         series: [{
           data: JSON.parse(`{!! json_encode($company_3bb_stat['total']) !!}`),
-          type: 'line'
+          type: 'line',
+          // label: seriesLabel
         }]
       };
       myChart.setOption(option);
@@ -824,8 +863,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -860,6 +900,7 @@
         xAxis: {
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_course_general['label']) !!}`),
+          nameLocation: 'middle',
           axisLabel: {
             formatter: '{value}',
             rotate: 25
@@ -877,6 +918,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_course_general['total']) !!}`),
             label: seriesLabel
@@ -904,8 +946,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -957,6 +1000,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_employee['total']) !!}`),
             label: seriesLabel
@@ -984,8 +1028,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1037,6 +1082,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_department['total']) !!}`),
             label: seriesLabel
@@ -1064,8 +1110,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1117,6 +1164,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_job_family['total']) !!}`),
             label: seriesLabel
@@ -1144,8 +1192,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          fontSize: 14
         }
       }
 
@@ -1197,6 +1246,7 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
+            barMinHeight: 50,
             // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($top5_playend_all_ep['total']) !!}`),
             label: seriesLabel

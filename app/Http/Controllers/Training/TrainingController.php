@@ -91,9 +91,10 @@ class TrainingController extends Controller
         $query->whereIn('employee_id',$arr_employee_id);
       }
       $datas = $query->paginate(25);
-      
 
-      return view('training.user_training_index',['datas' => $datas, 'search' => $search, 'training_id' => $training_id]);
+      $training = Training::find($training_id);
+
+      return view('training.user_training_index',['datas' => $datas, 'search' => $search, 'training_id' => $training_id, 'training' => $training]);
     }
     public function traingin_user_delete(Request $request) {
       $training_id = $request->input('training_id');
@@ -526,12 +527,7 @@ class TrainingController extends Controller
     $in_dept = $request->input('in_dept');
     $longevity = $request->input('longevity');
     $longevity_condition = $request->input('longevity_condition');
-    
-    $head_employee_id = [];
-    if(Auth()->user()->type=='jasmine') {
-      array_push($head_employee_id, Auth()->user()->user_info->employee_id);
-    }
-
+  
     // คนที่เคยอบรมแล้ว
     $training_user = TrainingUser::where('training_id',new ObjectId($training_id))->where('status',1)->get();
     $arr_training_employee_id = [];
@@ -599,10 +595,6 @@ class TrainingController extends Controller
     if(!empty($arr_training_employee_id)) {
       $query->whereNotIn('employee_id',$arr_training_employee_id);
     }
-    if(count($head_employee_id)>0) {
-      $query->whereIn('heads',$head_employee_id);
-    }
-
     if(!empty($longevity)) {
       foreach($longevity as $index => $row) {
         if(!empty($longevity_condition[$index]) && !empty($longevity[$index])) {

@@ -29,6 +29,32 @@ class ReportOverviewController extends Controller
   public function __construct()
   {
     $this->middleware('auth');
+    $this->region_full = [
+      'บริหารส่วนกลาง',
+      'ภาคตะวันออก (RO1)',
+      'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
+      'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
+      'ภาคเหนือตอนล่าง (RO4)',
+      'ภาคเหนือตอนบน (RO5)',
+      'ภาคตะวันตก (RO6)',
+      'ภาคใต้ตอนบน (RO7)',
+      'ภาคใต้ตอนล่าง (RO8)',
+      'ภาคกลาง (RO9)',
+      'กรุงเทพฯและปริมณฑล (RO10)'
+    ];
+    $this->region_short = [
+      'บริหารส่วนกลาง',
+      'RO1',
+      'RO2',
+      'RO3',
+      'RO4',
+      'RO5',
+      'RO6',
+      'RO7',
+      'RO8',
+      'RO9',
+      'RO10'
+    ];
   }
 
   public function index(Request $request) {
@@ -38,11 +64,11 @@ class ReportOverviewController extends Controller
       $date = explode('-', $date);
       $str_date_start = str_replace(' ', '', $date[0]);
       $str_date_end = str_replace(' ', '', $date[1]);
-      $calendar_date_start = Carbon::parse($str_date_start)->format('Y-m-d');
-      $calendar_date_end = Carbon::parse($str_date_end)->format('Y-m-d');
+      $calendar_date_start = Carbon::createFromFormat('d/m/Y',$str_date_start)->format('Y-m-d');
+      $calendar_date_end = Carbon::createFromFormat('d/m/Y',$str_date_end)->format('Y-m-d');
       
-      $date_start  = new UTCDateTime(Carbon::parse($str_date_start)->startOfDay());
-      $date_end  = new UTCDateTime(Carbon::parse($str_date_end)->endOfDay());
+      $date_start  = new UTCDateTime(Carbon::createFromFormat('d/m/Y',$str_date_start)->startOfDay());
+      $date_end  = new UTCDateTime(Carbon::createFromFormat('d/m/Y',$str_date_end)->endOfDay());
     } else {
       $calendar_date_start = Carbon::now()->subDays(6)->format('Y-m-d');
       $calendar_date_end = Carbon::now()->format('Y-m-d');
@@ -50,7 +76,6 @@ class ReportOverviewController extends Controller
       $date_start  = new UTCDateTime(now()->subDays(6)->startOfDay());
       $date_end  = new UTCDateTime(now()->endOfDay());
     }
-
 
     // $date_start  = new UTCDateTime(Carbon::now()->startOfDay());
     // $date_end  = new UTCDateTime(Carbon::now()->endOfDay());
@@ -369,11 +394,18 @@ class ReportOverviewController extends Controller
       $course = Course::find($course_id); 
       $title = $course->title." (".FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($course->created_at,'d/m/Y').")";
       array_push($course_inactive, new ObjectId($course_id));
+
+      // $inactive = $course_data['inactive'] - $course_data['active'];
+      // $all = $course_data['active'] + $course_data['success'] + $inactive;
+      // $active = number_format(($course_data['active'] * 100)/$all, 2, '.', '');
+      // $success = number_format(($course_data['success'] * 100)/$all, 2, '.', '');
+      // $inactive = number_format(($inactive * 100)/$all, 2, '.', '');
+
       $inactive = $course_data['inactive'] - $course_data['active'];
       $all = $course_data['active'] + $course_data['success'] + $inactive;
-      $active = number_format(($course_data['active'] * 100)/$all, 2, '.', '');
-      $success = number_format(($course_data['success'] * 100)/$all, 2, '.', '');
-      $inactive = number_format(($inactive * 100)/$all, 2, '.', '');
+      $active = $course_data['active'];
+      $success = $course_data['success'];
+      
       if($course->type=='standard') {
         array_push($data_back['standard']['label'], $title);
         array_push($data_back['standard']['inactive'], $inactive);
@@ -502,7 +534,7 @@ class ReportOverviewController extends Controller
         [
           '$group' => [
             '_id' => [
-              "department" => '$department'
+              "region" => '$region'
             ],
             'user' => ['$addToSet' => '$employee_id'] 
           ]
@@ -527,10 +559,25 @@ class ReportOverviewController extends Controller
     $data_back['result'] = [];
     $data_back['total'] = [];
     $total_all = 0;
+
     foreach($member_access_by_course as $row) {
-      array_push($data_back['label'],$row->_id['department']);
-      array_push($data_back['result'],$row->total_user);
-      $total_all += $row->total_user;
+      $index_region = array_search($row->_id['region'], $this->region_full);
+      if(!$index_region) {
+        array_push($data_back['label'],$this->region_short[0]);
+        array_push($data_back['result'],$row->total_user);
+        $total_all += $row->total_user;
+      }
+    }
+
+    foreach($this->region_full as $region) {
+      foreach($member_access_by_course as $row) {
+        if($region==$row->_id['region']) {
+          $index_region = array_search($region, $this->region_full);
+          array_push($data_back['label'],$this->region_short[$index_region]);
+          array_push($data_back['result'],$row->total_user);
+          $total_all += $row->total_user;
+        }
+      }
     }
 
     foreach($data_back['result'] as $total) {
@@ -625,7 +672,7 @@ class ReportOverviewController extends Controller
     $loop = 1;
     foreach($member_access_by_course as $row) {
       if($loop <= 5) {
-        array_push($data_back['label'], CourseClass::get_name_course($row->_id['course_id']));
+        array_push($data_back['label'], mb_substr(CourseClass::get_name_course($row->_id['course_id']), 0, 20, 'UTF-8'));
         array_push($data_back['total'], $row->count);
       }
       $loop++;

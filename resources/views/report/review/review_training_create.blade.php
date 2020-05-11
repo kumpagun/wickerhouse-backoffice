@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@php $title = $course->title; @endphp
+@php $title = $training->title; @endphp
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('report_review_index') }}">ประเมินหลักสูตรหลังเรียน</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('report_review_training_index') }}">ประเมินหลักสูตรหลังเรียน</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -16,7 +16,7 @@
 
 @section('content-header-right')
   <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-    <a href="{{ route('report_review_create', ['course_id'=>$course->_id,'platform'=>'excel']) }}">
+    <a href="{{ route('report_review_create', ['training_id'=>$training->_id,'platform'=>'excel']) }}">
       <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
     </a>
   </div>
@@ -26,11 +26,10 @@
 @section('content')
   <div class="row justify-content-center">
     <div class="col-12">
-      @if(!empty($review_group) && count($review_group)>0)
       @foreach ($review_group as $group)
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">{{ $group->title }}</h4>
+            <h4 class="card-title">{{ $title }}</h4>
           </div>
           <div class="card-content">
             <div class="card-body overflow-hidden"> 
@@ -83,7 +82,7 @@
                           @endforeach
                           @if($count_report[$review->_id]==10)
                             <tr>
-                              <td class="text-center" colspan="99"><a href="{{ route('report_review_create_answer_text', ['review_id' => $review->_id]) }}">ดูเพิ่มเติม</a></td>
+                              <td class="text-center" colspan="99"><a href="{{ route('report_review_training_create_answer_text', ['review_id' => $review->_id]) }}">ดูเพิ่มเติม</a></td>
                             </tr>
                           @endif
                         @endif
@@ -96,9 +95,6 @@
           </div>
         </div>
       @endforeach
-      @else
-        ไม่มีข้อมูล
-      @endif
     </div>
   </div>
 @endsection

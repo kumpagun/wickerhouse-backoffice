@@ -9,14 +9,13 @@ use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use MongoDB\BSON\ObjectId as ObjectId;
 use Excel;
 // Models
-use App\Models\Course;
 use App\Models\Training;
 use App\Models\Review;
 use App\Models\Review_group;
 use App\Models\Review_choice;
 use App\Models\Review_answer;
 
-class ReviewController extends Controller
+class ReviewTrainingController extends Controller
 {
   public function __construct()
   {
@@ -33,20 +32,22 @@ class ReviewController extends Controller
   }
 
   public function review_index() {
-    $datas = Course::where('status',1)->get();
+    $datas = Training::where('status',1)->get();
     $withData = [
       'datas' => $datas
     ];
-    return view('report.review.review_index',$withData);
+    return view('report.review.review_training_index',$withData);
   }
 
-  public function review_create(Request $request, $course_id) {
-    $course_id = new ObjectId($course_id);
+  public function review_create(Request $request, $training_id) {
+    $training_id = new ObjectId($training_id);
     $platform = $request->input('platform');
+    
+    $training = Training::find($training_id);
+    $course_id = $training->course_id;
+    $course_id = new ObjectId($course_id);
 
-    $course = Course::find($course_id);
-
-    $query = Review_answer::whereNull('training_id');
+    $query = Review_answer::query()->where('training_id',$training_id);
     $query->where('course_id', $course_id);
     $query->where('status', 1);
     $query->select('user_id');
@@ -65,7 +66,7 @@ class ReviewController extends Controller
 
     $datas_report = [];
     $count_report = [];
-    $query = Review_answer::whereNull('training_id');
+    $query = Review_answer::where('training_id',$training_id);
     $query->where('course_id', $course_id);
     $query->where('status', 1);
     $datas = $query->chunk(1000, function($rows) use ($data_choice, &$datas_report, &$count_report) {
@@ -103,10 +104,10 @@ class ReviewController extends Controller
     $reviews = Review::where('status',1)->where('course_id', $course_id)->get();
     
     if($platform=='excel') {
-      return Excel::download(new Export_Review($course,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total), Carbon::now()->timestamp.'.xlsx');
+      return Excel::download(new Export_Review_Training($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total), Carbon::now()->timestamp.'.xlsx');
     } else {
       $withData = [
-        'course' => $course,
+        'training' => $training,
         'review_group' => $review_group,
         'reviews' => $reviews,
         'data_question' => $data_question,
@@ -116,7 +117,7 @@ class ReviewController extends Controller
         'data_total' => $data_total
       ];
   
-      return view('report.review.review_create',$withData);
+      return view('report.review.review_training_create',$withData);
     }
   }
 
@@ -139,6 +140,6 @@ class ReviewController extends Controller
       'datas' => $datas
     ];
 
-    return view('report.review.review_create_answer_text',$withData);
+    return view('report.review.review_training_create_answer_text',$withData);
   }
 }

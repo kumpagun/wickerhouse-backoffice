@@ -24,6 +24,32 @@ class ReportCourseController extends Controller
   public function __construct()
   {
     $this->middleware('auth');
+    $this->region_full = [
+      'บริหารส่วนกลาง',
+      'ภาคตะวันออก (RO1)',
+      'ภาคตะวันออกเฉียงเหนือตอนล่าง (RO2)',
+      'ภาคตะวันออกเฉียงเหนือตอนบน (RO3)',
+      'ภาคเหนือตอนล่าง (RO4)',
+      'ภาคเหนือตอนบน (RO5)',
+      'ภาคตะวันตก (RO6)',
+      'ภาคใต้ตอนบน (RO7)',
+      'ภาคใต้ตอนล่าง (RO8)',
+      'ภาคกลาง (RO9)',
+      'กรุงเทพฯและปริมณฑล (RO10)'
+    ];
+    $this->region_short = [
+      'บริหารส่วนกลาง',
+      'RO1',
+      'RO2',
+      'RO3',
+      'RO4',
+      'RO5',
+      'RO6',
+      'RO7',
+      'RO8',
+      'RO9',
+      'RO10'
+    ];
   }
 
   public function get_department_from_training_id(Request $request) {
@@ -288,7 +314,7 @@ class ReportCourseController extends Controller
     } else {
       return view('report.dashboard_course',[
         'training_title' => $training_title,
-        'last_update' => Carbon::parse($last_update)->format('d/m/Y H:i:s'),
+        'last_update' => FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($last_update,'d/m/Y H:i:s'),
         'query_group' => $query_group,
         'search_group' => $search_group,
         'arr_department' => $arr_department,
@@ -791,24 +817,54 @@ class ReportCourseController extends Controller
       $datas[$row->_id['region']]['success'] = $row->total;
     }
 
+    // dd($datas);
+
     foreach($datas as $region => $total) {
-      array_push($data_back['label'], $region);
-      if(!empty($total['inactive'])) {
-        array_push($data_back['inactive'], $total['inactive']);
-      } else {
-        array_push($data_back['inactive'], 0);
-      }
-      if(!empty($total['active'])) {
-        array_push($data_back['active'], $total['active']);
-      } else {
-        array_push($data_back['active'], 0);
-      }
-      if(!empty($total['success'])) {
-        array_push($data_back['success'], $total['success']);
-      } else {
-        array_push($data_back['success'], 0);
+      $index_region = array_search($region, $this->region_full);
+      if(!$index_region) {
+        array_push($data_back['label'], $this->region_short[0]);
+        if(!empty($total['inactive'])) {
+          array_push($data_back['inactive'], $total['inactive']);
+        } else {
+          array_push($data_back['inactive'], 0);
+        }
+        if(!empty($total['active'])) {
+          array_push($data_back['active'], $total['active']);
+        } else {
+          array_push($data_back['active'], 0);
+        }
+        if(!empty($total['success'])) {
+          array_push($data_back['success'], $total['success']);
+        } else {
+          array_push($data_back['success'], 0);
+        }
       }
     }
+
+    foreach($this->region_full as $region_index => $region_data) {
+      foreach($datas as $region => $total) {
+        if($region_data==$region) {
+          $index_region = array_search($region, $this->region_full);
+          array_push($data_back['label'], $this->region_short[$index_region]);
+          if(!empty($total['inactive'])) {
+            array_push($data_back['inactive'], $total['inactive']);
+          } else {
+            array_push($data_back['inactive'], 0);
+          }
+          if(!empty($total['active'])) {
+            array_push($data_back['active'], $total['active']);
+          } else {
+            array_push($data_back['active'], 0);
+          }
+          if(!empty($total['success'])) {
+            array_push($data_back['success'], $total['success']);
+          } else {
+            array_push($data_back['success'], 0);
+          }
+        } 
+      }
+    }
+    
 
     return $data_back;
   }

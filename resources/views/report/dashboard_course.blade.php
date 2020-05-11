@@ -181,18 +181,11 @@
       var myChart = echarts.init(document.getElementById('simple-pie-chart'));
       var seriesLabel = {
         normal: {
-          show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 2
-        }
-      }
-
-      var seriesLabel = {
-        normal: {
-          show: true,
-          textBorderColor: '#333',
-          textBorderWidth: 1,
-          position: 'insideRight'
+          formatter: '{d}%',
+          position: 'inside'
         }
       }
       option = {
@@ -223,12 +216,8 @@
               type: 'pie',
               radius: '70%',
               center: ['50%', '50%'],
-              label: {
-                normal: {
-                  formatter: '{d}%',
-                  position: 'inside'
-                }
-              },
+              label: seriesLabel,
+              minAngle: 30,
               data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
               emphasis: {
                 itemStyle: {
@@ -265,8 +254,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
           position: 'inside'
         }
       }
@@ -278,13 +268,14 @@
               }
           },
           legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
           },
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
           grid: {
               left: '100',
               right: '100',
+              containLabel: true
           },
           toolbox: {
             show: true,
@@ -311,6 +302,9 @@
             type: 'value',
             axisLabel: {
               formatter: '{value}'
+            },
+            max: function (value) {
+              return value.max + 500;
             }
           },
 
@@ -320,13 +314,15 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart['inactive']) !!}`)
             },
             {
-              name: 'เข้าเรียน (ไม่ผ่าน)',
+              name: 'เข้าเรียน (ยังไม่ผ่าน)',
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart['active']) !!}`)
             },
             {
@@ -334,6 +330,7 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart['pass']) !!}`)
             },
           ]
@@ -362,8 +359,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
           position: 'inside'
         }
       }
@@ -375,13 +373,14 @@
               }
           },
           legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
           },
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
           grid: {
               left: '100',
               right: '100',
+              containLabel: true
           },
           toolbox: {
             show: true,
@@ -403,7 +402,10 @@
             }
           },
           yAxis: {
-              type: 'value'
+            type: 'value',
+            max: function (value) {
+              return value.max + 500;
+            }
           },
           series: [
             {
@@ -411,13 +413,15 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart_active['inactive']) !!}`)
             },
             {
-              name: 'เข้าเรียน (ไม่ผ่าน)',
+              name: 'เข้าเรียน (ยังไม่ผ่าน)',
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart_active['not_pass']) !!}`)
             },
             {
@@ -425,6 +429,7 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($chart_active['pass']) !!}`)
             },
           ]
@@ -454,8 +459,10 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1
+          formatter: '{c}%',
         }
       }
 
@@ -472,7 +479,8 @@
         // Add custom colors
         color: ['#F98E76'],
         grid: {
-          left: 100
+          left: 100,
+          containLabel: true
         },
 
         
@@ -507,8 +515,8 @@
               color: 'rgba(220, 220, 220, 0.8)'
             },
             stack: 'Total',
-            // itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
             data: JSON.parse(`{!! json_encode($chart_inactive['total']) !!}`),
+            barMinHeight: 30,
             label: seriesLabel
           }
         ]
@@ -537,8 +545,9 @@
       var seriesLabel = {
         normal: {
           show: true,
+          fontSize: 14,
+          color: '#000',
           textBorderColor: '#333',
-          textBorderWidth: 1,
           position: 'inside'
         }
       }
@@ -550,13 +559,14 @@
               }
           },
           legend: {
-              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+              data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
           },
           // Add custom colors
           color: ['#F98E76', '#FDD835', '#16D39A'],
           grid: {
-              left: '100',
-              right: '100',
+            left: '100',
+            right: '100',
+            containLabel: true
           },
           toolbox: {
             show: true,
@@ -586,13 +596,15 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($data_by_ro['inactive']) !!}`)
             },
             {
-              name: 'เข้าเรียน (ไม่ผ่าน)',
+              name: 'เข้าเรียน (ยังไม่ผ่าน)',
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($data_by_ro['active']) !!}`)
             },
             {
@@ -600,6 +612,7 @@
               type: 'bar',
               stack: 'total',
               label: seriesLabel,
+              barMinHeight: 30,
               data: JSON.parse(`{!! json_encode($data_by_ro['success']) !!}`)
             },
           ]
