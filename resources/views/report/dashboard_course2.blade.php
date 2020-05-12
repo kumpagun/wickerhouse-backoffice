@@ -130,7 +130,10 @@
           }
         },
         legend: {
-          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)']
+          data: ['ยังไม่เข้าเรียน', 'เข้าเรียน (ยังไม่ผ่าน)', 'เข้าเรียน (ผ่าน)'],
+          textStyle: {
+            fontSize: 16
+          },
         },
         // Add custom colors
         color: ['#F98E76', '#FDD835', '#a5a5a5'],
@@ -155,11 +158,14 @@
           data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
           axisLabel: {
             formatter: '{value}',
-            rotate: 25
+            rotate: 20
           }
         },
         yAxis: {
-            type: 'value'
+          type: 'value',
+          max: function (value) {
+            return value.max * 1.2;
+          }
         },
         series: [
           {

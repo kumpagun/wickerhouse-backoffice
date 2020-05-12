@@ -41,6 +41,8 @@ class Course extends Eloquent
     'have_posttest_limit', //Boolean
     'posttest_limit_total',
     'posttest_display_answer', //Boolean
+    'have_review',
+    'total_review',
     'require_course',
     'benefits',
     'appropriates',
