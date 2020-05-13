@@ -121,13 +121,13 @@
           <td class="text-center">-</td>
         @endif
 
-        @if(!empty($data->pretest)) 
+        @if(isset($data->pretest)) 
         <td class="text-center">{{ $data->pretest }}</td>
         @else 
         <td class="text-center">-</td>
         @endif
 
-        @if(!empty($data->posttest)) 
+        @if(isset($data->posttest)) 
           <td class="text-center">{{ $data->posttest }}</td>
         @else 
           <td class="text-center">-</td>
