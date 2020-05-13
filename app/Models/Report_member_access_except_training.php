@@ -6,7 +6,7 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Report_member_access_except_training extends Eloquent  
 {
-  protected $collection = 'report_member_access_except_trainings';
+  protected $collection = 'report_member_accesses_except_trainings';
   protected $fillable = [
     'course_id',
     'employee_id',

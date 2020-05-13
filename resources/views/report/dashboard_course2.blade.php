@@ -164,7 +164,7 @@
         yAxis: {
           type: 'value',
           max: function (value) {
-            return value.max * 1.2;
+            return value.max;
           }
         },
         series: [

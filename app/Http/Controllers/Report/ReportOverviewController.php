@@ -763,8 +763,12 @@ class ReportOverviewController extends Controller
     $data_back['total'] = [];
     $loop = 1;
     foreach($member_access_by_course as $row) {
+      $department = "อื่นๆ";
+      if($row->_id['department']!='') {
+        $department = $row->_id['department'];
+      }
       if($loop <= 5) {
-        array_push($data_back['label'],$row->_id['department']);
+        array_push($data_back['label'],$department);
         array_push($data_back['total'], $row->total_user);
       }
       $loop++;

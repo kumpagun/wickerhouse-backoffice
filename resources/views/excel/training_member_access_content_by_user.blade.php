@@ -32,6 +32,7 @@
       <th class="text-center align-middle">Region</th>
       <th class="text-center align-middle">StaffGrade</th>
       <th class="text-center align-middle">JobFamily</th>
+      <th class="text-center align-middle">Status</th>
       <th class="text-center align-middle">Pretest</th>
       <th class="text-center align-middle">Posttest</th>
       <th class="text-center align-middle">Course Complete</th>
@@ -119,6 +120,12 @@
           <td class="text-center">{{ $data->job_family }}</td>
         @else 
           <td class="text-center">-</td>
+        @endif
+
+        @if(!empty($data->play_course)) 
+          <td class="text-left text-success">เข้าเรียนแล้ว</td>
+        @else 
+          <td class="text-left text-danger">ยังไม่เข้าเรียน</td>
         @endif
 
         @if(!empty($data->pretest)) 

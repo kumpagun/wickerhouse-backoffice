@@ -46,7 +46,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr class="second-row">
-                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center min-width-200">DeptName</th>
                     <th class="align-middle text-center">เข้าเรียน</th>
                     <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
                     <th class="align-middle text-center">เข้าเรียน(ยังไม่ผ่าน)</th>
@@ -157,7 +157,7 @@
   <!-- Basic Tables end -->
 
   <div class="row align-items-stretch">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-8 col-lg-6">
       <div class="card">
         <div class="card-content collapse show">
           <div class="card-body">
@@ -165,7 +165,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr class="second-row">
-                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center min-width-200">DeptName</th>
                     <th class="align-middle text-center">ยังไม่เข้าเรียน</th>
                     <th class="align-middle text-center">เข้าเรียน(ยังไม่ผ่าน)</th>
                     <th class="align-middle text-center">เข้าเรียน(ผ่าน)</th>
@@ -228,7 +228,7 @@
   <!-- Basic Tables end -->
 
   <div class="row align-items-stretch">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-8 col-lg-6">
       <div class="card">
        
           <div class="card-body">
@@ -236,7 +236,7 @@
               <table class="table table-bordered">
                 <thead>
                   <tr class="second-row">
-                    <th class="align-middle text-center">DeptName</th>
+                    <th class="align-middle text-center min-width-200">DeptName</th>
                     <th class="align-middle text-center">ยังไม่เข้าเรียน%</th>
                   </tr>
                 </thead>
@@ -503,7 +503,6 @@
         },
         xAxis: {
           type: 'value',
-          name: 'Days',
           axisLabel: {
             formatter: '{value}'
           }
@@ -592,7 +591,7 @@
         xAxis: {
           type: 'value',
           max: function (value) {
-            return value.max * 1.2;
+            return value.max;
           }
         },
         yAxis: {
@@ -688,7 +687,6 @@
         },
         xAxis: {
           type: 'value',
-          name: 'Days',
           axisLabel: {
             formatter: '{value}'
           }

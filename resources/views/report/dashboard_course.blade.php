@@ -119,6 +119,22 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
+          <h4 class="card-title">สถานะผู้ไม่เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
+        </div>
+        <div class="card-content collapse show">
+          <div class="card-body">
+            <div id="stacked-bar-inactive-ro" class="height-500 echart-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column Stacked Chart -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
           <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} ณ วันที่ {{ $last_update }}</h4>
         </div>
         <div class="card-content collapse show">
@@ -176,6 +192,7 @@
     chart3()
     chart4()
     chart5()
+    chart6()
 
     function chart1() {
       var myChart = echarts.init(document.getElementById('simple-pie-chart'));
@@ -296,7 +313,6 @@
         },
 
         xAxis: {
-          name: 'Days',
           type: 'category',
           data: JSON.parse(`{!! json_encode($chart['label']) !!}`),
           axisLabel: {
@@ -310,7 +326,7 @@
             formatter: '{value}'
           },
           max: function (value) {
-            return value.max * 1.2;
+            return value.max + 100;
           }
         },
 
@@ -413,7 +429,7 @@
         yAxis: {
           type: 'value',
           max: function (value) {
-            return value.max * 1.2;
+            return value.max + 100;
           }
         },
         series: [
@@ -553,6 +569,95 @@
     }
 
     function chart5() {
+      var myChart = echarts.init(document.getElementById('stacked-bar-inactive-ro'));
+      var seriesLabel = {
+        normal: {
+          show: true,
+          fontSize: 14,
+          color: '#000',
+          textBorderColor: '#333',
+          formatter: '{c}%',
+        }
+      }
+
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['คนไม่เข้าเรียน (%)'],
+          textStyle: {
+            fontSize: 16
+          },
+        },
+        // Add custom colors
+        color: ['#F98E76'],
+        grid: {
+          left: 100,
+          containLabel: true
+        },
+
+        
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: 'Download',
+              name: Date.now(),
+              lang: ['Save']
+            }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: JSON.parse(`{!! json_encode($inactive_by_ro['label']) !!}`),
+          axisLabel: {
+            formatter: '{value}',
+            rotate: 20
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name:'คนไม่เข้าเรียน (%)',
+            type:'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(220, 220, 220, 0.8)'
+            },
+            stack: 'Total',
+            data: JSON.parse(`{!! json_encode($inactive_by_ro['inactive']) !!}`),
+            barMinHeight: 30,
+            label: seriesLabel
+          }
+        ]
+      }
+      myChart.setOption(option);
+      $(function () {
+        // Resize chart on menu width change and window resize
+        $(window).on('resize', resize);
+        $(".menu-toggle").on('click', resize);
+        $(document).ready(function(){
+          resize()
+        });
+
+        // Resize function
+        function resize() {
+          setTimeout(function() {
+            // Resize chart
+            myChart.resize();
+          }, 200);
+        }
+      });
+    }
+
+    function chart6() {
       var myChart = echarts.init(document.getElementById('chart-5'));
       var seriesLabel = {
         normal: {
@@ -605,7 +710,7 @@
         yAxis: {
           type: 'value',
           max: function (value) {
-            return value.max * 1.2;
+            return value.max + 100;
           }
         },
         series: [

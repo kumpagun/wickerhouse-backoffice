@@ -265,6 +265,7 @@ class ReportCourseController extends Controller
         array_push($chart_inactive['label'], $index);
         array_push($chart_inactive['total'], $result);
       }
+      $inactive_by_ro = $this->get_inactive_by_ro($training_id, $passing_score, $employee_id, $search_department);
       $data_by_ro = $this->get_data_by_ro($training_id, $passing_score, $employee_id, $search_department);
 
       // GET LAST UPDATE
@@ -296,6 +297,8 @@ class ReportCourseController extends Controller
       $chart_active['not_pass'] = [];
       $chart_inactive['label'] = [];
       $chart_inactive['total'] = [];
+      $inactive_by_ro['label'] = [];
+      $inactive_by_ro['inactive'] = [];
       $data_by_ro['label'] = [];
       $data_by_ro['inactive'] = [];
       $data_by_ro['active'] = [];
@@ -325,6 +328,7 @@ class ReportCourseController extends Controller
         'chart' => $chart,
         'chart_active' => $chart_active,
         'chart_inactive' => $chart_inactive,
+        'inactive_by_ro' => $inactive_by_ro,
         'data_by_ro' => $data_by_ro,
         'diff' => $diff
       ]);
@@ -677,6 +681,92 @@ class ReportCourseController extends Controller
       ]);
     });
     return $query;
+  }
+
+  public function get_inactive_by_ro($training_id, $passing_score, $employee_id, $search_department){
+    $data_back['label'] = [];
+    $data_back['inactive'] = [];
+    $datas = [];
+    // User ไม่เข้าเรียน
+    if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
+      $match = [
+        'status'  => 1,
+        'training_id' => $training_id,
+        'employee_id' => ['$in' => $employee_id],
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] ,
+      ];
+    } else {
+      $match = [
+        'status'  => 1,
+        'training_id' => $training_id,
+        '$or' => [
+          ['play_course' => ['$eq'  => 0]], 
+          ['play_course' => ['$eq'  => '']]
+        ] ,
+      ];
+    }
+    if(!empty($search_department)) {
+      $match['department'] = ['$in' => $search_department];
+    }
+    $report_member_access = Report_member_access::raw(function ($collection) use ($match) {
+      return $collection->aggregate([
+        [ 
+          '$match' => $match
+        ],
+        [
+          '$group' => [
+            '_id' => [ 'region'  => '$region'],
+            'total' => [ '$sum' => 1 ]
+          ]
+        ],
+        [
+          '$sort' => [
+            'region' => 1
+            // 'total' => -1
+          ]
+        ]
+      ]);
+    });
+
+    $total_inactive = 0;
+    foreach($report_member_access as $row) {
+      $datas[$row->_id['region']]['inactive'] = $row->total;
+      $total_inactive += $row->total;
+    }
+
+    foreach($datas as $region => $total) {
+      $index_region = array_search($region, $this->region_full);
+      if(!$index_region) {
+        array_push($data_back['label'], $this->region_short[0]);
+        if(!empty($total['inactive'])) {
+          $result = ($total['inactive']*100)/$total_inactive;
+          array_push($data_back['inactive'], $result);
+        } else {
+          array_push($data_back['inactive'], 0);
+        }
+      }
+    }
+
+    foreach($this->region_full as $region_index => $region_data) {
+      foreach($datas as $region => $total) {
+        if($region_data==$region) {
+          $index_region = array_search($region, $this->region_full);
+          array_push($data_back['label'], $this->region_short[$index_region]);
+          if(!empty($total['inactive'])) {
+            $result = ($total['inactive']*100)/$total_inactive;
+            $result = number_format($result,2);
+            array_push($data_back['inactive'], $result);
+          } else {
+            array_push($data_back['inactive'], 0);
+          }
+        } 
+      }
+    }
+    
+    return $data_back;
   }
 
   public function get_data_by_ro($training_id, $passing_score, $employee_id, $search_department){
