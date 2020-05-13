@@ -163,7 +163,7 @@ class ReportOverviewController extends Controller
     });
 
     // Pretest
-    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->groupBy('user_id','point')->get();
+    $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->where('status',1)->groupBy('user_id','point')->get();
     
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $user_test) {
@@ -172,7 +172,8 @@ class ReportOverviewController extends Controller
           '$match' => [
             'type' => 'posttest',
             'user_id' => [ '$in' => $memberId_jas ],
-            'course_id' => $course_id
+            'course_id' => $course_id,
+            'status' => 1
           ]
         ],
         [
