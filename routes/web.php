@@ -306,3 +306,6 @@ Route::group(['prefix' => 'crontab'], function () {
     Route::get('/update_branch', 'Crontab\ReportController@update_branch')->name('crontab_report_update_branch');
   });
 });
+
+
+Route::get('/update_user_training', 'Report\MemberAccessByUserTrainingController@update_user_training')->name('update_user_training');

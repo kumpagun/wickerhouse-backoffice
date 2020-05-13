@@ -16,7 +16,21 @@ use Maatwebsite\Excel\Facades\Excel;
 // Model
 use App\Models\Report_member_access;
 use App\Models\Training;
+use App\Models\TrainingUser;
 use App\Models\Employee;
+use App\Models\Member;
+
+use App\Models\Examination_user;
+use App\Models\Examination_answer;
+
+use App\Models\User_play_course_end;
+use App\Models\User_play_course;
+use App\Models\User_play_course_log;
+use App\Models\User_view_course;
+
+use App\Models\Review_answer;
+use App\Models\Reviews_user;
+
 
 class MemberAccessByUserTrainingController extends Controller
 {
@@ -112,6 +126,38 @@ class MemberAccessByUserTrainingController extends Controller
       $title = $group_name.'_'.$now;
 
       Excel::store(new Export_Report_member_access($group_id,$course_id), 'app/public/excel/exports/'.$training_id.'/'.$title.'.xls');
+    }
+  }
+
+  public function update_user_training() {
+    $course_id = new ObjectId("5eaa52c91b5e685f21185c55");
+    $training_id = new ObjectId("5eac2b6f4dec115cf2115c46");
+    $training_user = TrainingUser::where('course_id',$course_id)->where('training_id',$training_id)->where('status',1)->get();
+    $employee_id = [];
+    foreach($training_user as $row) {
+      array_push($employee_id, $row->employee_id);
+    }
+    $members = Member::whereIn('employee_id',$employee_id)->get();
+    $member_id = [];
+    foreach($members as $row) {
+      array_push($member_id, new ObjectId($row->_id));
+    }
+
+    $examination_user = Examination_user::whereIn('user_id',$member_id)->where('course_id',$course_id)->whereNull('training_id')->select('user_id')->groupBy('user_id')->get();
+    $member_id_training_null = [];
+    foreach($examination_user as $row) {
+      array_push($member_id_training_null, $row->user_id);
+    }
+
+    foreach($member_id_training_null as $mem_id) {
+      Examination_user::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      Examination_answer::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      User_play_course_end::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      User_play_course::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      User_play_course_log::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      User_view_course::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      Review_answer::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
+      Reviews_user::where('course_id',$course_id)->where('user_id',new ObjectId($mem_id))->whereNull('training_id')->update(['training_id' => $training_id]);
     }
   }
 }
