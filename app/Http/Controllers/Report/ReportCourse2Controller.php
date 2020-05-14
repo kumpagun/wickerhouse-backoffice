@@ -148,6 +148,9 @@ class ReportCourse2Controller extends Controller
       $chart_active['pass'] = [];
       $chart_active['not_pass'] = [];
       foreach($new_datas as $index => $values) {
+        if(empty($index)) {
+          $index = 'อื่นๆ';
+        }
         array_push($chart_active['label'], $index);
         array_push($chart_active['inactive'], $values['user_inactive']);
         array_push($chart_active['pass'], $values['user_active_passing_score']);
