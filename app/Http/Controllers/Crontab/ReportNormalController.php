@@ -320,7 +320,7 @@ class ReportNormalController extends Controller
       }
     }
     // dd($dataArray);
-    $this->insertDataArray('report_member_access_except_trainings',$dataArray);
+    $this->insertDataArray('report_member_accesses_except_trainings',$dataArray);
   }
 
   public function insertDataArray($table,$data) {
