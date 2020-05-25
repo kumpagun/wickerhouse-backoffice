@@ -607,12 +607,11 @@
         $("[name='employees[]']").append(
           $('<option> ', {
             value: values.employee_id,
-            text: values.tinitial+' '+ values.tf_name + ' ' + values.tl_name + ' ('+values.employee_id+')'
+            text: index+ ' ' +values.tinitial+' '+ values.tf_name + ' ' + values.tl_name + ' ('+values.employee_id+')'
           })
         );
       })
       $('.employees').multiSelect('refresh',{ 
-        keepOrder: true,
         afterSelect: function(value){
           $('[name="employees[]"] option[value="'+value+'"]').remove();
           $('[name="employees[]"]').append($("<option></option>").attr("value",value).attr('selected', 'selected'));
