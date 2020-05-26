@@ -1,5 +1,8 @@
 <table>
   <thead>
+    <tr>
+      <th colspan=17>หลักสูตร <span class="text-primary">{{ $group_name }}</span></th>
+    </tr>
     @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
     <tr>
       <th colspan=17>Name <span class="text-primary">{{ Auth::user()->user_info['thai_fullname'] }}</span></th>
@@ -30,7 +33,6 @@
       <th class="text-center align-middle">DeptName</th>
       <th class="text-center align-middle">BranchName</th>
       <th class="text-center align-middle">Region</th>
-      <th class="text-center align-middle">StaffGrade</th>
       <th class="text-center align-middle">JobFamily</th>
       <th class="text-center align-middle">Status</th>
       <th class="text-center align-middle">Pretest</th>

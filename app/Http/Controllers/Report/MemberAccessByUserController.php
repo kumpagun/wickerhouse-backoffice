@@ -83,7 +83,7 @@ class MemberAccessByUserController extends Controller
     $path = config('app.url').'storage/excel/exports/'.$group_id_select.'/'.$file;
 
     if($platform=='excel') {
-      return Excel::download(new Export_Report_member_access_by_user($datas), Carbon::now()->timestamp.'.xlsx');
+      return Excel::download(new Export_Report_member_access_by_user($group_name,$datas), Carbon::now()->timestamp.'.xlsx');
     }
 
     $update_date = '-';

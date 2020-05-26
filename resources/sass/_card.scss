@@ -2,6 +2,11 @@
   .card-title {
     line-height: 1.5rem;
   }
+  .card-subtext {
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: -2em;
+  }
   &.border-radius {
     border-radius: 1em !important;
   }
