@@ -147,6 +147,7 @@ class ReportCourse2Controller extends Controller
       $chart_active['inactive'] = [];
       $chart_active['pass'] = [];
       $chart_active['not_pass'] = [];
+      $chart_active['total'] = 0;
       foreach($new_datas as $index => $values) {
         if(empty($index)) {
           $index = 'อื่นๆ';
@@ -155,12 +156,16 @@ class ReportCourse2Controller extends Controller
         array_push($chart_active['inactive'], $values['user_inactive']);
         array_push($chart_active['pass'], $values['user_active_passing_score']);
         array_push($chart_active['not_pass'], $values['user_active_not_passing_score']);
+        $chart_active['total'] += $values['user_inactive'];
+        $chart_active['total'] += $values['user_active_passing_score'];
+        $chart_active['total'] += $values['user_active_not_passing_score'];
       }
     } else {
       $chart_active['label'] = [];
       $chart_active['inactive'] = [];
       $chart_active['pass'] = [];
       $chart_active['not_pass'] = [];
+      $chart_active['total'] = 0;
       $first_update = '';
     }
 
