@@ -56,6 +56,7 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">สถานะผู้เข้าเรียนหลักสูตร {{ $training_title }} </h4>
+        <p class="card-subtext">จำนวนพนักงาน {{ number_format($chart_active['total']) }} คน</p>
       </div>
       <div class="card-content collapse show">
         <div class="card-body">
@@ -157,6 +158,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }

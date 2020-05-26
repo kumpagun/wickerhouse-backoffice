@@ -14,6 +14,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use IIlluminate\Http\UploadedFile;
 use MongoDB\BSON\UTCDateTime as UTCDateTime;
 use Carbon\Carbon;
+use DB;
 
 use File;
 use User;
@@ -155,6 +156,8 @@ class TrainingController extends Controller
       return  $result;
     }
     public function training_create($id = ''){
+      ini_set('max_input_vars', 20000);
+
       $department = $this->get_department();
       $company = $this->get_company();
       $course = $this->get_course();
@@ -624,30 +627,57 @@ class TrainingController extends Controller
   }
 
   public function training_import_employees(Request $request) {
+    ini_set('max_input_vars', 20000);
     $employees = $request->input('employees');
     $training_id = $request->input('training_id');
 
     $query = Training::find($training_id);
     $course_id = new ObjectId($query->course_id);
 
-    if(!empty($employees)) {
-      foreach($employees as $employee) {
-        $check_user = TrainingUser::where('employee_id',(string)$employee)->where('status',1)->where('training_id',new ObjectId($training_id))->first();
-        $check_member_jasmine = Employee::where('employee_id',(string)$employee)->first();
-        if (empty($check_user)) {
-          $insert =  new TrainingUser();
-          $insert->training_id = new ObjectId($training_id);
-          $insert->employee_id =  (string)$employee; 
-          $insert->member_jasmine_id = new ObjectId($check_member_jasmine->_id);
-          $insert->course_id = new ObjectId($course_id);
-          $insert->type = 'filter';
-          $insert->status = 1;
-          $insert->save();
-        }
+    $dataArray = [];
+    $now = new UTCDateTime(Carbon::now()->timestamp * 1000);
+
+    $training_users = TrainingUser::where('status',1)->where('training_id',new ObjectId($training_id))->get();
+    $employee_training = [];
+    foreach($training_users as $row) {
+      array_push($employee_training, $row->employee_id);
+    }
+
+    $employees_active = array_diff($employees,$employee_training);
+
+    if(!empty($employees_active)) {
+      foreach($employees_active as $employee) {
+        $dataArray[] = [
+          'training_id' => new ObjectId($training_id),
+          'employee_id' =>  (string)$employee, 
+          'course_id' => new ObjectId($course_id),
+          'type' => 'filter',
+          'status' => 1,
+          'created_at' => $now,
+          'updated_at' => $now
+        ];
       }
     }
+    $this->insertDataArray($dataArray);
     $this->update_training_total_employee($training_id);
 
     return redirect()->back()->with('success','success');
+  }
+
+  public function insertDataArray($data) {
+		// ini_set("memory_limit","10M");
+		ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
+		$start = 0;
+		$length = 100;
+
+		$limit = count($data);
+		while ($start < $limit) {
+			$data_slice = array_slice ( $data, $start, $length );
+			// dd($data_slice);
+			DB::table('training_users')->insert($data_slice);
+			$start += $length;
+		}
+		return array('status' => 'success');
   }
 }

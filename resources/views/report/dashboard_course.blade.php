@@ -237,7 +237,6 @@
             radius: '70%',
             center: ['50%', '50%'],
             label: seriesLabel,
-            minAngle: 30,
             data: JSON.parse(`{!! json_encode($pie_chart['outer_data']) !!}`),
             emphasis: {
               itemStyle: {
@@ -323,6 +322,9 @@
         yAxis: {
           type: 'value',
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}'
           },
           max: function (value) {
@@ -422,6 +424,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($chart_active['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -527,6 +532,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($chart_inactive['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -616,6 +624,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($inactive_by_ro['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -703,6 +714,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($data_by_ro['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }

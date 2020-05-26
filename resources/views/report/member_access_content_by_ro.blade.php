@@ -504,6 +504,9 @@
         xAxis: {
           type: 'value',
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}'
           }
         },
@@ -688,6 +691,9 @@
         xAxis: {
           type: 'value',
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}'
           }
         },

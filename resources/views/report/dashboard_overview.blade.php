@@ -767,6 +767,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($company_stat['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             rotate: 20
           }
         },
@@ -839,6 +842,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($company_3bb_stat['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             rotate: 20
           }
         },
@@ -915,6 +921,9 @@
           data: JSON.parse(`{!! json_encode($top5_course_general['label']) !!}`),
           nameLocation: 'middle',
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -1000,6 +1009,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_employee['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -1085,6 +1097,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_department['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -1170,6 +1185,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_job_family['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
@@ -1255,6 +1273,9 @@
           type: 'category',
           data: JSON.parse(`{!! json_encode($top5_playend_all_ep['label']) !!}`),
           axisLabel: {
+            textStyle: {
+              fontSize: 16
+            },
             formatter: '{value}',
             rotate: 20
           }
