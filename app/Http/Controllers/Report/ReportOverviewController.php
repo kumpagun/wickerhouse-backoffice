@@ -166,29 +166,31 @@ class ReportOverviewController extends Controller
       }
       $datas[$course->type] += 1;
     }
-    $data_back['label'] = ['หลักสูตรมาตรฐาน','หลักสูตรทั่วไป'];
+    $data_back['label'] = [];
     $data_back['total'] = [];
+    array_push($data_back['label'],'หลักสูตรมาตรฐาน');
     if(!empty($datas['standard'])) {
       array_push($data_back['total'], [
         'value' => $datas['standard'],
         'name' => 'หลักสูตรมาตรฐาน'
       ]);
     } else {
-      array_push($data_back['total'], [
-        'value' => 0,
-        'name' => 'หลักสูตรมาตรฐาน'
-      ]);
+      // array_push($data_back['total'], [
+      //   'value' => 0,
+      //   'name' => 'หลักสูตรมาตรฐาน'
+      // ]);
     }
+    array_push($data_back['label'],'หลักสูตรทั่วไป');
     if(!empty($datas['general'])) {
       array_push($data_back['total'], [
         'value' => $datas['general'],
         'name' => 'หลักสูตรทั่วไป'
       ]);
     } else {
-      array_push($data_back['total'], [
-        'value' => 0,
-        'name' => 'หลักสูตรทั่วไป'
-      ]);
+      // array_push($data_back['total'], [
+      //   'value' => 0,
+      //   'name' => 'หลักสูตรทั่วไป'
+      // ]);
     }
     return $data_back;
   }
@@ -284,20 +286,29 @@ class ReportOverviewController extends Controller
       'inactive' => $inactive
     ];
 
-    $data_back['label'] = ['เข้าเรียนแล้ว','ยังไม่เข้าเรียน','เรียนสำเร็จ'];
+    $data_back['label'] = [];
     $data_back['total'] = [];
-    array_push($data_back['total'], [
-      'value' => $employee_active,
-      'name' => 'เข้าเรียนแล้ว'
-    ]);
-    array_push($data_back['total'], [
-      'value' => $inactive,
-      'name' => 'ยังไม่เข้าเรียน'
-    ]);
-    array_push($data_back['total'], [
-      'value' => $employee_success,
-      'name' => 'เรียนสำเร็จ'
-    ]);
+    if(!empty($employee_active)) {
+      array_push($data_back['label'], 'เข้าเรียนแล้ว');
+      array_push($data_back['total'], [
+        'value' => $employee_active,
+        'name' => 'เข้าเรียนแล้ว'
+      ]);
+    }
+    if(!empty($employee_active)) {
+      array_push($data_back['label'], 'ยังไม่เข้าเรียน');
+      array_push($data_back['total'], [
+        'value' => $inactive,
+        'name' => 'ยังไม่เข้าเรียน'
+      ]);
+    }
+    if(!empty($employee_active)) {
+      array_push($data_back['label'], 'เรียนสำเร็จ');
+      array_push($data_back['total'], [
+        'value' => $employee_success,
+        'name' => 'เรียนสำเร็จ'
+      ]);
+    }
     
     return $data_back;
   }
