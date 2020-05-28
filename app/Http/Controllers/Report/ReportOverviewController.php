@@ -419,14 +419,26 @@ class ReportOverviewController extends Controller
       
       if($course->type=='standard') {
         array_push($data_back['standard']['label'], $title);
-        array_push($data_back['standard']['inactive'], $inactive);
-        array_push($data_back['standard']['active'], $active);
-        array_push($data_back['standard']['success'], $success);
+        if(!empty($inactive)) {
+          array_push($data_back['standard']['inactive'], $inactive);
+        }
+        if(!empty($active)) {
+          array_push($data_back['standard']['active'], $active);
+        }
+        if(!empty($success)) {
+          array_push($data_back['standard']['success'], $success);
+        }
       } else {
         array_push($data_back['general']['label'], $title);
-        array_push($data_back['general']['inactive'], $inactive);
-        array_push($data_back['general']['active'], $active);
-        array_push($data_back['general']['success'], $success);
+        if(!empty($inactive)) {
+          array_push($data_back['general']['inactive'], $inactive);
+        }
+        if(!empty($active)) {
+          array_push($data_back['general']['active'], $active);
+        }
+        if(!empty($success)) {
+          array_push($data_back['general']['success'], $success);
+        }
       }
     }
 
