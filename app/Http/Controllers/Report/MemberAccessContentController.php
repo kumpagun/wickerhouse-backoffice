@@ -178,9 +178,12 @@ class MemberAccessContentController extends Controller
         if(!empty($values['inactive'])) {
           $value_inactive = $values['inactive'];
         }
-        array_push($chart['active'], $value_active);
-        
-        array_push($chart['inactive'], $value_inactive);
+        if(!empty($value_active)) {
+          array_push($chart['active'], $value_active);
+        }
+        if(!empty($value_inactive)) {
+          array_push($chart['inactive'], $value_inactive);
+        }
       }
       // CHART เข้าเรียน / ผ่าน / ไม่ผ่าน
       $chart_active['label'] = [];
@@ -192,9 +195,15 @@ class MemberAccessContentController extends Controller
           $index = 'อื่นๆ';
         }
         array_push($chart_active['label'], $index);
-        array_push($chart_active['inactive'], $values['user_inactive']);
-        array_push($chart_active['pass'], $values['user_active_passing_score']);
-        array_push($chart_active['not_pass'], $values['user_active_not_passing_score']);
+        if(!empty($values['user_inactive'])) {
+          array_push($chart_active['inactive'], $values['user_inactive']);
+        }
+        if(!empty($values['user_active_passing_score'])) {
+          array_push($chart_active['pass'], $values['user_active_passing_score']);
+        }
+        if(!empty($values['user_active_not_passing_score'])) {
+          array_push($chart_active['not_pass'], $values['user_active_not_passing_score']);
+        }
       }
       // CHART % คนไม่เข้าเรียน
       $chart_inactive['label'] = [];
