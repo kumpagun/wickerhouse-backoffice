@@ -201,8 +201,7 @@
           fontSize: 14,
           color: '#000',
           textBorderColor: '#333',
-          formatter: '{d}%',
-          position: 'inside'
+          formatter: '{d}%'
         }
       }
       option = {

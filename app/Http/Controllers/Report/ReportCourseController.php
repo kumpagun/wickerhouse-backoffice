@@ -209,14 +209,19 @@ class ReportCourseController extends Controller
         'name' => number_format($percent_inactive,2).'%'
         // 'name' => 'ยังไม่เข้าเรียน'
       ]);
-      array_push($pie_chart['outer_data'], [
-        'value' => $pie_chart_total['active'],
-        'name' => 'เข้าเรียน'
-      ]);
-      array_push($pie_chart['outer_data'], [
-        'value' => $pie_chart_total['inactive'],
-        'name' => 'ยังไม่เข้าเรียน'
-      ]);
+      if($pie_chart_total['active']!=0) {
+        array_push($pie_chart['outer_data'], [
+          'value' => $pie_chart_total['active'],
+          'name' => 'เข้าเรียน'
+        ]);
+      }
+      if($pie_chart_total['inactive']!=0) {
+        array_push($pie_chart['outer_data'], [
+          'value' => $pie_chart_total['inactive'],
+          'name' => 'ยังไม่เข้าเรียน'
+        ]);
+      }
+      
       // CHART เข้าเรียน / ไม่เข้าเรียน
       $chart['label'] = [];
       $chart['active'] = [];
