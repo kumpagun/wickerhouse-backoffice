@@ -451,13 +451,9 @@ class ReportOverviewController extends Controller
       if($course->type=='standard') {
         array_push($data_back['standard']['label'], $title);
         array_push($data_back['standard']['inactive'], 100);
-        array_push($data_back['standard']['active'], 0);
-        array_push($data_back['standard']['success'], 0);
       } else {
         array_push($data_back['general']['label'], $title);
         array_push($data_back['general']['inactive'], 100);
-        array_push($data_back['general']['active'], 0);
-        array_push($data_back['general']['success'], 0);
       }
     }
     

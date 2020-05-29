@@ -24,7 +24,7 @@ class ReportController extends Controller
   // CRONTAB 192.168.30.16
   public function access_content_by_user (Request $request)
   {
-		ini_set('memory_limit', '-1');
+    ini_set('memory_limit', '-1');
 		ini_set('max_execution_time', 1800);
     $date_now = Carbon::now();
     $date = new UTCDateTime($date_now->startOfDay());
@@ -36,7 +36,7 @@ class ReportController extends Controller
     $query->where('published_at','<=',$date_start);
     $query->where('expired_at','>=',$date_end);
     // $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
-    $trainings = $query->get();
+    $trainings = $query->get(); 
     if(!empty($trainings)) {
       foreach($trainings as $row) {
         Report_member_access::where('created_at', '<', $date)->where('training_id', new ObjectId($row->_id))->where('status', 1)->update(['status' => 0]);
@@ -47,6 +47,8 @@ class ReportController extends Controller
   }
 
   public function get_data($input_datas) {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $datas = [];
     $training_id = new ObjectId($input_datas->_id);
     $course_id = new ObjectId($input_datas->course_id);
@@ -61,8 +63,28 @@ class ReportController extends Controller
       array_push($arr_employee_id, $row->employee_id);
     }
     
-    // คนที่เข้าเรียน Collection member
-    $members = Member::whereIn('employee_id',$arr_employee_id)->get();
+    // Members login
+    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test) {
+      return $collection->aggregate([
+        [
+          '$lookup' => [
+            'from' =>  "employees",
+            'localField' =>  "employee_id",
+            'foreignField' =>  "employee_id",
+            'as' =>  "employees"
+          ]
+        ],
+        [
+          '$match' => [
+            'active' => 1,
+            'employee_id' => [ '$in' => $arr_employee_id ],
+          ]
+        ],
+        [
+          '$unwind' => '$employees'
+        ]
+      ]);
+    });
 
     // user_id members
     $memberId_jas = [];
@@ -71,17 +93,15 @@ class ReportController extends Controller
       array_push($memberId_jas, new ObjectId($row->_id));
       array_push($jas_in_members_table, $row['employee_id']);
     }
-    // Employee login
-    $members_jasmine = Employee::whereIn('employee_id',$jas_in_members_table)->get(); 
-    // Employee not login
-    $members_jasmine_notlogin = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    // Member not login
+    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
-    $arr_members_jasmine_notlogin = [];
-    foreach($members_jasmine_notlogin as $row) {
-      array_push($arr_members_jasmine_notlogin, $row->employee_id);
+    $arr_members_jasmine = [];
+    foreach($members_jasmine as $row) {
+      array_push($arr_members_jasmine, $row->employee_id);
     }
-    $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine_notlogin)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
 
     // Pretest
@@ -166,26 +186,26 @@ class ReportController extends Controller
       ]);
     });
     // Member ที่ login เข้าระบบแล่้ว 
-    foreach($members_jasmine as $value) {
+    foreach($members as $value) {
       $values_id = (string)$value->_id;
       $datas[$values_id]['_id'] = $values_id;
-      $datas[$values_id]['employee_id'] = $value->employee_id;
-      if(!empty($value->tinitial)) { $datas[$values_id]['tinitial'] = $value->tinitial; } else { $datas[$values_id]['tinitial'] = ''; }
-      if(!empty($value->tf_name)) { $datas[$values_id]['firstname'] = $value->tf_name; } else { $datas[$values_id]['firstname'] = ''; }
-      if(!empty($value->tl_name)) { $datas[$values_id]['lastname'] = $value->tl_name; } else { $datas[$values_id]['lastname'] = ''; }
-      if(!empty($value->workplace)) { $datas[$values_id]['workplace'] = $value->workplace; } else { $datas[$values_id]['workplace'] = ''; }
-      if(!empty($value->title_name)) { $datas[$values_id]['title'] = $value->title_name; } else { $datas[$values_id]['title'] = ''; }
-      if(!empty($value->company)) { $datas[$values_id]['company'] = $value->company; } else { $datas[$values_id]['company'] = ''; }
-      if(!empty($value->division_name)) { $datas[$values_id]['division'] = $value->division_name; } else { $datas[$values_id]['division'] = ''; }
-      if(!empty($value->section_name)) { $datas[$values_id]['section'] = $value->section_name; } else { $datas[$values_id]['section'] = ''; }
-      if(!empty($value->dept_name)) { $datas[$values_id]['department'] = $value->dept_name; } else { $datas[$values_id]['department'] = ''; }
-      if(!empty($value->branch_name)) { $datas[$values_id]['branch'] = $value->branch_name; } else { $datas[$values_id]['branch'] = ''; }
-      if(!empty($value->region)) { $datas[$values_id]['region'] = $value->region; } else { $datas[$values_id]['region'] = ''; }
-      if(!empty($value->staff_grade)) { $datas[$values_id]['staff_grade'] = $value->staff_grade; } else { $datas[$values_id]['staff_grade'] = ''; }
-      if(!empty($value->job_family)) { $datas[$values_id]['job_family'] = $value->job_family; } else { $datas[$values_id]['job_family'] = ''; }
+      $datas[$values_id]['employee_id'] = $value->employees->employee_id;
+      if(!empty($value->employees->tinitial)) { $datas[$values_id]['tinitial'] = $value->employees->tinitial; } else { $datas[$values_id]['tinitial'] = ''; }
+      if(!empty($value->employees->tf_name)) { $datas[$values_id]['firstname'] = $value->employees->tf_name; } else { $datas[$values_id]['firstname'] = ''; }
+      if(!empty($value->employees->tl_name)) { $datas[$values_id]['lastname'] = $value->employees->tl_name; } else { $datas[$values_id]['lastname'] = ''; }
+      if(!empty($value->employees->workplace)) { $datas[$values_id]['workplace'] = $value->employees->workplace; } else { $datas[$values_id]['workplace'] = ''; }
+      if(!empty($value->employees->title_name)) { $datas[$values_id]['title'] = $value->employees->title_name; } else { $datas[$values_id]['title'] = ''; }
+      if(!empty($value->employees->company)) { $datas[$values_id]['company'] = $value->employees->company; } else { $datas[$values_id]['company'] = ''; }
+      if(!empty($value->employees->division_name)) { $datas[$values_id]['division'] = $value->employees->division_name; } else { $datas[$values_id]['division'] = ''; }
+      if(!empty($value->employees->section_name)) { $datas[$values_id]['section'] = $value->employees->section_name; } else { $datas[$values_id]['section'] = ''; }
+      if(!empty($value->employees->dept_name)) { $datas[$values_id]['department'] = $value->employees->dept_name; } else { $datas[$values_id]['department'] = ''; }
+      if(!empty($value->employees->branch_name)) { $datas[$values_id]['branch'] = $value->employees->branch_name; } else { $datas[$values_id]['branch'] = ''; }
+      if(!empty($value->employees->region)) { $datas[$values_id]['region'] = $value->employees->region; } else { $datas[$values_id]['region'] = ''; }
+      if(!empty($value->employees->staff_grade)) { $datas[$values_id]['staff_grade'] = $value->employees->staff_grade; } else { $datas[$values_id]['staff_grade'] = ''; }
+      if(!empty($value->employees->job_family)) { $datas[$values_id]['job_family'] = $value->employees->job_family; } else { $datas[$values_id]['job_family'] = ''; }
     }
     // Member ที่ยังไม่ login เข้าระบบ
-    foreach($members_jasmine_notlogin as $value) {
+    foreach($members_jasmine as $value) {
       $datas[$value->_id]['employee_id'] = $value->employee_id;
       $datas[$value->_id]['tinitial'] = $value->tinitial;
       $datas[$value->_id]['firstname'] = $value->tf_name;
@@ -250,6 +270,8 @@ class ReportController extends Controller
   }
 
   public function formatData($training_id, $course_id, $datas) {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $dataArray = [];
     $now = new UTCDateTime(Carbon::now()->timestamp * 1000);
     foreach ($datas as $data) {
