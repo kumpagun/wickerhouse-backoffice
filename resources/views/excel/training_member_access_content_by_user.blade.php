@@ -112,12 +112,6 @@
           <td class="text-center">-</td>
         @endif
 
-        @if(!empty($data->staff_grade)) 
-          <td class="text-center">{{ $data->staff_grade }}</td>
-        @else 
-          <td class="text-center">-</td>
-        @endif
-
         @if(!empty($data->job_family)) 
           <td class="text-center">{{ $data->job_family }}</td>
         @else 
