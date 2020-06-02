@@ -235,7 +235,7 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-lg-6 mb-2">
+    <div class="col-12 col-xl-6 mb-2">
       <div class="card h-100">
         <div class="card-header">
           <h4 class="card-title text-center">หลักสูตรที่ได้รับความนิยม (หลักสูตรทั่วไป)</h4>
@@ -247,7 +247,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-6 mb-2">
+    <div class="col-12 col-xl-6 mb-2">
       <div class="card h-100">
         <div class="card-header">
           <h4 class="card-title text-center">พนักงานเข้าเรียนมากที่สุด</h4>
@@ -259,7 +259,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-6 mb-2">
+    <div class="col-12 col-xl-6 mb-2">
       <div class="card h-100">
         <div class="card-header">
           <h4 class="card-title text-center">แผนกที่พนักงานเข้าเรียนมากที่สุด</h4>
@@ -271,7 +271,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-6 mb-2">
+    <div class="col-12 col-xl-6 mb-2">
       <div class="card h-100">
         <div class="card-header">
           <h4 class="card-title text-center">Job family ที่พนักงานเข้าเรียนมากที่สุด</h4>
@@ -283,7 +283,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-6 mb-2">
+    <div class="col-12 col-xl-6 mb-2">
       <div class="card h-100">
         <div class="card-header">
           <h4 class="card-title text-center">ผู้เรียนที่สำเร็จหลักสูตรมากที่สุด</h4>
@@ -903,7 +903,7 @@
         // Add custom colors
         color: ['#5b9bd5','#ed7d31','#ff66ff','#548235','#00b0f0'],
         grid: {
-          left: 100
+          left: 120, bottom: 120
         },
         toolbox: {
           show: true,
@@ -990,7 +990,7 @@
         // Add custom colors
         color: ['#5b9bd5','#ed7d31','#ff66ff','#548235','#00b0f0'],
         grid: {
-          left: 100
+          left: 120, bottom: 120
         },
 
         
@@ -1078,7 +1078,7 @@
         // Add custom colors
         color: ['#5b9bd5','#ed7d31','#ff66ff','#548235','#00b0f0'],
         grid: {
-          left: 100
+          left: 120, bottom: 120
         },
 
         
@@ -1166,7 +1166,7 @@
         // Add custom colors
         color: ['#5b9bd5','#ed7d31','#ff66ff','#548235','#00b0f0'],
         grid: {
-          left: 100
+          left: 120, bottom: 120
         },
 
         
@@ -1254,7 +1254,7 @@
         // Add custom colors
         color: ['#5b9bd5','#ed7d31','#ff66ff','#548235','#00b0f0'],
         grid: {
-          left: 100
+          left: 120, bottom: 120
         },
 
         
