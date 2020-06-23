@@ -235,7 +235,15 @@ Route::group(['prefix' => 'employee', 'middleware' => ['auth', 'role:admin|cours
   Route::get('/vip', 'EmployeeVIPController@employee_vip_index')->name('employee_vip_index');
   Route::get('/vip/create/{id?}', 'EmployeeVIPController@employee_vip_create')->name('employee_vip_create');
   Route::post('/vip/store/{id?}', 'EmployeeVIPController@employee_vip_store')->name('employee_vip_store');
-  Route::match(['get','post'],'/vip/delete/{id?}', 'EmployeeVIPController@employee_vip_delete')->name('employee_vip_delete');
+  Route::match(['get','post'], '/vip/delete/{id?}', 'EmployeeVIPController@employee_vip_delete')->name('employee_vip_delete');
+
+  // Delegate
+  Route::group(['prefix' => 'delegate', 'middleware' => ['auth', 'role:admin|course']], function () {
+    Route::get('/', 'EmployeeDelegateController@index')->name('employee_delegate_index');
+    Route::get('/create/{id?}', 'EmployeeDelegateController@create')->name('employee_delegate_create');
+    Route::post('/store/{id?}', 'EmployeeDelegateController@store')->name('employee_delegate_store');
+    Route::match(['get','post'], '/delete/{id?}', 'EmployeeDelegateController@delete')->name('employee_delegate_delete');
+  });
 });
 
 // REPORT

@@ -5,6 +5,7 @@ use Mem;
 use Response;
 use DB;
 use Auth;
+use Member as MemberClass;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -34,22 +35,6 @@ use App\Models\Reviews_user;
 
 class MemberAccessByUserTrainingController extends Controller
 {
-  public function get_employee_id_from_head() {
-    $employee_id = Auth::user()->username;
-    $arr_employee_id = [];
-    array_push($arr_employee_id, $employee_id);
-    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
-
-    $data_back = [];
-    if(!empty($employees)) {
-      foreach($employees as $employee) {
-        array_push($data_back, $employee->employee_id);
-      }
-    } 
-
-    return $data_back;
-  }
-
   public function access_content_by_user (Request $request)
   {
     $search_input = $request->input('search_input');
@@ -59,7 +44,7 @@ class MemberAccessByUserTrainingController extends Controller
 
     $employee_id = [];
     if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin')) {
-      $employee_id = $this->get_employee_id_from_head();
+      $employee_id = MemberClass::get_employee_id_from_head();
     }
 
     $query_group = Training::query()->where('status',1)->orderBy('created_at','desc')->get();
