@@ -1,15 +1,19 @@
 <?php
 
 namespace App\Classes;
+
 use Request;
+use Auth;
 use MongoDB\BSON\ObjectId as ObjectId;
-use App\Models\Member;
-use App\User;
 use Maklad\Permission\Models\Role;
+
+// Model
+use App\User;
 use App\Models\Member_jasmine;
 use App\Models\Employee;
 use App\Models\Giftcode_usage;
-use Auth;
+use App\Models\Member;
+use App\Models\Delegate;
 
 class MemberClass
 {
@@ -141,8 +145,15 @@ class MemberClass
 
   public function get_employee_id_from_head() {
     $employee_id = Auth::user()->username;
+    $delegate = Delegate::where('employee_delegate_id',$employee_id)->orderBy('created_at','desc')->first();
     $arr_employee_id = [];
-    array_push($arr_employee_id, $employee_id);
+    
+    if(!empty($delegate)) {
+      array_push($arr_employee_id, $delegate->employee_executive_id);
+    } else {
+      array_push($arr_employee_id, $employee_id);
+    }
+   
     $employees = Employee::whereIn('heads', $arr_employee_id)->get();
 
     $data_back = [];
@@ -159,6 +170,15 @@ class MemberClass
     $member = Employee::where('employee_id', $employee_id)->first();
     if(!empty($member)) {
       return $member->tf_name.' '.$member->tl_name;
+    } else {
+      return '';
+    }
+  }
+
+  public function get_employee_from_employee_id($employee_id) {
+    $member = Employee::where('employee_id', $employee_id)->first();
+    if(!empty($member)) {
+      return $member;
     } else {
       return '';
     }

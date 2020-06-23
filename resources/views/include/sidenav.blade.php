@@ -129,6 +129,9 @@
       <li class="nav-item">
         <a href="{{ route('users_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">List user</span></a>
       </li>
+      <li class="nav-item">
+        <a href="{{ route('employee_delegate_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">ตัวแทนผู้บริหาร</span></a>
+      </li>
       {{-- <li class="nav-item">
         <a href="{{ route('roles_index') }}"><i class="feather icon-unlock"></i><span class="menu-title" data-i18n="">Roles</span></a>
       </li>
