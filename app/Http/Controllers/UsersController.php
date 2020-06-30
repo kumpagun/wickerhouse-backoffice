@@ -20,7 +20,7 @@ class UsersController extends Controller
 
   public function index()
   {
-    $datas = User::all();
+    $datas = User::where('status',1)->get();
     $withData = ['datas' => $datas];
     return view('users.index',$withData);
   }

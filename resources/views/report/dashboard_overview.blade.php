@@ -770,7 +770,7 @@
             textStyle: {
               fontSize: 16
             },
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -845,7 +845,7 @@
             textStyle: {
               fontSize: 16
             },
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -925,7 +925,7 @@
               fontSize: 16
             },
             formatter: '{value}',
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -1013,7 +1013,7 @@
               fontSize: 16
             },
             formatter: '{value}',
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -1101,7 +1101,7 @@
               fontSize: 16
             },
             formatter: '{value}',
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -1189,7 +1189,7 @@
               fontSize: 16
             },
             formatter: '{value}',
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {
@@ -1277,7 +1277,7 @@
               fontSize: 16
             },
             formatter: '{value}',
-            rotate: 20
+            rotate: 30
           }
         },
         yAxis: {

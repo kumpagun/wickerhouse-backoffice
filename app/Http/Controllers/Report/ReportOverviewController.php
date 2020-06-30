@@ -295,14 +295,14 @@ class ReportOverviewController extends Controller
         'name' => 'เข้าเรียนแล้ว'
       ]);
     }
-    if(!empty($employee_active)) {
+    if(!empty($inactive)) {
       array_push($data_back['label'], 'ยังไม่เข้าเรียน');
       array_push($data_back['total'], [
         'value' => $inactive,
         'name' => 'ยังไม่เข้าเรียน'
       ]);
     }
-    if(!empty($employee_active)) {
+    if(!empty($employee_success)) {
       array_push($data_back['label'], 'เรียนสำเร็จ');
       array_push($data_back['total'], [
         'value' => $employee_success,
@@ -781,10 +781,16 @@ class ReportOverviewController extends Controller
     $data_back['label'] = [];
     $data_back['total'] = [];
     $loop = 1;
+
     foreach($member_access_by_course as $row) {
       $department = "อื่นๆ";
       if($row->_id['department']!='') {
-        $department = $row->_id['department'];
+        $index_region = array_search($row->_id['department'], $this->region_full); 
+        if(!empty($index_region)) {
+          $department = $this->region_short[$index_region];
+        } else {
+          $department = $row->_id['department'];
+        }
       }
       if($loop <= 5) {
         array_push($data_back['label'],$department);
