@@ -145,17 +145,23 @@ class MemberClass
 
   public function get_employee_id_from_head() {
     $employee_id = Auth::user()->username;
+    $headofhead = ['SVP - Acting Head of Regional Operation Group','ผู้อำนวยการภาค'];
+    $director = Employee::where('employee_id',$employee_id)->whereIn('title_name', $headofhead)->first();
     $delegate = Delegate::where('employee_delegate_id',$employee_id)->orderBy('created_at','desc')->first();
     $arr_employee_id = [];
     
-    if(!empty($delegate)) {
-      array_push($arr_employee_id, $delegate->employee_executive_id);
-    } else {
+    if(!empty($director)) { // หัวหน้าภาค
+      $employees = Employee::where('region', $director->region)->get();
+    }
+    else if(!empty($delegate)) { // ตัวแทนหัวหน้าภาค
+      $head = Employee::where('employee_id',$delegate->employee_executive_id)->first();
+      $employees = Employee::where('region', $head->region)->get();
+    } 
+    else { // // หัวหน้า
       array_push($arr_employee_id, $employee_id);
+      $employees = Employee::whereIn('heads', $arr_employee_id)->get();
     }
    
-    $employees = Employee::whereIn('heads', $arr_employee_id)->get();
-
     $data_back = [];
     if(!empty($employees)) {
       foreach($employees as $employee) {
