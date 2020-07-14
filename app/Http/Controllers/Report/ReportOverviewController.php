@@ -272,6 +272,7 @@ class ReportOverviewController extends Controller
       ]);
     });
     foreach($member_access_by_course as $row) {
+      dd($total_course);
       if($row->total_course==$total_course) {
         $employee_success++;
       }
@@ -309,6 +310,8 @@ class ReportOverviewController extends Controller
         'name' => 'เรียนสำเร็จ'
       ]);
     }
+
+    dd($employee_success);
     
     return $data_back;
   }

@@ -45,6 +45,7 @@
             <th class="text-center">รหัสผู้บริหาร</th>
             <th class="text-center">ชื่อ - นามสกุล</th>
             <th class="text-center">ตำแหน่ง</th>
+            <th class="text-center">ภูมิภาค</th>
             <th class="text-center">รหัสตัวแทน</th>
             <th class="text-center">ชื่อ - นามสกุล</th>
             <th class="text-center">ตำแหน่ง</th>
@@ -61,6 +62,7 @@
                 <td class="align-baseline text-center">{{ $item->employee_executive_id }}</td>
                 <td class="align-baseline text-center">@if(!empty($executive)) {{ $executive->tf_name.' '.$executive->tl_name }} @else ไม่มีข้อมูล @endif</td>
                 <td class="align-baseline text-center">@if(!empty($executive)) {{ $executive->title_name }} @else ไม่มีข้อมูล @endif</td>
+                <td class="align-baseline text-center">@if(!empty($executive)) {{ $executive->region }} @else ไม่มีข้อมูล @endif</td>
                 <td class="align-baseline text-center">{{ $item->employee_delegate_id }}</td>
                 <td class="align-baseline text-center">@if(!empty($delegate)) {{ $delegate->tf_name.' '.$delegate->tl_name }} @else ไม่มีข้อมูล @endif</td>
                 <td class="align-baseline text-center">@if(!empty($delegate)) {{ $delegate->title_name }} @else ไม่มีข้อมูล @endif</td>

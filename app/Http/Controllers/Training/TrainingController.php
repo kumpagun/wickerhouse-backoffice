@@ -616,7 +616,7 @@ class TrainingController extends Controller
         }
       }
     }
-    $datas = $query->get();
+    $datas = $query->limit(2000)->get();
 
     $data_back = [
       'status' => 200,
