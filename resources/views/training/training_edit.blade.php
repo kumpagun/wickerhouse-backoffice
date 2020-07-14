@@ -354,6 +354,7 @@
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-12 mb-2 text-center text-danger">สามารถเลือกพนักงานได้ครั้งละ 2,000 คนเท่านั้น</div>
                   <div class="col-12">
                     @can('editor')
                     <button type="submit" class="btn btn-block btn-secondary">บันทึก</button>
@@ -604,10 +605,11 @@
     },
     function(data, status){
       data.datas.map((values,index) => {
+        let emp_index = index + 1
         $("[name='employees[]']").append(
           $('<option> ', {
             value: values.employee_id,
-            text: index+ ' ' +values.tinitial+' '+ values.tf_name + ' ' + values.tl_name + ' ('+values.employee_id+')'
+            text: emp_index+ '. ' +values.tinitial+' '+ values.tf_name + ' ' + values.tl_name + ' ('+values.employee_id+')'
           })
         );
       })
