@@ -28,6 +28,8 @@ class MemberAccessContentController extends Controller
 
   // ยอดคนเข้าดู ep 
   public function member_access_content_by_RO(Request $request){
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $search_group = $request->input('search_group'); 
     $platform = $request->input('platform'); 
     $employee_id = [];

@@ -9,6 +9,8 @@ class Export_Review implements FromView
 
   public function __construct($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total)
   {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $this->training = $training;
     $this->review_group = $review_group;
     $this->reviews = $reviews;
