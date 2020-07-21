@@ -23,6 +23,8 @@ class MemberAccessByUserController extends Controller
 {
   public function access_content_by_user (Request $request)
   {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $search_input = $request->input('search_input');
     $search_group = $request->input('search_group');
     $filter_status = $request->input('filter_status');

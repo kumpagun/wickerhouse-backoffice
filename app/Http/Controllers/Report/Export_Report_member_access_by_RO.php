@@ -9,6 +9,8 @@ class Export_Report_member_access_by_RO implements FromView
 
   public function __construct($training_title,$datas,$data_total)
   {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $this->training_title = $training_title;
     $this->datas = $datas;
     $this->data_total = $data_total;

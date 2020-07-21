@@ -16,6 +16,9 @@ class Export_Report_member_access implements FromQuery, WithMapping, WithHeading
 
   public function __construct($training_id,$course_id)
   {
+    ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 1800);
+    
     $this->training_id = $training_id;
     $this->course_id = $course_id;
     $this->count = 1;
