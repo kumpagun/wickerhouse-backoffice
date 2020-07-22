@@ -27,6 +27,8 @@ class ReportNormalController extends Controller
   // CRONTAB 192.168.30.16
   public function index (Request $request)
   {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $date_now = Carbon::now();
     $date = new UTCDateTime($date_now->startOfDay());
 
@@ -44,6 +46,8 @@ class ReportNormalController extends Controller
   }
 
   public function get_data($input_datas) {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $datas = [];
     $course_id = new ObjectId($input_datas->_id);
     $total_episode = $input_datas->total_episode;
