@@ -57,6 +57,8 @@ class ReportController extends Controller
     $user_test = [
       new ObjectId("5de5e565bc48d45e27e5f349")
     ];
+    $date_now = Carbon::create(2020, 6, 30, 0, 0, 0);
+    $date = new UTCDateTime($date_now->startOfDay());
 
     // ผู้เรียนทั้งหมด
     $training_user = TrainingUser::where('status',1)->where('training_id', $training_id)->get();
@@ -96,7 +98,7 @@ class ReportController extends Controller
       array_push($jas_in_members_table, $row['employee_id']);
     }
     // Member not login
-    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->where('expired_at','<=',$date)->get(); 
 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
     $arr_members_jasmine = [];
