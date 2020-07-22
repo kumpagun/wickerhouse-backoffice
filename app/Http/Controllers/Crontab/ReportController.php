@@ -26,17 +26,16 @@ class ReportController extends Controller
   {
     ini_set('memory_limit', '-1');
 		ini_set('max_execution_time', 1800);
-    // $date_now = Carbon::now();
-    $date_now = Carbon::create(2020, 6, 30, 0, 0, 0);
+    $date_now = Carbon::now();
     $date = new UTCDateTime($date_now->startOfDay());
 
-    $date_start  = new UTCDateTime($date_now->addDays(1)->startOfDay());
-    $date_end  = new UTCDateTime($date_now->subDays(1)->endOfDay());
+    $date_start  = new UTCDateTime(Carbon::now()->addDays(1)->startOfDay());
+    $date_end  = new UTCDateTime(Carbon::now()->subDays(1)->endOfDay());
     // $query = Training::where('status',1)->where('_id',new ObjectId('5e85f50e042105442c52a970'));
     $query = Training::where('status',1);
-    // $query->where('published_at','<=',$date_start);
-    // $query->where('expired_at','>=',$date_end);
-    $query->where('_id',new ObjectId("5eac2b6f4dec115cf2115c46"));
+    $query->where('published_at','<=',$date_start);
+    $query->where('expired_at','>=',$date_end);
+    // $query->where('_id',new ObjectId("5e85f50e042105442c52a970"));
     $trainings = $query->get(); 
 
     if(!empty($trainings)) {
@@ -47,6 +46,7 @@ class ReportController extends Controller
       }
     }
   }
+
 
   public function get_data($input_datas) {
     ini_set('memory_limit', '-1');
@@ -108,6 +108,7 @@ class ReportController extends Controller
 
     // Pretest
     $pretests = Examination_user::select('user_id','point')->where('course_id',$course_id)->where('training_id',$training_id)->whereIn('user_id',$memberId_jas)->where('type','pretest')->where('status',1)->groupBy('user_id','point')->get();
+    
     // Posttest
     $posttests = Examination_user::raw(function ($collection) use ($memberId_jas, $course_id, $training_id, $user_test) {
       return $collection->aggregate([
