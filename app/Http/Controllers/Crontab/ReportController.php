@@ -346,7 +346,6 @@ class ReportController extends Controller
   }
 
   public function insertDataArray($data) {
-		// ini_set("memory_limit","10M");
 		ini_set('memory_limit', '-1');
 		ini_set('max_execution_time', 1800);
 		$start = 0;
@@ -355,7 +354,6 @@ class ReportController extends Controller
 		$limit = count($data);
 		while ($start < $limit) {
 			$data_slice = array_slice ( $data, $start, $length );
-			// dd($data_slice);
 			DB::table('report_member_accesses')->insert($data_slice);
 			$start += $length;
 		}
