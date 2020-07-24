@@ -57,6 +57,8 @@ class ReportController extends Controller
     $user_test = [
       new ObjectId("5de5e565bc48d45e27e5f349")
     ];
+    $date_now = Carbon::create(2020, 6, 30, 0, 0, 0);
+    $date = new UTCDateTime($date_now->startOfDay());
 
     // ผู้เรียนทั้งหมด
     $training_user = TrainingUser::where('status',1)->where('training_id', $training_id)->get();
@@ -66,7 +68,7 @@ class ReportController extends Controller
     }
     
     // Members login
-    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test) {
+    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test, $date) {
       return $collection->aggregate([
         [
           '$lookup' => [
@@ -79,7 +81,7 @@ class ReportController extends Controller
         [
           '$match' => [
             'active' => 1,
-            'employee_id' => [ '$in' => $arr_employee_id ],
+            'employee_id' => [ '$in' => $arr_employee_id ]
           ]
         ],
         [
@@ -96,7 +98,12 @@ class ReportController extends Controller
       array_push($jas_in_members_table, $row['employee_id']);
     }
     // Member not login
-    $members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    $q_members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table);
+    $q_members_jasmine->where(function ($q) use ($date) {
+      $q->orWhere('expired_at','<=',$date);
+      $q->orWhereNull('expired_at');
+    }); 
+    $members_jasmine = $q_members_jasmine->get();
 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
     $arr_members_jasmine = [];
