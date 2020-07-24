@@ -38,6 +38,8 @@ class ReportCourse2Controller extends Controller
 
   // ยอดคนเข้าดู ep 
   public function index(Request $request){
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $search_group = $request->input('search_group'); 
     $search_region = $request->input('search_region');
 
