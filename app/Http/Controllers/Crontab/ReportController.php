@@ -66,9 +66,26 @@ class ReportController extends Controller
     foreach($training_user as $row) {
       array_push($arr_employee_id, $row->employee_id);
     }
+    // ผู้เรียนทั้งหมด
+
+    // คนที่ลาออก
+    $query_expire_member = Employee::where('status',2)->get();
+    $arr_expire_member = [];
+    foreach($query_expire_member as $row) {
+      array_push($arr_expire_member, $row->employee_id);
+    }
+    // คนที่ลาออก
+
+    // เฉพาะคนที่ active
+    $employee_active = [];
+    $employee_active = array_diff($arr_employee_id, $arr_expire_member);
+    $arr_employee_active = [];
+    foreach($employee_active as $row) {
+      array_push($arr_employee_active, $row);
+    }
     
     // Members login
-    $members = Member::raw(function ($collection) use ($arr_employee_id, $user_test, $date) {
+    $members = Member::raw(function ($collection) use ($arr_employee_active) {
       return $collection->aggregate([
         [
           '$lookup' => [
@@ -81,7 +98,7 @@ class ReportController extends Controller
         [
           '$match' => [
             'active' => 1,
-            'employee_id' => [ '$in' => $arr_employee_id ]
+            'employee_id' => [ '$in' => $arr_employee_active ]
           ]
         ],
         [
@@ -98,11 +115,7 @@ class ReportController extends Controller
       array_push($jas_in_members_table, $row['employee_id']);
     }
     // Member not login
-    $q_members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table);
-    $q_members_jasmine->where(function ($q) use ($date) {
-      $q->orWhere('expired_at','<=',$date);
-      $q->orWhereNull('expired_at');
-    }); 
+    $q_members_jasmine = Employee::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$jas_in_members_table)->where('status',1); 
     $members_jasmine = $q_members_jasmine->get();
 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
