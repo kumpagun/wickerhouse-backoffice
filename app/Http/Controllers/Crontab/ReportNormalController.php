@@ -68,7 +68,8 @@ class ReportNormalController extends Controller
         ],
         [
           '$match' => [
-            'active' => 1
+            'active' => 1,
+            'employees.status' => 1
           ]
         ],
         [
