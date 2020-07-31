@@ -17,7 +17,10 @@
       </li>
       @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
       <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user_training') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
+        <a href="{{ route('report_access_content_by_user_training') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการอบรมรายบุคคล</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('report_access_content_by_director') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานรายบุคคล(ภูมิภาค)</span></a>
       </li>
       @endif
       @hasrole('admin|banner')

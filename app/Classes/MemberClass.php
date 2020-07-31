@@ -157,6 +157,9 @@ class MemberClass
       $head = Employee::where('employee_id',$delegate->employee_executive_id)->first();
       $employees = Employee::where('region', $head->region)->get();
     } 
+    // else if(Auth::user()->hasRole('admin')) {
+    //   $employees = Employee::all();
+    // }
     else { // // หัวหน้า
       array_push($arr_employee_id, $employee_id);
       $employees = Employee::whereIn('heads', $arr_employee_id)->get();
