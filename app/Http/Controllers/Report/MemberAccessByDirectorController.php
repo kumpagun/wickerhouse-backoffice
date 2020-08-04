@@ -56,34 +56,45 @@ class MemberAccessByDirectorController extends Controller
       $group_id_select = $search_group;
     }
 
-    $active_emp = [];
 
     $datas_group = Training::find($group_id_select);
     $group_id = new ObjectId($datas_group->_id);
     $course_id = new ObjectId($datas_group->course_id);
 
-    // Training user
-    $query = Report_member_access::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
-    $query->whereIn('employee_id',$employee_id);
-    $query->where('play_course','>',0);
-    $user_training = $query->get();
-    foreach($user_training as $row) {
-      array_push($active_emp, $row->employee_id);
+    $active_emp = [];
+    $inactive_emp = [];
+    $user_training = [];
+    $user_expect_training = [];
+
+    if($filter_status!='inactive') { 
+      // Training user
+      $query = Report_member_access::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
+      $query->whereIn('employee_id',$employee_id);
+      $query->where('play_course','>',0);
+      $user_training = $query->get();
+      foreach($user_training as $row) {
+        array_push($active_emp, $row->employee_id);
+      }
+
+      $active_training = [];
+      $active_training = array_diff($active_emp,$employee_id);
+
+      // Expect training user
+      $query = Report_member_access_except_training::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
+      $query->whereIn('employee_id',$active_training);
+      $query->where('play_course','>',0);
+      $user_expect_training = $query->get();
+      foreach($user_expect_training as $row) {
+        array_push($active_emp, $row->employee_id);
+      }
     }
 
-    $active_training = array_diff($active_emp,$employee_id);
-
-    // Expect training user
-    $query = Report_member_access_except_training::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
-    $query->whereIn('employee_id',$active_training);
-    $query->where('play_course','>',0);
-    $user_expect_training = $query->get();
-    foreach($user_expect_training as $row) {
-      array_push($active_emp, $row->employee_id);
+    if($filter_status!='active') {
+      $active_training = [];
+      $active_training = array_diff($active_emp,$employee_id);
+      // Inactive user
+      $inactive_emp = Employee::where('status',1)->whereIn('employee_id',$active_training)->get();
     }
-
-    // Inactive user
-    $inactive_emp = Employee::where('status',1)->whereNotIn('employee_id',$active_emp)->get();
 
     $datas = new Collection();
     foreach($user_training as $row) {
