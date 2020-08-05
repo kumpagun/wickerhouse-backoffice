@@ -6,17 +6,6 @@
   </style>
   @foreach ($review_group as $group)
   <table class="table table-hover table-sm">
-    <thead>
-      <tr>
-        <th colspan="99"><b>หลักสูตร{{ $course->title }}</b></th>
-      </tr>
-      <tr>
-        <th colspan="99"><b> ผู้ประเมิินจำนวน {{ $data_total }} คน</b></th>
-      </tr>
-      <tr>
-        <th colspan="99"><b>{{ $group->title }}</b></th>
-      </tr>
-    </thead>
     @foreach ($reviews as $review)
       @if($review->type=='choice')
         @if($group->_id == $review->review_group_id)

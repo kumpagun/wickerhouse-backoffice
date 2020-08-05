@@ -66,32 +66,35 @@ class MemberAccessByDirectorController extends Controller
     $user_training = [];
     $user_expect_training = [];
 
-    if($filter_status!='inactive') { 
-      // Training user
-      $query = Report_member_access::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
-      $query->whereIn('employee_id',$employee_id);
-      $query->where('play_course','>',0);
-      $user_training = $query->get();
-      foreach($user_training as $row) {
-        array_push($active_emp, $row->employee_id);
-      }
+    // Training user
+    $query = Report_member_access::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
+    $query->whereIn('employee_id',$employee_id);
+    $query->where('play_course','>',0);
+    $user_training = $query->get();
+    foreach($user_training as $row) {
+      array_push($active_emp, $row->employee_id);
+    }
 
-      $active_training = [];
-      $active_training = array_diff($active_emp,$employee_id);
+    $active_training = [];
+    $active_training = array_diff($active_emp,$employee_id);
 
-      // Expect training user
-      $query = Report_member_access_except_training::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
-      $query->whereIn('employee_id',$active_training);
-      $query->where('play_course','>',0);
-      $user_expect_training = $query->get();
-      foreach($user_expect_training as $row) {
-        array_push($active_emp, $row->employee_id);
-      }
+    // Expect training user
+    $query = Report_member_access_except_training::where('status',1)->where('training_id', $group_id )->where('course_id', $course_id);
+    $query->whereIn('employee_id',$active_training);
+    $query->where('play_course','>',0);
+    $user_expect_training = $query->get();
+    foreach($user_expect_training as $row) {
+      array_push($active_emp, $row->employee_id);
+    }
+
+    if($filter_status=='inactive') { 
+      $user_training = [];
+      $user_expect_training = [];
     }
 
     if($filter_status!='active') {
       $active_training = [];
-      $active_training = array_diff($active_emp,$employee_id);
+      $active_training = array_diff($employee_id,$active_emp);
       // Inactive user
       $inactive_emp = Employee::where('status',1)->whereIn('employee_id',$active_training)->get();
     }
@@ -109,6 +112,7 @@ class MemberAccessByDirectorController extends Controller
       $result['section'] = $row['section'];
       $result['department'] = $row['department'];
       $result['branch'] = $row['branch'];
+      $result['company'] = $row['company'];
       $result['region'] = $row['region'];
       $result['staff_grade'] = $row['staff_grade'];
       $result['job_family'] = $row['job_family'];
@@ -131,6 +135,7 @@ class MemberAccessByDirectorController extends Controller
       $result['section'] = $row['section'];
       $result['department'] = $row['department'];
       $result['branch'] = $row['branch'];
+      $result['company'] = $row['company'];
       $result['region'] = $row['region'];
       $result['staff_grade'] = $row['staff_grade'];
       $result['job_family'] = $row['job_family'];
@@ -153,6 +158,7 @@ class MemberAccessByDirectorController extends Controller
       $result['section'] = $row['section_name'];
       $result['department'] = $row['dept_name'];
       $result['branch'] = $row['branch_name'];
+      $result['company'] = $row['company'];
       $result['region'] = $row['region'];
       $result['staff_grade'] = $row['staff_grade'];
       $result['job_family'] = $row['job_family'];

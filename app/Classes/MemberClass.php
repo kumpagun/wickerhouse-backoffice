@@ -151,18 +151,18 @@ class MemberClass
     $arr_employee_id = [];
     
     if(!empty($director)) { // หัวหน้าภาค
-      $employees = Employee::where('region', $director->region)->get();
+      $employees = Employee::where('region', $director->region)->where('status',1)->get();
     }
     else if(!empty($delegate)) { // ตัวแทนหัวหน้าภาค
       $head = Employee::where('employee_id',$delegate->employee_executive_id)->first();
-      $employees = Employee::where('region', $head->region)->get();
+      $employees = Employee::where('region', $head->region)->where('status',1)->get();
     } 
     // else if(Auth::user()->hasRole('admin')) {
-    //   $employees = Employee::all();
+    //   $employees = Employee::where('region', 'ภาคเหนือตอนล่าง (RO4)')->where('status',1)->get();
     // }
     else { // // หัวหน้า
       array_push($arr_employee_id, $employee_id);
-      $employees = Employee::whereIn('heads', $arr_employee_id)->get();
+      $employees = Employee::whereIn('heads', $arr_employee_id)->where('status',1)->get();
     }
    
     $data_back = [];

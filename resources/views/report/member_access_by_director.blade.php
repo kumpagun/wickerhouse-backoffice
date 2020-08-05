@@ -25,7 +25,7 @@
         <div class="col-12">DeptName <span class="text-primary">{{ Auth::user()->user_info['department'] }}</span></div>
       </div>
       @endif
-      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user_training')}}" method="POST">
+      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_director')}}" method="POST">
         {{ csrf_field() }}
         <div class="col-6">
           <div class="row align-items-baseline">
@@ -62,7 +62,7 @@
           {{-- <a href="{{ $path }}" class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a> --}}
-          <a href="{{ route('report_access_content_by_user_training', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
+          <a href="{{ route('report_access_content_by_director', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a>
         </div>
@@ -83,6 +83,7 @@
             <th class="text-center align-middle">SectionName</th>
             <th class="text-center align-middle">DeptName</th>
             <th class="text-center align-middle">BranchName</th>
+            <th class="text-center align-middle">Company</th>
             <th class="text-center align-middle">Region</th>
             <th class="text-center align-middle">StaffGrade</th>
             <th class="text-center align-middle">JobFamily</th>
@@ -154,6 +155,12 @@
 
                 @if(!empty($data->branch)) 
                   <td class="text-center">{{ $data->branch }}</td>
+                @else 
+                  <td class="text-center">-</td>
+                @endif
+
+                @if(!empty($data->company)) 
+                  <td class="text-center">{{ $data->company }}</td>
                 @else 
                   <td class="text-center">-</td>
                 @endif
