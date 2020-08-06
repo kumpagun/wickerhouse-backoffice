@@ -259,6 +259,7 @@ Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
   Route::match(['get','post'],'/access-content-by-user-training', 'Report\MemberAccessByUserTrainingController@access_content_by_user')->name('report_access_content_by_user_training');
   Route::match(['get','post'],'/access-content-by-user-normal', 'Report\MemberAccessByUserController@access_content_by_user')->name('report_access_content_by_user');
   Route::match(['get','post'],'/access-content-by-director', 'Report\MemberAccessByDirectorController@access_content_by_director')->name('report_access_content_by_director');
+  Route::match(['get','post'],'/get-course-from-year/{year?}', 'Report\MemberAccessByDirectorController@get_course_from_year')->name('report_get_course_from_year');
   // REVIEW
   Route::group(['prefix' => 'review-training'], function () {
     Route::get('/', 'Report\ReviewTrainingController@review_index')->name('report_review_training_index');
