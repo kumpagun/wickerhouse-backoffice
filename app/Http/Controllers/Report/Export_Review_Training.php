@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Report;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class Export_Review implements FromView
+class Export_Review_Training implements FromView
 {
 
   public function __construct($training,$review_group,$reviews,$data_question,$data_choice,$datas_report,$count_report,$data_total)

@@ -25,14 +25,40 @@
         <div class="col-12">DeptName <span class="text-primary">{{ Auth::user()->user_info['department'] }}</span></div>
       </div>
       @endif
-      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_user_training')}}" method="POST">
+      <form class="row align-items-baseline justify-content-end" action="{{route('report_access_content_by_director')}}" method="POST">
         {{ csrf_field() }}
-        <div class="col-6">
+        <div class="col-12 col-md-4">
           <div class="row align-items-baseline">
-            <label class="col-12 col-md-4 text-left text-md-right"> Status</label>
-            <div class="col-12 col-md-8">
+            <div class="col-12">
+              <label class="text-left text-md-right"> ปี</label>
               <div class="form-group">
-                <select name="filter_status" class="form-control select2" onchange="this.form.submit()">
+                <select name="search_year" class="form-control select2" onchange="handleChangeYear(this.value)">
+                  @for($year=2019;$year<=date('Y');$year++)
+                    <option value={{$year}} @if($search_year == $year) selected @endif>{{ $year }}</option>
+                  @endfor
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="row align-items-baseline">
+            <div class="col-12">
+              <label class="text-left text-md-right"> หลักสูตร</label>
+              <div class="form-group">
+                <select name="search_group" class="form-control select2">
+                  <option value="" @if(empty($search_group)) selected @endif>กรุณาเลือกหลักสูตร</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-8 col-md-2">
+          <div class="row align-items-baseline">
+            <div class="col-12">
+              <label class="text-left text-md-right"> สถานะ</label>
+              <div class="form-group">
+                <select name="filter_status" class="form-control select2">
                   <option value="" @if(empty($filter_status)) selected @endif>ทั้งหมด</option>
                   <option value="active" @if('active' == $filter_status) selected @endif>เข้าเรียน</option>
                   <option value="inactive" @if('inactive' == $filter_status) selected @endif>ยังไม่เข้าเรียน</option>
@@ -41,17 +67,11 @@
             </div>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-4 col-md-2">
           <div class="row align-items-baseline">
-            <label class="col-12 col-md-4 text-left text-md-right"> Training List</label>
-            <div class="col-12 col-md-8">
-              <div class="form-group">
-                <select name="search_group" class="form-control select2" onchange="this.form.submit()">
-                  @foreach($query_group as $key)
-                    <option value="{{$key->_id}}" @if( $search_group == (string)($key->_id)) selected @endif>{{ $key->title}}</option>
-                  @endforeach
-                </select>
-              </div>
+            <div class="col-12">
+              <label class="text-left text-md-right"> &nbsp;</label>
+              <button type="submit" class="btn btn-block btn-primary">ค้นหา</button>
             </div>
           </div>
         </div>
@@ -59,10 +79,7 @@
 
       <div class="row text-right">
         <div class="col-12">
-          {{-- <a href="{{ $path }}" class="btn btn-social width-200 mb-1 btn-outline-github text-center">
-            <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
-          </a> --}}
-          <a href="{{ route('report_access_content_by_user_training', ['search_group'=>$search_group,'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
+          <a href="{{ route('report_access_content_by_director', ['search_group'=>$search_group, 'filter_status'=>$filter_status, 'platform'=>'excel']) }}"  class="btn btn-social width-200 mb-1 btn-outline-github text-center">
             <span class="fa fa-file-excel-o font-medium-4"></span> Export Excel
           </a>
         </div>
@@ -71,25 +88,26 @@
       <div class="o-scroll mt-2">
         <table id="table" class="table table-striped table-bordered zero-configuration">
           <thead>
-            <tr class="">
-            <th class="text-center align-middle">#</th>
-            <th class="text-center align-middle">EmployeeId</th>
-            <th class="text-center align-middle">Tinitial</th>
-            <th class="text-center align-middle">TFName</th>
-            <th class="text-center align-middle">TLName</th>
-            <th class="text-center align-middle">Workplace</th>
-            <th class="text-center align-middle">TitleName</th>
-            <th class="text-center align-middle">DivisionName</th>
-            <th class="text-center align-middle">SectionName</th>
-            <th class="text-center align-middle">DeptName</th>
-            <th class="text-center align-middle">BranchName</th>
-            <th class="text-center align-middle">Region</th>
-            <th class="text-center align-middle">StaffGrade</th>
-            <th class="text-center align-middle">JobFamily</th>
-            <th class="text-center align-middle">Status</th>
-            <th class="text-center align-middle">Pretest</th>
-            <th class="text-center align-middle">Posttest</th>
-            <th class="text-center align-middle">Course Complete</th>
+            <tr>
+              <th class="text-center align-middle">#</th>
+              <th class="text-center align-middle">EmployeeId</th>
+              <th class="text-center align-middle">Tinitial</th>
+              <th class="text-center align-middle">TFName</th>
+              <th class="text-center align-middle">TLName</th>
+              <th class="text-center align-middle">Workplace</th>
+              <th class="text-center align-middle">TitleName</th>
+              <th class="text-center align-middle">DivisionName</th>
+              <th class="text-center align-middle">SectionName</th>
+              <th class="text-center align-middle">DeptName</th>
+              <th class="text-center align-middle">BranchName</th>
+              <th class="text-center align-middle">Company</th>
+              <th class="text-center align-middle">Region</th>
+              <th class="text-center align-middle">StaffGrade</th>
+              <th class="text-center align-middle">JobFamily</th>
+              <th class="text-center align-middle">Status</th>
+              <th class="text-center align-middle">Pretest</th>
+              <th class="text-center align-middle">Posttest</th>
+              <th class="text-center align-middle">Course Complete</th>
             </tr>
           </thead>
           <tbody>
@@ -154,6 +172,12 @@
 
                 @if(!empty($data->branch)) 
                   <td class="text-center">{{ $data->branch }}</td>
+                @else 
+                  <td class="text-center">-</td>
+                @endif
+
+                @if(!empty($data->company)) 
+                  <td class="text-center">{{ $data->company }}</td>
                 @else 
                   <td class="text-center">-</td>
                 @endif
@@ -301,5 +325,56 @@ thead input {
         fixedHeader: true
     } );
   } );
+</script>
+
+<script>
+  $(document).ready(function() {
+    handleChangeYear('{{$search_year}}')
+  })
+  function handleChangeYear(year){
+    if(year){
+      $("[name='search_group']").empty()
+      var url = "{{ route('report_get_course_from_year') }}/"+year
+      $.get(url, function (data) {
+        if(data.datas.length > 0) {
+          $("[name='search_group']").append($('<option>', {
+            value: '',
+            text: 'กรุณาเลือกหลักสูตร'
+          }));
+          data.datas.forEach(function (ch) {
+            var search_group = "{{ $search_group }}"
+            if(search_group==ch._id) {
+              $("[name='search_group']").append(
+                $('<option> ', {
+                  value: ch._id,
+                  text: ch.title
+                }).attr('selected', 'selected')
+              )
+            } else {
+              $("[name='search_group']").append(
+                $('<option> ', {
+                  value: ch._id,
+                  text: ch.title
+                })
+              )
+            }
+          })
+        } else {
+          $("[name='search_group']").append($('<option>', {
+            value: '',
+            text: 'ไม่มีหลักสูตร'
+          }));
+        }
+        
+        $("[name='search_group']").attr('disabled', false)
+      })
+    } else {
+      $("[name='search_group']").find('option').remove()
+      $("[name='search_group']").append($('<option>', {
+        value: '',
+        text: 'กรุณาเลือกหลักสูตร'
+      }));
+    }
+  }
 </script>
 @endsection

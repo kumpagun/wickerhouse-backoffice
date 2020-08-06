@@ -74,6 +74,7 @@
             <th class="text-center align-middle">SectionName</th>
             <th class="text-center align-middle">DeptName</th>
             <th class="text-center align-middle">BranchName</th>
+            <th class="text-center align-middle">Company</th>
             <th class="text-center align-middle">Region</th>
             <th class="text-center align-middle">StaffGrade</th>
             <th class="text-center align-middle">JobFamily</th>
@@ -144,6 +145,12 @@
 
                 @if(!empty($data->branch)) 
                   <td class="text-center">{{ $data->branch }}</td>
+                @else 
+                  <td class="text-center">-</td>
+                @endif
+
+                @if(!empty($data->company)) 
+                  <td class="text-center">{{ $data->company }}</td>
                 @else 
                   <td class="text-center">-</td>
                 @endif

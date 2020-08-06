@@ -16,7 +16,7 @@
 
 @section('content-header-right')
   <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-    <a href="{{ route('report_review_create', ['training_id'=>$training->_id,'platform'=>'excel']) }}">
+    <a href="{{ route('report_review_training_create', ['training_id'=>$training->_id,'platform'=>'excel']) }}">
       <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
     </a>
   </div>
