@@ -119,11 +119,11 @@ class ReportController extends Controller
     $members_jasmine = $q_members_jasmine->get();
 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
-    $arr_members_jasmine = [];
-    foreach($members_jasmine as $row) {
-      array_push($arr_members_jasmine, $row->employee_id);
-    }
-    $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
+    // $arr_members_jasmine = [];
+    // foreach($members_jasmine as $row) {
+    //   array_push($arr_members_jasmine, $row->employee_id);
+    // }
+    // $member_import_excel = Member_jasmine::whereIn('employee_id',$arr_employee_id)->whereNotIn('employee_id',$arr_members_jasmine)->whereNotIn('employee_id',$jas_in_members_table)->get(); 
     // หาผู้เรียนที่มาจากการ Import excel และยังไม่เข้าเรียน
 
     // Pretest
@@ -245,22 +245,22 @@ class ReportController extends Controller
       $datas[$value->_id]['job_family'] = $value->job_family;
     }
     // Member ที่ยังไม่ login เข้าระบบ จากการ IMPORT EXCEL
-    foreach($member_import_excel as $value) {
-      $datas[$value->_id]['employee_id'] = $value->employee_id;
-      $datas[$value->_id]['tinitial'] = $value->tinitial;
-      $datas[$value->_id]['firstname'] = $value->firstname;
-      $datas[$value->_id]['lastname'] = $value->lastname;
-      $datas[$value->_id]['workplace'] = $value->workplace;
-      $datas[$value->_id]['title'] = $value->title;
-      $datas[$value->_id]['company'] = $value->company;
-      $datas[$value->_id]['division'] = $value->division;
-      $datas[$value->_id]['section'] = $value->section;
-      $datas[$value->_id]['department'] = $value->department;
-      $datas[$value->_id]['branch'] = $value->branch;
-      $datas[$value->_id]['region'] = $value->region;
-      $datas[$value->_id]['staff_grade'] = $value->staff_grade;
-      $datas[$value->_id]['job_family'] = $value->job_family;
-    }
+    // foreach($member_import_excel as $value) {
+    //   $datas[$value->_id]['employee_id'] = $value->employee_id;
+    //   $datas[$value->_id]['tinitial'] = $value->tinitial;
+    //   $datas[$value->_id]['firstname'] = $value->firstname;
+    //   $datas[$value->_id]['lastname'] = $value->lastname;
+    //   $datas[$value->_id]['workplace'] = $value->workplace;
+    //   $datas[$value->_id]['title'] = $value->title;
+    //   $datas[$value->_id]['company'] = $value->company;
+    //   $datas[$value->_id]['division'] = $value->division;
+    //   $datas[$value->_id]['section'] = $value->section;
+    //   $datas[$value->_id]['department'] = $value->department;
+    //   $datas[$value->_id]['branch'] = $value->branch;
+    //   $datas[$value->_id]['region'] = $value->region;
+    //   $datas[$value->_id]['staff_grade'] = $value->staff_grade;
+    //   $datas[$value->_id]['job_family'] = $value->job_family;
+    // }
     
     // Play course
     foreach($play_courses as $play_course) {
