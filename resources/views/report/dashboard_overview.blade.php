@@ -45,6 +45,7 @@
         <div class="card-content collapse show">
           <div class="card-body">
             <div id="chart-1" class="height-500 echart-container"></div>
+            <p class="text-sm mb-0">&nbsp;</p>
           </div>
         </div>
       </div>
@@ -58,6 +59,7 @@
         <div class="card-content collapse show">
           <div class="card-body">
             <div id="chart-2" class="height-500 echart-container"></div>
+            <p class="text-sm mb-0 text-center"><strong>หมายเหตุ</strong> % <span class="grey"><span class="badge badge-secondary px-1">&nbsp;</span> เรียนสำเร็จ</span> จะแสดง % ของคนที่เรียนครบทุกหลักสูตรเท่านั้น</p>
           </div>
         </div>
       </div>
