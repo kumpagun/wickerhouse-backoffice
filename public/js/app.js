@@ -36990,8 +36990,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/www/bo-online-learning/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/www/bo-online-learning/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/SorachaiZa007/Projects/jasmine-online-learning/src/bo-online-learning/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/SorachaiZa007/Projects/jasmine-online-learning/src/bo-online-learning/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

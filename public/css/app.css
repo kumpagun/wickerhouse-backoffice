@@ -57,6 +57,14 @@ a:hover {
   white-space: nowrap;
 }
 
+.grey {
+  color: #a5a5a5 !important;
+}
+
+.grey .badge-secondary {
+  background-color: #a5a5a5 !important;
+}
+
 .btn {
   border-radius: 0.4em !important;
 }
