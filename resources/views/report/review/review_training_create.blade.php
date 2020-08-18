@@ -15,9 +15,14 @@
 @endsection
 
 @section('content-header-right')
-  <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+  <div class="btn-group float-md-right mb-1" role="group" aria-label="Button group with nested dropdown">
     <a href="{{ route('report_review_training_create', ['training_id'=>$training->_id,'platform'=>'excel']) }}">
-      <button class="btn btn-round btn-secondary"><i class="ft-download mr-1"></i> Export</button>
+      <button class="btn btn-round btn-secondary"><i class="feather icon-download mr-1"></i> Export overview</button>
+    </a>
+  </div>
+  <div class="btn-group float-md-right mb-1 mr-1" role="group" aria-label="Button group with nested dropdown">
+    <a href="{{ route('report_review_training_by_user', ['training_id'=>$training->_id]) }}">
+      <button class="btn btn-round btn-secondary"><i class="feather icon-download mr-1"></i> Export รายบุคคล</button>
     </a>
   </div>
 @endsection

@@ -265,10 +265,12 @@ Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
     Route::get('/', 'Report\ReviewTrainingController@review_index')->name('report_review_training_index');
     Route::get('/create/{training_id}', 'Report\ReviewTrainingController@review_create')->name('report_review_training_create');
     Route::get('/create_answer/{review_id}', 'Report\ReviewTrainingController@review_create_answer_text')->name('report_review_training_create_answer_text');
+    Route::get('/byuser/{training_id}', 'Report\ReviewTrainingController@review_by_user')->name('report_review_training_by_user');
   });
   Route::group(['prefix' => 'review-normal'], function () {
     Route::get('/', 'Report\ReviewController@review_index')->name('report_review_index');
     Route::get('/create/{course_id}', 'Report\ReviewController@review_create')->name('report_review_create');
+    Route::get('/byuser/{course_id}', 'Report\ReviewController@review_by_user')->name('report_review_by_user');
     Route::get('/create_answer/{review_id}', 'Report\ReviewController@review_create_answer_text')->name('report_review_create_answer_text');
   });
 });
