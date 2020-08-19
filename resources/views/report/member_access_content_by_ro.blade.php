@@ -36,7 +36,7 @@
     <div class="col-12">
       <div class="text-right">
         <a href="{{ route('report_member_access_content_by_RO', ['search_group'=>$search_group,'platform'=>'excel']) }}">
-          <button class="btn btn-round btn-secondary my-1"><i class="ft-download mr-1"></i> Export</button>
+          <button class="btn btn-round btn-secondary my-1"><i class="feather icon-download mr-1"></i> Export</button>
         </a>
       </div>
       <div class="card">

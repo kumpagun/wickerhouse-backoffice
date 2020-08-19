@@ -23,6 +23,9 @@
         <a href="{{ route('report_access_content_by_director') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานรายบุคคล(ภูมิภาค)</span></a>
       </li>
       @endif
+      <li class="nav-item">
+        <a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">หนังสือรับรองการฝึกอบรม</span></a>
+      </li>
       @hasrole('admin|banner')
       <li class="nav-item">
         <a href="{{ route('banner_index') }}"><i class="feather icon-square"></i><span class="menu-title" data-i18n="">แบนเนอร์</span></a>
