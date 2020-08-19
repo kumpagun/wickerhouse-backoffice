@@ -44,85 +44,85 @@
                 @if(!empty($data->employee_id)) 
                   <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->employee_id }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->tinitial)) 
-                  <td class="text-center">{{ $data->tinitial }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->tinitial }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->tf_name)) 
-                  <td class="text-center">{{ $data->tf_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->tf_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->tl_name)) 
-                  <td class="text-center">{{ $data->tl_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->tl_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->workplace)) 
-                  <td class="text-center">{{ $data->workplace }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->workplace }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->title_name)) 
-                  <td class="text-center">{{ $data->title_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->title_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->division_name)) 
-                  <td class="text-center">{{ $data->division_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->division_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->section_name)) 
-                  <td class="text-center">{{ $data->section_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->section_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->dept_name)) 
-                  <td class="text-center">{{ $data->dept_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->dept_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->branch_name)) 
-                  <td class="text-center">{{ $data->branch_name }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->branch_name }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->company)) 
-                  <td class="text-center">{{ $data->company }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->company }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->region)) 
-                  <td class="text-center">{{ $data->region }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->region }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->staff_grade)) 
-                  <td class="text-center">{{ $data->staff_grade }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->staff_grade }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
 
                 @if(!empty($data->job_family)) 
-                  <td class="text-center">{{ $data->job_family }}</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">{{ $data->job_family }}</a></td>
                 @else 
-                  <td class="text-center">-</td>
+                  <td class="text-center"><a href="{{ route('report_training_certificate',['employee_id'=>$data->employee_id]) }}">-</a></td>
                 @endif
                 
               </tr>
