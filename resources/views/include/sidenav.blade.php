@@ -24,7 +24,7 @@
       </li>
       @endif
       <li class="nav-item">
-        <a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">หนังสือรับรองการฝึกอบรม</span></a>
+        <a href="{{ route('report_training_certificate_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">หนังสือรับรองการฝึกอบรม</span></a>
       </li>
       @hasrole('admin|banner')
       <li class="nav-item">
