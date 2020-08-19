@@ -273,6 +273,11 @@ Route::group(['prefix' => 'report', 'middleware' => ['auth']], function () {
     Route::get('/byuser/{course_id}', 'Report\ReviewController@review_by_user')->name('report_review_by_user');
     Route::get('/create_answer/{review_id}', 'Report\ReviewController@review_create_answer_text')->name('report_review_create_answer_text');
   });
+
+  Route::group(['prefix' => 'training-certificate'], function () {
+    Route::get('/', 'Report\ReportTrainingCertificate@index')->name('report_training_certificate_index');
+    Route::get('/certificate/{employee_id}', 'Report\ReportTrainingCertificate@certificate')->name('report_training_certificate');
+  });
 });
 
 // EMPLOYEE VIP
