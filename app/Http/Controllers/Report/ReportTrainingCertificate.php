@@ -33,6 +33,8 @@ class ReportTrainingCertificate extends Controller
   }
 
   public function index() {
+    ini_set('memory_limit', '-1');
+		ini_set('max_execution_time', 1800);
     $employees = Employee::where('status',1)->get(); 
     $withData = [
       'datas' => $employees
