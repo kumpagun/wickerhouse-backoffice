@@ -43,28 +43,32 @@ class ReportTrainingCertificate extends Controller
   }
 
   public function certificate($employee_id) {
+    $employee = Employee::where('employee_id',$employee_id)->first();
     $member = Member_model::where('employee_id',$employee_id)->first();
     $trainings = Training::where('status',1)->get();
     $training_end = [];
-    foreach($trainings as $training) {
-      $course = Course::find($training->course_id);
-      $total_ep = $course->total_episode;
-      $total_end = User_play_course_end::where('user_id',new ObjectId($member->_id))->where('training_id',new ObjectId($training->_id))->select('episode_id')->groupBy('episode_id')->count();
-      $result = [];
-      if($total_ep==$total_end) {
-        $result = [
-          'title' => $course->title,
-          'created_at' => FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($training->created_at,'d/m/Y')
-        ];
-        array_push($training_end,$result);
+    if(!empty($member)) {
+      foreach($trainings as $training) {
+        $course = Course::find($training->course_id);
+        $total_ep = $course->total_episode;
+        $total_end = User_play_course_end::where('user_id',new ObjectId($member->_id))->where('training_id',new ObjectId($training->_id))->select('episode_id')->groupBy('episode_id')->count();
+        $result = [];
+        if($total_ep==$total_end) {
+          $result = [
+            'title' => $course->title,
+            'created_at' => FuncClass::utc_to_carbon_format_time_zone_bkk_in_format($training->created_at,'d/m/Y')
+          ];
+          array_push($training_end,$result);
+        }
       }
-    }
+    } 
+    
     $withData = [
-      'member' => $member,
+      'employee' => $employee,
       'training_end' => $training_end
     ];
 
-    $filename = 'หนังสือรับรองการฝึกอบรม '.$member->fullname.'.pdf';
+    $filename = 'หนังสือรับรองการฝึกอบรม '.$employee->tinitial.' '.$employee->tf_name.' '.$employee->tl_name.'.pdf';
 
     // return view('report.certificate', $withData);
     $pdf = PDF::loadView('report.certificate', $withData);

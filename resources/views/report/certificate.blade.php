@@ -124,26 +124,28 @@
   <p class="head text-center mt-0 mb-1 p-0">หนังสือรับรองการฝึกอบรม</p>
   <div class="info">
     <div class="info-detail">
-      <span class="ml-1 mr-1"><strong>ชื่อ-นามสกุล</strong> {{ $member->fullname }}</span>
-      <span class="ml-1 mr-1"><strong>ตำแหน่ง</strong> {{ $member->position }}</span>
-      <span class="ml-1 mr-1"><strong>บริษัท</strong> {{ $member->company }}</span>
+      <span class="ml-1 mr-1"><strong>ชื่อ-นามสกุล</strong> {{ $employee->tinitial.' '.$employee->tf_name.' '.$employee->tl_name }}</span>
+      <span class="ml-1 mr-1"><strong>ตำแหน่ง</strong> {{ $employee->title_name }}</span>
+      <span class="ml-1 mr-1"><strong>บริษัท</strong> {{ $employee->company }}</span>
     </div>
   </div>
-  <div class="training">
-    <div class="training-title">หลักสูตรฝึกอบรมภายใน</div>
-    <table class="table">
-      <tr>
-        <th class="text-left">ชื่อหลักสูตร</th>
-        <th class="text-center">วัน/เดือน/ปี</th>
-      </tr>
-      @foreach ($training_end as $training)
+  @if (!empty($training_end))
+    <div class="training">
+      <div class="training-title">หลักสูตรฝึกอบรมภายใน</div>
+      <table class="table">
         <tr>
-          <td class="table-title">{{ $training['title'] }}</td>
-          <td class="table-date text-center">{{ $training['created_at'] }}</td>
+          <th class="text-left">ชื่อหลักสูตร</th>
+          <th class="text-center">วัน/เดือน/ปี</th>
         </tr>
-      @endforeach
-    </table>
-  </div>
+        @foreach ($training_end as $training)
+          <tr>
+            <td class="table-title">{{ $training['title'] }}</td>
+            <td class="table-date text-center">{{ $training['created_at'] }}</td>
+          </tr>
+        @endforeach
+      </table>
+    </div>
+  @endif
   <div class="sign">
     <p class="text-center">.................................................................</p>
     <p class="mb-0 text-center">
