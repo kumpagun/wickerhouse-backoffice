@@ -72,6 +72,7 @@ class ReportTrainingCertificate extends Controller
 
     // return view('report.certificate', $withData);
     $pdf = PDF::loadView('report.certificate', $withData);
+    // return $pdf->stream($filename);
     return $pdf->download($filename);
   }
 }
