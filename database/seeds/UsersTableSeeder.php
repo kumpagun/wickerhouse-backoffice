@@ -20,5 +20,23 @@ class UsersTableSeeder extends Seeder
       $newUser->save();
       $newUser->syncRoles(['admin']);
       $newUser->syncPermissions(['viewer','editor']);
+
+      // $newUser = new User;
+      // $newUser->name = 'Guest';
+      // $newUser->username = 'guest';
+      // $newUser->password = Hash::make('guest');
+      // $newUser->status = 1;
+      // $newUser->save();
+      // $newUser->syncRoles(['guest']);
+      // $newUser->syncPermissions(['viewer','editor']);
+
+      // $newUser = new User;
+      // $newUser->name = 'General';
+      // $newUser->username = 'general';
+      // $newUser->password = Hash::make('general');
+      // $newUser->status = 1;
+      // $newUser->save();
+      // $newUser->syncRoles(['general']);
+      // $newUser->syncPermissions(['viewer','editor']);
     }
 }

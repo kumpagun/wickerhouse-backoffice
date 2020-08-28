@@ -27,37 +27,16 @@ class RoleTableSeeder extends Seeder
       $role->save();
 
       $role = new Role();
-      $role->name         = 'course';
-      $role->display_name = 'Course'; // optional
-      $role->description  = 'Description Course'; // optional
+      $role->name         = 'general';
+      $role->display_name = 'General'; // optional
+      $role->description  = 'Description General'; // optional
       $role->status       = 1;
       $role->save();
 
       $role = new Role();
-      $role->name         = 'teacher';
-      $role->display_name = 'Teacher'; // optional
-      $role->description  = 'Description Teacher'; // optional
-      $role->status       = 1;
-      $role->save();
-
-      $role = new Role();
-      $role->name         = 'homework';
-      $role->display_name = 'Homework'; // optional
-      $role->description  = 'Description Homework'; // optional
-      $role->status       = 1;
-      $role->save();
-
-      $role = new Role();
-      $role->name         = 'question';
-      $role->display_name = 'Question'; // optional
-      $role->description  = 'Description Question'; // optional
-      $role->status       = 1;
-      $role->save();
-
-      $role = new Role();
-      $role->name         = 'banner';
-      $role->display_name = 'Banner'; // optional
-      $role->description  = 'Description Banner'; // optional
+      $role->name         = 'report';
+      $role->display_name = 'Report'; // optional
+      $role->description  = 'Description Report'; // optional
       $role->status       = 1;
       $role->save();
     }
