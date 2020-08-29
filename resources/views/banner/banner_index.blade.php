@@ -1,24 +1,17 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('แบนเนอร์'); @endphp
+@php $title = strtoupper('Banner'); @endphp
 
 @section('content-header-left')
-    <h3 class="content-header-title mb-2">{{ $title }}</h3>
-    <div class="row breadcrumbs-top">
-      <div class="breadcrumb-wrapper col-12">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">{{ $title }}</li>
-        </ol>
-      </div>
-    </div>
+  <h3 class="content-header-title mb-0">{{ $title }}</h3>
 @endsection
 
 @section('content-header-right')
-  <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+  <div class="btn-group float-right mb-1" role="group" aria-label="Button group with nested dropdown">
     @can('editor')
-      <a class="btn btn-secondary" href="{{ route('banner_create') }}">เพิ่ม{{ $title }}</a>
+      <a class="btn btn-secondary" href="{{ route('banner_create') }}">ADD {{ $title }}</a>
     @else 
-      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>เพิ่ม{{ $title }}</button>
+      <button class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>ADD {{ $title }}</button>
     @endcan
   </div>
 @endsection
@@ -36,17 +29,20 @@
       @endif
     </div>
     <div class="col-12 col-md-10 col-xl-8">
-      <div class="card px-1 py-1 m-0">
+      <div class="card m-0">
         <div class="card-header border-0 pb-0">
           <h4 class="mb-2">{{$title}}</h4>
+          @if(!empty($datas) && count($datas)>0)
           <div class="heading-elements">
             <ul class="list-inline mb-0">
-              <li><a href="#" onclick="handleChangeList()"><i class="ft-edit"></i> เรียงลำดับ</a></li>
+              <li><a href="#" onclick="handleChangeList()"><i class="ft-edit"></i> Sort banner</a></li>
             </ul>
           </div>
+          @endif
         </div>
         <div class="card-content">
           <div class="card-body pt-0">
+            @if(!empty($datas) && count($datas)>0)
             <form method="POST" action="{{ route('banner_sort') }}">
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <ul id="sortable" class="list-group mb-2" onchange="this.form.submit()">
@@ -56,7 +52,7 @@
                       <li class="list-group-item">
                         <div><img src="{{ config('app.url').'storage/'.$item->image_path }}" alt=""></div>
                         <div class="action">
-                          <button type="button" class="btn btn-outline-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">ลบ</button>
+                          <button type="button" class="btn btn-danger" onclick="handleDeleteGroup('{{ $item->_id }}')">×</button>
                         </div>
                       </li>
                     </ul>
@@ -66,6 +62,9 @@
               <button id="update-grouplist" type="button" class="btn btn-sortgroup btn-primary d-none">บันทึก</button>
               <button id="cancel-grouplist" type="button" class="btn btn-sortgroup btn-danger d-none">ปิด</button>
             </form>
+            @else 
+              ไม่มีข้อมูล Banner
+            @endif
           </div>
         </div>
       </div>
@@ -101,12 +100,20 @@
     border-right: 0;
     display: flex;
     justify-content: space-between;
+    padding: 5px;
   }
   .action {
-    padding: 10px 5px 10px 20px;
+    /* padding: 10px 5px 10px 20px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  .action > button {
+    border-radius: 0 !important;
+    padding: 5px 10px;
   }
   </style>
 @endsection

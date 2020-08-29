@@ -76,8 +76,8 @@ class BannerController extends Controller
     if(!empty($data['image_path']) && !empty($data['img_final'])) {
       $img_final = $data['img_final'];
       $input_path = $data['input_path'];
-      $imgWidth = 1938;
-      $imgHeight = 300;
+      $imgWidth = 970;
+      $imgHeight = 250;
       // open file a image resource
       $img = Image::make(public_path($img_final));
       // crop image

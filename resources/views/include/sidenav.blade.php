@@ -2,129 +2,31 @@
 <div class="main-menu menu-fixed menu-light menu-accordion" data-scroll-to-active="true">
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-      
-      <li class="nav-item">
-        <a href="{{ route('report_member_access_content_by_RO') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+
+      @hasrole('admin|product')
+      <li class="navigation-header">
+        <span>Menu</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="หลักสูตรการเรียน"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_dashboard_overview') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard Overview</span></a>
+        <a href="{{ route('banner_index') }}"><i class="feather icon-image"></i><span class="menu-title" data-i18n="">Banner</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_dashboard_course') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard Course</span></a>
+        <a href="{{ route('category_index') }}"><i class="feather icon-grid"></i><span class="menu-title" data-i18n="">Category</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_dashboard_course2') }}"><i class="feather icon-bar-chart-2"></i><span class="menu-title" data-i18n="">Dashboard Course 2</span></a>
-      </li>
-      @if(Auth::user()->type=='jasmine' && !Auth::user()->hasRole('admin'))
-      <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user_training') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการอบรมรายบุคคล</span></a>
+        <a href="{{ route('product_index') }}"><i class="feather icon-tag"></i><span class="menu-title" data-i18n="">All Product</span></a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('report_access_content_by_director') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานรายบุคคล(ภูมิภาค)</span></a>
-      </li>
-      @endif
-      <li class="nav-item">
-        <a href="{{ route('report_training_certificate_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">หนังสือรับรองการฝึกอบรม</span></a>
-      </li>
-      @hasrole('admin|banner')
-      <li class="nav-item">
-        <a href="{{ route('banner_index') }}"><i class="feather icon-square"></i><span class="menu-title" data-i18n="">แบนเนอร์</span></a>
+        <a href="#"><i class="feather icon-shopping-cart"></i><span class="menu-title" data-i18n="">Shopping</span></a>
       </li>
       @endhasrole
 
-      @hasrole('admin|course')
+      @hasrole('admin|product')
       <li class="navigation-header">
-        <span>วิทยากร</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="วิทยากร"></i>
+        <span>Report</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="หลักสูตรการเรียน"></i>
       </li>
       <li class="nav-item">
-        <a href="{{ route('teacher_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">วิทยากรทั้งหมด</span></a>
-      </li>
-      @endhasrole
-
-      @hasrole('admin|course')
-      <li class="navigation-header">
-        <span>หลักสูตรการเรียน</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="หลักสูตรการเรียน"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('category_index') }}"><i class="feather icon-list"></i><span class="menu-title" data-i18n="">ประเภทของหลักสูตร</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('course_index') }}"><i class="feather icon-tv"></i><span class="menu-title" data-i18n="">หลักสูตรทั้งหมด</span></a>
-      </li>
-      @endhasrole
-      
-      @hasrole('admin|homework')
-      <li class="navigation-header">
-        <span>แบบฝึกหัด</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="แบบฝึกหัด"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('homework_index') }}"><i class="feather icon-edit"></i><span class="menu-title" data-i18n="">ตรวจแบบฝึกหัดหลังเรียน</span></a>
-      </li>
-      @endhasrole
-      
-      @hasrole('admin|question')
-      <li class="navigation-header">
-        <span>คำถาม</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="คำถาม"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('question_index') }}"><i class="feather icon-edit"></i><span class="menu-title" data-i18n="">ถาม-ตอบ</span></a>
-      </li>
-      @endhasrole
-
-      @hasrole('admin|course')
-      <li class="navigation-header">
-        <span>รอบการอบรม</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รอบการอบรม"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{route('department_index')}}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="">บริษัท / แผนก</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('training_index') }}"><i class="feather icon-tv"></i><span class="menu-title" data-i18n="">รอบอบรมทั้งหมด</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('employee_vip_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> สมาชิก VIP</span></a>
-      </li>
-      @hasrole('admin|certificate')
-      <li class="nav-item">
-        <a href="{{ route('certificate_index') }}"><i class="feather icon-thumbs-up"></i><span class="menu-title" data-i18n=""> Certificate</span></a>
-      </li>
-      @endhasrole
-      @endhasrole
-
-      @hasrole('admin|giftcode')
-      <li class="navigation-header">
-        <span>ของรางวัล</span><i class=" feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="ของรางวัล"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('giftcode_group_index') }}"><i class="feather icon-star"></i><span class="menu-title" data-i18n=""> กิจกรรมแจกของรางวัล</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('giftcode_usage') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n=""> รายงานผู้โชคดีที่ได้รับรางวัล</span></a>
-      </li>
-      @endhasrole
-
-      @hasrole('admin|report')
-      <li class="navigation-header">
-        <span>รายงานรอบการอบรม</span><i class="feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user_training') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('report_review_training_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('email_log_index') }}"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="">ประวัติการส่งอีเมล</span></a>
-      </li>
-
-      <li class="navigation-header">
-        <span>รายงานหลักสูตรทั่วไป</span><i class="feather icon-minus" data-toggle="tooltip" data-placement="right" data-original-title="รายงาน"></i>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('report_access_content_by_user') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">รายงานการใช้งานรายบุคคล</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('report_review_index') }}"><i class="feather icon-message-circle"></i><span class="menu-title" data-i18n="">ประเมินหลักสูตรหลังเรียน</span></a>
+        <a href="#"><i class="feather icon-trending-up"></i><span class="menu-title" data-i18n="">Page view</span></a>
       </li>
       @endhasrole
 
@@ -134,9 +36,6 @@
       </li>
       <li class="nav-item">
         <a href="{{ route('users_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">List user</span></a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ route('employee_delegate_index') }}"><i class="feather icon-user"></i><span class="menu-title" data-i18n="">ตัวแทนผู้บริหาร</span></a>
       </li>
       {{-- <li class="nav-item">
         <a href="{{ route('roles_index') }}"><i class="feather icon-unlock"></i><span class="menu-title" data-i18n="">Roles</span></a>

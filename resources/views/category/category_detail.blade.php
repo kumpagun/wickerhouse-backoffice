@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('เพิ่มประเภทของหลักสูตร'); @endphp
+@if(!empty($data->_id))
+  @php $title = strtoupper('edit category'); @endphp
+@else
+  @php $title = strtoupper('add category'); @endphp
+@endif
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('category_index') }}">ประเภทของหลักสูตร</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('category_index') }}">CATEGORY</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -23,7 +27,7 @@
           <img src="{{ asset('stack-admin/app-assets/images/logo/stack-logo-dark.png') }}" alt="branding logo">
         </div> --}}
         <h6 class="card-subtitle line-on-side text-muted text-center font-small-3">
-          <span>รายละเอียดประเภทของหลักสูตร</span>
+          <span>CATEGORY DETAIL</span>
         </h6>
       </div>
       <div class="card-content ">
@@ -40,18 +44,6 @@
                 <p class="mb-0">{{ $errors->category->first('title') }}</p>
                 </span>
               @endif
-              </fieldset>
-            </div>
-            <div class="col-6">
-              <fieldset class="form-group @if($errors->category->has('code')) danger @endif">
-                <label for="user-name">Code *</label>
-                <input id="input-code" type="text" name="code" class="form-control" maxlength="3" value="{{ old('code', $data->code) }}" placeholder="Code">
-                <span><small>* ตัวอักษร 3 ตัว</small></span>
-                @if($errors->category->has('code'))
-                  <span class="small" role="alert">
-                  <p class="mb-0">{{ $errors->category->first('code') }}</p>
-                  </span>
-                @endif
               </fieldset>
             </div>
             <div class="col-6">

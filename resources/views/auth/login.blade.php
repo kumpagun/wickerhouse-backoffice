@@ -30,12 +30,9 @@
         <div class="card-header border-0">
           <div class="card-title text-center">
             <div class="p-1">
-              <img src="{{ asset('/images/jaslogo.png') }}" class="w-50" alt="branding logo">
+              WICKER HOUSE
             </div>
           </div>
-          <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-            <span>Login with Online Learning</span>
-          </h6>
           @if($errors->signin->has('signin'))
             <div class="alert bg-warning alert-icon-right alert-dismissible mb-0" role="alert">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -67,27 +64,9 @@
                   </p>
                 @endif
               </fieldset>
-              {{-- <div class="form-group row">
-                <div class="col-md-6 col-12 text-center text-sm-left">
-                  <fieldset>
-                    <input type="checkbox" id="remember-me" class="chk-remember">
-                    <label for="remember-me"> {{ __('Remember Me') }}</label>
-                  </fieldset>
-                </div>
-                <div class="col-md-6 col-12 float-sm-left text-center text-sm-right"><a href="recover-password.html" class="card-link">Forgot Password?</a></div>
-              </div> --}}
               <button type="submit" class="btn btn-primary btn-block"><i class="ft-unlock"></i> Login</button>
             </form>
-            <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
-              <span>Login with Jasmine</span>
-            </h6>
-            <a href="{{ route('jasmine_signin') }}">
-              <button type="submit" class="btn btn-primary2 btn-block"><i class="ft-unlock"></i> Login Jasmine</button>
-            </a>
           </div>
-          {{-- <div class="card-body">
-            <a href="register-with-bg.html" class="btn btn-outline-secondary btn-block"><i class="ft-user"></i> Register</a>
-          </div> --}}
         </div>
       </div>
     </div>

@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
-@php $title = strtoupper('เพิ่ม,แก้ไข แบนเนอร์'); @endphp
+@if(!empty($data->_id))
+  @php $title = strtoupper('edit banner'); @endphp
+@else
+  @php $title = strtoupper('add banner'); @endphp
+@endif
 
 @section('content-header-left')
-<h3 class="content-header-title mb-2">{{ $title }}</h3>
+<h3 class="content-header-title">{{ $title }}</h3>
 <div class="row breadcrumbs-top">
   <div class="breadcrumb-wrapper col-12">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('category_index') }}">แบนเนอร์</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('banner_index') }}">Banner</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -19,7 +23,7 @@
   <div class="col-12 col-md-10 col-xl-8">
   <div class="card">
     <div class="card-header">
-      <h4 class="card-title">รายละเอียดแบนเนอร์</h4>
+      <h4 class="card-title">Banner detail</h4>
     </div>
     <div class="card-content">
       <div class="card-body overflow-hidden">
@@ -47,12 +51,12 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <div class="card border-primary text-center bg-transparent mt-1 px-3">
+                  <div class="card border-primary text-center bg-transparent mt-1 px-0 px-md-3">
                     <div class="card-header text-left">
-                      <label for="basicInputFile">รูปแบนเนอร์ *</label>
+                      <label for="basicInputFile">Image *</label>
                       <div>
                         <div class="controls">
-                          <input type="file" name="image_path" class="form-control"  id="uploadfile" accept="image/*" >
+                          <input type="file" name="image_path" class="form-control"  id="uploadfile" accept="image/x-png,image/jpeg" required>
                         </div>
                         @if(!empty($errors->content->first('images')))
                           <label class="text-danger"><small>{{ "กรุณาใส่่รูป" }}</small></label>
@@ -78,7 +82,7 @@
                           <img id="imageFinalSrc" class="aspect-ratio-4-3 img-fluid" src="" alt="Picture">
                         </div>
                         @endif
-                        <span class="text-warning">* ขนาดที่แนะนำ 1938 x 300</span>
+                        <span class="text-warning">* Recommend size 970 x 250</span>
                       </div>
                     </div>
                   </div>
@@ -87,7 +91,7 @@
               
               <div class="col-12 mt-2 text-right">
                 @can('editor')
-                <button type="submit" id="btnSubmit" class="btn btn-primary btn-block">บันทึก</button>
+                <button type="submit" id="btnSubmit" class="btn btn-primary btn-block">Save</button>
                 @else
                 <button type="button" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="bottom" title='Required "Editor" Permission'>NOT ALLOW</button>
                 @endcan
@@ -240,7 +244,7 @@
     function handleCrop(url) {
       $('#imageCropSrc').cropper('destroy').cropper({
         viewMode: 1,
-        aspectRatio: 6/1,
+        aspectRatio: 970/250,
         autoCropArea: 1,
         restore: false,
         zoomOnWheel: false

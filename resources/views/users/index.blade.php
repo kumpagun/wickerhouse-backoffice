@@ -4,14 +4,6 @@
 
 @section('content-header-left')
 <h3 class="content-header-title mb-2">{{ $title }}</h3>
-<div class="row breadcrumbs-top">
-  <div class="breadcrumb-wrapper col-12">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">Users</li>
-      <li class="breadcrumb-item active">{{ $title }}</li>
-    </ol>
-  </div>
-</div>
 @endsection
 
 @section('content-header-right')
